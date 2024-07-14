@@ -3,38 +3,45 @@
 import React, { useState } from "react";
 import FieldContainer from "../FieldContainer";
 import BoldLabel from "../BoldLabel";
-import NormalLabel from "../NormalLabel";
 import SmallLabel from "../SmallLabel";
 import TinyWarning from "../TinyWarning";
-import InputField from "../InputField";
-import RadioGroupField from "../RadioGroupField";
-import { Radio, RadioGroup, Input, Button } from "@nextui-org/react";
-import ContainerTab from "../ContainerTab";
-import GroupContainer from "../GroupContainer";
+import {
+  Radio,
+  RadioGroup,
+  Input,
+  Button,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 import ButtonContainer from "../ButtonContainer";
 import InputCol from "../InputCol";
+import { stateList, organizationTypes } from "@/constant";
+import { useRouter } from "next/navigation";
 
 const StepOne = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [ownedBy, setOwnedBy] = useState("individual");
 
   const [wantToProtect, setWantToProtect] = useState("name");
   const [protectName, setProtectName] = useState("");
   const [sloganName, setSloganName] = useState("");
 
-  const [livingPersonsName, setLivingPersonsName] = useState("yes");
-  const [includingPseudonymInYours, setIncludingPseudonymInYours] =
-    useState("yes");
-  const [nameOfLivingPersonsInYourMark, setNameOfLivingPersonsInYourMark] =
-    useState("");
-  const [includingPseudonymOther, setIncludingPseudonymOther] = useState("yes");
+  const [formation, setFormation] = useState("us_based");
+  const [countryOfFormation, setCountryOfFormation] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
+  const [organizationType, setOrganizationType] = useState("");
+  const [stateOfFormation, setStateOfFormation] = useState("");
+  const [position, setPosition] = useState("");
 
-  const [wordOtherThenEnglish, setWordOtherThenEnglish] = useState("no");
-  const [englishTranslationWord, setEnglishTranslationWord] = useState("");
-
-  const [
-    currentlyUsingTrademarkInBusiness,
-    setCurrentlyUsingTrademarkInBusiness,
-  ] = useState("no");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
   const [validate, setValidate] = useState({
     protectNameV: false,
@@ -43,10 +50,13 @@ const StepOne = () => {
 
   // handle form submission
   const handleFormSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     // after submit validate the form
     validateForm();
+
+    return router.push("/trademark-register/step-2");
   };
 
   // validate the form
@@ -76,7 +86,7 @@ const StepOne = () => {
           >
             <Radio value="name">Name</Radio>
             <Radio value="slogan">Slogan</Radio>
-            <Radio value="logo">logo</Radio>
+            <Radio value="logo">Logo</Radio>
             <Radio value="all_three">All Three</Radio>
           </RadioGroup>
 
@@ -87,7 +97,7 @@ const StepOne = () => {
               type="text"
               variant="underlined"
               label="Enter the name you wish to protect"
-              isInvalid={validate.protectNameV}
+              isInvalid={false}
               errorMessage="This field is required!"
               value={protectName}
               onChange={(e) => setProtectName(e.target.value)}
@@ -101,7 +111,7 @@ const StepOne = () => {
               type="text"
               variant="underlined"
               label="Enter the slogan you wish to protect"
-              isInvalid={validate.sloganNameV}
+              isInvalid={false}
               errorMessage="This field is required!"
               value={sloganName}
               onChange={(e) => setSloganName(e.target.value)}
@@ -118,7 +128,7 @@ const StepOne = () => {
                 type="file"
                 variant="flat"
                 label="  "
-                isInvalid={validate.sloganNameV}
+                isInvalid={false}
                 errorMessage="This field is required!"
                 value={sloganName}
                 onChange={(e) => setSloganName(e.target.value)}
@@ -144,62 +154,188 @@ const StepOne = () => {
           </RadioGroup>
         </FieldContainer>
 
+        {/* show organization info taker if owned by organization is selected   */}
+        {ownedBy === "organization" && (
+          <FieldContainer>
+            {/* formation */}
+            <SmallLabel text={`FORMATION`} />
+            <RadioGroup
+              orientation="horizontal"
+              value={formation}
+              onValueChange={setFormation}
+              className="gap-4"
+            >
+              <Radio value="us_based">US Based</Radio>
+              <Radio value="non_us_based">Non US Based</Radio>
+            </RadioGroup>
+            <InputCol>
+              <Input
+                name="organizationName"
+                type="text"
+                variant="underlined"
+                label="Organization Name"
+                isInvalid={false}
+                errorMessage="This field is required!"
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
+              />
+              <Select
+                variant="underlined"
+                label="Organization Type"
+                onChange={(e) => setOrganizationType(e.target.value)}
+              >
+                {organizationTypes.map((type) => (
+                  <SelectItem key={type.label} value={type.label}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            </InputCol>
+            <InputCol>
+              {formation === "non_us_based" ? (
+                <Input
+                  name="countryOfFormation"
+                  type="text"
+                  variant="underlined"
+                  label="Country Of Formation"
+                  isInvalid={false}
+                  errorMessage="This field is required!"
+                  value={countryOfFormation}
+                  onChange={(e) => setCountryOfFormation(e.target.value)}
+                />
+              ) : (
+                <Select
+                  variant="underlined"
+                  label="State Of Formation"
+                  onChange={(e) => setStateOfFormation(e.target.value)}
+                >
+                  {stateList.map((state) => (
+                    <SelectItem key={state.value} value={state.value}>
+                      {state.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+              <Input
+                name="position"
+                type="text"
+                variant="underlined"
+                label="Position"
+                isInvalid={false}
+                errorMessage="This field is required!"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+              />
+            </InputCol>
+          </FieldContainer>
+        )}
+
         <FieldContainer>
           <InputCol>
             <Input
-              name="protectName"
+              name="firstName"
               type="text"
               variant="underlined"
-              label="Please provide the english translation"
+              label="First Name"
               isInvalid={false}
               errorMessage="This field is required!"
-              value={englishTranslationWord}
-              onChange={(e) => setEnglishTranslationWord(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
             />
             <Input
-              name="protectName"
+              name="lastName"
               type="text"
               variant="underlined"
-              label="Please provide the english translation"
+              label="Last Name"
               isInvalid={false}
               errorMessage="This field is required!"
-              value={englishTranslationWord}
-              onChange={(e) => setEnglishTranslationWord(e.target.value)}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
             />
           </InputCol>
           <InputCol>
             <Input
-              name="protectName"
+              name="address"
               type="text"
               variant="underlined"
-              label="Please provide the english translation"
+              label="Enter Full Address"
               isInvalid={false}
               errorMessage="This field is required!"
-              value={englishTranslationWord}
-              onChange={(e) => setEnglishTranslationWord(e.target.value)}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </InputCol>
+          <InputCol>
+            <Input
+              name="city"
+              type="text"
+              variant="underlined"
+              label="Enter City"
+              isInvalid={false}
+              errorMessage="This field is required!"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <Select
+              variant="underlined"
+              label="State/Province/Region"
+              onChange={(e) => setState(e.target.value)}
+            >
+              {stateList.map((state) => (
+                <SelectItem key={state.value} value={state.value}>
+                  {state.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </InputCol>
+          <InputCol>
+            <Input
+              name="zipCode"
+              type="number"
+              variant="underlined"
+              label="Zip Code"
+              isInvalid={false}
+              errorMessage="This field is required!"
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
             />
             <Input
-              name="protectName"
-              type="text"
+              name="phone"
+              type="number"
               variant="underlined"
-              label="Please provide the english translation"
+              label="Phone Number"
               isInvalid={false}
               errorMessage="This field is required!"
-              value={englishTranslationWord}
-              onChange={(e) => setEnglishTranslationWord(e.target.value)}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </InputCol>
+          <InputCol>
+            <Input
+              name="email"
+              type="email"
+              variant="underlined"
+              label="Enter Email Address"
+              isInvalid={false}
+              errorMessage="This field is required!"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </InputCol>
         </FieldContainer>
 
         {/* next or previous button */}
-        <ButtonContainer>
-          <Button color="secondary" variant="shadow">
-            Previous
-          </Button>
-          <Button color="primary" variant="shadow" type="submit">
+        <div className="my-5 mb-11 items-center float-end">
+          <Button
+            color="primary"
+            variant="shadow"
+            type="submit"
+            isLoading={isLoading}
+            className=" float-end"
+          >
             Next
           </Button>
-        </ButtonContainer>
+        </div>
       </form>
     </section>
   );
