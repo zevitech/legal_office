@@ -3,19 +3,19 @@
 import React, { useState } from "react";
 import FieldContainer from "../FieldContainer";
 import BoldLabel from "../BoldLabel";
-import NormalLabel from "../NormalLabel";
 import SmallLabel from "../SmallLabel";
-import TinyWarning from "../TinyWarning";
-import InputField from "../InputField";
-import RadioGroupField from "../RadioGroupField";
-import { Radio, RadioGroup, Input, Button, Textarea } from "@nextui-org/react";
-import ContainerTab from "../ContainerTab";
-import GroupContainer from "../GroupContainer";
+import { Button, Textarea } from "@nextui-org/react";
 import ButtonContainer from "../ButtonContainer";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { saveStepTwo } from "@/features/formSlice";
 
 const StepTwo = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const stepOneData = useSelector((state) => state.form.stepOne);
+  console.log("stepOneData", stepOneData);
+
   const [isLoading, setIsLoading] = useState(false);
   const [classification, setClassification] = useState("");
 
@@ -24,13 +24,13 @@ const StepTwo = () => {
     setIsLoading(true);
     e.preventDefault();
 
-    // after submit validate the form
-
+    // store the data to state and foreword to next step
+    dispatch(saveStepTwo({ classification }));
     return router.push("/trademark-register/step-3");
   };
 
   return (
-    <section className="w-[70%] max-md:w-[95%] m-auto mt-16">
+    <section className="w-[70%] max-md:w-[95%] m-auto mt-16 max-md:mt-10">
       <form
         action=""
         method="post"
@@ -48,6 +48,8 @@ const StepTwo = () => {
             labelPlacement="outside"
             placeholder="Enter your description"
             className="col-span-12 md:col-span-6 mb-6 md:mb-0"
+            value={classification}
+            onChange={(e) => setClassification(e.target.value)}
           />
         </FieldContainer>
 

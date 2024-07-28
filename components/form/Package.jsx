@@ -1,21 +1,22 @@
-"use client";
-
-import React, { useState } from "react";
 import SmallLabel from "./SmallLabel";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 
-const Package = ({ packageName, price, complementaryTreat, rows, badge }) => {
-  const router = useRouter();
+const Package = ({
+  packageName,
+  price,
+  complementaryTreat,
+  rows,
+  badge,
+  handleNext,
+}) => {
   const badgeBorder = badge
     ? "border-2 border-orange-600"
     : "border-2 border-slate-100";
-  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div
-      className={`w-[350px] py-7 bg-white rounded-2xl flex flex-col justify-between gap-6 relative  ${badgeBorder} hover:translate-y-5 transition-all`}
+      className={`w-[350px] py-7 bg-white rounded-2xl flex flex-col justify-between gap-6 relative  ${badgeBorder} hover:translate-y-5 transition-all max-md:hover:translate-y-0`}
     >
       {badge === true && (
         <div className="absolute top-[-15px] bg-orange-600 text-white left-[130px] rounded-md text-xs px-2 py-1">
@@ -50,9 +51,8 @@ const Package = ({ packageName, price, complementaryTreat, rows, badge }) => {
         <Button
           color="primary"
           variant="solid"
-          isLoading={isLoading}
           className="bg-gradient-to-tr from-pink-500 to-orange-500 text-white shadow-lg w-[80%] m-auto font-medium"
-          onClick={() => router.push("/trademark-register/step-4")}
+          onClick={() => handleNext({ packageName, price })}
         >
           Select
         </Button>

@@ -1,79 +1,79 @@
 "use client";
 
-import React, { useState } from "react";
-import FieldContainer from "../FieldContainer";
-import BoldLabel from "../BoldLabel";
-import NormalLabel from "../NormalLabel";
-import SmallLabel from "../SmallLabel";
-import TinyWarning from "../TinyWarning";
-import InputField from "../InputField";
-import RadioGroupField from "../RadioGroupField";
-import { Radio, RadioGroup, Input, Button, Textarea } from "@nextui-org/react";
-import ContainerTab from "../ContainerTab";
-import GroupContainer from "../GroupContainer";
-import ButtonContainer from "../ButtonContainer";
-import { useRouter } from "next/navigation";
 import Package from "../Package";
+import React, { useState } from "react";
+import NormalLabel from "../NormalLabel";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@nextui-org/react";
+import { FaSpinner } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
+import { saveStepThree } from "@/features/formSlice";
 import { _35_USD, _135_USD, _235_USD } from "@/constant/packages";
+import PageLoader from "@/components/PageLoader";
 
 const StepThree = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [classification, setClassification] = useState("");
+  const stepTwoData = useSelector((state) => state.form.stepTwo);
+  console.log("stepTwoData", stepTwoData);
 
   // handle form submission
-  const handleFormSubmit = async (e) => {
+  const handleNext = ({ packageName, price }) => {
     setIsLoading(true);
-    e.preventDefault();
+    dispatch(saveStepThree({ packageName, price })); // store data to state
 
-    // after submit validate the form
-
-    return router.push("/trademark-register/step-3");
+    return router.push("/trademark-register/step-4");
   };
 
   return (
-    <section className=" m-auto w-full flex flex-col gap-11 mt-16">
-      <div className="flex flex-col gap-3 m-auto w-[700px]">
-        <h1 className="text-slate-600 font-semibold text-3xl">
-          Choose a Package
-        </h1>
-        <NormalLabel
-          text={`All packages include lifetime customer support and our 100% satisfaction guaranteed.`}
-        />
-      </div>
-      <div className="flex justify-center gap-7 pb-11">
-        <Package
-          price={`35`}
-          packageName={`Basic`}
-          complementaryTreat={`+ USPTO Fee $350/Class*`}
-          rows={_35_USD}
-        />
-        <Package
-          price={`135`}
-          packageName={`Standard`}
-          complementaryTreat={`+ USPTO Fee $350/Class*`}
-          rows={_135_USD}
-          badge={true}
-        />
-        <Package
-          price={`235`}
-          packageName={`Premium`}
-          complementaryTreat={`+ USPTO Fee $350/Class*`}
-          rows={_235_USD}
-        />
-      </div>
-
-      {/*previous button */}
-      <div className="w-[90%] m-auto float-right">
-        <Button
-          color="secondary"
-          variant="shadow"
-          onClick={() => router.back()}
-        >
-          Previous
-        </Button>
-      </div>
-    </section>
+    <>
+      <section className="m-auto w-full flex flex-col gap-9 max-md:gap-4 mt-16 max-md:mt-10">
+        {isLoading && <PageLoader />}
+        <div className="flex flex-col gap-3 m-auto w-[700px] px-4 max-md:w-auto">
+          <h1 className="text-slate-600 font-semibold text-3xl">
+            Choose a Package
+          </h1>
+          <NormalLabel
+            text={`All packages include lifetime customer support and our 100% satisfaction guaranteed.`}
+          />
+        </div>
+        <div className="flex justify-center max-md:flex-col max-md:items-center gap-7 pb-11">
+          <Package
+            price={35}
+            packageName={`Basic`}
+            complementaryTreat={`+ USPTO Fee $350/Class*`}
+            rows={_35_USD}
+            handleNext={handleNext}
+          />
+          <Package
+            price={135}
+            packageName={`Standard`}
+            complementaryTreat={`+ USPTO Fee $350/Class*`}
+            rows={_135_USD}
+            badge={true}
+            handleNext={handleNext}
+          />
+          <Package
+            price={235}
+            packageName={`Premium`}
+            complementaryTreat={`+ USPTO Fee $350/Class*`}
+            rows={_235_USD}
+            handleNext={handleNext}
+          />
+        </div>
+        {/*previous button */}
+        <div className="w-[90%] m-auto float-right">
+          <Button
+            color="secondary"
+            variant="shadow"
+            onClick={() => router.back()}
+          >
+            Previous
+          </Button>
+        </div>
+      </section>
+    </>
   );
 };
 

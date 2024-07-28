@@ -1,6 +1,9 @@
 "use client";
 
+import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { saveStepOne } from "@/features/formSlice";
 import FieldContainer from "../FieldContainer";
 import BoldLabel from "../BoldLabel";
 import SmallLabel from "../SmallLabel";
@@ -13,19 +16,24 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import ButtonContainer from "../ButtonContainer";
 import InputCol from "../InputCol";
 import { stateList, organizationTypes } from "@/constant";
 import { useRouter } from "next/navigation";
+import validator from "email-validator";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 
 const StepOne = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [ownedBy, setOwnedBy] = useState("individual");
 
   const [wantToProtect, setWantToProtect] = useState("name");
   const [protectName, setProtectName] = useState("");
   const [sloganName, setSloganName] = useState("");
+  const [logo, setLogo] = useState("");
 
   const [formation, setFormation] = useState("us_based");
   const [countryOfFormation, setCountryOfFormation] = useState("");
@@ -43,32 +51,117 @@ const StepOne = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  const [validate, setValidate] = useState({
-    protectNameV: false,
-    sloganNameV: false,
-  });
+  const [errors, setErrors] = useState({});
 
-  // handle form submission
-  const handleFormSubmit = async (e) => {
-    setIsLoading(true);
-    e.preventDefault();
-
-    // after submit validate the form
-    validateForm();
-
-    return router.push("/trademark-register/step-2");
+  // validate the phone number
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneNumberObject = parsePhoneNumberFromString(phoneNumber, "US");
+    return phoneNumberObject ? phoneNumberObject.isValid() : false;
   };
 
-  // validate the form
+  // validate the form input
   const validateForm = () => {
-    setValidate((prev) => ({
-      ...prev,
-      protectNameV: protectName ? false : true,
-    }));
+    let tempErrors = {};
+    if (wantToProtect === "name" && !protectName)
+      tempErrors.protectName = "Name is required";
+    if (wantToProtect === "slogan" && !sloganName)
+      tempErrors.sloganName = "Slogan is required";
+    if (wantToProtect === "logo" && !logo) tempErrors.logo = "Logo is required";
+
+    if (ownedBy === "organization") {
+      if (!organizationName)
+        tempErrors.organizationName = "Organization name is required";
+      if (!organizationType)
+        tempErrors.organizationType = "Organization type is required";
+      if (formation === "non_us_based" && !countryOfFormation)
+        tempErrors.countryOfFormation = "Country of formation is required";
+      if (formation === "us_based" && !stateOfFormation)
+        tempErrors.stateOfFormation = "State of formation is required";
+      if (!position) tempErrors.position = "Position is required";
+    }
+
+    if (!firstName) tempErrors.firstName = "First name is required";
+    if (!lastName) tempErrors.lastName = "Last name is required";
+    if (!address) tempErrors.address = "Address is required";
+    if (!state) tempErrors.state = "State is required";
+    if (!zip) tempErrors.zip = "Zip code is required";
+    if (!city) tempErrors.city = "City is required";
+    if (!phone) {
+      tempErrors.phone = "Phone number is required";
+    } else if (!validatePhoneNumber(phone)) {
+      tempErrors.phone = "Invalid phone number";
+    }
+    if (!email) {
+      tempErrors.email = "Email address is required";
+    } else if (!validator.validate(email)) {
+      tempErrors.email = "Invalid email address";
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
+  // Handle form submission
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    //return (stop) if there validation issue
+    if (!validateForm()) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Todo:: get the key who has value
+    const stepOne = {
+      wantToProtect,
+      protectName,
+      sloganName,
+      logo,
+      ownedBy,
+      formation,
+      countryOfFormation,
+      organizationName,
+      organizationType,
+      stateOfFormation,
+      position,
+      firstName,
+      lastName,
+      address,
+      city,
+      state,
+      zip,
+      phone,
+      email,
+    };
+
+    // Filter out properties that are empty or undefined
+    const stepOneWithValues = Object.fromEntries(
+      Object.entries(stepOne).filter(([_, value]) => value !== "")
+    );
+
+    // store data to state
+    dispatch(saveStepOne(stepOneWithValues));
+
+    // send the data to mail and zoho
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/save-data`, stepOneWithValues)
+      .then((res) => {
+        if (res.data.success) {
+          return router.push("/trademark-register/step-2");
+        }
+      })
+      .catch((err) => {
+        console.log("Error in step one: ", err);
+        alert("Something went wrong, Please try again.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
-    <section className="w-[70%] max-md:w-[95%] m-auto mt-16">
+    <section className="w-[70%] max-md:w-[95%] m-auto mt-16 max-md:mt-10">
       <form
         action=""
         method="post"
@@ -76,8 +169,7 @@ const StepOne = () => {
         encType="multipart/form-data"
       >
         <FieldContainer>
-          {/* Select what you are trying to protect */}
-          <BoldLabel text={`Select what you are trying to protect`} />
+          <BoldLabel text="Select what you are trying to protect" />
           <RadioGroup
             orientation="horizontal"
             value={wantToProtect}
@@ -90,59 +182,85 @@ const StepOne = () => {
             <Radio value="all_three">All Three</Radio>
           </RadioGroup>
 
-          {/* Enter the name you wish to protect */}
-          {wantToProtect == "name" && (
+          {wantToProtect === "name" && (
             <Input
               name="protectName"
               type="text"
               variant="underlined"
               label="Enter the name you wish to protect"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.protectName}
+              errorMessage={errors.protectName}
               value={protectName}
               onChange={(e) => setProtectName(e.target.value)}
             />
           )}
 
-          {/* Enter the slogan you wish to protect */}
-          {wantToProtect == "slogan" && (
+          {wantToProtect === "slogan" && (
             <Input
               name="sloganName"
               type="text"
               variant="underlined"
               label="Enter the slogan you wish to protect"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.sloganName}
+              errorMessage={errors.sloganName}
               value={sloganName}
               onChange={(e) => setSloganName(e.target.value)}
             />
           )}
 
-          {/* Upload logo you wish to protect */}
-          {wantToProtect == "logo" && (
+          {wantToProtect === "logo" && (
             <>
               <br />
-              <TinyWarning text={"Upload the logo you wish to protect"} />
-              <Input
-                name="logo"
-                type="file"
-                variant="flat"
-                label="  "
-                isInvalid={false}
-                errorMessage="This field is required!"
-                value={sloganName}
-                onChange={(e) => setSloganName(e.target.value)}
-              />
+              <TinyWarning text="Upload the logo you wish to protect" />
+              <CldUploadWidget
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                onSuccess={(results) => {
+                  const public_url = results?.info?.url;
+                  setLogo(public_url);
+                }}
+              >
+                {({ open }) => {
+                  return (
+                    <div className="w-full">
+                      <div className="flex gap-3">
+                        <div
+                          onClick={() => open()}
+                          className="bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full"
+                        >
+                          Select Image
+                        </div>
+                        {logo && (
+                          <Image
+                            src={logo}
+                            alt="Logo"
+                            width={100}
+                            height={44}
+                            className="h-[44px] w-auto"
+                          />
+                        )}
+                      </div>
+                      {!!errors.logo && (
+                        <p className="text-[#f31260] text-xs pt-2">
+                          Please select an image
+                        </p>
+                      )}
+                    </div>
+                  );
+                }}
+              </CldUploadWidget>
             </>
           )}
         </FieldContainer>
 
         <FieldContainer>
-          {/* Will the trademark be owned by an individual or an entity such as a corporation or LLC? */}
-          <BoldLabel
-            text={`Will the trademark be owned by an individual or an entity such as a corporation or LLC?`}
-          />
-          <h1 className="text-xs text-slate-800 capitalize">{`Identify the owner of the trademark. This is the person or organization who will be the owner of record. If you choose individuals, you can enter as many names as you want who own the mark. With an organization, you will have to identify someone to be the person of contact for the organization.`}</h1>
+          <BoldLabel text="Will the trademark be owned by an individual or an entity such as a corporation or LLC?" />
+          <h1 className="text-xs text-slate-800">
+            Identify the owner of the trademark. This is the person or
+            organization who will be the owner of record. If you choose
+            individuals, you can enter as many names as you want who own the
+            mark. With an organization, you will have to identify someone to be
+            the person of contact for the organization.
+          </h1>
           <RadioGroup
             orientation="horizontal"
             value={ownedBy}
@@ -154,11 +272,9 @@ const StepOne = () => {
           </RadioGroup>
         </FieldContainer>
 
-        {/* show organization info taker if owned by organization is selected   */}
         {ownedBy === "organization" && (
           <FieldContainer>
-            {/* formation */}
-            <SmallLabel text={`FORMATION`} />
+            <SmallLabel text="FORMATION" />
             <RadioGroup
               orientation="horizontal"
               value={formation}
@@ -174,8 +290,8 @@ const StepOne = () => {
                 type="text"
                 variant="underlined"
                 label="Organization Name"
-                isInvalid={false}
-                errorMessage="This field is required!"
+                isInvalid={!!errors.organizationName}
+                errorMessage={errors.organizationName}
                 value={organizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
               />
@@ -198,8 +314,8 @@ const StepOne = () => {
                   type="text"
                   variant="underlined"
                   label="Country Of Formation"
-                  isInvalid={false}
-                  errorMessage="This field is required!"
+                  isInvalid={!!errors.countryOfFormation}
+                  errorMessage={errors.countryOfFormation}
                   value={countryOfFormation}
                   onChange={(e) => setCountryOfFormation(e.target.value)}
                 />
@@ -207,6 +323,8 @@ const StepOne = () => {
                 <Select
                   variant="underlined"
                   label="State Of Formation"
+                  isInvalid={!!errors.stateOfFormation}
+                  errorMessage={errors.stateOfFormation}
                   onChange={(e) => setStateOfFormation(e.target.value)}
                 >
                   {stateList.map((state) => (
@@ -221,8 +339,8 @@ const StepOne = () => {
                 type="text"
                 variant="underlined"
                 label="Position"
-                isInvalid={false}
-                errorMessage="This field is required!"
+                isInvalid={!!errors.position}
+                errorMessage={errors.position}
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
               />
@@ -230,6 +348,7 @@ const StepOne = () => {
           </FieldContainer>
         )}
 
+        {/* personal information */}
         <FieldContainer>
           <InputCol>
             <Input
@@ -237,8 +356,8 @@ const StepOne = () => {
               type="text"
               variant="underlined"
               label="First Name"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.firstName}
+              errorMessage={errors.firstName}
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -247,8 +366,8 @@ const StepOne = () => {
               type="text"
               variant="underlined"
               label="Last Name"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.lastName}
+              errorMessage={errors.lastName}
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -259,8 +378,8 @@ const StepOne = () => {
               type="text"
               variant="underlined"
               label="Enter Full Address"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.address}
+              errorMessage={errors.address}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -271,8 +390,8 @@ const StepOne = () => {
               type="text"
               variant="underlined"
               label="Enter City"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.city}
+              errorMessage={errors.city}
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
@@ -280,6 +399,8 @@ const StepOne = () => {
               variant="underlined"
               label="State/Province/Region"
               onChange={(e) => setState(e.target.value)}
+              isInvalid={!!errors.state}
+              errorMessage={errors.state}
             >
               {stateList.map((state) => (
                 <SelectItem key={state.value} value={state.value}>
@@ -294,8 +415,8 @@ const StepOne = () => {
               type="number"
               variant="underlined"
               label="Zip Code"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.zip}
+              errorMessage={errors.zip}
               value={zip}
               onChange={(e) => setZip(e.target.value)}
             />
@@ -304,8 +425,8 @@ const StepOne = () => {
               type="number"
               variant="underlined"
               label="Phone Number"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.phone}
+              errorMessage={errors.phone}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -316,8 +437,8 @@ const StepOne = () => {
               type="email"
               variant="underlined"
               label="Enter Email Address"
-              isInvalid={false}
-              errorMessage="This field is required!"
+              isInvalid={!!errors.email}
+              errorMessage={errors.email}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
