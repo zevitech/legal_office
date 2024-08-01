@@ -14,30 +14,30 @@ import { Button, Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
 const Payment = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  // const [cardNumber, setCardNumber] = useState(null);
-  // const [cardExpiry, setCardExpiry] = useState(null);
-  // const [cardCVC, setCardCVC] = useState(null);
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [city, setCity] = useState("");
-  // const [state, setState] = useState("");
-  // const [zip, setZip] = useState("");
-  // const [billingAddress, setBillingAddress] = useState("");
+  const [cardNumber, setCardNumber] = useState(null);
+  const [cardExpiry, setCardExpiry] = useState(null);
+  const [cardCVC, setCardCVC] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
+  const [billingAddress, setBillingAddress] = useState("");
   const [isTermsAccept, setIsTermsAccept] = useState(false);
   const [errors, setErrors] = useState({});
   const [paymentError, setPaymentError] = useState("");
   const [isNext, setIsNext] = useState(false);
 
   // for test
-  const [cardNumber, setCardNumber] = useState("5424000000000015");
-  const [cardExpiry, setCardExpiry] = useState("2025-12");
-  const [cardCVC, setCardCVC] = useState(999);
-  const [firstName, setFirstName] = useState("Ellen");
-  const [lastName, setLastName] = useState("Johnson");
-  const [city, setCity] = useState("14 Main Street");
-  const [state, setState] = useState("TX");
-  const [zip, setZip] = useState("44628");
-  const [billingAddress, setBillingAddress] = useState("Pecan Springs");
+  // const [cardNumber, setCardNumber] = useState("5424000000000015");
+  // const [cardExpiry, setCardExpiry] = useState("2025-12");
+  // const [cardCVC, setCardCVC] = useState(999);
+  // const [firstName, setFirstName] = useState("Ellen");
+  // const [lastName, setLastName] = useState("Johnson");
+  // const [city, setCity] = useState("14 Main Street");
+  // const [state, setState] = useState("TX");
+  // const [zip, setZip] = useState("44628");
+  // const [billingAddress, setBillingAddress] = useState("Pecan Springs");
 
   // Refs for error fields
   const cardNumberRef = useRef(null);
@@ -173,7 +173,8 @@ const Payment = () => {
         refId: leadDataWithValues.receipt_ID,
         transactionRequest: {
           transactionType: "authCaptureTransaction",
-          amount: leadDataWithValues.totalAmount,
+          // amount: leadDataWithValues.totalAmount,
+          amount: 5,
           payment: {
             creditCard: {
               cardNumber: cardNumber?.replace(/\s+/g, ""),
