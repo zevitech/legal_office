@@ -68,6 +68,8 @@ const StepOne = () => {
   const phoneRef = useRef(null);
   const emailRef = useRef(null);
 
+  console.log("APP URL: ", process.env.NEXT_PUBLIC_APP_URL);
+
   // validate the phone number
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberObject = parsePhoneNumberFromString(phoneNumber, "US");

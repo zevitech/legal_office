@@ -14,19 +14,30 @@ import { Button, Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
 const Payment = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [cardNumber, setCardNumber] = useState(null);
-  const [cardExpiry, setCardExpiry] = useState(null);
-  const [cardCVC, setCardCVC] = useState(null);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [zip, setZip] = useState("");
-  const [billingAddress, setBillingAddress] = useState("");
+  // const [cardNumber, setCardNumber] = useState(null);
+  // const [cardExpiry, setCardExpiry] = useState(null);
+  // const [cardCVC, setCardCVC] = useState(null);
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [city, setCity] = useState("");
+  // const [state, setState] = useState("");
+  // const [zip, setZip] = useState("");
+  // const [billingAddress, setBillingAddress] = useState("");
   const [isTermsAccept, setIsTermsAccept] = useState(false);
   const [errors, setErrors] = useState({});
   const [paymentError, setPaymentError] = useState("");
   const [isNext, setIsNext] = useState(false);
+
+  // for test
+  const [cardNumber, setCardNumber] = useState("5424000000000015");
+  const [cardExpiry, setCardExpiry] = useState("2025-12");
+  const [cardCVC, setCardCVC] = useState(999);
+  const [firstName, setFirstName] = useState("Ellen");
+  const [lastName, setLastName] = useState("Johnson");
+  const [city, setCity] = useState("14 Main Street");
+  const [state, setState] = useState("TX");
+  const [zip, setZip] = useState("44628");
+  const [billingAddress, setBillingAddress] = useState("Pecan Springs");
 
   // Refs for error fields
   const cardNumberRef = useRef(null);
@@ -47,14 +58,6 @@ const Payment = () => {
   const stepFourData = nestedLeadData.stepFour;
 
   // from the nested object, merge them into one object
-  // const leadData = Object.assign({}, ...Object.values(nestedLeadData));
-
-  // Filter out properties that are empty or undefined
-  // const leadDataWithValues = Object.fromEntries(
-  //   Object.entries(leadData).filter(([_, value]) => value !== "")
-  // );
-
-  // from the nested object, merge them into one object
   const leadData = useMemo(
     () => Object.assign({}, ...Object.values(nestedLeadData)),
     [nestedLeadData]
@@ -68,51 +71,6 @@ const Payment = () => {
       ),
     [leadData]
   );
-  console.log("leadDataWithValues", leadDataWithValues);
-  console.log("stepFourData", stepFourData);
-  console.log("leadData", nestedLeadData);
-  console.log("object speareds values", leadData);
-
-  // adjust the order items details
-  // var orderDetails;
-  // if (nestedLeadData.stepFour.rushAmount == 0) {
-  //   orderDetails = [
-  //     {
-  //       title: "Trademark registration",
-  //       amount: nestedLeadData.stepThree.price,
-  //     },
-  //     { title: "Comprehensive Trademark Search", amount: 0 },
-  //     { title: "Trademark monitoring", amount: 0 },
-  //     { title: "Office Action Response", amount: 0 },
-  //   ];
-  // } else {
-  //   orderDetails = [
-  //     {
-  //       title: "Trademark registration",
-  //       amount: nestedLeadData.stepThree.price,
-  //     },
-  //     { title: "Comprehensive Trademark Search", amount: 0 },
-  //     { title: "Trademark monitoring", amount: 0 },
-  //     { title: "Office Action Response", amount: 0 },
-  //     { title: "Rush processing", amount: nestedLeadData.stepFour.rushAmount },
-  //   ];
-  // }
-
-  // // Create the lineItems array
-  // const lineItems = orderDetails.map((item, index) => ({
-  //   itemId: `item${index + 1}`,
-  //   name: item.title,
-  //   description: item.title,
-  //   quantity: "1",
-  //   unitPrice: item.amount,
-  // }));
-
-  // //count the total and add to total amount into data object
-  // const totalAmount = orderDetails.reduce(
-  //   (accumulator, current) => accumulator + current.amount,
-  //   0
-  // );
-  // leadDataWithValues.totalAmount = totalAmount;
 
   // adjust the order items details
   const orderDetails = useMemo(() => {
@@ -136,26 +94,24 @@ const Payment = () => {
     return baseDetails;
   }, [nestedLeadData, stepFourData]);
 
+  //count the total and add to total amount into data object
+  const totalAmount = orderDetails.reduce(
+    (accumulator, current) => accumulator + current.amount,
+    0
+  );
+  leadDataWithValues.totalAmount = totalAmount;
+
   // Create the lineItems array
   const lineItems = useMemo(
-    () =>
-      orderDetails.map((item, index) => ({
+    () => ({
+      lineItem: orderDetails.map((item, index) => ({
         itemId: `item${index + 1}`,
         name: item.title,
         description: item.title,
         quantity: "1",
         unitPrice: item.amount,
       })),
-    [orderDetails]
-  );
-
-  //count the total and add to total amount into data object
-  const totalAmount = useMemo(
-    () =>
-      orderDetails.reduce(
-        (accumulator, current) => accumulator + current.amount,
-        0
-      ),
+    }),
     [orderDetails]
   );
 
@@ -164,7 +120,7 @@ const Payment = () => {
     let tempErrors = {};
 
     if (!cardNumber) tempErrors.cardNumber = "Card Number is required";
-    if (cardNumber?.length < 16)
+    if (cardNumber?.length < 12)
       tempErrors.cardNumber = "Card Number is too short";
     if (!cardExpiry) tempErrors.cardExpiry = "Card Expiry is required";
     if (!cardCVC) tempErrors.cardCVC = "Card CVC is required";
@@ -176,20 +132,18 @@ const Payment = () => {
     if (!state) tempErrors.state = "State is required";
     if (!zip) tempErrors.zip = "Zip code is required";
     if (!city) tempErrors.city = "City is required";
-    if (!isTermsAccept) tempErrors.isTermsAccept = "Field is required";
 
     setErrors(tempErrors);
     return Object.keys(tempErrors)[0];
   };
 
-  // handle the payment request
+  // handle the payment request --------------------------
   const handlePaymentRequest = () => {
     setIsLoading(true);
 
     //return (stop) if there validation issue
     const firstErrorField = validateForm();
     if (firstErrorField) {
-      setIsNext(false);
       setIsLoading(false);
 
       // Scroll to the first error field
@@ -201,7 +155,11 @@ const Payment = () => {
         lastName: lastNameRef,
       };
 
-      errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });
+      if (firstErrorField < 4) {
+        errorRefs[firstErrorField].current.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
       return;
     }
 
@@ -218,27 +176,25 @@ const Payment = () => {
           amount: leadDataWithValues.totalAmount,
           payment: {
             creditCard: {
-              cardNumber: cardNumber.replace(/\s+/g, ""),
+              cardNumber: cardNumber?.replace(/\s+/g, ""),
               expirationDate: cardExpiry,
               cardCode: cardCVC,
             },
           },
-          lineItems: {
-            lineItems,
-          },
+          lineItems,
           poNumber: leadDataWithValues.phone,
           customer: {
             id: leadDataWithValues.customer_ID,
           },
           billTo: {
-            firstName: leadDataWithValues.firstName,
-            lastName: leadDataWithValues.lastName,
+            firstName: firstName,
+            lastName: lastName,
             company: leadDataWithValues.formation,
-            address: leadDataWithValues.address,
-            city: leadDataWithValues.city,
-            state: leadDataWithValues.state,
-            zip: leadDataWithValues.zip,
-            country: "USA",
+            address: billingAddress,
+            city: city,
+            state: state,
+            zip: zip,
+            country: "US",
           },
           customerIP: "",
           processingOptions: {
@@ -253,77 +209,64 @@ const Payment = () => {
     };
 
     // requesting to authorize.net to make payment
-    const endpoint = "https://api.authorize.net/xml/v1/request.api";
     axios
-      .post(endpoint, requestData)
+      .post(process.env.NEXT_PUBLIC_AUTHORIZE_API_URL, requestData)
       .then((res) => {
-        if ("transactionResponse" in res) {
-          if ("messages" in res.transactionResponse) {
-            if (res.transactionResponse.messages[0].code === "1") {
-              console.log(
-                "success",
-                res.transactionResponse.messages[0].description
-              );
-              // payment successful
-              setIsNext(true);
+        if ("transactionResponse" in res.data) {
+          if ("messages" in res.data.transactionResponse) {
+            if (res.data.transactionResponse.messages[0].code === "1") {
+              // payment successful. now make a request to send the data to mail and zoho
+              setPaymentError("");
+              axios
+                .post(
+                  `${process.env.NEXT_PUBLIC_API_URL}/save-data`,
+                  leadDataWithValues
+                )
+                .then((res) => {
+                  if (res.data.success) {
+                    return router.push("/trademark-register/thank-you");
+                  }
+                })
+                .catch((err) => {
+                  setIsLoading(false);
+                  console.log(
+                    "Error sending data to save-data endpoint in payment page: ",
+                    err
+                  );
+                  alert(
+                    "Something went wrong, Check your network or please try again."
+                  );
+                });
             } else {
-              console.log("fail", res.transactionResponse.messages[0]);
-              setPaymentError(res.transactionResponse.messages[0].description);
-              setIsNext(false);
+              setPaymentError(
+                res.data.transactionResponse.messages[0].description
+              );
+              setIsLoading(false);
               return;
             }
-          } else if ("errors" in res.transactionResponse) {
-            console.log(
-              "transactionResponse error",
-              res.transactionResponse.errors[0]
-            );
-            setPaymentError(res.transactionResponse.errors[0].errorText);
-            setIsNext(false);
+          } else if ("errors" in res.data.transactionResponse) {
+            setPaymentError(res.data.transactionResponse.errors[0].errorText);
+            setIsLoading(false);
             return;
           } else {
-            console.log("failed res", res);
             setPaymentError("Please enter a valid card information.");
-            setIsNext(false);
+            setIsLoading(false);
             return;
           }
         } else {
-          console.log("failed:invalid ", res);
           setPaymentError("Please enter a valid card information.");
-          setIsNext(false);
+          setIsLoading(false);
           return;
         }
       })
       .catch((error) => {
         console.error("There was a problem with the request:", error);
-        setPaymentError("There was a problem with the request, Try again.");
-        setIsNext(false);
-        return;
-      })
-      .finally(() => {
+        setPaymentError(
+          "Something went wrong, Check your network or please try again."
+        );
         setIsLoading(false);
+        return;
       });
-
-    // if everything is ok then make a request to send the data to mail and zoho
-    if (isNext) {
-      setIsLoading(true);
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/save-data`,
-          leadDataWithValues
-        )
-        .then((res) => {
-          if (res.data.success) {
-            return router.push("/trademark-register/thank-you");
-          }
-        })
-        .catch((err) => {
-          console.log("Error in payment page: ", err);
-          alert("Something went wrong, Please try again.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
   };
 
   return (
@@ -382,7 +325,7 @@ const Payment = () => {
                   type="number"
                   label="Card CVC"
                   variant="underlined"
-                  placeholder="1234"
+                  placeholder="123"
                   value={cardCVC}
                   onChange={(e) => setCardCVC(e.target.value)}
                   isInvalid={!!errors.cardCVC}
@@ -464,8 +407,6 @@ const Payment = () => {
                   onChange={(e) => setIsTermsAccept(e.target.value)}
                   value={isTermsAccept}
                   size="md"
-                  isInvalid={!!errors.isTermsAccept}
-                  errorMessage={errors.isTermsAccept}
                 >
                   <TinyWarning
                     text={`I ACCEPT THE TERMS. I HAVE READ, UNDERSTAND, & AGREE TO THE TERMS OF SERVICE.`}
