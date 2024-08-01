@@ -10,15 +10,18 @@ import { useRouter } from "next/navigation";
 import Receipt from "@/components/form/Receipt";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
+import { useSelector } from "react-redux";
 
 const Page = () => {
   const router = useRouter();
   const receiptRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const stepFourData = useSelector((state) => state.form.stepFour);
 
-  // useEffect(() => {
-  //   window.scrollTo(0, document.body.scrollHeight);
-  // }, []);
+  // page authorization | redirect if previous step has no data
+  if (Object.keys(stepFourData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   // make image and the download the receipt as image
   const handleDownload = async () => {

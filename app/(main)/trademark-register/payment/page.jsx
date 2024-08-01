@@ -26,7 +26,6 @@ const Payment = () => {
   const [isTermsAccept, setIsTermsAccept] = useState(false);
   const [errors, setErrors] = useState({});
   const [paymentError, setPaymentError] = useState("");
-  const [isNext, setIsNext] = useState(false);
 
   // for test
   // const [cardNumber, setCardNumber] = useState("5424000000000015");
@@ -46,6 +45,9 @@ const Payment = () => {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
 
+  const nestedLeadData = useSelector((state) => state.form);
+  const stepFourData = nestedLeadData.stepFour;
+
   const handleCardExpiryChange = (e) => {
     const allowedChars = /^[0-9/]*$/;
     if (!allowedChars.test(e.key)) {
@@ -53,9 +55,6 @@ const Payment = () => {
     }
     setCardExpiry(e.target.value);
   };
-
-  const nestedLeadData = useSelector((state) => state.form);
-  const stepFourData = nestedLeadData.stepFour;
 
   // from the nested object, merge them into one object
   const leadData = useMemo(
@@ -115,6 +114,11 @@ const Payment = () => {
     [orderDetails]
   );
 
+  // page authorization | redirect if previous step has no data
+  if (Object.keys(stepFourData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
+
   // validate the form input
   const validateForm = () => {
     let tempErrors = {};
@@ -155,10 +159,23 @@ const Payment = () => {
         lastName: lastNameRef,
       };
 
-      if (firstErrorField < 4) {
+      // if (firstErrorField < 4) {
+      // errorRefs[firstErrorField].current.scrollIntoView({
+      //   behavior: "smooth",
+      // });
+      if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
         errorRefs[firstErrorField].current.scrollIntoView({
           behavior: "smooth",
         });
+
+        // Wait for the scrolling to finish and then adjust by the offset
+        setTimeout(() => {
+          window.scrollBy({
+            top: -100,
+            behavior: "smooth",
+          });
+        }, 400);
+        // }
       }
       return;
     }
@@ -173,8 +190,8 @@ const Payment = () => {
         refId: leadDataWithValues.receipt_ID,
         transactionRequest: {
           transactionType: "authCaptureTransaction",
-          // amount: leadDataWithValues.totalAmount,
-          amount: 5,
+          amount: leadDataWithValues.totalAmount,
+          // amount: 5,
           payment: {
             creditCard: {
               cardNumber: cardNumber?.replace(/\s+/g, ""),
@@ -418,17 +435,19 @@ const Payment = () => {
                     {paymentError}
                   </p>
                 )}
-                <Button
-                  color="primary"
-                  variant="shadow"
-                  type="submit"
-                  isLoading={isLoading}
-                  className=" float-end mt-5 px-6"
-                  radius="sm"
-                  onClick={handlePaymentRequest}
-                >
-                  Confirm Payment
-                </Button>
+                <div className="mt-5">
+                  <Button
+                    color="primary"
+                    variant="shadow"
+                    type="submit"
+                    isLoading={isLoading}
+                    className=" float-end px-6"
+                    radius="sm"
+                    onClick={handlePaymentRequest}
+                  >
+                    Confirm Payment
+                  </Button>
+                </div>
               </div>
             </div>
           </section>

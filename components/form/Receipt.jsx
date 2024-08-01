@@ -13,8 +13,6 @@ const Receipt = () => {
       ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
       : nestedLeadData.stepThree.price;
 
-  console.log("nestedLeadData receipt: ", nestedLeadData);
-
   const today = new Date().toLocaleDateString(undefined, {
     year: "numeric",
     month: "long",

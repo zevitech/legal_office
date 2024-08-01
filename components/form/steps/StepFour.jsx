@@ -17,9 +17,12 @@ const StepFour = () => {
   const rushAmount = 49;
   const [isLoading, setIsLoading] = useState(false);
   const [isRushProcessing, setIsRushProcessing] = useState(false);
-
   const stepThreeData = useSelector((state) => state.form.stepThree);
-  console.log("stepThreeData", stepThreeData);
+
+  // page authorization | redirect if previous step has no data
+  if (Object.keys(stepThreeData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   // handle form submission
   const handleFormSubmit = async (e) => {

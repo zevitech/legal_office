@@ -1,7 +1,7 @@
 "use client";
 
 import Package from "../Package";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NormalLabel from "../NormalLabel";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@nextui-org/react";
@@ -16,7 +16,11 @@ const StepThree = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const stepTwoData = useSelector((state) => state.form.stepTwo);
-  console.log("stepTwoData", stepTwoData);
+
+  // page authorization | redirect if previous step has no data
+  if (Object.keys(stepTwoData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   // handle form submission
   const handleNext = ({ packageName, price }) => {

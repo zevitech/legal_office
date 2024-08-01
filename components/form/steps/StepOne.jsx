@@ -23,6 +23,7 @@ import validator from "email-validator";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
+import { LuLoader } from "react-icons/lu";
 
 const StepOne = () => {
   const router = useRouter();
@@ -147,8 +148,20 @@ const StepOne = () => {
         phone: phoneRef,
         email: emailRef,
       };
+      // errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });if (firstErrorField)
+      if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
+        errorRefs[firstErrorField].current.scrollIntoView({
+          behavior: "smooth",
+        });
 
-      errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });
+        // Wait for the scrolling to finish and then adjust by the offset
+        setTimeout(() => {
+          window.scrollBy({
+            top: -100,
+            behavior: "smooth",
+          });
+        }, 500);
+      }
       return;
     }
 
@@ -296,9 +309,9 @@ const StepOne = () => {
                 onSuccess={(results) => {
                   const public_url = results?.info?.url;
                   setLogo(public_url);
-                  setIsUploading(false);
                 }}
                 onOpen={() => setIsUploading(true)}
+                onClose={() => setIsUploading(false)}
               >
                 {({ open }) => {
                   return (
@@ -306,10 +319,16 @@ const StepOne = () => {
                       <div className="flex gap-3">
                         <div
                           onClick={() => open()}
-                          className="bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full"
+                          className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
+                            isUploading && `cursor-not-allowed opacity-75`
+                          }`}
                           ref={logoRef}
                         >
-                          {isUploading ? "Loading..." : "Select Image"}
+                          {isUploading ? (
+                            <LuLoader className=" animate-spin text-2xl" />
+                          ) : (
+                            "Select Image"
+                          )}
                         </div>
                         {logo && (
                           <Image
