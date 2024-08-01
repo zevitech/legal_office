@@ -5,14 +5,14 @@ const FormHero = ({ step }) => {
   return (
     <section
       className={`w-full flex-center bg-formHero bg-center bg-cover ${
-        step ? `h-[40vh] max-md:h-[230px]` : `h-[30vh] max-md:h-[180px]`
+        step ? `h-[40vh] max-md:h-[250px]` : `h-[30vh] max-md:h-[180px]`
       } `}
     >
-      <div className="px-2 py-3 flex-col flex gap-3">
-        <h1 className="text-4xl max-md:text-2xl font-semibold capitalize text-white text-center">
+      <div className="px-2 py-3 flex-col flex gap-3 max-md:gap-0">
+        <h1 className="text-4xl max-md:text-2xl font-semibold capitalize text-white text-center max-md:mb-3">
           official US trademark register
         </h1>
-        <div className="text-base max-md:text text-slate-100 flex max-md:flex-col gap-2 max-md:block max-md:px-2 max-md:text-center">
+        <div className="text-base max-md:text-sm text-slate-100 flex max-md:flex-col gap-2 max-md:block max-md:px-2 max-md:text-center">
           Still have questions?
           <a
             href="tel:123456789"

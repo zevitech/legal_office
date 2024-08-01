@@ -31,7 +31,7 @@ const StepThree = () => {
       <section className="m-auto w-full flex flex-col gap-9 max-md:gap-4 mt-16 max-md:mt-10">
         {isLoading && <PageLoader />}
         <div className="flex flex-col gap-3 m-auto w-[700px] px-4 max-md:w-auto">
-          <h1 className="text-slate-600 font-semibold text-3xl">
+          <h1 className="text-slate-600 font-semibold text-3xl max-md:text-2xl">
             Choose a Package
           </h1>
           <NormalLabel

@@ -16,10 +16,10 @@ const Package = ({
 
   return (
     <div
-      className={`w-[350px] py-7 bg-white rounded-2xl flex flex-col justify-between gap-6 relative  ${badgeBorder} hover:translate-y-5 transition-all max-md:hover:translate-y-0`}
+      className={`w-[350px] max-sm:w-[93%] py-7 bg-white rounded-2xl flex flex-col justify-between gap-6 relative max-md:mx-4 ${badgeBorder} hover:translate-y-5 transition-all max-md:hover:translate-y-0`}
     >
       {badge === true && (
-        <div className="absolute top-[-15px] bg-orange-600 text-white left-[130px] rounded-md text-xs px-2 py-1">
+        <div className="absolute top-[-15px] bg-orange-600 text-white left-[130px] max-sm:left-[37%] rounded-md text-xs px-2 py-1">
           Most Popular
         </div>
       )}

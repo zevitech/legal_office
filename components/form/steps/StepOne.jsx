@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveStepOne } from "@/features/formSlice";
 import FieldContainer from "../FieldContainer";
@@ -28,20 +28,18 @@ const StepOne = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [ownedBy, setOwnedBy] = useState("individual");
-
   const [wantToProtect, setWantToProtect] = useState("name");
   const [protectName, setProtectName] = useState("");
   const [sloganName, setSloganName] = useState("");
   const [logo, setLogo] = useState("");
-
   const [formation, setFormation] = useState("us_based");
   const [countryOfFormation, setCountryOfFormation] = useState("");
   const [organizationName, setOrganizationName] = useState("");
   const [organizationType, setOrganizationType] = useState("");
   const [stateOfFormation, setStateOfFormation] = useState("");
   const [position, setPosition] = useState("");
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -50,8 +48,25 @@ const StepOne = () => {
   const [zip, setZip] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-
   const [errors, setErrors] = useState({});
+
+  // Refs for error fields
+  const protectNameRef = useRef(null);
+  const sloganNameRef = useRef(null);
+  const logoRef = useRef(null);
+  const organizationNameRef = useRef(null);
+  const organizationTypeRef = useRef(null);
+  const countryOfFormationRef = useRef(null);
+  const stateOfFormationRef = useRef(null);
+  const positionRef = useRef(null);
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const addressRef = useRef(null);
+  const cityRef = useRef(null);
+  const stateRef = useRef(null);
+  const zipRef = useRef(null);
+  const phoneRef = useRef(null);
+  const emailRef = useRef(null);
 
   // validate the phone number
   const validatePhoneNumber = (phoneNumber) => {
@@ -98,7 +113,7 @@ const StepOne = () => {
     }
 
     setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
+    return Object.keys(tempErrors)[0]; // Return the first error key
   };
 
   // Handle form submission
@@ -107,12 +122,34 @@ const StepOne = () => {
     setIsLoading(true);
 
     //return (stop) if there validation issue
-    if (!validateForm()) {
+    const firstErrorField = validateForm();
+    if (firstErrorField) {
       setIsLoading(false);
+
+      // Scroll to the first error field
+      const errorRefs = {
+        protectName: protectNameRef,
+        sloganName: sloganNameRef,
+        logo: logoRef,
+        organizationName: organizationNameRef,
+        organizationType: organizationTypeRef,
+        countryOfFormation: countryOfFormationRef,
+        stateOfFormation: stateOfFormationRef,
+        position: positionRef,
+        firstName: firstNameRef,
+        lastName: lastNameRef,
+        address: addressRef,
+        city: cityRef,
+        state: stateRef,
+        zip: zipRef,
+        phone: phoneRef,
+        email: emailRef,
+      };
+
+      errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });
       return;
     }
 
-    // Todo:: get the key who has value
     const stepOne = {
       wantToProtect,
       protectName,
@@ -133,6 +170,7 @@ const StepOne = () => {
       zip,
       phone,
       email,
+      customer_ID: Math.floor(Math.random() * 90000 + 10000),
     };
 
     // Filter out properties that are empty or undefined
@@ -153,7 +191,7 @@ const StepOne = () => {
       })
       .catch((err) => {
         console.log("Error in step one: ", err);
-        alert("Something went wrong, Please try again.");
+        alert("Something went wrong, Check your network or Please try again.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -192,6 +230,7 @@ const StepOne = () => {
               errorMessage={errors.protectName}
               value={protectName}
               onChange={(e) => setProtectName(e.target.value)}
+              ref={protectNameRef}
             />
           )}
 
@@ -205,6 +244,7 @@ const StepOne = () => {
               errorMessage={errors.sloganName}
               value={sloganName}
               onChange={(e) => setSloganName(e.target.value)}
+              ref={sloganNameRef}
             />
           )}
 
@@ -212,7 +252,7 @@ const StepOne = () => {
             <>
               <br />
               <TinyWarning text="Upload the logo you wish to protect" />
-              <CldUploadWidget
+              {/* <CldUploadWidget
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
                 onSuccess={(results) => {
                   const public_url = results?.info?.url;
@@ -226,8 +266,48 @@ const StepOne = () => {
                         <div
                           onClick={() => open()}
                           className="bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full"
+                          ref={logoRef}
                         >
                           Select Image
+                        </div>
+                        {logo && (
+                          <Image
+                            src={logo}
+                            alt="Logo"
+                            width={100}
+                            height={44}
+                            className="h-[44px] w-auto"
+                          />
+                        )}
+                      </div>
+                      {!!errors.logo && (
+                        <p className="text-[#f31260] text-xs pt-2">
+                          Please select an image
+                        </p>
+                      )}
+                    </div>
+                  );
+                }}
+              </CldUploadWidget> */}
+              <CldUploadWidget
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                onSuccess={(results) => {
+                  const public_url = results?.info?.url;
+                  setLogo(public_url);
+                  setIsUploading(false);
+                }}
+                onOpen={() => setIsUploading(true)}
+              >
+                {({ open }) => {
+                  return (
+                    <div className="w-full">
+                      <div className="flex gap-3">
+                        <div
+                          onClick={() => open()}
+                          className="bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full"
+                          ref={logoRef}
+                        >
+                          {isUploading ? "Loading..." : "Select Image"}
                         </div>
                         {logo && (
                           <Image
@@ -294,11 +374,13 @@ const StepOne = () => {
                 errorMessage={errors.organizationName}
                 value={organizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
+                ref={organizationNameRef}
               />
               <Select
                 variant="underlined"
                 label="Organization Type"
                 onChange={(e) => setOrganizationType(e.target.value)}
+                ref={organizationTypeRef}
               >
                 {organizationTypes.map((type) => (
                   <SelectItem key={type.label} value={type.label}>
@@ -318,6 +400,7 @@ const StepOne = () => {
                   errorMessage={errors.countryOfFormation}
                   value={countryOfFormation}
                   onChange={(e) => setCountryOfFormation(e.target.value)}
+                  ref={countryOfFormationRef}
                 />
               ) : (
                 <Select
@@ -326,6 +409,7 @@ const StepOne = () => {
                   isInvalid={!!errors.stateOfFormation}
                   errorMessage={errors.stateOfFormation}
                   onChange={(e) => setStateOfFormation(e.target.value)}
+                  ref={stateOfFormationRef}
                 >
                   {stateList.map((state) => (
                     <SelectItem key={state.value} value={state.value}>
@@ -343,6 +427,7 @@ const StepOne = () => {
                 errorMessage={errors.position}
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
+                ref={positionRef}
               />
             </InputCol>
           </FieldContainer>
@@ -360,6 +445,7 @@ const StepOne = () => {
               errorMessage={errors.firstName}
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              ref={firstNameRef}
             />
             <Input
               name="lastName"
@@ -370,6 +456,7 @@ const StepOne = () => {
               errorMessage={errors.lastName}
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              ref={lastNameRef}
             />
           </InputCol>
           <InputCol>
@@ -382,6 +469,7 @@ const StepOne = () => {
               errorMessage={errors.address}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              ref={addressRef}
             />
           </InputCol>
           <InputCol>
@@ -394,6 +482,7 @@ const StepOne = () => {
               errorMessage={errors.city}
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              ref={cityRef}
             />
             <Select
               variant="underlined"
@@ -401,6 +490,7 @@ const StepOne = () => {
               onChange={(e) => setState(e.target.value)}
               isInvalid={!!errors.state}
               errorMessage={errors.state}
+              ref={stateRef}
             >
               {stateList.map((state) => (
                 <SelectItem key={state.value} value={state.value}>
@@ -419,6 +509,7 @@ const StepOne = () => {
               errorMessage={errors.zip}
               value={zip}
               onChange={(e) => setZip(e.target.value)}
+              ref={zipRef}
             />
             <Input
               name="phone"
@@ -429,6 +520,7 @@ const StepOne = () => {
               errorMessage={errors.phone}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              ref={phoneRef}
             />
           </InputCol>
           <InputCol>
@@ -441,6 +533,7 @@ const StepOne = () => {
               errorMessage={errors.email}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
             />
           </InputCol>
         </FieldContainer>
@@ -452,7 +545,7 @@ const StepOne = () => {
             variant="shadow"
             type="submit"
             isLoading={isLoading}
-            className=" float-end"
+            className="float-end px-10 py-5"
           >
             Next
           </Button>

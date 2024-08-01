@@ -67,6 +67,7 @@ const StepTwo = () => {
             variant="shadow"
             type="submit"
             isLoading={isLoading}
+            className="px-10"
           >
             Next
           </Button>

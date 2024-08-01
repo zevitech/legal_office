@@ -30,7 +30,7 @@ const StepFour = () => {
       isRushProcessing,
       rushAmount: isRushProcessing ? rushAmount : 0,
       previous: true,
-      receipt_ID: Math.floor(Math.random() * 90000 + 10000),
+      receipt_ID: Math.floor(Math.random() * 900000 + 100000),
     };
     dispatch(saveStepFour(data)); // store data to state
 
@@ -106,6 +106,7 @@ const StepFour = () => {
             variant="shadow"
             type="submit"
             isLoading={isLoading}
+            className="px-10"
           >
             Next
           </Button>

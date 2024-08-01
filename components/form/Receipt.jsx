@@ -31,12 +31,9 @@ const Receipt = () => {
           height={40}
           className="w-24 h-auto"
         />
-        {/* <h1 className="text-slate-700 font-bold text-3xl ">
-          receipt #{nestedLeadData.stepFour.receipt_ID}
-        </h1> */}
         <div className="flex flex-col gap-2 items-end">
           <h1 className="text-slate-700 font-bold text-2xl max-md:text-lg uppercase">
-            receipt #33433
+            receipt #{nestedLeadData.stepFour.receipt_ID}
           </h1>
           <p className="text-sm"> {today}</p>
         </div>
