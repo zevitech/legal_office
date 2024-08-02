@@ -22,13 +22,17 @@ const Receipt = () => {
   return (
     <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono mt-8">
       <section className="flex-between border-dashed border-b-2 border-slate-500 pb-4">
-        <Image
-          src="/images/form-hero.jpg"
+        {/* <Image
+          src="/images/legal-trademark-logo.webp"
           alt="Secure Your Mark"
           width={100}
           height={40}
           className="w-24 h-auto"
-        />
+        /> */}
+        <h1 className="text-[#005ea2] font-extrabold text-lg">
+          Legal Trademark
+        </h1>
+
         <div className="flex flex-col gap-2 items-end">
           <h1 className="text-slate-700 font-bold text-2xl max-md:text-lg uppercase">
             receipt #{nestedLeadData.stepFour.receipt_ID}
@@ -101,7 +105,9 @@ const Receipt = () => {
           </div>
         </div>
         <div className="mt-7 flex flex-col items-center justify-center gap-2 text-slate-600 text-xs">
-          <p>Thank you for choosing us!</p>
+          <p className="flex-center gap-1">
+            {`Statement Descriptor "Xtarlabs LLC"`}
+          </p>
           <p className="w-28 h-[1px] bg-slate-300" />
           <p className="flex-center gap-1">
             <FaRegCopyright /> Copyright and all Rights reserved by{" "}

@@ -6,7 +6,7 @@ import BoldLabel from "../BoldLabel";
 import SmallLabel from "../SmallLabel";
 import { Button, Textarea } from "@nextui-org/react";
 import ButtonContainer from "../ButtonContainer";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { saveStepTwo } from "@/features/formSlice";
 

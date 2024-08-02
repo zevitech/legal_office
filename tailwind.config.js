@@ -12,7 +12,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         beams: "url('/images/beams-home@95.jpg')",
-        formHero: "url('/images/form-hero.jpg')",
+        formHero: "url('/images/form-banner.jpg')",
       },
     },
   },

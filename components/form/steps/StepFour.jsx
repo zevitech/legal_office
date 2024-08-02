@@ -5,7 +5,7 @@ import FieldContainer from "../FieldContainer";
 import SmallLabel from "../SmallLabel";
 import { Button, Checkbox } from "@nextui-org/react";
 import ButtonContainer from "../ButtonContainer";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { IoTimerOutline } from "react-icons/io5";
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";

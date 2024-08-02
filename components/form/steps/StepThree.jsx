@@ -6,7 +6,7 @@ import NormalLabel from "../NormalLabel";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@nextui-org/react";
 import { FaSpinner } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { saveStepThree } from "@/features/formSlice";
 import { _35_USD, _135_USD, _235_USD } from "@/constant/packages";
 import PageLoader from "@/components/PageLoader";
