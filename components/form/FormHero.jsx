@@ -18,14 +18,14 @@ const FormHero = ({ step }) => {
           Still have questions?
           <Link
             href="tel:+14083893630"
-            className="font-bold text-[#ff812a] uppercase max-md:px-1"
+            className="font-bold text-color-primary uppercase max-md:px-1"
           >
             Call +1 (408) 389-3630
           </Link>
           or
           <button
             href=""
-            className="font-bold text-[#ff812a] uppercase max-md:px-1"
+            className="font-bold text-color-primary uppercase max-md:px-1"
           >
             live chat
           </button>

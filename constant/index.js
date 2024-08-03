@@ -73,3 +73,13 @@ export const organizationTypes = [
   { id: 7, label: "Trust" },
   { id: 8, label: "Other" },
 ];
+
+export const serviceList = [
+  { id: 1, text: "Protect your brand nationwide" },
+  { id: 2, text: "Enforce and defend your rights" },
+  { id: 3, text: "70% of Self Filers make a mistake, avoid that today" },
+  {
+    id: 4,
+    text: "Full Preparation and Filing of your Official Trademark with USPTO",
+  },
+];

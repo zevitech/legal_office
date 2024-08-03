@@ -18,7 +18,7 @@ import {
 } from "@nextui-org/react";
 import InputCol from "../InputCol";
 import { stateList, organizationTypes } from "@/constant";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import validator from "email-validator";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { CldUploadWidget } from "next-cloudinary";
