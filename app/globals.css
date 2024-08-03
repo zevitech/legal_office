@@ -54,6 +54,7 @@ a {
   height: 100%;
   z-index: -999;
   transform: rotate(180deg);
+  background-position: top;
 }
 
 .heroBgAfter {

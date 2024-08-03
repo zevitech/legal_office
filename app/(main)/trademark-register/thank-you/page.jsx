@@ -6,7 +6,7 @@ import FormHero from "@/components/form/FormHero";
 import { Button } from "@nextui-org/react";
 import { MdOutlineCall } from "react-icons/md";
 import { FaDownload } from "react-icons/fa6";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Receipt from "@/components/form/Receipt";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";

@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import { stateList } from "@/constant";
 import React, { useMemo, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import FormHero from "@/components/form/FormHero";
 import TinyWarning from "@/components/form/TinyWarning";
 import NormalLabel from "@/components/form/NormalLabel";
