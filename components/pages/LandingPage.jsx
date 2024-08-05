@@ -100,8 +100,9 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+
       {/* testimonial section  */}
-      <section className="flex-center gap-24 mt-24">
+      <section className="flex-center gap-24 mt-32">
         <div className="flex">
           <div className="flex-center gap-2 flex-col">
             <h2 className="text-2xl font-bold text-slate-800">Excellent</h2>
@@ -124,7 +125,7 @@ const LandingPage = () => {
       </section>
 
       {/* how it's work section */}
-      <section className="flex-center mt-24">
+      <section className="flex-center mt-32">
         <div className="flex flex-col gap-16">
           <div className="text-center flex flex-col gap-4">
             <h1 className="text-4xl text-[#025da0] font-bold">
@@ -179,7 +180,7 @@ const LandingPage = () => {
 
       {/* benefit section */}
       <section className="mt-24">
-        <div className="ml-28 flex-between gap-28">
+        <div className="ml-28 flex-between gap-32">
           <div className="flex flex-col gap-14 ">
             <div className="flex gap-14">
               <BenefitCard
@@ -218,7 +219,7 @@ const LandingPage = () => {
       </section>
 
       {/* faq section */}
-      <section className="flex-center mt-28">
+      <section className="flex-center mt-32">
         <div className="flex gap-20">
           <div className="w-[500px]">
             <div className="text-center flex flex-col gap-4">
@@ -260,7 +261,7 @@ const LandingPage = () => {
       </section>
 
       {/* footer section */}
-      <footer className="mt-28 bg-footer w-full bg-no-repeat bg-cover relative">
+      <footer className="mt-32 bg-footer w-full bg-no-repeat bg-cover relative">
         <div className="footer-overly"></div>
         <div className="pt-20 z-30 relative">
           <div className="flex-center">
