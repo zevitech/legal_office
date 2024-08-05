@@ -1,0 +1,104 @@
+import React, { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  FaRegArrowAltCircleLeft,
+  FaRegArrowAltCircleRight,
+} from "react-icons/fa";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+// import required modules
+import { Navigation, Pagination } from "swiper/modules";
+import ReviewCard from "./ReviewCard";
+
+export default function TestimonialCarousel() {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
+  return (
+    <div className="relative flex justify-end bg-slate-50 shadow-sm py-7 px-16 rounded-sm pb-9">
+      <button
+        ref={prevRef}
+        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-10"
+      >
+        <FaRegArrowAltCircleLeft className="text-slate-500 text-2xl" />
+      </button>
+      <button
+        ref={nextRef}
+        className="absolute right-7 top-1/2 transform -translate-y-1/2 z-10"
+      >
+        <FaRegArrowAltCircleRight className="text-slate-500 text-2xl" />
+      </button>
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={1}
+        grabCursor={true}
+        navigation={{
+          prevEl: prevRef.current,
+          nextEl: nextRef.current,
+        }}
+        onBeforeInit={(swiper) => {
+          swiper.params.navigation.prevEl = prevRef.current;
+          swiper.params.navigation.nextEl = nextRef.current;
+        }}
+        breakpoints={{
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 40,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 50,
+          },
+        }}
+        pagination={true}
+        modules={[Navigation, Pagination]}
+        className="mySwiper max-w-[700px] m-0"
+      >
+        <SwiperSlide>
+          <ReviewCard
+            title="ipsum dolor sit amet consectetur"
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReviewCard
+            title="ipsum dolor sit amet consectetur"
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReviewCard
+            title="ipsum dolor sit amet consectetur"
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReviewCard
+            title="ipsum dolor sit amet consectetur"
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReviewCard
+            title="ipsum dolor sit amet consectetur"
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReviewCard
+            title="ipsum dolor sit amet consectetur"
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
+          />
+        </SwiperSlide>
+      </Swiper>
+    </div>
+  );
+}
