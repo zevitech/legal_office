@@ -1,0 +1,13 @@
+import React from "react";
+
+const WhyChooseCard = ({ number, title, description }) => {
+  return (
+    <div className="w-[330px] flex flex-col gap-5">
+      <h1 className="text-[#025da0] font-semibold text-5xl">{number}+</h1>
+      <h1 className="text-slate-800 font-semibold text-2xl">{title}</h1>
+      <p className="text-slate-700 pt-2">{description}</p>
+    </div>
+  );
+};
+
+export default WhyChooseCard;

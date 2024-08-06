@@ -22,3 +22,19 @@ export const definition = [
     answer: `A Service is any action or task provided for the consumer. Services include activities such as dry cleaning, legal services or banking, for example.`,
   },
 ];
+
+export const applicationProcess = [
+  {
+    key: randomKey(),
+    question: ``,
+    answer: ``,
+  },
+];
+
+export const basicQuestion = [
+  {
+    key: randomKey(),
+    question: ``,
+    answer: ``,
+  },
+];
