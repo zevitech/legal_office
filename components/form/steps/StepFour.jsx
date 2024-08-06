@@ -114,6 +114,12 @@ const StepFour = () => {
             Next
           </Button>
         </ButtonContainer>
+        <p className="text-sm text-slate-500 mb-16 mt-7">
+          Once you have received your search(es) and our specialists have
+          curated your Trademark application, Trademark Genius will collect and
+          pay the government-discounted TEAS Standard electronic filing fee of
+          $350.
+        </p>
       </form>
     </section>
   );

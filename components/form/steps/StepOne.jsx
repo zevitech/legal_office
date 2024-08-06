@@ -24,6 +24,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { LuLoader } from "react-icons/lu";
+import { IoMdLock } from "react-icons/io";
 
 const StepOne = () => {
   const router = useRouter();
@@ -560,7 +561,11 @@ const StepOne = () => {
         </FieldContainer>
 
         {/* next or previous button */}
-        <div className="my-5 mb-11 items-center float-end">
+        <div className="my-10  flex-between">
+          <div className="flex-center gap-2 text-slate-700">
+            <IoMdLock className="text-lg" />
+            <p>{`Click on "Next" to save your application`}</p>
+          </div>
           <Button
             color="primary"
             variant="shadow"
@@ -571,6 +576,12 @@ const StepOne = () => {
             Next
           </Button>
         </div>
+        <p className="text-sm text-slate-500 mb-16">
+          Once you have received your search(es) and our specialists have
+          curated your Trademark application, Trademark Genius will collect and
+          pay the government-discounted TEAS Standard electronic filing fee of
+          $350.
+        </p>
       </form>
     </section>
   );

@@ -9,9 +9,9 @@ const WhyChooseInfo = ({ image, title }) => {
         width={35}
         height={35}
         alt="icon"
-        className="m-auto mb-4"
+        className="m-auto mb-4 max-md:w-6"
       />
-      <p className="text-center text-sm">{title}</p>
+      <p className="text-center text-sm max-md:text-xs">{title}</p>
     </div>
   );
 };

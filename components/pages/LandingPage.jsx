@@ -15,6 +15,7 @@ import { LuCopyright } from "react-icons/lu";
 import ClientSection from "../ui/ClientSection";
 import WhyChooseCard from "../ui/WhyChooseCard";
 import WhyChooseInfo from "../ui/WhyChooseInfo";
+import { FaAnglesDown } from "react-icons/fa6";
 
 const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,18 +32,18 @@ const LandingPage = () => {
         <div className="heroBg absolute"></div>
         {/* <div className="heroBgAfter absolute"></div> */}
         <LandingHeader />
-        <div className="flex-center mt-8">
-          <div className="flex flex-col gap-5 max-w-[1000px]">
-            <h1 className="text-slate-800 text-5xl leading-tight font-bold text-center">
+        <div className="flex-center mt-8 max-md:mt-4">
+          <div className="flex flex-col gap-5 max-md:gap-2 max-w-[1000px] px-2">
+            <h1 className="text-slate-800 text-5xl max-md:text-2xl leading-tight font-bold text-center">
               Register a trademark for your Business Name, Slogan, or Logo
               Starting at
             </h1>
             <h1 className="text-slate-700 text-2xl font-bold text-center">
-              <span className="text-[44px] text-[#025da0]">
+              <span className="text-[44px]  max-md:text-2xl text-[#025da0]">
                 $35 + USPTO Filing Fee
               </span>
             </h1>
-            <p className="text-slate-700 mt-4 text-center max-w-[80%] m-auto">
+            <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
               Start by filling out our simple trademark questionnaire,
               Affordable Rates, Expert Legal Support, Get your serial number of
               trade mark registration once your trademark application is filed
@@ -50,7 +51,7 @@ const LandingPage = () => {
             </p>
           </div>
         </div>
-        <div className="flex-center mt-16">
+        <div className="flex-center mt-16 max-md:mt-10 w-[80%] m-auto">
           <Button
             color="primary"
             radius="sm"
@@ -62,34 +63,34 @@ const LandingPage = () => {
           </Button>
         </div>
         <div className="flex-center mt-12">
-          <div className="flex-center gap-6">
+          <div className="flex-center gap-6 max-md:gap-3">
             <Image
               src={"/images/trustpilot-logo.webp"}
               alt="Trustpilot Review"
               width={110}
               height={40}
-              className="w-26 h-12"
+              className="w-26 h-12 max-md:w-14 max-md:h-auto"
             />
             <Image
               src={"/images/Untitled-design-1.webp"}
               alt="Google Review"
               width={110}
               height={40}
-              className="w-24 h-16"
+              className="w-24 h-16 max-md:w-14 max-md:h-auto"
             />
             <Image
               src={"/images/accredited-business.jpg"}
               alt="trustpilot"
               width={110}
               height={40}
-              className="w-24 h-10"
+              className="w-24 h-10 max-md:w-14 max-md:h-auto"
             />
             <Image
               src={"/images/Seal_of_the_United_States_Patent.png"}
               alt="Seal of the United States patient"
               width={110}
               height={40}
-              className="w-20 h-20"
+              className="w-20 h-20 max-md:w-14 max-md:h-auto"
             />
             <Image
               src={
@@ -98,7 +99,7 @@ const LandingPage = () => {
               alt="Forbes"
               width={110}
               height={40}
-              className="w-24 h-10"
+              className="w-24 h-10 max-md:w-14 max-md:h-auto"
             />
             {/* <Image
               src={"/images/seal-cs-grnte.png"}
@@ -115,10 +116,10 @@ const LandingPage = () => {
       <ClientSection />
 
       {/* how it's work section */}
-      <section className="flex-center mt-24">
-        <div className="flex flex-col gap-16">
-          <div className="text-center flex flex-col gap-4">
-            <h1 className="text-4xl text-[#025da0] font-bold">
+      <section className="flex-center mt-24 max-md:mt-20 max-md:w-full">
+        <div className="flex flex-col gap-16 max-md:gap-8">
+          <div className="text-center flex flex-col gap-4  max-md:px-3">
+            <h1 className="text-4xl text-[#025da0] font-bold max-md:text-3xl">
               How Legal Trademark Works
             </h1>
             <p className="text-base text-slate-600">
@@ -130,23 +131,25 @@ const LandingPage = () => {
               width={300}
               height={10}
               alt="curve line"
-              className="m-auto"
+              className="m-auto max-md:w-56"
             />
           </div>
           <div className="flex-center">
-            <div className="flex gap-4">
+            <div className="flex-center gap-4 max-md:flex-col">
               <HowWorkCard
                 step={1}
                 title={`Complete Our Online Questionnaire`}
                 description={`All information gathered is confidential and secured.`}
               />
-              <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4" />
+              <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
+              <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={2}
                 title={`We Review & Prepare the Application for Submission`}
                 description={`Our specialists review for any missing information, conduct a Direct-Hit search and ensure the application is ready for quick and easy processing.`}
               />
-              <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 " />
+              <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
+              <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
                 title={`Application is Filed`}
@@ -154,7 +157,7 @@ const LandingPage = () => {
               />
             </div>
           </div>
-          <div className="flex-center">
+          <div className="flex-center max-md:w-[80%] max-md:m-auto max-md:mt-6">
             <Button
               color="primary"
               radius="sm"
@@ -169,10 +172,26 @@ const LandingPage = () => {
       </section>
 
       {/* benefit section */}
-      <section className="mt-24">
-        <div className="ml-28 flex-between gap-32">
-          <div className="flex flex-col gap-14 ">
-            <div className="flex gap-14">
+      <section className="mt-28 max-md:mt-20">
+        <div className="text-center flex flex-col gap-4 mb-16 max-md:mb-10 max-md:px-5">
+          <h1 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
+            Why Choose Us
+          </h1>
+          <p className="text-base text-slate-600">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
+            neque. adipisicing elit.
+          </p>
+          <Image
+            src={"/images/curve-DplsLMf8.webp"}
+            width={300}
+            height={10}
+            alt="curve line"
+            className="m-auto max-md:w-56"
+          />
+        </div>
+        <div className="ml-28 max-md:ml-0 flex-between gap-32 max-md:gap-0">
+          <div className="flex flex-col gap-14  max-md:gap-6">
+            <div className="flex max-md:flex-col gap-14  max-md:gap-6">
               <BenefitCard
                 title={`Protects from Infringements`}
                 description={`Registering your trademark gives you special rights. It means only you can use your mark, and others can't copy it.`}
@@ -184,7 +203,7 @@ const LandingPage = () => {
                 icon={`registered`}
               />
             </div>
-            <div className="flex gap-14">
+            <div className="flex max-md:flex-col gap-14 max-md:gap-6">
               <BenefitCard
                 title={`Secure Your Brand`}
                 description={`When you register your trademark, you gain legal rights. It means you can protect your brand and maintain its integrity.`}
@@ -197,7 +216,7 @@ const LandingPage = () => {
               />
             </div>
           </div>
-          <div className="">
+          <div className="max-md:hidden">
             <Image
               src={"/images/marks-in-laptop.webp"}
               alt=""
@@ -209,9 +228,9 @@ const LandingPage = () => {
       </section>
 
       {/* contact us section */}
-      <section className="bg-[#025da0] mt-28">
-        <div className="flex-center gap-14">
-          <div className="w-[500px] flex justify-end items-center">
+      <section className="bg-[#025da0] mt-28 max-md:mt-20 max-md:py-20">
+        <div className="flex-center max-md:flex-col gap-14">
+          <div className="w-[500px] max-md:w-full flex justify-end max-md:justify-center items-center">
             <div>
               <h1 className="text-slate-100 font-semibold text-3xl">
                 Consult Our Experts
@@ -235,16 +254,19 @@ const LandingPage = () => {
             alt="Trust Pilot"
             width={150}
             height={300}
+            className="max-md:rounded-2xl"
           />
-          <div className="w-[500px] text-slate-200">
-            <p className="font-semibold mb-1">Call an agent at: </p>
+          <div className="w-[500px] max-md:w-full max-md:px-4 text-slate-200">
+            <p className="font-semibold mb-1 max-md:text-2xl">
+              Call an agent at:{" "}
+            </p>
             <Link
               href={"tel:+12098135108"}
               className="text-slate-100 font-semibold text-3xl"
             >
               +1 (209) 813 5108
             </Link>
-            <div className="mt-3 mb-5 text-sm">
+            <div className="mt-3 mb-5 text-sm max-md:text-base">
               <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
               <p>Weekends: 7 a.m.-4 p.m. PT</p>
             </div>
@@ -254,10 +276,10 @@ const LandingPage = () => {
       </section>
 
       {/* faq section */}
-      <section className="flex-center mt-28 ">
-        <div className="flex gap-20">
-          <div className="w-[500px]">
-            <div className="text-center flex flex-col gap-4">
+      <section className="flex-center mt-28 max-md:mt-20 ">
+        <div className="flex max-md:flex-col gap-20 max-md:gap-10">
+          <div className="w-[500px] max-md:w-[90%] max-md:m-auto">
+            <div className="text-center flex flex-col gap-4 ">
               <h1 className="text-4xl text-[#025da0] font-bold">FAQs</h1>
               <p className="text-base text-slate-600">
                 {`Everything you need to know about the trademark. Can't find the
@@ -279,7 +301,7 @@ const LandingPage = () => {
               />
             </div>
           </div>
-          <div className="w-[600px] flex flex-col gap-10">
+          <div className="w-[600px] max-md:w-[90%] max-md:m-auto flex flex-col gap-10">
             <p>
               Trademark Genius does not operate as a law firm. No information on
               our website is to be used as legal advice. Each situation can be
@@ -296,9 +318,11 @@ const LandingPage = () => {
       </section>
 
       {/* why choose us */}
-      <section className="flex flex-col gap-16 mt-28 bg-slate-50 py-24">
-        <div className="text-center flex flex-col gap-4">
-          <h1 className="text-4xl text-[#025da0] font-bold">Why Choose Us</h1>
+      <section className="flex flex-col gap-16 max-md:gap-14 mt-28 max-md:mt-20 bg-slate-50 py-24 max-md:py-20">
+        <div className="text-center flex flex-col gap-4 max-md:px-5">
+          <h1 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
+            Why Choose Us
+          </h1>
           <p className="text-base text-slate-600">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
             neque. adipisicing elit.
@@ -308,11 +332,11 @@ const LandingPage = () => {
             width={300}
             height={10}
             alt="curve line"
-            className="m-auto"
+            className="m-auto max-md:w-56"
           />
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex-center gap-8">
+          <div className="flex-center max-md:flex-col gap-8">
             <WhyChooseCard
               number={`3500`}
               title={`Businesses`}
@@ -329,7 +353,7 @@ const LandingPage = () => {
               description={`We've trademarked over 3500 businesses and we're still keeping count.`}
             />
           </div>
-          <div className="flex justify-center border-t-1 mx-14 mt-10 pt-9">
+          <div className="flex justify-center border-t-1 mx-14 max-md:mx-0 mt-10 pt-9 overflow-hidden">
             <WhyChooseInfo
               image={`pi-01.png`}
               title={`Unlimited Customer Service`}
@@ -350,7 +374,7 @@ const LandingPage = () => {
             <WhyChooseInfo image={`pi-06.png`} title={`We're Affordable`} />
           </div>
         </div>
-        <div className="flex-center">
+        <div className="flex-center max-md:mt-7">
           <Button
             color="primary"
             radius="sm"
@@ -364,7 +388,7 @@ const LandingPage = () => {
       </section>
 
       {/* testimonial section  */}
-      <section className="flex-center gap-28 mt-24">
+      <section className="flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-20">
         <div className="flex">
           <div className="flex-center gap-2 flex-col">
             <h2 className="text-2xl font-bold text-slate-800">Excellent</h2>
@@ -383,7 +407,9 @@ const LandingPage = () => {
             />
           </div>
         </div>
-        <TestimonialCarousel />
+        <div className="max-md:w-full">
+          <TestimonialCarousel />
+        </div>
       </section>
 
       {/* footer section */}
@@ -391,15 +417,15 @@ const LandingPage = () => {
         <div className="footer-overly"></div>
         <div className="pt-20 z-30 relative">
           <div className="flex-center">
-            <div className="w-[1100px] flex-center">
-              <div className="w-[50%]">
+            <div className="w-[1100px] max-md:w-full max-md:px-5 max-md:gap-9 flex-center max-md:flex-col">
+              <div className="w-[50%] max-md:w-full">
                 <Image
                   src={`/images/legal-trademark-logo.webp`}
                   alt="Legal Trademark"
                   width={200}
                   height={200}
                 />
-                <p className="mt-1 text-slate-400 text-sm">
+                <p className="mt-1 max-md:mt-0 text-slate-400 text-sm">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
                   dolorum praesentium nemo possimus dolore blanditiis ratione
                   quos, doloremque necessitatibus asperiores labore commodi rem
@@ -407,7 +433,7 @@ const LandingPage = () => {
                   facere! Tempore consectetur illum ad suscipit ipsum voluptate.
                 </p>
               </div>
-              <div className="w-[50%] flex-center">
+              <div className="w-[50%] max-md:w-full flex-center">
                 <div className="bg-slate-900 p-10 rounded-md bg-opacity-80">
                   <h1 className="text-slate-300 font-semibold text-lg ">
                     Call us at:{" "}
@@ -436,8 +462,8 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-          <div className="mt-14 border-t-1 border-slate-700 py-6">
-            <div className="text-slate-300 flex-center gap-1">
+          <div className="mt-14 border-t-1 border-slate-700 py-6 max-md:px-6">
+            <div className="text-slate-300 flex-center max-md:items-start gap-1">
               <LuCopyright className=" text-lg" />
               <p>
                 Copyright & all rights reserved by{" "}

@@ -19,14 +19,14 @@ const LandingHeader = () => {
   };
 
   return (
-    <header className="flex-between px-16 py-5">
+    <header className="flex-between gap-4 px-6 py-5">
       <Image
         src={`/images/legal-trademark-logo.webp`}
         alt="Legal Trademark"
         width={130}
         height={100}
       />
-      <ul className="flex gap-5">
+      <ul className="flex gap-4">
         <li>
           <Link href="tel:+14083893630">
             <Tooltip content="+1 (408) 389-3630">
@@ -45,7 +45,7 @@ const LandingHeader = () => {
             </Tooltip>
           </Link>
         </li>
-        <li>
+        <li className="max-md:hidden">
           <Button
             color="secondary"
             variant="shadow"

@@ -9,6 +9,7 @@ import ButtonContainer from "../ButtonContainer";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { saveStepTwo } from "@/features/formSlice";
+import { IoMdLock } from "react-icons/io";
 
 const StepTwo = () => {
   const router = useRouter();
@@ -75,6 +76,18 @@ const StepTwo = () => {
             Next
           </Button>
         </ButtonContainer>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-slate-700">
+            <IoMdLock className="text-lg" />
+            <p>{`Click on "Next" to save your application`}</p>
+          </div>
+          <p className="text-sm text-slate-500 mb-16">
+            Once you have received your search(es) and our specialists have
+            curated your Trademark application, Trademark Genius will collect
+            and pay the government-discounted TEAS Standard electronic filing
+            fee of $350.
+          </p>
+        </div>
       </form>
     </section>
   );
