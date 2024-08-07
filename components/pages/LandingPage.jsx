@@ -28,39 +28,40 @@ const LandingPage = () => {
   return (
     <>
       {/* hero section */}
-      <section className="relative w-full ">
+      <section className="relative w-full bg-of-hero pb-20 backdrop-brightness-150">
         <div className="heroBg absolute"></div>
-        {/* <div className="heroBgAfter absolute"></div> */}
-        <LandingHeader />
-        <div className="flex-center mt-8 max-md:mt-4">
-          <div className="flex flex-col gap-5 max-md:gap-2 max-w-[1000px] px-2">
-            <h1 className="text-slate-800 text-5xl max-md:text-2xl leading-tight font-bold text-center">
-              Register a trademark for your Business Name, Slogan, or Logo
-              Starting at
-            </h1>
-            <h1 className="text-slate-700 text-2xl font-bold text-center">
-              <span className="text-[44px]  max-md:text-2xl text-[#025da0]">
-                $35 + USPTO Filing Fee
-              </span>
-            </h1>
-            <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
-              Start by filling out our simple trademark questionnaire,
-              Affordable Rates, Expert Legal Support, Get your serial number of
-              trade mark registration once your trademark application is filed
-              with us!
-            </p>
+        <div>
+          <LandingHeader />
+          <div className="flex-center mt-8 max-md:mt-4">
+            <div className="flex flex-col gap-5 max-md:gap-2 max-w-[1000px] px-2">
+              <h1 className="text-slate-800 text-5xl max-md:text-2xl leading-tight font-bold text-center">
+                Register a trademark for your Business Name, Slogan, or Logo
+                Starting at
+              </h1>
+              <h1 className="text-slate-700 text-2xl font-bold text-center">
+                <span className="text-[44px]  max-md:text-2xl text-[#025da0]">
+                  $49 + USPTO Filing Fee
+                </span>
+              </h1>
+              <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
+                Start by filling out our simple trademark questionnaire,
+                Affordable Rates, Expert Legal Support, Get your serial number
+                of trade mark registration once your trademark application is
+                filed with us!
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="flex-center mt-16 max-md:mt-10 w-[80%] m-auto">
-          <Button
-            color="primary"
-            radius="sm"
-            onClick={handleRegisterClick}
-            isLoading={isLoading}
-            className="bg-gradient-to-tr to-[#0b72e7] from-blue-700 text-white text-lg animate-expand hover:animate-none px-28 py-8 shadow-lg shadow-blue-200"
-          >
-            Trademark Now
-          </Button>
+          <div className="flex-center mt-16 max-md:mt-10 w-[80%] m-auto">
+            <Button
+              color="primary"
+              radius="sm"
+              onClick={handleRegisterClick}
+              isLoading={isLoading}
+              className="bg-gradient-to-tr to-[#0b72e7] from-blue-700 text-white text-lg animate-expand hover:animate-none px-28 py-8 shadow-lg shadow-blue-200"
+            >
+              Trademark Now
+            </Button>
+          </div>
         </div>
         <div className="flex-center mt-12">
           <div className="flex-center gap-6 max-md:gap-3">
@@ -229,8 +230,8 @@ const LandingPage = () => {
 
       {/* contact us section */}
       <section className="bg-[#025da0] mt-28 max-md:mt-20 max-md:py-20">
-        <div className="flex-center max-md:flex-col gap-14">
-          <div className="w-[500px] max-md:w-full flex justify-end max-md:justify-center items-center">
+        <div className="flex-center max-md:flex-col gap-20 max-md:gap-10 py-12 max-md:py-0">
+          <div className="w-[500px] max-md:w-full flex justify-end max-md:justify-center items-center max-md:px-4">
             <div>
               <h1 className="text-slate-100 font-semibold text-3xl">
                 Consult Our Experts
@@ -245,20 +246,20 @@ const LandingPage = () => {
                 onClick={handleRegisterClick}
                 isLoading={isLoading}
               >
-                Get Expert Help
+                Get Free Consultation
               </Button>
             </div>
+            <Image
+              src={"/images/assistant.webp"}
+              alt="Trust Pilot"
+              width={80}
+              height={200}
+              className="rounded-2xl md:ml-5"
+            />
           </div>
-          <Image
-            src={"/images/expert-cta.png"}
-            alt="Trust Pilot"
-            width={150}
-            height={300}
-            className="max-md:rounded-2xl"
-          />
           <div className="w-[500px] max-md:w-full max-md:px-4 text-slate-200">
             <p className="font-semibold mb-1 max-md:text-2xl">
-              Call an agent at:{" "}
+              Call Now for a Free Consultation:
             </p>
             <Link
               href={"tel:+12098135108"}
@@ -380,7 +381,7 @@ const LandingPage = () => {
             radius="sm"
             onClick={handleRegisterClick}
             isLoading={isLoading}
-            className="bg-gradient-to-tr to-[#0b72e7] from-blue-700 text-white text-lg animate-bounce hover:animate-none px-28 py-8 shadow-lg shadow-blue-200"
+            className="bg-gradient-to-tr to-[#0b72e7] from-blue-700 text-white text-lg animate-bounce hover:animate-none px-28 py-8 shadow-lg shadow-blue-200 max-md:w-[80%]"
           >
             Trademark Now
           </Button>
@@ -417,7 +418,7 @@ const LandingPage = () => {
         <div className="footer-overly"></div>
         <div className="pt-20 z-30 relative">
           <div className="flex-center">
-            <div className="w-[1100px] max-md:w-full max-md:px-5 max-md:gap-9 flex-center max-md:flex-col">
+            <div className="w-[1100px] max-md:w-full max-md:px-6 max-md:gap-9 flex-center max-md:flex-col">
               <div className="w-[50%] max-md:w-full">
                 <Image
                   src={`/images/legal-trademark-logo.webp`}
@@ -433,8 +434,8 @@ const LandingPage = () => {
                   facere! Tempore consectetur illum ad suscipit ipsum voluptate.
                 </p>
               </div>
-              <div className="w-[50%] max-md:w-full flex-center">
-                <div className="bg-slate-900 p-10 rounded-md bg-opacity-80">
+              <div className="w-[50%] max-md:w-[full] flex-center">
+                <div className="bg-slate-900 p-10 rounded-md bg-opacity-80 ">
                   <h1 className="text-slate-300 font-semibold text-lg ">
                     Call us at:{" "}
                     <Link

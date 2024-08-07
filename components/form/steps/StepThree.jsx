@@ -18,9 +18,9 @@ const StepThree = () => {
   const stepTwoData = useSelector((state) => state.form.stepTwo);
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepTwoData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepTwoData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   // handle form submission
   const handleNext = ({ packageName, price }) => {
@@ -44,22 +44,22 @@ const StepThree = () => {
         </div>
         <div className="flex justify-center max-md:flex-col max-md:items-center gap-7 pb-11">
           <Package
-            price={35}
+            price={49}
             packageName={`Basic`}
             complementaryTreat={`+ USPTO Fee $350/Class*`}
             rows={_35_USD}
             handleNext={handleNext}
           />
           <Package
-            price={135}
+            price={149}
             packageName={`Standard`}
             complementaryTreat={`+ USPTO Fee $350/Class*`}
             rows={_135_USD}
-            badge={true}
             handleNext={handleNext}
           />
           <Package
-            price={235}
+            price={249}
+            badge={true}
             packageName={`Premium`}
             complementaryTreat={`+ USPTO Fee $350/Class*`}
             rows={_235_USD}
@@ -75,11 +75,11 @@ const StepThree = () => {
           >
             Previous
           </Button>
-          <p className="text-sm text-slate-500 mb-16 mt-7">
-            Once you have received your search(es) and our specialists have
-            curated your Trademark application, Trademark Genius will collect
-            and pay the government-discounted TEAS Standard electronic filing
-            fee of $350.
+          <p className="text-sm max-md:text-xs text-slate-500 mb-16 max-md:mt-5">
+            Once your search results have been reviewed and our specialists have
+            curated your trademark application, Legal Trademark Office will
+            collect the necessary fees and pay the discounted TEAS Standard
+            electronic filing fee of $350 on your behalf.
           </p>
         </div>
       </section>

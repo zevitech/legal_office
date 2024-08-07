@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 // import required modules
 import { Navigation, Pagination } from "swiper/modules";
 import ReviewCard from "./ReviewCard";
+import { testimonials } from "@/constant/testimonial";
 
 export default function TestimonialCarousel() {
   const prevRef = useRef(null);
@@ -62,42 +63,14 @@ export default function TestimonialCarousel() {
         modules={[Navigation, Pagination]}
         className="mySwiper max-w-[700px] max-md:w-full m-0"
       >
-        <SwiperSlide>
-          <ReviewCard
-            title="ipsum dolor sit amet consectetur"
-            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReviewCard
-            title="ipsum dolor sit amet consectetur"
-            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReviewCard
-            title="ipsum dolor sit amet consectetur"
-            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReviewCard
-            title="ipsum dolor sit amet consectetur"
-            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReviewCard
-            title="ipsum dolor sit amet consectetur"
-            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReviewCard
-            title="ipsum dolor sit amet consectetur"
-            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo vel numquam labore cupiditate. Harum, voluptatibus! Animi eius nemo voluptatum consequatur, illum commodi sequi ipsa placeat!"
-          />
-        </SwiperSlide>
+        {testimonials.map((testimonial, index) => (
+          <SwiperSlide key={index}>
+            <ReviewCard
+              title={testimonial.title}
+              description={testimonial.description}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

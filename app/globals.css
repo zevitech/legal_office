@@ -49,12 +49,18 @@ a {
 }
 
 .heroBg {
-  background-image: url("/images/beams-home@95.jpg");
   width: 100%;
-  height: 100%;
-  z-index: -999;
-  transform: rotate(180deg);
-  background-position: top;
+  height: -webkit-fill-available;
+  background: #eff6fc4f;
+  backdrop-filter: blur(1px);
+  z-index: -99;
+}
+
+.bg-of-hero {
+  background-image: url("/images/Hero-Section-Background-03.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }
 
 .heroBgAfter {

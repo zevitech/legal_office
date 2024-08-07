@@ -19,7 +19,7 @@ const LandingHeader = () => {
   };
 
   return (
-    <header className="flex-between gap-4 px-6 py-5">
+    <header className="flex-between gap-4 px-10 py-5">
       <Image
         src={`/images/legal-trademark-logo.webp`}
         alt="Legal Trademark"

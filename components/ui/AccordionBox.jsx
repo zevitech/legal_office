@@ -4,6 +4,8 @@ import { FcProcess } from "react-icons/fc";
 import { RiQuestionnaireLine } from "react-icons/ri";
 import { FiBookOpen } from "react-icons/fi";
 import { definition } from "@/constant/faqs";
+import { applicationProcess } from "@/constant/faqs";
+import { basicQuestions } from "@/constant/faqs";
 
 const AccordionBox = () => {
   const itemClasses = {
@@ -52,7 +54,7 @@ const AccordionBox = () => {
       >
         <div className="w-[90%] m-auto">
           <Accordion>
-            {definition.map(({ key, question, answer }) => (
+            {applicationProcess.map(({ key, question, answer }) => (
               <AccordionItem key={key} title={question}>
                 {answer}
               </AccordionItem>
@@ -72,7 +74,7 @@ const AccordionBox = () => {
       >
         <div className="w-[90%] m-auto">
           <Accordion>
-            {definition.map(({ key, question, answer }) => (
+            {basicQuestions.map(({ key, question, answer }) => (
               <AccordionItem key={key} title={question}>
                 {answer}
               </AccordionItem>

@@ -5,7 +5,7 @@ import StepTwo from "@/components/form/steps/StepTwo";
 import React from "react";
 
 export const metadata = {
-  title: "Step 4 - Trademark Register | USPTO",
+  title: "Step 4 - Register Trademark | Legal Trademark Office",
 };
 
 const page = () => {

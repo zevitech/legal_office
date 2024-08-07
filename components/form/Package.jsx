@@ -20,7 +20,7 @@ const Package = ({
     >
       {badge === true && (
         <div className="absolute top-[-15px] bg-orange-600 text-white left-[130px] max-sm:left-[37%] rounded-md text-xs px-2 py-1">
-          Most Popular
+          Most Ordered
         </div>
       )}
       <div className="px-5 flex flex-col gap-5">

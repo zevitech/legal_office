@@ -5,8 +5,9 @@ import GlobalProvider from "./GlobalProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Step 1 - Trademark Register | USPTO",
-  description: "Register your trademark now. Trademark register form.",
+  title: "Step 1 - Register Trademark | Legal Trademark Office",
+  description:
+    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
 };
 
 export default function RootLayout({ children }) {

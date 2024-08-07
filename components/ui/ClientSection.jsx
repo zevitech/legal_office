@@ -3,10 +3,11 @@ import React from "react";
 
 const ClientSection = () => {
   return (
-    <div className="flex-center bg-slate-100 mt-16 max-md:mt-8">
-      <div className="flex-center py-2 max-md:flex-col">
-        <h1 className="text-[20px] font-semibold text-slate-700 max-md:text-lg w-64 max-md:w-auto max-md:text-center py-3">
-          Loved and trusted by the industry leaders
+    <div className="flex-center bg-slate-100">
+      <div className="flex-center py-3 max-md:flex-col">
+        <h1 className="text-lg font-medium text-slate-700 max-md:text-lg md:w-[400px] max-md:w-auto max-md:text-center py-3">
+          {`Ensure that competitors don't infringe on your most vital assets. 100%
+          Satisfaction Guaranteed.`}
         </h1>
         <Image
           src={"/images/comp-logos.png"}

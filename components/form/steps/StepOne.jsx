@@ -561,26 +561,26 @@ const StepOne = () => {
         </FieldContainer>
 
         {/* next or previous button */}
-        <div className="my-10  flex-between">
-          <div className="flex-center gap-2 text-slate-700">
-            <IoMdLock className="text-lg" />
-            <p>{`Click on "Next" to save your application`}</p>
+        <div className="my-10 gap-5 flex-between">
+          <div className="flex-center max-md:items-start gap-2 text-slate-700">
+            <IoMdLock className="text-lg max-md:text-2xl" />
+            <p className="max-md:text-sm">{`Click on "Next" to save your application`}</p>
           </div>
           <Button
             color="primary"
             variant="shadow"
             type="submit"
             isLoading={isLoading}
-            className="float-end px-10 py-5"
+            className="float-end px-10 py-5 max-md:px-14"
           >
             Next
           </Button>
         </div>
-        <p className="text-sm text-slate-500 mb-16">
-          Once you have received your search(es) and our specialists have
-          curated your Trademark application, Trademark Genius will collect and
-          pay the government-discounted TEAS Standard electronic filing fee of
-          $350.
+        <p className="text-sm max-md:text-xs text-slate-500 mb-16">
+          Once your search results have been reviewed and our specialists have
+          curated your trademark application, Legal Trademark Office will
+          collect the necessary fees and pay the discounted TEAS Standard
+          electronic filing fee of $350 on your behalf.
         </p>
       </form>
     </section>
