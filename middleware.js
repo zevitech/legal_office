@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const corsOptions = {
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
   "Access-Control-Allow-Origin": "*",
 };
@@ -10,9 +10,12 @@ export function middleware(request) {
   console.log("middleware running");
 
   // Handle preflight requests
-  const isPreflight = request.method === "OPTIONS";
-  if (isPreflight) {
-    return NextResponse.json({}, { headers: corsOptions });
+  if (request.method === "OPTIONS") {
+    const response = new NextResponse(null, { status: 204 });
+    Object.entries(corsOptions).forEach(([key, value]) => {
+      response.headers.set(key, value);
+    });
+    return response;
   }
 
   // Handle simple requests

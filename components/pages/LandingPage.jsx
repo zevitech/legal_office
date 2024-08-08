@@ -514,6 +514,7 @@ finish, so you can focus on growing your business.`}
           </div>
         </div>
       </footer>
+      <logCheck />
     </>
   );
 };
