@@ -4,6 +4,8 @@ import { createTransport } from "nodemailer";
 export async function POST(req) {
   const data = await req.json();
 
+  console.log("Getting request.....");
+
   try {
     // sending data to gmail account -start
     const transporter = createTransport({
