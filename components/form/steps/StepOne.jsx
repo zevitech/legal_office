@@ -198,8 +198,19 @@ const StepOne = () => {
     dispatch(saveStepOne(stepOneWithValues));
 
     // send the data to mail and zoho
+    const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+    console.log("endPoint", endPoint);
+
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/save-data`, stepOneWithValues)
+      .post(endPoint, stepOneWithValues, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer your-token-here",
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          Origin: process.env.NEXT_PUBLIC_APP_URL,
+        },
+      })
       .then((res) => {
         if (res.data.success) {
           return router.push("/trademark-register/step-2");
