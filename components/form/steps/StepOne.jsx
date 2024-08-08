@@ -208,7 +208,6 @@ const StepOne = () => {
           Authorization: "Bearer your-token-here",
           Accept: "application/json",
           "X-Requested-With": "XMLHttpRequest",
-          Origin: process.env.NEXT_PUBLIC_APP_URL,
         },
       })
       .then((res) => {
