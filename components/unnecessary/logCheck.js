@@ -1,9 +1,9 @@
 import React from "react";
 
-const logCheck = () => {
+const LogCheck = () => {
   console.log("checking logging");
 
-  return <div>logCheck</div>;
+  return <div>LogCheck</div>;
 };
 
-export default logCheck;
+export default LogCheck;

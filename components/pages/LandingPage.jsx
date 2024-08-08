@@ -17,6 +17,7 @@ import WhyChooseCard from "../ui/WhyChooseCard";
 import WhyChooseInfo from "../ui/WhyChooseInfo";
 import { FaAnglesDown } from "react-icons/fa6";
 import { IoChatbubblesOutline } from "react-icons/io5";
+import LogCheck from "../unnecessary/logCheck";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -514,7 +515,7 @@ finish, so you can focus on growing your business.`}
           </div>
         </div>
       </footer>
-      <logCheck />
+      <LogCheck />
     </>
   );
 };
