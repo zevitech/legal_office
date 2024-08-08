@@ -205,7 +205,6 @@ const StepOne = () => {
       .post(endPoint, stepOneWithValues, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer your-token-here",
           Accept: "application/json",
           "X-Requested-With": "XMLHttpRequest",
         },
