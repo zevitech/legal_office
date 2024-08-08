@@ -14,7 +14,7 @@ import { saveStepFour } from "@/features/formSlice";
 const StepFour = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const rushAmount = 49;
+  const rushAmount = 99;
   const [isLoading, setIsLoading] = useState(false);
   const [isRushProcessing, setIsRushProcessing] = useState(false);
   const stepThreeData = useSelector((state) => state.form.stepThree);
