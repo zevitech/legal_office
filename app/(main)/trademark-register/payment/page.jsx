@@ -134,9 +134,9 @@ const Payment = () => {
   );
 
   // page authorization | redirect if previous step has no data
-  // if (Object.keys(stepFourData).length === 0) {
-  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  // }
+  if (Object.keys(stepFourData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   // validate the form input
   const validateForm = () => {
