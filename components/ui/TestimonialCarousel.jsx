@@ -20,18 +20,18 @@ export default function TestimonialCarousel() {
   const nextRef = useRef(null);
 
   return (
-    <div className="relative flex justify-end bg-slate-50 shadow-sm py-7 px-16 max-md:px-0 rounded-md pb-9">
+    <div className="relative z-10 flex justify-end bg-slate-50 shadow-sm py-7 px-16 max-md:px-0 rounded-md pb-9">
       <button
         ref={prevRef}
-        className="absolute left-6 max-md:left-3 top-1/2 transform -translate-y-1/2 z-10"
+        className="absolute left-6 max-md:left-3 top-1/2 transform -translate-y-1/2 z-30"
       >
-        <FaRegArrowAltCircleLeft className="text-slate-500 text-2xl" />
+        <FaRegArrowAltCircleLeft className="text-slate-500 text-2xl max-md:text-4xl" />
       </button>
       <button
         ref={nextRef}
-        className="absolute right-7 max-md:right-3 top-1/2 transform -translate-y-1/2 z-10"
+        className="absolute right-7 max-md:right-3 top-1/2 transform -translate-y-1/2 z-30 "
       >
-        <FaRegArrowAltCircleRight className="text-slate-500 text-2xl" />
+        <FaRegArrowAltCircleRight className="text-slate-500 text-2xl  max-md:text-4xl" />
       </button>
       <Swiper
         slidesPerView={1}
@@ -61,7 +61,7 @@ export default function TestimonialCarousel() {
         }}
         pagination={true}
         modules={[Navigation, Pagination]}
-        className="mySwiper max-w-[700px] max-md:w-full m-0"
+        className="mySwiper max-w-[700px] max-md:w-full m-0  z-10"
       >
         {testimonials.map((testimonial, index) => (
           <SwiperSlide key={index}>

@@ -3,7 +3,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { stateList } from "@/constant";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import FormHero from "@/components/form/FormHero";
 import TinyWarning from "@/components/form/TinyWarning";
@@ -13,6 +13,7 @@ import { Button, Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
 
 const Payment = () => {
   const router = useRouter();
+  const [isDataSent, setIsDataSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [cardNumber, setCardNumber] = useState(null);
   const [cardExpiry, setCardExpiry] = useState(null);
@@ -100,6 +101,24 @@ const Payment = () => {
   );
   leadDataWithValues.totalAmount = totalAmount;
 
+  // send the data to mail and zoho
+  const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+  useEffect(() => {
+    const sendData = async () => {
+      if (isDataSent) return; // Prevent multiple sends
+
+      try {
+        await axios.post(endPoint, leadDataWithValues);
+        setIsDataSent(true); // Mark as sent
+      } catch (err) {
+        console.log("Error sending mail in payment page: ", err);
+        alert("Something went wrong, Check your network or Please try again.");
+      }
+    };
+
+    sendData();
+  }, [isDataSent]);
+
   // Create the lineItems array
   const lineItems = useMemo(
     () => ({
@@ -115,9 +134,9 @@ const Payment = () => {
   );
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepFourData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepFourData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   // validate the form input
   const validateForm = () => {
@@ -235,10 +254,7 @@ const Payment = () => {
               // payment successful. now make a request to send the data to mail and zoho
               setPaymentError("");
               axios
-                .post(
-                  `${process.env.NEXT_PUBLIC_API_URL}/save-data`,
-                  leadDataWithValues
-                )
+                .post(endPoint, leadDataWithValues)
                 .then((res) => {
                   if (res.data.success) {
                     return router.push("/trademark-register/thank-you");

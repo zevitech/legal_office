@@ -5,8 +5,8 @@ const ClientSection = () => {
   return (
     <div className="flex-center bg-slate-100">
       <div className="flex-center py-3 max-md:py-5 max-md:flex-col max-md:gap-2">
-        <h1 className="text-lg font-medium text-slate-700 max-md:text-base md:w-[400px] max-md:w-auto max-md:text-center py-3 ">
-          {`Trademark applicants with attorneys are 50% more likely to succeed than those without.`}
+        <h1 className="text-lg font-medium text-slate-700 max-md:text-base md:w-[400px] max-md:w-auto max-md:text-center py-3 max-md:mx-2">
+          {`Trademark applicants with US are 99% more likely to succeed than those without.`}
         </h1>
         <Image
           src={"/images/comp-logos.png"}

@@ -3,7 +3,7 @@ import React from "react";
 
 const ReviewCard = ({ title, description }) => {
   return (
-    <div className="flex flex-col gap-2 max-w-52 max-md:max-w-[70%] max-md:m-auto">
+    <div className="flex flex-col gap-2 max-w-52 max-md:max-w-[70%] max-md:m-auto z-10">
       <Image
         src={"/images/trustpilot-5star.jpg"}
         alt="Trust Pilot"

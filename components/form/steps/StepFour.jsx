@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 import FieldContainer from "../FieldContainer";
 import SmallLabel from "../SmallLabel";
@@ -7,7 +8,6 @@ import { Button, Checkbox } from "@nextui-org/react";
 import ButtonContainer from "../ButtonContainer";
 import { useRouter } from "next/navigation";
 import { IoTimerOutline } from "react-icons/io5";
-import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { saveStepFour } from "@/features/formSlice";
 
@@ -20,9 +20,9 @@ const StepFour = () => {
   const stepThreeData = useSelector((state) => state.form.stepThree);
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepThreeData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepThreeData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   // handle form submission
   const handleFormSubmit = async (e) => {

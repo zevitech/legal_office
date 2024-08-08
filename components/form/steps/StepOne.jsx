@@ -70,8 +70,6 @@ const StepOne = () => {
   const phoneRef = useRef(null);
   const emailRef = useRef(null);
 
-  console.log("APP URL: ", process.env.NEXT_PUBLIC_APP_URL);
-
   // validate the phone number
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberObject = parsePhoneNumberFromString(phoneNumber, "US");
@@ -199,16 +197,8 @@ const StepOne = () => {
 
     // send the data to mail and zoho
     const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
-    console.log("endPoint", endPoint);
-
     axios
-      .post(endPoint, stepOneWithValues, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      })
+      .post(endPoint, stepOneWithValues)
       .then((res) => {
         if (res.data.success) {
           return router.push("/trademark-register/step-2");
