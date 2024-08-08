@@ -20,7 +20,7 @@ export default function TestimonialCarousel() {
   const nextRef = useRef(null);
 
   return (
-    <div className="relative flex justify-end bg-slate-50 shadow-sm py-7 px-16 max-md:px-0 rounded-sm pb-9">
+    <div className="relative flex justify-end bg-slate-50 shadow-sm py-7 px-16 max-md:px-0 rounded-md pb-9">
       <button
         ref={prevRef}
         className="absolute left-6 max-md:left-3 top-1/2 transform -translate-y-1/2 z-10"

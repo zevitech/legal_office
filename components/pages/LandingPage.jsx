@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LandingHeader from "../ui/LandingHeader";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
@@ -16,19 +16,54 @@ import ClientSection from "../ui/ClientSection";
 import WhyChooseCard from "../ui/WhyChooseCard";
 import WhyChooseInfo from "../ui/WhyChooseInfo";
 import { FaAnglesDown } from "react-icons/fa6";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 const LandingPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [chatLoader, setChatLoader] = useState(false);
 
   const handleRegisterClick = () => {
     setIsLoading(true);
     router.push("/trademark-register");
   };
+
+  // adding zendesk script
+  useEffect(() => {
+    const loadZendeskScript = () => {
+      const script = document.createElement("script");
+      script.id = "ze-snippet";
+      script.src =
+        "https://static.zdassets.com/ekr/snippet.js?key=c87da82e-ad58-45e6-8a3b-737fbcad8c30";
+      script.async = true;
+      script.onload = () => {
+        console.log("Zendesk script loaded successfully");
+      };
+      script.onerror = (error) => {
+        console.error("Error loading Zendesk script:", error);
+      };
+      document.body.appendChild(script);
+    };
+
+    loadZendeskScript();
+  }, []);
+
+  // Wait for the Zendesk widget script to load and then open the chat
+  const handleOpenChat = () => {
+    setChatLoader(true);
+    if (window.zE) {
+      zE("messenger", "open");
+      setChatLoader(false);
+    } else {
+      console.error("Zendesk widget is not loaded yet.");
+      setChatLoader(false);
+    }
+  };
+
   return (
     <>
       {/* hero section */}
-      <section className="relative w-full bg-of-hero pb-20 backdrop-brightness-150">
+      <section className="relative w-full bg-of-hero pb-20 max-md:pb-10 backdrop-brightness-150">
         <div className="heroBg absolute"></div>
         <div>
           <LandingHeader />
@@ -57,7 +92,7 @@ const LandingPage = () => {
               radius="sm"
               onClick={handleRegisterClick}
               isLoading={isLoading}
-              className="bg-gradient-to-tr to-[#0b72e7] from-blue-700 text-white text-lg animate-expand hover:animate-none px-28 py-8 shadow-lg shadow-blue-200"
+              className="bg-gradient-to-tr to-[#0b72e7] from-blue-700 text-white text-lg animate-expand hover:animate-none px-28 max-md:px-20 py-8 shadow-lg shadow-blue-200"
             >
               Trademark Now
             </Button>
@@ -80,18 +115,18 @@ const LandingPage = () => {
               className="w-24 h-16 max-md:w-14 max-md:h-auto"
             />
             <Image
-              src={"/images/accredited-business.jpg"}
-              alt="trustpilot"
-              width={110}
-              height={40}
-              className="w-24 h-10 max-md:w-14 max-md:h-auto"
-            />
-            <Image
               src={"/images/Seal_of_the_United_States_Patent.png"}
               alt="Seal of the United States patient"
               width={110}
               height={40}
               className="w-20 h-20 max-md:w-14 max-md:h-auto"
+            />
+            <Image
+              src={"/images/accredited-business.jpg"}
+              alt="trustpilot"
+              width={110}
+              height={40}
+              className="w-24 h-10 max-md:w-14 max-md:h-auto"
             />
             <Image
               src={
@@ -121,11 +156,12 @@ const LandingPage = () => {
         <div className="flex flex-col gap-16 max-md:gap-8">
           <div className="text-center flex flex-col gap-4  max-md:px-3">
             <h1 className="text-4xl text-[#025da0] font-bold max-md:text-3xl">
-              How Legal Trademark Works
+              Register your U.S. Trademark in 3 easy steps
             </h1>
-            <p className="text-base text-slate-600">
-              Get your trademark registered in just 3 easy steps using our
-              simple online questionnaire.
+            <p className="text-base text-slate-600 md:max-w-[50%] m-auto">
+              Legal Trademark Office® attorneys have provided representation for
+              a diverse range of businesses, including Amazon sellers, clothing
+              designers, professional service providers, and more.
             </p>
             <Image
               src={"/images/curve-DplsLMf8.webp"}
@@ -139,22 +175,22 @@ const LandingPage = () => {
             <div className="flex-center gap-4 max-md:flex-col">
               <HowWorkCard
                 step={1}
-                title={`Complete Our Online Questionnaire`}
-                description={`All information gathered is confidential and secured.`}
+                title={` Conduct a Trademark Search`}
+                description={`Before you apply, our team will perform a comprehensive search to ensure your desired trademark isn't already in use. This step helps avoid potential conflicts and strengthens your application`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={2}
-                title={`We Review & Prepare the Application for Submission`}
-                description={`Our specialists review for any missing information, conduct a Direct-Hit search and ensure the application is ready for quick and easy processing.`}
+                title={` Prepare and File Your Application`}
+                description={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office (USPTO). We'll ensure your application meets all legal requirements.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
-                title={`Application is Filed`}
-                description={`The application is electronically with filed the USPTO for examination. You will be notified with all status updates and additional handling.`}
+                title={`Monitor and Respond to Office Actions`}
+                description={`After filing, we'll keep track of your application's progress and respond to any office actions or requests for additional information from the USPTO. Our goal is to help secure your trademark efficiently and effectively.`}
               />
             </div>
           </div>
@@ -173,14 +209,14 @@ const LandingPage = () => {
       </section>
 
       {/* benefit section */}
-      <section className="mt-28 max-md:mt-20">
+      <section className="mt-24 max-md:mt-20">
         <div className="text-center flex flex-col gap-4 mb-16 max-md:mb-10 max-md:px-5">
           <h1 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
             Why Choose Us
           </h1>
-          <p className="text-base text-slate-600">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
-            neque. adipisicing elit.
+          <p className="text-base text-slate-600 md:max-w-[50%] m-auto">
+            Trademark applicants represented by attorneys are 50% more likely to
+            successfully register than those who go it alone.
           </p>
           <Image
             src={"/images/curve-DplsLMf8.webp"}
@@ -190,38 +226,48 @@ const LandingPage = () => {
             className="m-auto max-md:w-56"
           />
         </div>
-        <div className="ml-28 max-md:ml-0 flex-between gap-32 max-md:gap-0">
-          <div className="flex flex-col gap-14  max-md:gap-6">
-            <div className="flex max-md:flex-col gap-14  max-md:gap-6">
+        <div className=" max-md:ml-0 flex-center gap-24 md:mr-5 max-md:gap-0">
+          <div className="flex flex-col gap-8  max-md:gap-6">
+            <div className="flex max-md:flex-col gap-8  max-md:gap-6">
               <BenefitCard
-                title={`Protects from Infringements`}
-                description={`Registering your trademark gives you special rights. It means only you can use your mark, and others can't copy it.`}
+                title={`Expertise You Can Trust`}
+                description={`Our team of seasoned trademark professionals brings years of experience to ensure your brand
+is protected with precision. We stay abreast of the latest legal developments to provide you with
+expert guidance every step of the way.`}
                 icon={`hand`}
               />
               <BenefitCard
-                title={`Trademark Certified`}
-                description={`By registering your trademark, you get official certification that your brand is real, proving its authenticity and making it more credible.`}
+                title={`Comprehensive Trademark Services
+`}
+                description={`We offer a full spectrum of trademark services, from name searches and registration to
+monitoring and enforcement. Our all-inclusive approach ensures that all aspects of your
+trademark needs are addressed efficiently and effectively.`}
                 icon={`registered`}
               />
             </div>
-            <div className="flex max-md:flex-col gap-14 max-md:gap-6">
+            <div className="flex max-md:flex-col gap-8 max-md:gap-6">
               <BenefitCard
-                title={`Secure Your Brand`}
-                description={`When you register your trademark, you gain legal rights. It means you can protect your brand and maintain its integrity.`}
+                title={`Personalized Support for Your Brand`}
+                description={`We understand that every brand is unique. Our personalized approach means we tailor our
+services to fit your specific needs, providing dedicated support and customized solutions to
+safeguard your intellectual property.`}
                 icon={`scale`}
               />
               <BenefitCard
-                title={`Secure Your Brand`}
-                description={`When you register your trademark, you gain legal rights. It means you can protect your brand and maintain its integrity.`}
+                title={`Fast and Reliable Registration Process
+`}
+                description={`Our streamlined registration process is designed to be quick and dependable, minimizing delays
+and maximizing efficiency. We handle all the details to ensure a smooth experience from start to
+finish, so you can focus on growing your business.`}
                 icon={`trademark`}
               />
             </div>
           </div>
           <div className="max-md:hidden">
             <Image
-              src={"/images/marks-in-laptop.webp"}
+              src={"/images/Attorney.png"}
               alt=""
-              width={400}
+              width={300}
               height={400}
             />
           </div>
@@ -229,50 +275,62 @@ const LandingPage = () => {
       </section>
 
       {/* contact us section */}
-      <section className="bg-[#025da0] mt-28 max-md:mt-20 max-md:py-20">
-        <div className="flex-center max-md:flex-col gap-20 max-md:gap-10 py-12 max-md:py-0">
-          <div className="w-[500px] max-md:w-full flex justify-end max-md:justify-center items-center max-md:px-4">
+      <section className=" mt-28 max-md:mt-20 max-md:py-16 bg-of-hero">
+        <div className="flex max-md:flex-col justify-center gap-20 max-md:gap-5 pt-12 max-md:pt-0">
+          <div className="w-[500px] max-md:w-full flex justify-end max-md:justify-center max-md:px-4">
             <div>
-              <h1 className="text-slate-100 font-semibold text-3xl">
-                Consult Our Experts
+              <h1 className="text-slate-700 font-semibold text-2xl">
+                {`Before someone else files for your name, why don't you get it?`}
               </h1>
-              <p className="text-slate-200 text-base mt-2 mb-6">
-                Get the perfect guidance from our consultants.
+              <p className="text-slate-700 text-base mt-2 mb-6">
+                {`Protect your brand before it's too late. Schedule a free
+                consultation with a qualified legal professional to discuss your
+                trademark needs and explore your options. Unsure of the next
+                steps? We're here to guide you through every part of the
+                process.`}
               </p>
-              <Button
-                color="secondary"
-                variant="shadow"
-                radius="sm"
-                onClick={handleRegisterClick}
-                isLoading={isLoading}
-              >
-                Get Free Consultation
-              </Button>
             </div>
-            <Image
+            {/* <Image
               src={"/images/assistant.webp"}
               alt="Trust Pilot"
               width={80}
               height={200}
               className="rounded-2xl md:ml-5"
-            />
+            /> */}
           </div>
-          <div className="w-[500px] max-md:w-full max-md:px-4 text-slate-200">
-            <p className="font-semibold mb-1 max-md:text-2xl">
-              Call Now for a Free Consultation:
-            </p>
-            <Link
-              href={"tel:+12098135108"}
-              className="text-slate-100 font-semibold text-3xl"
-            >
-              +1 (209) 813 5108
-            </Link>
-            <div className="mt-3 mb-5 text-sm max-md:text-base">
-              <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
-              <p>Weekends: 7 a.m.-4 p.m. PT</p>
+          <div className="w-[500px] max-md:w-full max-md:px-4 text-slate-800 flex justify-center max-md:justify-start">
+            <div>
+              <p className="font-semibold text-lg mb-1">
+                Call Now for a Free Consultation:
+              </p>
+              <Link
+                href={"tel:+12098135108"}
+                className="text-blue-700 font-semibold text-3xl"
+              >
+                +1 (209) 813 5108
+              </Link>
+              <div className="mt-3 mb-5 text-sm max-md:text-base">
+                <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
+                <p>Weekends: 7 a.m.-4 p.m. PT</p>
+              </div>
+              <p className="text-slate-800">
+                All of our experts are based in the U.S.
+              </p>
             </div>
-            <p>All of our experts are based in the U.S.</p>
           </div>
+        </div>
+        <div className="flex-center w-full m-auto pb-10 mt-3 max-md:mt-7 max-md:pb-0">
+          <Button
+            color="primary"
+            variant="shadow"
+            radius="sm"
+            onClick={() => handleOpenChat()}
+            isLoading={chatLoader}
+            className="px-7"
+            startContent={<IoChatbubblesOutline className="text-2xl" />}
+          >
+            Live Chat
+          </Button>
         </div>
       </section>
 
@@ -283,8 +341,7 @@ const LandingPage = () => {
             <div className="text-center flex flex-col gap-4 ">
               <h1 className="text-4xl text-[#025da0] font-bold">FAQs</h1>
               <p className="text-base text-slate-600">
-                {`Everything you need to know about the trademark. Can't find the
-                answer you're looking for? Chat with our friendly team!`}
+                {`Protect Your Brand with Confidence - Expert Trademark Services Made Simple.`}
               </p>
               <Image
                 src={"/images/curve-DplsLMf8.webp"}
@@ -304,12 +361,7 @@ const LandingPage = () => {
           </div>
           <div className="w-[600px] max-md:w-[90%] max-md:m-auto flex flex-col gap-10">
             <p>
-              Trademark Genius does not operate as a law firm. No information on
-              our website is to be used as legal advice. Each situation can be
-              affected by individual circumstances. We do not guarantee the
-              approval of the USPTO, that the trademark will be protected from
-              infringement or that any ensuing litigation will lead to a
-              desirable outcome.
+              {`Our FAQ section provides clear and concise answers to common questions about trademark registration and protection. Whether you're curious about the application process, fees, or how to handle trademark disputes, we've got you covered. Explore our FAQs to get quick and reliable information.`}
             </p>
             <div className="flex flex-col gap-2">
               <AccordionBox />
@@ -322,11 +374,10 @@ const LandingPage = () => {
       <section className="flex flex-col gap-16 max-md:gap-14 mt-28 max-md:mt-20 bg-slate-50 py-24 max-md:py-20">
         <div className="text-center flex flex-col gap-4 max-md:px-5">
           <h1 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
-            Why Choose Us
+            Trusted by clients in over 20 countries
           </h1>
           <p className="text-base text-slate-600">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
-            neque. adipisicing elit.
+            {`Collectively, Legal Trademark Office® attorneys have unparalleled trademark experience and great reviews.`}
           </p>
           <Image
             src={"/images/curve-DplsLMf8.webp"}
@@ -337,22 +388,12 @@ const LandingPage = () => {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex-center max-md:flex-col gap-8">
-            <WhyChooseCard
-              number={`3500`}
-              title={`Businesses`}
-              description={`We've helped startups and entrepreneurs realize their dreams by protecting their mark.`}
-            />
-            <WhyChooseCard
-              number={`8000`}
-              title={`Consultations`}
-              description={`We pride ourselves as a holistic platform for round-the-clock consultations.`}
-            />
-            <WhyChooseCard
-              number={`4000`}
-              title={`Trademark Applications`}
-              description={`We've trademarked over 3500 businesses and we're still keeping count.`}
-            />
+          <div className="flex-center">
+            <div className="bg-white flex-center max-md:flex-col shadow-md rounded-md">
+              <WhyChooseCard number={`12+`} title={`Years Experience`} />
+              <WhyChooseCard number={`99%`} title={`Customer Approval`} />
+              <WhyChooseCard number={`7k+`} title={`Trademarks Managed`} />
+            </div>
           </div>
           <div className="flex justify-center border-t-1 mx-14 max-md:mx-0 mt-10 pt-9 overflow-hidden">
             <WhyChooseInfo
@@ -389,7 +430,7 @@ const LandingPage = () => {
       </section>
 
       {/* testimonial section  */}
-      <section className="flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-20">
+      <section className="flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-16">
         <div className="flex">
           <div className="flex-center gap-2 flex-col">
             <h2 className="text-2xl font-bold text-slate-800">Excellent</h2>
@@ -414,30 +455,27 @@ const LandingPage = () => {
       </section>
 
       {/* footer section */}
-      <footer className="mt-28 bg-footer w-full bg-no-repeat bg-cover relative">
+      <footer className="mt-28 max-md:mt-20 bg-footer w-full bg-no-repeat bg-cover relative">
         <div className="footer-overly"></div>
         <div className="pt-20 z-30 relative">
           <div className="flex-center">
             <div className="w-[1100px] max-md:w-full max-md:px-6 max-md:gap-9 flex-center max-md:flex-col">
               <div className="w-[50%] max-md:w-full">
                 <Image
-                  src={`/images/legal-trademark-logo.webp`}
+                  src={`/images/Legal-Trademark-White-Logo.png`}
                   alt="Legal Trademark"
                   width={200}
                   height={200}
+                  className="max-md:w-[150px] max-md:h-auto"
                 />
-                <p className="mt-1 max-md:mt-0 text-slate-400 text-sm">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
-                  dolorum praesentium nemo possimus dolore blanditiis ratione
-                  quos, doloremque necessitatibus asperiores labore commodi rem
-                  eius dicta molestiae vel, quae excepturi provident saepe sunt
-                  facere! Tempore consectetur illum ad suscipit ipsum voluptate.
+                <p className="mt-1 max-md:mt-0 text-slate-100 text-sm">
+                  {`Secure your brand's future with Legal Trademark Office® tailored protection packages. Choose our DIY assisted service for a hands-on approach, or enlist our expert attorneys to handle your trademark filing with precision and care. Protect your uniqueness.`}
                 </p>
               </div>
-              <div className="w-[50%] max-md:w-[full] flex-center">
-                <div className="bg-slate-900 p-10 rounded-md bg-opacity-80 ">
-                  <h1 className="text-slate-300 font-semibold text-lg ">
-                    Call us at:{" "}
+              <div className="w-[50%] max-md:w-full flex-center max-md:block">
+                <div className="bg-[#fefefe] p-10 max-md:p-4 rounded-md shadow-lg">
+                  <h1 className="text-slate-800 font-semibold text-lg ">
+                    Call us at:
                     <Link
                       href="tel:+12098135108"
                       className="text-blue-600 font-semibold"
@@ -445,11 +483,11 @@ const LandingPage = () => {
                       +1 209 813 5108
                     </Link>
                   </h1>
-                  <p className="text-xs text-slate-300">
+                  <p className="text-xs text-slate-700">
                     Mon-Fri 6:00 am - 5:00 pm
                   </p>
                   <div className="mt-4">
-                    <h1 className="text-slate-300 font-semibold text-lg">
+                    <h1 className="text-slate-800 font-semibold text-lg">
                       Email us for any support:
                     </h1>
                     <Link
@@ -468,8 +506,8 @@ const LandingPage = () => {
               <LuCopyright className=" text-lg" />
               <p>
                 Copyright & all rights reserved by{" "}
-                <Link href={"/"} className="text-blue-800">
-                  Legal Trademark Office{" "}
+                <Link href={"/"} className=" underline">
+                  Legal Trademark Office
                 </Link>
               </p>
             </div>

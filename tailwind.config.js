@@ -13,7 +13,7 @@ module.exports = {
       backgroundImage: {
         beams: "url('/images/beams-home@95.jpg')",
         formHero: "url('/images/form-banner.jpg')",
-        footer: "url('/images/footer-bg.jpg')",
+        footer: "url('/images/Hero-Section-Background-05.jpg')",
         heroBanner: "url('/images/hero-banner.jpg')",
       },
     },

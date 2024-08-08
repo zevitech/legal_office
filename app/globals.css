@@ -57,7 +57,7 @@ a {
 }
 
 .bg-of-hero {
-  background-image: url("/images/Hero-Section-Background-03.jpg");
+  background-image: url("/images/legal-trademark-office-hero-background.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -156,5 +156,5 @@ a {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #050a1dd9;
+  /* background: #025da0; */
 }

@@ -19,18 +19,24 @@ const LandingHeader = () => {
   };
 
   return (
-    <header className="flex-between gap-4 px-10 py-5">
+    <header className="flex-between gap-4 px-10 py-5 max-md:pt-8">
       <Image
-        src={`/images/legal-trademark-logo.webp`}
+        src={`/images/legal-trademark-office.png`}
         alt="Legal Trademark"
-        width={130}
-        height={100}
+        width={150}
+        height={120}
+        className="max-md:w-28 max-md:h-auto"
       />
       <ul className="flex gap-4">
         <li>
           <Link href="tel:+14083893630">
             <Tooltip content="+1 (408) 389-3630">
-              <Button isIconOnly color="danger" aria-label="Like">
+              <Button
+                isIconOnly
+                color="primary"
+                variant="shadow"
+                aria-label="Like"
+              >
                 <IoMdCall />
               </Button>
             </Tooltip>
@@ -39,7 +45,12 @@ const LandingHeader = () => {
         <li>
           <Link href="mailto:support@legaltrademarkoffice.com">
             <Tooltip content="support@legaltrademarkoffice.com">
-              <Button isIconOnly color="danger" aria-label="Like">
+              <Button
+                isIconOnly
+                color="primary"
+                variant="shadow"
+                aria-label="Like"
+              >
                 <HiOutlineMail />
               </Button>
             </Tooltip>
@@ -47,7 +58,7 @@ const LandingHeader = () => {
         </li>
         <li className="max-md:hidden">
           <Button
-            color="secondary"
+            color="primary"
             variant="shadow"
             radius="sm"
             onClick={handleRegisterClick}

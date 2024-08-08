@@ -10,8 +10,8 @@ import { TbHandStop } from "react-icons/tb";
 const BenefitCard = ({ title, description, icon }) => {
   return (
     <div className="w-[320px] p-8 bg-slate-50 hover:bg-white benefit-card hover:shadow-medium">
-      <h1 className="text-2xl font-medium text-slate-600">{title}</h1>
-      <p className="text-[15px] mt-2 mb-10 text-slate-500">{description}</p>
+      <h1 className="text-[20px] font-medium text-slate-600">{title}</h1>
+      <p className="text-[14px] mt-2 mb-7 text-slate-500">{description}</p>
       <div className="flex-between">
         <div>
           {icon === "hand" && (
