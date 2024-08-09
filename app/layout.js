@@ -17,16 +17,16 @@ export default function RootLayout({ children }) {
       {/* Microsoft Clarity */}
       <Script
         id="clarity"
-        strategy="afterInteractive"
+        type="text/javascript"
         dangerouslySetInnerHTML={{
           __html: `(function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
               y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "nfkffgj87k");`,
+              })(window, document, "clarity", "script", "nkt5qfiqhb");
+              `,
         }}
       />
-      {/* End Microsoft Clarity */}
       {/* Google Tag Manager */}
       <Script
         id="gtm"
@@ -39,7 +39,6 @@ export default function RootLayout({ children }) {
               })(window,document,'script','dataLayer','GTM-KJGHNHGM');`,
         }}
       />
-      {/* End Google Tag Manager */}
 
       <Head>
         <meta
