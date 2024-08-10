@@ -17,7 +17,6 @@ import WhyChooseCard from "../ui/WhyChooseCard";
 import WhyChooseInfo from "../ui/WhyChooseInfo";
 import { FaAnglesDown } from "react-icons/fa6";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import LogCheck from "../unnecessary/logCheck";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -29,35 +28,10 @@ const LandingPage = () => {
     router.push("/trademark-register");
   };
 
-  // adding zendesk script
-  useEffect(() => {
-    const loadZendeskScript = () => {
-      const script = document.createElement("script");
-      script.id = "ze-snippet";
-      script.src =
-        "https://static.zdassets.com/ekr/snippet.js?key=c87da82e-ad58-45e6-8a3b-737fbcad8c30";
-      script.async = true;
-      script.onload = () => {
-        console.log("Zendesk script loaded successfully");
-      };
-      script.onerror = (error) => {
-        console.error("Error loading Zendesk script:", error);
-      };
-      document.body.appendChild(script);
-    };
-
-    loadZendeskScript();
-  }, []);
-
-  // Wait for the Zendesk widget script to load and then open the chat
+  // Function to open Tawk.to chat
   const handleOpenChat = () => {
-    setChatLoader(true);
-    if (window.zE) {
-      zE("messenger", "open");
-      setChatLoader(false);
-    } else {
-      console.error("Zendesk widget is not loaded yet.");
-      setChatLoader(false);
+    if (window.Tawk_API && window.Tawk_API.maximize) {
+      window.Tawk_API.maximize();
     }
   };
 

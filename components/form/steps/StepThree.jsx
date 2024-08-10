@@ -74,7 +74,7 @@ const StepThree = () => {
           >
             Previous
           </Button>
-          <p className="text-sm max-md:text-xs text-slate-500 mb-16 max-md:mt-5">
+          <p className="text-sm max-md:text-xs text-slate-500 mb-16 mt-7">
             Once your search results have been reviewed and our specialists have
             curated your trademark application, Legal Trademark Office will
             collect the necessary fees and pay the discounted TEAS Standard

@@ -11,6 +11,8 @@ import Receipt from "@/components/form/Receipt";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
+import { BiHome } from "react-icons/bi";
+import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
@@ -63,6 +65,13 @@ const Page = () => {
               <Receipt />
             </div>
             <div className="flex justify-between mt-10 mb-11 items-center">
+              <Button
+                color="primary"
+                variant="shadow"
+                startContent={<BiHome />}
+              >
+                <Link href={`/`}>Home</Link>
+              </Button>
               <Button
                 color="danger"
                 variant="shadow"
