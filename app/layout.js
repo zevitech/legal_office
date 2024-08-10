@@ -35,6 +35,7 @@ export default function RootLayout({ children }) {
       {/* Google Tag Manager */}
       <Script
         id="gtm"
+        type="text/javascript"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -51,17 +52,16 @@ export default function RootLayout({ children }) {
           content="where to register business name, trademark my name, trademark brand name, apply for trademark online, trade mark a company name, file my trademark, brand name trademark registration, best trademark registration service, trademark filing company, cheap trademark registration, trade mark registration, get a trademark, register my business, register my company name, trademark my logo, trademark my business name, apply for trademark, file trademark for business name, trademark registration, register my business name, register business name, trademark a name, file a trademark, get my brand trademarked, trademark and brand registration"
         />
         <meta name="author" content="Legal Trademark Office" />
-        {/* Microsoft Clarity */}
-        <script
+        <Script
           id="clarity"
           type="text/javascript"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: ` (function(c,l,a,r,i,t,y){
+            __html: `(function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
               y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "nktr0k2lgt");
-              `,
+          })(window, document, "clarity", "script", "nla1txqmwe");`,
           }}
         />
       </head>
