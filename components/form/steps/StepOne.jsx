@@ -84,6 +84,11 @@ const StepOne = () => {
     if (wantToProtect === "slogan" && !sloganName)
       tempErrors.sloganName = "Slogan is required";
     if (wantToProtect === "logo" && !logo) tempErrors.logo = "Logo is required";
+    if (wantToProtect === "all_three") {
+      if (!protectName) tempErrors.protectName = "Name is required";
+      if (!sloganName) tempErrors.sloganName = "Slogan is required";
+      if (!logo) tempErrors.logo = "Logo is required";
+    }
 
     if (ownedBy === "organization") {
       if (!organizationName)
@@ -267,43 +272,6 @@ const StepOne = () => {
             <>
               <br />
               <TinyWarning text="Upload the logo you wish to protect" />
-              {/* <CldUploadWidget
-                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
-                onSuccess={(results) => {
-                  const public_url = results?.info?.url;
-                  setLogo(public_url);
-                }}
-              >
-                {({ open }) => {
-                  return (
-                    <div className="w-full">
-                      <div className="flex gap-3">
-                        <div
-                          onClick={() => open()}
-                          className="bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full"
-                          ref={logoRef}
-                        >
-                          Select Image
-                        </div>
-                        {logo && (
-                          <Image
-                            src={logo}
-                            alt="Logo"
-                            width={100}
-                            height={44}
-                            className="h-[44px] w-auto"
-                          />
-                        )}
-                      </div>
-                      {!!errors.logo && (
-                        <p className="text-[#f31260] text-xs pt-2">
-                          Please select an image
-                        </p>
-                      )}
-                    </div>
-                  );
-                }}
-              </CldUploadWidget> */}
               <CldUploadWidget
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
                 onSuccess={(results) => {
@@ -350,6 +318,82 @@ const StepOne = () => {
                 }}
               </CldUploadWidget>
             </>
+          )}
+
+          {wantToProtect === "all_three" && (
+            <section>
+              <Input
+                name="protectName"
+                type="text"
+                variant="underlined"
+                label="Enter the name you wish to protect"
+                isInvalid={!!errors.protectName}
+                errorMessage={errors.protectName}
+                value={protectName}
+                onChange={(e) => setProtectName(e.target.value)}
+                ref={protectNameRef}
+              />
+              <Input
+                name="sloganName"
+                type="text"
+                variant="underlined"
+                label="Enter the slogan you wish to protect"
+                isInvalid={!!errors.sloganName}
+                errorMessage={errors.sloganName}
+                value={sloganName}
+                onChange={(e) => setSloganName(e.target.value)}
+                ref={sloganNameRef}
+              />
+              <>
+                <br />
+                <TinyWarning text="Upload the logo you wish to protect" />
+                <CldUploadWidget
+                  uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                  onSuccess={(results) => {
+                    const public_url = results?.info?.url;
+                    setLogo(public_url);
+                  }}
+                  onOpen={() => setIsUploading(true)}
+                  onClose={() => setIsUploading(false)}
+                >
+                  {({ open }) => {
+                    return (
+                      <div className="w-full">
+                        <div className="flex gap-3">
+                          <div
+                            onClick={() => open()}
+                            className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
+                              isUploading && `cursor-not-allowed opacity-75`
+                            }`}
+                            ref={logoRef}
+                          >
+                            {isUploading ? (
+                              <LuLoader className=" animate-spin text-2xl" />
+                            ) : (
+                              "Select Image"
+                            )}
+                          </div>
+                          {logo && (
+                            <Image
+                              src={logo}
+                              alt="Logo"
+                              width={100}
+                              height={44}
+                              className="h-[44px] w-auto"
+                            />
+                          )}
+                        </div>
+                        {!!errors.logo && (
+                          <p className="text-[#f31260] text-xs pt-2">
+                            Please select an image
+                          </p>
+                        )}
+                      </div>
+                    );
+                  }}
+                </CldUploadWidget>
+              </>
+            </section>
           )}
         </FieldContainer>
 
