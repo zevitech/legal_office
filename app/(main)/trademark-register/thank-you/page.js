@@ -1,10 +1,8 @@
 import FormHero from "@/components/form/FormHero";
-import StepThree from "@/components/form/steps/StepThree";
-import StepTwo from "@/components/form/steps/StepTwo";
-import React from "react";
+import ThankYou from "@/components/form/steps/ThankYou";
 
 export const metadata = {
-  title: "Step 3 - Register Trademark | Legal Trademark Office",
+  title: "Thank You - Register Trademark | Legal Trademark Office",
   description:
     "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
 };
@@ -12,8 +10,8 @@ export const metadata = {
 const page = () => {
   return (
     <main className="mb-10">
-      <FormHero step={3} />
-      <StepThree />
+      <FormHero />
+      <ThankYou />
     </main>
   );
 };

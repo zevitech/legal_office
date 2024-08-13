@@ -6,6 +6,8 @@ import React from "react";
 
 export const metadata = {
   title: "Step 4 - Register Trademark | Legal Trademark Office",
+  description:
+    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
 };
 
 const page = () => {

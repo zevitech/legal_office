@@ -32,6 +32,7 @@ export default function RootLayout({ children }) {
             `,
         }}
       />
+
       {/* Google Tag Manager */}
       <Script
         id="gtm"
