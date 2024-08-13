@@ -45,6 +45,23 @@ export default function RootLayout({ children }) {
         }}
       />
 
+      {/* MouseFlow Tracking */}
+      <Script
+        id="mfq"
+        type="text/javascript"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: ` window._mfq = window._mfq || [];
+              (function() {
+                var mf = document.createElement("script");
+                mf.type = "text/javascript"; mf.defer = true;
+                mf.src = "//cdn.mouseflow.com/projects/6d88ebfa-5138-492c-b0b1-2f54e50b2048.js";
+                document.getElementsByTagName("head")[0].appendChild(mf);
+              })();
+            `,
+        }}
+      />
+
       <body className={`${inter.className}`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>

@@ -46,25 +46,30 @@ export default function RootLayout({ children }) {
         }}
       />
 
-      <head>
+      {/* MouseFlow Tracking */}
+      <Script
+        id="mfq"
+        type="text/javascript"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: ` window._mfq = window._mfq || [];
+              (function() {
+                var mf = document.createElement("script");
+                mf.type = "text/javascript"; mf.defer = true;
+                mf.src = "//cdn.mouseflow.com/projects/6d88ebfa-5138-492c-b0b1-2f54e50b2048.js";
+                document.getElementsByTagName("head")[0].appendChild(mf);
+              })();
+            `,
+        }}
+      />
+
+      <Head>
         <meta
           name="keywords"
           content="where to register business name, trademark my name, trademark brand name, apply for trademark online, trade mark a company name, file my trademark, brand name trademark registration, best trademark registration service, trademark filing company, cheap trademark registration, trade mark registration, get a trademark, register my business, register my company name, trademark my logo, trademark my business name, apply for trademark, file trademark for business name, trademark registration, register my business name, register business name, trademark a name, file a trademark, get my brand trademarked, trademark and brand registration"
         />
         <meta name="author" content="Legal Trademark Office" />
-        <Script
-          id="clarity"
-          type="text/javascript"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "nla1txqmwe");`,
-          }}
-        />
-      </head>
+      </Head>
       <body className={inter.className}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
