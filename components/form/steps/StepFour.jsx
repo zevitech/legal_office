@@ -12,9 +12,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { saveStepFour } from "@/features/formSlice";
 
 const StepFour = () => {
+  const rushAmount = 29;
   const router = useRouter();
   const dispatch = useDispatch();
-  const rushAmount = 29;
   const [isLoading, setIsLoading] = useState(false);
   const [isRushProcessing, setIsRushProcessing] = useState(false);
   const stepThreeData = useSelector((state) => state.form.stepThree);

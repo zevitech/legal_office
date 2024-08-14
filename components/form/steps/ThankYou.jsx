@@ -17,6 +17,7 @@ const ThankYou = () => {
   const router = useRouter();
   const receiptRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [homeIsLoading, setHomeIsLoading] = useState(false);
   const stepFourData = useSelector((state) => state.form.stepFour);
 
   // page authorization | redirect if previous step has no data
@@ -62,7 +63,15 @@ const ThankYou = () => {
             <Receipt />
           </div>
           <div className="flex justify-between mt-10 mb-11 items-center">
-            <Button color="primary" variant="shadow" startContent={<BiHome />}>
+            <Button
+              color="primary"
+              variant="shadow"
+              startContent={<BiHome />}
+              isLoading={homeIsLoading}
+              onClick={() => {
+                setHomeIsLoading(true);
+              }}
+            >
               <Link href={`/`}>Home</Link>
             </Button>
             <Button

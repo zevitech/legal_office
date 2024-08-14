@@ -10,6 +10,7 @@ import TinyWarning from "@/components/form/TinyWarning";
 import NormalLabel from "@/components/form/NormalLabel";
 import { useSelector } from "react-redux";
 import { Button, Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
+import Link from "next/link";
 
 const Payment = () => {
   const router = useRouter();
@@ -304,6 +305,7 @@ const Payment = () => {
 
   return (
     <div className="px-16 mt-16 mb-14 max-sm:px-2 max-md:mt-12 max-md:mb-8">
+      <Link href={"thank-you"}>Bypass</Link>
       <div className="flex flex-col gap-3 mb-8 w-[800px] max-md:w-auto max-sm:px-4">
         <h1 className="text-[#03589c] font-semibold text-4xl max-md:text-3xl">
           Confirm order and pay

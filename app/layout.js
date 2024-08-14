@@ -1,6 +1,5 @@
-import Head from "next/head";
-import { Inter } from "next/font/google";
 import "./globals.css";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -64,13 +63,13 @@ export default function RootLayout({ children }) {
         }}
       />
 
-      <Head>
+      <head>
         <meta
           name="keywords"
           content="where to register business name, trademark my name, trademark brand name, apply for trademark online, trade mark a company name, file my trademark, brand name trademark registration, best trademark registration service, trademark filing company, cheap trademark registration, trade mark registration, get a trademark, register my business, register my company name, trademark my logo, trademark my business name, apply for trademark, file trademark for business name, trademark registration, register my business name, register business name, trademark a name, file a trademark, get my brand trademarked, trademark and brand registration"
         />
         <meta name="author" content="Legal Trademark Office" />
-      </Head>
+      </head>
       <body className={inter.className}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
