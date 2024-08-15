@@ -190,6 +190,7 @@ const StepOne = () => {
       phone,
       email,
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
+      zoho_step: 1,
     };
 
     // Filter out properties that are empty or undefined

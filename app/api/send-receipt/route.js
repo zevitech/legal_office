@@ -27,6 +27,11 @@ export async function POST(req) {
                                   <p style="font-size: 14px; color: #64748b; margin: 0;">${
                                     data.today
                                   }</p>
+                                  <p style="font-size: 14px; color: #64748b; margin: 0;">${
+                                    data?.nestedLeadData?.stepOne?.firstName +
+                                    " " +
+                                    data?.nestedLeadData?.stepOne?.lastName
+                                  }</p>
                                 </td>
                               </tr>
                             </table>

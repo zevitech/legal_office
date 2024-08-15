@@ -101,6 +101,7 @@ const Payment = () => {
     0
   );
   leadDataWithValues.totalAmount = totalAmount;
+  leadDataWithValues.zoho_step = 2;
 
   // send the data to mail and zoho
   const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
@@ -179,10 +180,6 @@ const Payment = () => {
         lastName: lastNameRef,
       };
 
-      // if (firstErrorField < 4) {
-      // errorRefs[firstErrorField].current.scrollIntoView({
-      //   behavior: "smooth",
-      // });
       if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
         errorRefs[firstErrorField].current.scrollIntoView({
           behavior: "smooth",
@@ -254,6 +251,8 @@ const Payment = () => {
             if (res.data.transactionResponse.messages[0].code === "1") {
               // payment successful. now make a request to send the data to mail and zoho
               setPaymentError("");
+              leadDataWithValues.is_paid = true;
+              leadDataWithValues.zoho_step = 3;
               axios
                 .post(endPoint, leadDataWithValues)
                 .then((res) => {

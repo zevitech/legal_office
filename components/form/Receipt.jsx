@@ -43,6 +43,11 @@ const Receipt = () => {
             receipt #{nestedLeadData.stepFour.receipt_ID}
           </h1>
           <p className="text-sm"> {today}</p>
+          <p className="text-sm">
+            {nestedLeadData?.stepOne?.firstName +
+              " " +
+              nestedLeadData?.stepOne?.lastName}
+          </p>
         </div>
       </section>
       <section className="mt-4">
