@@ -40,6 +40,11 @@ const ThankYou = () => {
     setIsLoading(false);
   };
 
+  const redirectToHome = () => {
+    setHomeIsLoading(true);
+    return router.push(process.env.NEXT_PUBLIC_APP_URL);
+  };
+
   return (
     <section>
       <div className="flex-center py-8 ">
@@ -68,11 +73,9 @@ const ThankYou = () => {
               variant="shadow"
               startContent={<BiHome />}
               isLoading={homeIsLoading}
-              onClick={() => {
-                setHomeIsLoading(true);
-              }}
+              onClick={redirectToHome}
             >
-              <Link href={`/`}>Home</Link>
+              Home
             </Button>
             <Button
               color="danger"
