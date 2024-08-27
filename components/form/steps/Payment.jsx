@@ -5,12 +5,10 @@ import Image from "next/image";
 import { stateList } from "@/constant";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import FormHero from "@/components/form/FormHero";
 import TinyWarning from "@/components/form/TinyWarning";
 import NormalLabel from "@/components/form/NormalLabel";
 import { useSelector } from "react-redux";
 import { Button, Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
-import Link from "next/link";
 
 const Payment = () => {
   const router = useRouter();
@@ -248,7 +246,11 @@ const Payment = () => {
       .then((res) => {
         if ("transactionResponse" in res.data) {
           if ("messages" in res.data.transactionResponse) {
-            if (res.data.transactionResponse.messages[0].code === "1") {
+            if (
+              res.data.transactionResponse.messages[0].code === "1" ||
+              res.data.transactionResponse.messages[0].description ==
+                "your order has been received. thank you for your business!"
+            ) {
               // payment successful. now make a request to send the data to mail and zoho
               setPaymentError("");
               leadDataWithValues.is_paid = true;
