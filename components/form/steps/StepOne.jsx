@@ -118,7 +118,7 @@ const StepOne = () => {
       tempErrors.phone = "Invalid phone number";
     }
     if (!preferredPhone) {
-      tempErrors.preferredPhone = "Phone number is required";
+      tempErrors.preferredPhone = "Preferred Phone number is required";
     } else if (!validatePhoneNumber(preferredPhone)) {
       tempErrors.preferredPhone = "Invalid phone number";
     }
@@ -165,6 +165,7 @@ const StepOne = () => {
         state: stateRef,
         zip: zipRef,
         phone: phoneRef,
+        phone: preferredPhoneRef,
         email: emailRef,
       };
       // errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });if (firstErrorField)
@@ -203,6 +204,7 @@ const StepOne = () => {
       state,
       zip,
       phone,
+      preferredPhone,
       email,
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
       zoho_step: 1,
