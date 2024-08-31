@@ -633,10 +633,10 @@ const StepOne = () => {
         </FieldContainer>
 
         {/* Google ReCAPTCHA */}
-        <ReCAPTCHA
+        {/* <ReCAPTCHA
           sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}
           onChange={ReCAPTCHAHandle}
-        />
+        /> */}
 
         {/* next or previous button */}
         <div className="my-10 gap-5 flex-between">
