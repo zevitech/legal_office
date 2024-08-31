@@ -25,6 +25,7 @@ import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { LuLoader } from "react-icons/lu";
 import { IoMdLock } from "react-icons/io";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const StepOne = () => {
   const router = useRouter();
@@ -49,8 +50,10 @@ const StepOne = () => {
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
   const [phone, setPhone] = useState("");
+  const [preferredPhone, setPreferredPhone] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
+  const [reChaptcha, setReChaptcha] = useState("");
 
   // Refs for error fields
   const protectNameRef = useRef(null);
@@ -68,6 +71,7 @@ const StepOne = () => {
   const stateRef = useRef(null);
   const zipRef = useRef(null);
   const phoneRef = useRef(null);
+  const preferredPhoneRef = useRef(null);
   const emailRef = useRef(null);
 
   // validate the phone number
@@ -113,6 +117,11 @@ const StepOne = () => {
     } else if (!validatePhoneNumber(phone)) {
       tempErrors.phone = "Invalid phone number";
     }
+    if (!preferredPhone) {
+      tempErrors.preferredPhone = "Phone number is required";
+    } else if (!validatePhoneNumber(preferredPhone)) {
+      tempErrors.preferredPhone = "Invalid phone number";
+    }
     if (!email) {
       tempErrors.email = "Email address is required";
     } else if (!validator.validate(email)) {
@@ -122,6 +131,12 @@ const StepOne = () => {
     setErrors(tempErrors);
     return Object.keys(tempErrors)[0]; // Return the first error key
   };
+
+  const ReCAPTCHAHandle = (value) => {
+    console.log("ReCAPTCHA Value is: " + value);
+    setReChaptcha(value);
+  };
+  console.log("ReCAPTCHA", process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY);
 
   // Handle form submission
   const handleFormSubmit = async (e) => {
@@ -567,17 +582,6 @@ const StepOne = () => {
           </InputCol>
           <InputCol>
             <Input
-              name="zipCode"
-              type="number"
-              variant="underlined"
-              label="Zip Code"
-              isInvalid={!!errors.zip}
-              errorMessage={errors.zip}
-              value={zip}
-              onChange={(e) => setZip(e.target.value)}
-              ref={zipRef}
-            />
-            <Input
               name="phone"
               type="number"
               variant="underlined"
@@ -588,8 +592,30 @@ const StepOne = () => {
               onChange={(e) => setPhone(e.target.value)}
               ref={phoneRef}
             />
+            <Input
+              name="preferred_phone"
+              type="number"
+              variant="underlined"
+              label="Preferred Phone Number"
+              isInvalid={!!errors.preferredPhone}
+              errorMessage={errors.preferredPhone}
+              value={preferredPhone}
+              onChange={(e) => setPreferredPhone(e.target.value)}
+              ref={preferredPhoneRef}
+            />
           </InputCol>
           <InputCol>
+            <Input
+              name="zipCode"
+              type="number"
+              variant="underlined"
+              label="Zip Code"
+              isInvalid={!!errors.zip}
+              errorMessage={errors.zip}
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
+              ref={zipRef}
+            />
             <Input
               name="email"
               type="email"
@@ -603,6 +629,12 @@ const StepOne = () => {
             />
           </InputCol>
         </FieldContainer>
+
+        {/* Google ReCAPTCHA */}
+        <ReCAPTCHA
+          sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}
+          onChange={ReCAPTCHAHandle}
+        />
 
         {/* next or previous button */}
         <div className="my-10 gap-5 flex-between">

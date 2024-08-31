@@ -12,6 +12,7 @@ import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
 import { BiHome } from "react-icons/bi";
+import CalendlyWidget from "@/components/ui/CalendlyWidget";
 
 const ThankYou = () => {
   const router = useRouter();
@@ -48,27 +49,34 @@ const ThankYou = () => {
   return (
     <section>
       <div className="flex-center py-8 ">
-        <div className="w-[500px] max-md:w-full max-md:px-6">
-          <Image
-            src={`/images/payment-done.png`}
-            alt="payment done"
-            width={200}
-            height={200}
-            className="mb-10 m-auto"
-          />
-          <h1 className="text-orange-600 text-3xl font-semibold">
-            Thank You, Payment Done!
-          </h1>
-          <p className="text-slate-600 text-base mt-5">
-            We have received your application. Please wait for a call from one
-            of our specialists regarding your trademark application.
-          </p>
-          <br />
-          <div ref={receiptRef}>
-            <Receipt />
+        <div className="max-md:px-6">
+          <div className="w-[600px] max-md:w-full m-auto text-center">
+            <Image
+              src={`/images/payment-done.png`}
+              alt="payment done"
+              width={200}
+              height={200}
+              className="mb-10 m-auto"
+            />
+            <h1 className="text-orange-600 text-3xl font-semibold">
+              Thank You, Payment Done!
+            </h1>
+            <p className="text-slate-600 text-base mt-5">
+              We have received your application. Please wait for a call from one
+              of our specialists regarding your trademark application.
+            </p>
           </div>
-          <div className="flex justify-between mt-10 mb-11 items-center">
-            <Button
+          <br />
+          <div className="flex justify-center gap-20 mt-14">
+            <div ref={receiptRef}>
+              <Receipt />
+            </div>
+            <div>
+              <CalendlyWidget />
+            </div>
+          </div>
+          <div className="flex-center gap-10  mt-7 mb-11 max-md:w-full">
+            {/* <Button
               color="primary"
               variant="shadow"
               startContent={<BiHome />}
@@ -76,7 +84,7 @@ const ThankYou = () => {
               onClick={redirectToHome}
             >
               Home
-            </Button>
+            </Button> */}
             <Button
               color="danger"
               variant="shadow"

@@ -34,7 +34,7 @@ const Receipt = () => {
   }, []);
 
   return (
-    <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono mt-8">
+    <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono ">
       <section className="flex-between border-dashed border-b-2 border-slate-500 pb-4">
         <h1 className="text-[#005ea2] font-bold text-lg">Legal Trademark</h1>
 
