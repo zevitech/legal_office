@@ -67,7 +67,7 @@ const ThankYou = () => {
             </p>
           </div>
           <br />
-          <div className="flex justify-center gap-20 mt-14">
+          <div className="flex justify-center gap-20 mt-14 max-md:flex-col">
             <div ref={receiptRef}>
               <Receipt />
             </div>
