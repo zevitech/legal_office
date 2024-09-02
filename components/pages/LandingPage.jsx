@@ -279,10 +279,10 @@ finish, so you can focus on growing your business.`}
                 Call Now for a Free Consultation:
               </p>
               <Link
-                href={"tel:+13104244909"}
+                href={"tel:+14083876783"}
                 className="text-blue-700 font-semibold text-3xl"
               >
-                +1 (310) 424-4909
+                +1 (408) 387-6783
               </Link>
               <div className="mt-3 mb-5 text-sm max-md:text-base">
                 <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
@@ -452,10 +452,10 @@ finish, so you can focus on growing your business.`}
                   <h1 className="text-slate-800 font-semibold text-lg ">
                     Call us at:
                     <Link
-                      href="tel:+13104244909"
+                      href="tel:+14083876783"
                       className="text-blue-600 font-semibold"
                     >
-                      +1 (310) 424-4909
+                      +1 (408) 387-6783
                     </Link>
                   </h1>
                   <p className="text-xs text-slate-700">

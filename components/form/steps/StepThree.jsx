@@ -74,11 +74,11 @@ const StepThree = () => {
           >
             Previous
           </Button>
-          <p className="text-sm max-md:text-xs text-slate-500 mb-16 mt-7">
-            Once your search results have been reviewed and our specialists have
-            curated your trademark application, Legal Trademark Office will
-            collect the necessary fees and pay the discounted TEAS Standard
-            electronic filing fee of $350 on your behalf.
+          <p className="text-md max-md:text-sm text-orange-600 mb-16 mt-7 font-semibold">
+            Note: Once your search results have been reviewed and our
+            specialists have curated your trademark application, Secure Your
+            Mark will collect the necessary fees and pay the discounted TEAS
+            Standard electronic filing fee of $350 on your behalf.
           </p>
         </div>
       </section>
