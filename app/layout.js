@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import GlobalProvider from "./GlobalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       {/* Tawk.to */}
-      <Script
+      {/* <Script
         id="tawkTo"
         type="text/javascript"
         dangerouslySetInnerHTML={{
@@ -30,10 +31,10 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      />
+      /> */}
 
       {/* Google Tag Manager */}
-      <Script
+      {/* <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -44,10 +45,10 @@ export default function RootLayout({ children }) {
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
               })(window,document,'script','dataLayer','GTM-KJGHNHGM');`,
         }}
-      />
+      /> */}
 
       {/* MouseFlow Tracking */}
-      <Script
+      {/* <Script
         id="mfq"
         type="text/javascript"
         strategy="afterInteractive"
@@ -61,7 +62,7 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      />
+      /> */}
 
       <head>
         <meta
@@ -72,16 +73,16 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         {/* Google Tag Manager (noscript) */}
-        <noscript>
+        {/* <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJGHNHGM"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript>
+        </noscript> */}
         {/* End Google Tag Manager (noscript) */}
-        {children}
+        <GlobalProvider>{children}</GlobalProvider>
       </body>
     </html>
   );

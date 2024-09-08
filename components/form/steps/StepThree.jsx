@@ -8,7 +8,7 @@ import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { saveStepThree } from "@/features/formSlice";
 import { _35_USD, _135_USD, _235_USD } from "@/constant/packages";
-import PageLoader from "@/components/PageLoader";
+import PageLoader from "@/components/pages/PageLoader";
 
 const StepThree = () => {
   const router = useRouter();

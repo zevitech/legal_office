@@ -17,6 +17,14 @@ a {
   text-decoration: none;
 }
 
+.text-color-primary {
+  color: #027dd6;
+}
+
+.bg-color-primary {
+  background: #027dd6;
+}
+
 .flex-center {
   @apply flex justify-center items-center;
 }
@@ -42,10 +50,6 @@ a {
   width: 100%;
   height: 100%;
   background: #0b206e8f;
-}
-
-.text-color-primary {
-  @apply text-[#ff385c];
 }
 
 .heroBg {

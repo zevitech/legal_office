@@ -5,9 +5,7 @@ import { NextUIProvider } from "@nextui-org/react";
 const page = () => {
   return (
     <main>
-      <NextUIProvider>
-        <LandingPage />
-      </NextUIProvider>
+      <LandingPage />
     </main>
   );
 };

@@ -83,3 +83,42 @@ export const serviceList = [
     text: "Full Preparation and Filing of your Official Trademark with USPTO",
   },
 ];
+
+export const navItems = [
+  {
+    id: 1,
+    text: "Home",
+    route: "home",
+  },
+  {
+    id: 2,
+    text: "Our Services",
+    route: "services",
+    subItems: [
+      {
+        id: 1,
+        text: "Trademark Registration",
+        route: "trademark-registration",
+      },
+      { id: 2, text: "Free Trademark Search", route: "#" },
+      { id: 3, text: "International Trademark ", route: "#" },
+      { id: 4, text: "Trademark Renewal", route: "#" },
+      { id: 5, text: "Trademark Revival", route: "#" },
+    ],
+  },
+  {
+    id: 3,
+    text: "Contact Us",
+    route: "contact",
+  },
+  {
+    id: 4,
+    text: "About Us",
+    route: "about",
+  },
+  {
+    id: 5,
+    text: "FAQ",
+    route: "faq",
+  },
+];
