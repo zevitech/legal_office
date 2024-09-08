@@ -25,6 +25,10 @@ a {
   background: #027dd6;
 }
 
+.bg-color-secondary {
+  background: #f8f8f8;
+}
+
 .flex-center {
   @apply flex justify-center items-center;
 }

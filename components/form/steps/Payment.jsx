@@ -338,7 +338,7 @@ const Payment = () => {
                     height={30}
                     alt="cards"
                     src={`/images/visa-mastercard-discover-american-express-icons-21635415958rgxaunvs7z.png`}
-                    className="max-sm::w-24 max-sm:h-6'"
+                    className="max-sm::w-24 max-sm:h-6"
                   />
                 }
               />

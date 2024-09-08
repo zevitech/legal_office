@@ -1,9 +1,13 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import GlobalProvider from "./GlobalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata = {
   title: "Register Trademark - Legal Trademark Office",
@@ -71,7 +75,7 @@ export default function RootLayout({ children }) {
         />
         <meta name="author" content="Legal Trademark Office" />
       </head>
-      <body className={inter.className}>
+      <body className={`${poppins.className} bg-color-secondary`}>
         {/* Google Tag Manager (noscript) */}
         {/* <noscript>
           <iframe
