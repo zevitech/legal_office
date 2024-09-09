@@ -120,18 +120,30 @@ const Payment = () => {
   }, [isDataSent]);
 
   // Create the lineItems array
-  const lineItems = useMemo(
-    () => ({
-      lineItem: orderDetails.map((item, index) => ({
-        itemId: `item${index + 1}`,
-        name: item.title,
-        description: item.title,
+  const lineItems = useMemo(() => {
+    const lineItem = [
+      {
+        itemId: "item1",
+        name: `${nestedLeadData.stepThree.packageName} Package`,
+        description: " ",
         quantity: "1",
-        unitPrice: item.amount,
-      })),
-    }),
-    [orderDetails]
-  );
+        unitPrice: nestedLeadData.stepThree.price,
+      },
+    ];
+
+    // Conditionally add the rush processing item
+    if (stepFourData.rushAmount !== 0) {
+      lineItem.push({
+        itemId: `item2`,
+        name: "Rush processing",
+        description: " ",
+        quantity: "1",
+        unitPrice: stepFourData.rushAmount,
+      });
+    }
+
+    return { lineItem };
+  }, [nestedLeadData, stepFourData]);
 
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepFourData).length === 0) {
