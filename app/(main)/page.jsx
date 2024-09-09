@@ -21,7 +21,7 @@ const page = () => {
           <StatisticCountBox text={`Happy Customers`} number={120000} />
           <StatisticCountBox text={`Years in Service`} number={15} />
           <div className=" border-l-2 border-slate-600 pl-5">
-            <p className="text-sm">
+            <p className="text-sm pb-2">
               Rated <span className="font-bold">4.8/5</span> by 1000+ users
             </p>
             <div className="flex items-center gap-2">
