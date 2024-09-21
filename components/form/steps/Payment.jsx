@@ -105,15 +105,15 @@ const Payment = () => {
   }, [totalAmount, nestedLeadData]);
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepFourData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepFourData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   return (
     <div className="px-16 mt-16 mb-14 max-sm:px-2 max-md:mt-12 max-md:mb-8">
-      <div className="flex flex-col gap-3 mb-8 w-[800px] max-md:w-auto max-sm:px-4">
+      <div className="flex flex-col mb-8 gap-3 w-[800px] max-md:w-auto max-sm:px-4">
         <h1 className="text-[#03589c] font-semibold text-4xl max-md:text-3xl">
-          Confirm order and pay
+          Confirm order and Pay
         </h1>
         <NormalLabel
           text={`

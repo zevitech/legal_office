@@ -70,12 +70,12 @@ const StripePayment = ({ loading, em }) => {
           isInvalid={checkboxError}
         >
           <TinyWarning
-            text={`I agree that I will receive a phone call from the Legal Trademark Office after payment.`}
+            text={`I acknowledge and agree to the terms and conditions outlined above.`}
           />
         </Checkbox>
         {checkboxError && (
           <p className="text-[#f31260] text-xs text-center mt-3">
-            Please tick the checkbox.
+            Please tick the checkbox to process.
           </p>
         )}
       </div>
