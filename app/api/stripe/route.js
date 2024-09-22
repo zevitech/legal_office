@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   const { amount, description } = await req.json();
+  const finalAmount = Math.round(amount * 100);
+  console.log("The Amount Is: ", finalAmount);
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2024-06-20",
@@ -10,7 +12,7 @@ export async function POST(req) {
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: finalAmount,
       currency: "USD",
       description,
     });

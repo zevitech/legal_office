@@ -90,24 +90,26 @@ const Payment = () => {
     setIsLoading(true);
     const description = `Payment from ${nestedLeadData?.stepOne?.firstName} ${nestedLeadData?.stepOne?.lastName}. And receipt ID is ${nestedLeadData?.stepFour?.receipt_ID}`;
 
-    axios
-      .post("/api/stripe", { amount: totalAmount, description })
-      .then((res) => {
-        setClientSecret(res?.data?.paymentIntent?.client_secret);
-      })
-      .catch((err) => {
-        console.log("Error processing stripe: ", err);
-        setPaymentError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (totalAmount > 1) {
+      axios
+        .post("/api/stripe", { amount: totalAmount, description })
+        .then((res) => {
+          setClientSecret(res?.data?.paymentIntent?.client_secret);
+        })
+        .catch((err) => {
+          console.log("Error processing stripe: ", err);
+          setPaymentError(err.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   }, [totalAmount, nestedLeadData]);
 
   // page authorization | redirect if previous step has no data
-  // if (Object.keys(stepFourData).length === 0) {
-  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  // }
+  if (Object.keys(stepFourData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   return (
     <div className="px-16 mt-16 mb-14 max-sm:px-2 max-md:mt-12 max-md:mb-8">
