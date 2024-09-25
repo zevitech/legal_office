@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   PaymentElement,
   useElements,
@@ -9,6 +9,8 @@ import {
 import { Button, Checkbox } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import TinyWarning from "./TinyWarning";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const StripePayment = ({ loading, em }) => {
   const router = useRouter();
@@ -18,6 +20,24 @@ const StripePayment = ({ loading, em }) => {
   const [isLoading, setLoading] = useState(loading);
   const [isTermsAccept, setIsTermsAccept] = useState(false);
   const [checkboxError, setCheckboxError] = useState(false);
+
+  const nestedLeadData = useSelector((state) => state.form);
+  console.log("nestedLeadData-----", nestedLeadData);
+
+  // from the nested object, merge them into one object
+  const leadData = useMemo(
+    () => Object.assign({}, ...Object.values(nestedLeadData)),
+    [nestedLeadData]
+  );
+
+  // Filter out properties that are empty or undefined
+  const leadDataWithValues = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(leadData).filter(([_, value]) => value !== "")
+      ),
+    [leadData]
+  );
 
   const handlePaymentRequest = async () => {
     setLoading(true);
@@ -46,9 +66,27 @@ const StripePayment = ({ loading, em }) => {
 
     // Handle payment result
     if (result?.paymentIntent?.status === "succeeded") {
-      router.push(
-        `${process.env.NEXT_PUBLIC_APP_URL}/trademark-register/thank-you`
-      );
+      // send the data to mail and zoho
+      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      leadDataWithValues.is_paid = true;
+      leadDataWithValues.zoho_step = 3;
+      axios
+        .post(endPoint, leadDataWithValues)
+        .then((res) => {
+          if (res.data.success) {
+            return router.push("/trademark-register/thank-you");
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(
+            "Error sending data to save-data endpoint in payment page: ",
+            err
+          );
+          alert(
+            "Paid, payment Successfull. But something went wrong to redirect Thank You page, Check your network or contact support."
+          );
+        });
     } else {
       setPaymentError(result.error?.message);
       setLoading(false);

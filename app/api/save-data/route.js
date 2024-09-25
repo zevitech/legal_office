@@ -53,7 +53,7 @@ export async function POST(req) {
       await axios
         .post(zohoEndPoint, data)
         .then((res) => {
-          console.log("zoho response", res?.data?.message);
+          console.log("zoho response: ", res?.data?.message);
         })
         .catch((err) => {
           console.log("zoho error", err);

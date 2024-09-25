@@ -17,9 +17,9 @@ const StepThree = () => {
   const stepTwoData = useSelector((state) => state.form.stepTwo);
 
   // page authorization | redirect if previous step has no data
-  // if (Object.keys(stepTwoData).length === 0) {
-  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  // }
+  if (Object.keys(stepTwoData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   // handle form submission
   const handleNext = ({ packageName, price }) => {
