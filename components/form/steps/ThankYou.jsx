@@ -71,9 +71,9 @@ const ThankYou = () => {
             <div ref={receiptRef}>
               <Receipt />
             </div>
-            <div>
+            {/* <div>
               <CalendlyWidget />
-            </div>
+            </div> */}
           </div>
           <div className="flex-center gap-10  mt-7 mb-11 max-md:w-full">
             {/* <Button
