@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { MdOutlineCall } from "react-icons/md";
 import { FaDownload } from "react-icons/fa6";
@@ -28,7 +28,7 @@ const ThankYou = () => {
       ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
       : nestedLeadData.stepThree.price;
 
-  // FOR PIXEL TAG
+  added
   useEffect(() => {
     const transactionValue = totalPrice;
 
