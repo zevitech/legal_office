@@ -28,7 +28,7 @@ const ThankYou = () => {
       ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
       : nestedLeadData.stepThree.price;
 
-  added
+  // FOR PIXEL TAG
   useEffect(() => {
     const transactionValue = totalPrice;
 
