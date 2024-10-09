@@ -259,6 +259,7 @@ const Payment = () => {
               // Triggering InitiateCheckout event pixel tag
               if (window.fbq) {
                 window.fbq("track", "InitiateCheckout");
+                console.log("Event is triggered");
               }
 
               axios

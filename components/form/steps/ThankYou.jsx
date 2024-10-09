@@ -37,6 +37,8 @@ const ThankYou = () => {
         value: transactionValue,
         currency: "USD",
       });
+
+      console.log("Even is Triggering");
     }
   }, []);
 

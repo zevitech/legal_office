@@ -68,32 +68,6 @@ export default function RootLayout({ children }) {
         }}
       /> */}
 
-      {/* Pixel Tag */}
-      <Script
-        id="facebook-pixel"
-        strategy="afterInteractive"
-        src="https://connect.facebook.net/en_US/fbevents.js"
-      />
-
-      <Script
-        id="facebook-pixel-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window,document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '1778222035980026');
-              fbq('track', 'PageView');
-            `,
-        }}
-      />
-
       <head>
         <meta
           name="keywords"
@@ -113,6 +87,23 @@ export default function RootLayout({ children }) {
         </noscript> */}
         {/* End Google Tag Manager (noscript) */}
 
+        <GlobalProvider>{children}</GlobalProvider>
+
+        <Script id="facebook-pixel" strategy="afterInteractive">
+          {`
+          !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window,document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '1778222035980026');
+              fbq('track', 'PageView');
+        `}
+        </Script>
+
         {/* Non-script (noscript) Pixel */}
         <noscript>
           <img
@@ -123,8 +114,6 @@ export default function RootLayout({ children }) {
             alt="facebook-pixel"
           />
         </noscript>
-
-        <GlobalProvider>{children}</GlobalProvider>
       </body>
     </html>
   );
