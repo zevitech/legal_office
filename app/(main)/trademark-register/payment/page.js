@@ -30,6 +30,15 @@ fbq('track', 'PageView');
   }}
 />;
 
+<noscript>
+  <img
+    height="1"
+    width="1"
+    src="https://www.facebook.com/tr?id=1778222035980026&ev=PageView
+&noscript=1"
+  />
+</noscript>;
+
 const page = () => {
   return (
     <main>
