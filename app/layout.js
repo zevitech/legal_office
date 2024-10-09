@@ -68,16 +68,12 @@ export default function RootLayout({ children }) {
         }}
       /> */}
 
-      <head>
-        <meta
-          name="keywords"
-          content="where to register business name, trademark my name, trademark brand name, apply for trademark online, trade mark a company name, file my trademark, brand name trademark registration, best trademark registration service, trademark filing company, cheap trademark registration, trade mark registration, get a trademark, register my business, register my company name, trademark my logo, trademark my business name, apply for trademark, file trademark for business name, trademark registration, register my business name, register business name, trademark a name, file a trademark, get my brand trademarked, trademark and brand registration"
-        />
-        <meta name="author" content="Legal Trademark Office" />
-
-        <Script id="facebook-pixel" strategy="afterInteractive">
-          {`
-          !function(f,b,e,v,n,t,s)
+      <Script
+        id="facebook-pixel"
+        strategy="afterInteractive"
+        type="text/javascript"
+        dangerouslySetInnerHTML={{
+          __html: ` !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
           n.callMethod.apply(n,arguments):n.queue.push(arguments)};
           if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -87,8 +83,16 @@ export default function RootLayout({ children }) {
           'https://connect.facebook.net/en_US/fbevents.js');
           fbq('init', '1778222035980026');
           fbq('track', 'PageView');
-        `}
-        </Script>
+            `,
+        }}
+      />
+
+      <head>
+        <meta
+          name="keywords"
+          content="where to register business name, trademark my name, trademark brand name, apply for trademark online, trade mark a company name, file my trademark, brand name trademark registration, best trademark registration service, trademark filing company, cheap trademark registration, trade mark registration, get a trademark, register my business, register my company name, trademark my logo, trademark my business name, apply for trademark, file trademark for business name, trademark registration, register my business name, register business name, trademark a name, file a trademark, get my brand trademarked, trademark and brand registration"
+        />
+        <meta name="author" content="Legal Trademark Office" />
       </head>
       <body className={`${poppins.className} bg-color-secondary`}>
         {/* Google Tag Manager (noscript) */}
