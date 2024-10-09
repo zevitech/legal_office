@@ -21,6 +21,25 @@ const ThankYou = () => {
   const [homeIsLoading, setHomeIsLoading] = useState(false);
   const stepFourData = useSelector((state) => state.form.stepFour);
 
+  // FOR PIXEL TAG
+  const nestedLeadData = useSelector((state) => state.form);
+  const totalPrice =
+    nestedLeadData.stepFour.isRushProcessing === true
+      ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
+      : nestedLeadData.stepThree.price;
+
+  // FOR PIXEL TAG
+  useEffect(() => {
+    const transactionValue = totalPrice;
+
+    if (window.fbq) {
+      window.fbq("track", "Purchase", {
+        value: transactionValue,
+        currency: "USD",
+      });
+    }
+  }, []);
+
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepFourData).length === 0) {
     return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");

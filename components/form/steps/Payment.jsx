@@ -255,6 +255,12 @@ const Payment = () => {
               setPaymentError("");
               leadDataWithValues.is_paid = true;
               leadDataWithValues.zoho_step = 3;
+
+              // Triggering InitiateCheckout event pixel tag
+              if (window.fbq) {
+                window.fbq("track", "InitiateCheckout");
+              }
+
               axios
                 .post(endPoint, leadDataWithValues)
                 .then((res) => {

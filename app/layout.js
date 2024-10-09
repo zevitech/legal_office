@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Inter, Poppins } from "next/font/google";
-import Script from "next/script";
+import Script from 'next/script';
 import GlobalProvider from "./GlobalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -67,6 +67,8 @@ export default function RootLayout({ children }) {
             `,
         }}
       /> */}
+
+      
 
       <head>
         <meta
