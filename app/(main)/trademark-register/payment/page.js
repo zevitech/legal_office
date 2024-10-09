@@ -30,6 +30,7 @@ fbq('track', 'PageView');
   }}
 />;
 
+// Non Script Tag
 <noscript>
   <img
     height="1"
