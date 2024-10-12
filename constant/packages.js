@@ -73,3 +73,24 @@ export const _235_USD = [
       "In the event that you find an infringing mark, we will provide a Cease and Desist template for you to deliver to your infringing party.",
   },
 ];
+
+export const basic = [
+  "Basic Website Design",
+  "Direct-Hit Search of the Federal USPTO database which will include misspellings for live and pending applications.",
+  "Professional Preparation of your federal trademark application.",
+  "Digitalization and Formatting of your trademark specimens and designs.",
+];
+
+export const standard = [
+  "Basic Website Design",
+  "Direct-Hit Search of the Federal USPTO database which will include misspellings for live and pending applications.",
+  "Professional Preparation of your federal trademark application.",
+  "Digitalization and Formatting of your trademark specimens and designs.",
+];
+
+export const premium = [
+  "Basic Website Design",
+  "Direct-Hit Search of the Federal USPTO database which will include misspellings for live and pending applications.",
+  "Professional Preparation of your federal trademark application.",
+  "Digitalization and Formatting of your trademark specimens and designs.",
+];

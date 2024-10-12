@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 import Container from "./Container";
 import { navItems } from "@/constant";
+import Link from "next/link";
+
 const Header = () => {
   const [hoveredItemId, setHoveredItemId] = useState(null);
 
@@ -54,9 +56,12 @@ const Header = () => {
                         key={subItem.id}
                         className="py-2 rounded-md px-3 hover:bg-gray-100"
                       >
-                        <a href={`${subItem.route}`} className="text-gray-600">
+                        <Link
+                          href={`${subItem.route}`}
+                          className="text-gray-600"
+                        >
                           {subItem.text}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

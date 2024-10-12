@@ -122,3 +122,66 @@ export const navItems = [
     route: "faq",
   },
 ];
+
+export const similarMarks = [
+  {
+    flag: "usa-flag.png",
+    name: "United States",
+    details: "4 Million+ Trademarks",
+  },
+  {
+    flag: "canada-flag.png",
+    name: "Canada",
+    details: "2 Million+ Trademarks",
+  },
+  {
+    flag: "eu-flag.png",
+    name: "European Union",
+    details: "2 Million+ Trademarks",
+  },
+  {
+    flag: "uk-flag.png",
+    name: "United Kingdom",
+    details: "3 Million+ Trademarks",
+  },
+];
+
+export const recentlyTrademarked = [
+  "postman.png",
+  "divina_life.png",
+  "guard_link.png",
+  "fross.png",
+  "re.png",
+  "postman.png",
+  "divina_life.png",
+  "guard_link.png",
+  "fross.png",
+  "re.png",
+];
+
+export const whyChooseUs = [
+  {
+    icon: "wcu-1.png",
+    heading: "Expertise You Can Trust",
+    details:
+      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+  },
+  {
+    icon: "wcu-2.png",
+    heading: "Comprehensive Trademark Services",
+    details:
+      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+  },
+  {
+    icon: "wcu-3.png",
+    heading: "Personalized Support for Brand",
+    details:
+      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+  },
+  {
+    icon: "wcu-4.png",
+    heading: "Fast and Reliable Registration Process",
+    details:
+      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+  },
+];
