@@ -256,12 +256,6 @@ const Payment = () => {
               leadDataWithValues.is_paid = true;
               leadDataWithValues.zoho_step = 3;
 
-              // Triggering InitiateCheckout event pixel tag
-              if (window.fbq) {
-                window.fbq("track", "InitiateCheckout");
-                console.log("Event is triggered");
-              }
-
               axios
                 .post(endPoint, leadDataWithValues)
                 .then((res) => {

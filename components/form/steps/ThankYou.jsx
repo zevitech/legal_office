@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@nextui-org/react";
 import { MdOutlineCall } from "react-icons/md";
 import { FaDownload } from "react-icons/fa6";
@@ -20,27 +20,6 @@ const ThankYou = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [homeIsLoading, setHomeIsLoading] = useState(false);
   const stepFourData = useSelector((state) => state.form.stepFour);
-
-  // FOR PIXEL TAG
-  const nestedLeadData = useSelector((state) => state.form);
-  const totalPrice =
-    nestedLeadData.stepFour.isRushProcessing === true
-      ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
-      : nestedLeadData.stepThree.price;
-
-  // FOR PIXEL TAG
-  useEffect(() => {
-    const transactionValue = totalPrice;
-
-    if (window.fbq) {
-      window.fbq("track", "Purchase", {
-        value: transactionValue,
-        currency: "USD",
-      });
-
-      console.log("Even is Triggering");
-    }
-  }, []);
 
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepFourData).length === 0) {
