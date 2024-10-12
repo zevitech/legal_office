@@ -32,6 +32,7 @@ export default function RootLayout({ children }) {
             `,
         }}
       />
+
       {/* Google Tag Manager */}
       <Script
         id="gtm"
@@ -72,6 +73,7 @@ export default function RootLayout({ children }) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
+
         <div className={`bg-form-body`}></div>
         <GlobalProvider>{children}</GlobalProvider>
       </body>

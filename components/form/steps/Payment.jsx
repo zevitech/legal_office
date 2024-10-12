@@ -255,6 +255,7 @@ const Payment = () => {
               setPaymentError("");
               leadDataWithValues.is_paid = true;
               leadDataWithValues.zoho_step = 3;
+
               axios
                 .post(endPoint, leadDataWithValues)
                 .then((res) => {
