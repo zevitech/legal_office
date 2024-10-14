@@ -70,6 +70,7 @@ const StripePayment = ({ loading, em }) => {
       const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
       leadDataWithValues.is_paid = true;
       leadDataWithValues.zoho_step = 3;
+      leadDataWithValues.is_paid_log = "paid";
       axios
         .post(endPoint, leadDataWithValues)
         .then((res) => {

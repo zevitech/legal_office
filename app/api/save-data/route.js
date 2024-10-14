@@ -5,6 +5,8 @@ import { createTransport } from "nodemailer";
 export async function POST(req) {
   const data = await req.json();
 
+  console.log("client already paid: ", data?.is_paid_log);
+
   try {
     // sending data to gmail account -start
     const transporter = createTransport({
