@@ -15,6 +15,7 @@ export async function POST(req) {
       amount: finalAmount,
       currency: "USD",
       description,
+      payment_method_types: ["card"],
     });
 
     return NextResponse.json({ paymentIntent }, { status: 200 });
