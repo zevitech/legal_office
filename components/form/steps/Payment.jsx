@@ -95,6 +95,11 @@ const Payment = () => {
         .post("/api/stripe", { amount: totalAmount, description })
         .then((res) => {
           setClientSecret(res?.data?.paymentIntent?.client_secret);
+
+          // Trigger Facebook Pixel Event For Initiate Checkout
+          if (window.fbq) {
+            window.fbq("track", "InitiateCheckout");
+          }
         })
         .catch((err) => {
           console.log("Error processing stripe: ", err);

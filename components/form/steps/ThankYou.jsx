@@ -24,7 +24,7 @@ const ThankYou = () => {
   // Totlal Price For Facebook Pixel Tag
   const totalPrice = useSelector((state) => state.form.stepThree.price);
 
-  // Trigger Facebook Pixel Event
+  // Trigger Facebook Pixel Event For Purchase
   useEffect(() => {
     if (totalPrice && window.fbq) {
       window.fbq("track", "Purchase", {
