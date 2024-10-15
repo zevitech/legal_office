@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   const { amount, description } = await req.json();
   const finalAmount = Math.round(amount * 100);
+  console.log("finalAmount", finalAmount);
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2024-06-20",

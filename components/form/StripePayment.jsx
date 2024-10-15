@@ -59,6 +59,7 @@ const StripePayment = ({ loading, em }) => {
         return_url: `${process.env.NEXT_PUBLIC_APP_URL}/trademark-register/thank-you`,
       },
       redirect: "if_required",
+      payment_method_types: ["card"],
     });
 
     // Reset checkbox error
