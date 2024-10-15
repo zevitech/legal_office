@@ -21,6 +21,19 @@ const ThankYou = () => {
   const [homeIsLoading, setHomeIsLoading] = useState(false);
   const stepFourData = useSelector((state) => state.form.stepFour);
 
+  // Totlal Price For Facebook Pixel Tag
+  const totalPrice = useSelector((state) => state.form.stepThree.price);
+
+  // Trigger Facebook Pixel Event
+  useEffect(() => {
+    if (totalPrice && window.fbq) {
+      window.fbq("track", "Purchase", {
+        value: totalPrice,
+        currency: "GBP",
+      });
+    }
+  }, [totalPrice]);
+
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepFourData).length === 0) {
     return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");

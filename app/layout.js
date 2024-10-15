@@ -99,6 +99,18 @@ export default function RootLayout({ children }) {
           ></iframe>
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+
+        {/* No script Facebook Pixel */}
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=1778222035980026&ev=PageView&noscript=1"
+            alt="facebook-pixel"
+          />
+        </noscript>
+
         {children}
       </body>
     </html>
