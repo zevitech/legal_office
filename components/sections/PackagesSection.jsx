@@ -8,7 +8,7 @@ export default function PackagesSection() {
   return (
     <div className="flex w-full flex-col justify-center bg-white shadow-md rounded-lg">
       <Tabs aria-label="Options" className="w-full package-tab">
-        <Tab key="photos" title="Photos" className="">
+        <Tab key="Basic" title="Basic" className="">
           <PackageTab
             packageName={`Basic`}
             services={basic}
@@ -16,7 +16,7 @@ export default function PackagesSection() {
             amount={`35`}
           />
         </Tab>
-        <Tab key="music" title="Music" className="">
+        <Tab key="Standard" title="Standard" className="">
           <PackageTab
             packageName={`Standard`}
             services={standard}
@@ -24,7 +24,7 @@ export default function PackagesSection() {
             amount={`135`}
           />
         </Tab>
-        <Tab key="videos" title="Videos" className="">
+        <Tab key="Premium" title="Premium" className="">
           <PackageTab
             packageName={`Premium`}
             services={premium}

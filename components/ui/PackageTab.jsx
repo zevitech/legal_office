@@ -7,19 +7,21 @@ import { FaArrowRightLong } from "react-icons/fa6";
 const PackageTab = ({ packageName, services, details, amount }) => {
   return (
     <div className="text-slate-700">
-      <h1 className="font-medium text-2xl text-center">
+      <h1 className="font-medium text-2xl max-md:text-xl text-center">
         Trademark <span className="text-color-primary">logo and name</span> with
         expert registration service.
       </h1>
       <div className="bg-[#E9EFF3] p-7 -m-[4px] mt-8">
         <h4 className="text-xs uppercase font-semibold">for just</h4>
         <div className="flex items-center mt-3 gap-3">
-          <h1 className="text-8xl font-bold text-[#273B4A]">${amount}</h1>
+          <h1 className="text-8xl max-md:text-6xl font-bold text-[#273B4A]">
+            ${amount}
+          </h1>
           <span className="mb-4">+ USPTO Fee $350/Class* </span>
         </div>
       </div>
-      <div className="py-10 px-7 flex-between">
-        <div className="w-[55%] pr-10">
+      <div className="py-10 px-7 flex-between max-md:flex-col-reverse max-md:gap-7">
+        <div className="w-[55%] pr-10 max-md:w-full">
           <h1 className="font-medium text-lg">
             Save up to 5% with{" "}
             <span className="text-color-primary">Subscribe to Save</span>
@@ -35,12 +37,12 @@ const PackageTab = ({ packageName, services, details, amount }) => {
             ))}
           </ul>
         </div>
-        <div className="border-l-1 w-[45%] pl-10">
+        <div className="border-l-1 w-[45%] pl-10 max-md:w-full max-md:border-none">
           <h1 className="font-medium text-lg">
             About <span className="text-color-primary">{packageName}</span>{" "}
             Package
           </h1>
-          <p className="pt-4">{details}</p>
+          <p className="pt-4 max-md:pt-2 max-md:text-sm">{details}</p>
         </div>
       </div>
       <div className="p-5">

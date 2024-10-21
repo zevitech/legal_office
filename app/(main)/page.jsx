@@ -6,7 +6,6 @@ import { Button } from "@nextui-org/react";
 import { CiSearch } from "react-icons/ci";
 import HeaderText from "@/components/ui/HeaderText";
 import TMButton from "@/components/ui/TMButton";
-import { similarMarks } from "@/constant";
 import AttorneyCard from "@/components/ui/AttorneyCard";
 import StepCard from "@/components/ui/StepCard";
 import Link from "next/link";
@@ -33,8 +32,8 @@ const page = () => {
       <Header />
       <main className="bg-slate-100">
         {/* Hero Section */}
-        <section className="bg-homeBanner w-full h-[85vh] bg-no-repeat bg-cover bg-bottom flex-center">
-          <div className="w-[800px] col-flex gap-10 -mt-24">
+        <section className="bg-homeBanner w-full h-[88vh] max-md:h-auto max-md:py-28 max-md:px-5 bg-no-repeat bg-cover bg-bottom flex-center">
+          <div className="w-[800px] max-md:w-full col-flex gap-10 -mt-20 max-md:mt-10">
             <div className="flex gap-1">
               <div className="flex items-start">
                 <Image
@@ -45,7 +44,7 @@ const page = () => {
                   className="object-contain"
                 />
               </div>
-              <h1 className="text-4xl font-bold text-white text-center leading-normal">
+              <h1 className="text-4xl max-md:text-3xl font-bold text-white text-center leading-normal">
                 Register a trademark for your Business Name, Slogan, or Logo
                 Starting at
               </h1>
@@ -59,8 +58,8 @@ const page = () => {
                 />
               </div>
             </div>
-            <div className="flex-center gap-4">
-              <div className="relative w-[650px]">
+            <div className="flex-center gap-4 max-md:flex-col">
+              <div className="relative w-[650px] max-md:w-full">
                 <input
                   className="p-6 rounded-lg  text-sm w-full outline-blue-600"
                   type="text"
@@ -79,11 +78,16 @@ const page = () => {
         </section>
 
         {/* Statistic Section */}
-        <section className="flex-center gap-16 py-10">
+        <section className="flex-center gap-16 max-md:gap-7 py-10 max-md:flex-wrap">
           <StatisticCountBox text={`Trademarks since 2009`} number={200000} />
-          <StatisticCountBox text={`Happy Customers`} number={120000} />
+          <div className="block max-md:hidden">
+            <StatisticCountBox text={`Happy Customers`} number={120000} />
+          </div>
           <StatisticCountBox text={`Years in Service`} number={15} />
-          <div className=" border-l-2 border-slate-600 pl-5">
+          <div className="hidden max-md:block">
+            <StatisticCountBox text={`Happy Customers`} number={120000} />
+          </div>
+          <div className=" border-l-2 border-slate-600 pl-5 max-md:border-none">
             <p className="text-sm pb-2">
               Rated <span className="font-bold">4.8/5</span> by 1000+ users
             </p>
@@ -107,14 +111,14 @@ const page = () => {
         </section>
 
         {/* similar marks section */}
-        <section className="py-16 pb-24">
+        <section className="py-16 max-md:pt-10 pb-24 max-md:px-5">
           <SimilarMarks />
         </section>
 
         {/* attorney section */}
         <section className="relative">
           <div className="bg-[#DFEAF1] h-[530px] absolute w-full top-0"></div>
-          <div className="flex-between gap-7 max-w-5xl m-auto pt-24 pb-16 relative">
+          <div className="flex-between gap-7 max-md:gap-1 max-w-5xl m-auto pt-24 max-md:pt-20 pb-16 relative">
             <div className="flex items-end">
               <Image
                 width={130}
@@ -142,7 +146,7 @@ const page = () => {
               />
             </div>
           </div>
-          <div className="flex-center gap-10">
+          <div className="flex-center gap-10 max-md:flex-col">
             <AttorneyCard
               name={`Luez. kafe`}
               details={`Legal Trademark Office® attorneys have provided representation`}
@@ -162,9 +166,9 @@ const page = () => {
         </section>
 
         {/* trusted by section */}
-        <section className="py-20">
-          <div className="flex-center gap-20">
-            <div className="max-w-lg col-flex gap-7">
+        <section className="py-20 max-md:px-5">
+          <div className="flex-center gap-20 max-md:gap-5 max-md:flex-col-reverse">
+            <div className="max-w-lg max-md:w-full col-flex gap-7">
               <HeaderText
                 text1="Trusted by Leading "
                 text2="Attorneys Nationwide"
@@ -199,8 +203,8 @@ const page = () => {
         </section>
 
         {/* Trademark Insurance section */}
-        <section className="pb-20">
-          <div className="flex-center gap-20">
+        <section className="pb-20 max-md:px-5">
+          <div className="flex-center gap-20 max-md:flex-col max-md:gap-7">
             <div className="">
               <Image
                 width={500}
@@ -228,30 +232,31 @@ const page = () => {
         </section>
 
         {/* steps section */}
-        <section className="pb-20 pt-10">
+        <section className="pb-20 pt-10 max-md:px-5">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto">
             <HeaderText
               text1="Register your U.S."
               text2="Trademark in 3 easy steps"
             />
-            <p className="text-slate-500 text-base text-center">
+            <p className="text-slate-500 text-base text-center max-md:text-start max-md:text-sm">
               Legal Trademark Office® attorneys have provided representation for
               a diverse range of businesses, including Amazon sellers, clothing
               designers, professional service providers, and more.
             </p>
           </div>
-          <div className="flex-center gap-3 mt-8">
+          <div className="flex-center gap-3 mt-8 max-md:flex-col">
             <StepCard
               icon={`search-icon.png`}
               header={`Conduct a Trademark Search`}
               details={`Before you apply, our team will perform a comprehensive search to ensure your desired trademark isn't already in use. This step helps avoid potential conflicts and strengthens your application`}
             />
-            <div className="mt-20">
+            <div className="mt-20 max-md:mt-0 max-md:rotate-[-111deg] ">
               <Image
                 alt="step indicator"
                 src={`/images/step-indicator.png`}
                 width={80}
                 height={80}
+                className=" scale-x-[-1]"
               />
             </div>
             <StepCard
@@ -259,7 +264,7 @@ const page = () => {
               header={`Prepare and File Your Application`}
               details={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office (USPTO). We'll ensure your application meets all legal requirements.`}
             />
-            <div className="mt-20">
+            <div className="mt-20 max-md:mt-0 rotate-[130deg]">
               <Image
                 alt="step indicator"
                 src={`/images/step-indicator-2.png`}
@@ -273,7 +278,7 @@ const page = () => {
               details={`After filing, we'll keep track of your application's progress and respond to any office actions or requests for additional information from the USPTO. Our goal is to help secure your trademark efficiently and effectively.`}
             />
           </div>
-          <div className="flex-center gap-10 mt-10">
+          <div className="flex-center gap-10 max-md:gap-4 mt-10 max-md:mt-2">
             <TMButton px="80px" py="30px" text={"Start Now"} />
             <Button
               as={Link}
@@ -291,14 +296,16 @@ const page = () => {
         </section>
 
         {/* pricing section */}
-        <section className="flex-center gap-7 pt-10 pb-24">
-          <div className="w-[600px] bg-[#E9EFF3] px-8 py-9 col-flex items-center gap-8 rounded-lg relative">
+        <section className="flex-center gap-7 max-md:gap-10 pt-10 max-md:pt-5 pb-24 max-md:flex-col max-md:px-5">
+          <div className="w-[600px] max-md:w-full bg-[#E9EFF3] px-8 py-9 col-flex items-center gap-8 rounded-lg relative">
             <h1 className="text-color-primary text-3xl font-bold">
               Trademark registration start from
             </h1>
-            <div className="flex-between w-full">
-              <div className="flex items-end">
-                <h1 className="text-8xl font-bold text-[#505050]">$99</h1>
+            <div className="flex-between max-md:items-start max-md:justify-start w-full max-md:flex-col">
+              <div className="flex items-end max-md:items-start max-md:mb-5">
+                <h1 className="text-8xl max-md:text-6xl font-bold text-[#505050]">
+                  $99
+                </h1>
                 <span className="mb-4">+ Govt fee</span>
               </div>
               <TMButton
@@ -309,40 +316,40 @@ const page = () => {
               />
             </div>
             <div className="flex-between w-full mt-3">
-              <ul className="col-flex gap-5 w-[60%] text-[15px]">
+              <ul className="col-flex gap-5 w-[60%] max-md:w-[90%] text-[15px] max-md:relative max-md:z-10">
                 <li className="text-slate-700 flex items-center gap-3">
-                  <TbWorld className="text-[20px]" />{" "}
+                  <TbWorld className="text-[20px] max-md:w-[20px]" />{" "}
                   <span>File in 180+ countries</span>
                 </li>
                 <li className="text-slate-700 flex items-center gap-3">
-                  <IoMdTime className="text-[20px]" />{" "}
+                  <IoMdTime className="text-[20px] max-md:w-[20px]" />{" "}
                   <span>Finish application in 5 minutes</span>
                 </li>
                 <li className="text-slate-700 flex items-center gap-3">
-                  <FaRegUser className="text-[20px]" />{" "}
+                  <FaRegUser className="text-[20px] max-md:w-[20px]" />{" "}
                   <span>Attorney-led filing</span>
                 </li>
                 <li className="text-slate-700 flex items-start gap-3">
-                  <FaShieldHeart className="text-[20px]" />{" "}
+                  <FaShieldHeart className="text-[20px] max-md:w-[20px]" />{" "}
                   <span>{`World's most trusted trademark service`}</span>
                 </li>
               </ul>
               <Image
                 alt="satisfied user"
                 src={`/images/satisfied-user.png`}
-                width={250}
+                width={300}
                 height={250}
-                className="object-contain absolute bottom-0 right-0"
+                className="object-contain absolute bottom-0 right-0 z-0 max-md:w-[140px]"
               />
             </div>
           </div>
-          <div className="w-[500px] col-flex gap-8">
+          <div className="w-[500px] max-md:w-full col-flex gap-8 max-md:gap-10">
             <div className="bg-[#D8EEFD] px-8 py-5 col-flex gap-3 rounded-lg">
               <h1 className="text-color-primary text-3xl font-bold">
                 Patent filing starts from
               </h1>
               <div className="col-flex w-full">
-                <div className="flex items-end mb-3">
+                <div className="flex items-end mb-3 max-md:my-5">
                   <h1 className="text-5xl font-bold text-[#505050]">$199</h1>
                   <span className="mb-4">+ Govt fee</span>
                 </div>
@@ -359,8 +366,8 @@ const page = () => {
                 Patent filing starts from
               </h1>
               <div className="col-flex w-full">
-                <div className="flex items-end mb-3">
-                  <h1 className="text-5xl font-bold text-[#505050]">$199</h1>
+                <div className="flex items-end mb-3 max-md:my-5">
+                  <h1 className="text-5xl font-bold text-[#505050]">$39</h1>
                   <span className="mb-4">+ Govt fee</span>
                 </div>
                 <TMButton
@@ -375,14 +382,14 @@ const page = () => {
         </section>
 
         {/* registered brands */}
-        <section className="pt-16 pb-12 px-20 mb-20 bg-[#E9EFF3]">
+        <section className="pt-16 pb-12 px-20 max-md:px-0 mb-20 max-md:mb-0 bg-[#E9EFF3]">
           <BrandCarousel />
         </section>
 
         {/* explore trademark */}
-        <section className="py-20">
-          <div className="flex-center gap-16">
-            <div className="max-w-2xl col-flex gap-7">
+        <section className="py-20 max-md:px-5">
+          <div className="flex-center gap-16 max-md:flex-col-reverse max-md:gap-6">
+            <div className="max-w-2xl max-md:w-full col-flex gap-7">
               <HeaderText
                 text1="Explore trademarks filed by"
                 text2="competing companies"
@@ -394,8 +401,8 @@ const page = () => {
                 </p>
               </div>
 
-              <div className="flex-center gap-4">
-                <div className="relative w-[600px] shadow-md rounded-lg">
+              <div className="flex-center gap-4 max-md:flex-col">
+                <div className="relative w-[600px] max-md:w-full shadow-md rounded-lg">
                   <input
                     className="p-6 rounded-lg  text-sm w-full outline-blue-600"
                     type="text"
@@ -404,7 +411,7 @@ const page = () => {
                   <CiSearch className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
                 </div>
                 <Button
-                  className="py-[35px] px-14 font-semibold bg-color-primary text-white"
+                  className="py-[35px] px-14 font-semibold bg-color-primary text-white max-md:w-full"
                   radius="md"
                 >
                   Search
@@ -424,31 +431,31 @@ const page = () => {
         </section>
 
         {/* packages - tab */}
-        <section className="py-10">
-          <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto">
+        <section className="py-10 max-md:px-2">
+          <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
             <HeaderText text1="Trademark" text2="Registration Packages" />
-            <p className="text-slate-500 text-base text-center">
+            <p className="text-slate-500 text-base text-center max-md:text-start">
               Legal Trademark Office® attorneys have provided representation for
               a diverse range of businesses, including Amazon sellers, clothing
               designers, professional service providers, and more.
             </p>
           </div>
-          <div className="max-w-4xl m-auto pt-20">
+          <div className="max-w-4xl max-md:w-full m-auto pt-20 max-md:pt-5">
             <PackagesSection />
           </div>
         </section>
 
         {/* testimonial section */}
-        <section className="pt-20 pb-8 pl-20">
+        <section className="pt-20 pb-8 pl-20 max-md:pl-5 max-md:px-5">
           <TestimonialSection />
         </section>
 
-        {/* recommended section */}
-        <section className="pb-20">
-          <div className="flex-center">
-            <HeaderText text1="Our" text2="Happy Customers" />
+        {/* blog section */}
+        <section className="pb-20 max-md:px-5">
+          <div className="flex-center max-md:justify-start">
+            <HeaderText text1="Our" text2="Blogs" />
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-10 mt-16">
+          <div className="flex flex-wrap justify-center items-center gap-10 mt-16 max-md:mt-7 max-md:gap-7">
             <LearningCard
               image={`rlp-1.png`}
               header={`What's the cost to Register a Trademark?`}

@@ -88,17 +88,17 @@ export const navItems = [
   {
     id: 1,
     text: "Home",
-    route: "home",
+    route: "/",
   },
   {
     id: 2,
     text: "Our Services",
-    route: "services",
+    route: "/services",
     subItems: [
       {
         id: 1,
         text: "Trademark Registration",
-        route: "trademark-registration",
+        route: "/services/trademark-registration",
       },
       { id: 2, text: "Free Trademark Search", route: "#" },
       { id: 3, text: "International Trademark ", route: "#" },
@@ -109,18 +109,55 @@ export const navItems = [
   {
     id: 3,
     text: "Contact Us",
-    route: "contact",
+    route: "/contact-us",
   },
   {
     id: 4,
     text: "About Us",
-    route: "about",
+    route: "/about-us",
   },
   {
     id: 5,
     text: "FAQ",
-    route: "faq",
+    route: "/faq",
   },
+];
+
+export const mobileNavItems = [
+  {
+    id: 1,
+    text: "Home",
+    route: "/",
+  },
+  {
+    id: 3,
+    text: "Contact Us",
+    route: "/contact-us",
+  },
+  {
+    id: 4,
+    text: "About Us",
+    route: "/about-us",
+  },
+  {
+    id: 5,
+    text: "FAQ",
+    route: "/faq",
+  },
+  {
+    id: 6,
+    text: "Our Services",
+    route: "/services",
+  },
+  {
+    id: 7,
+    text: "Trademark Registration",
+    route: "/services/trademark-registration",
+  },
+  { id: 9, text: "Free Trademark Search", route: "#" },
+  { id: 10, text: "International Trademark ", route: "#" },
+  { id: 11, text: "Trademark Renewal", route: "#" },
+  { id: 12, text: "Trademark Revival", route: "#" },
 ];
 
 export const similarMarks = [

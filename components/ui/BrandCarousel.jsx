@@ -15,7 +15,7 @@ import "@/components/styles/carousel-custom.css";
 export default function BrandCarousel() {
   return (
     <>
-      <h1 className="text-3xl text-slate-700 text-center mb-12">
+      <h1 className="text-3xl text-slate-700 text-center mb-12 max-md:text-2xl max-md:px-3">
         <span className="font-bold text-color-primary">80,000+</span>{" "}
         <span className="font-normal">trademarks registered by us</span>
       </h1>
@@ -27,6 +27,20 @@ export default function BrandCarousel() {
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
+        }}
+        breakpoints={{
+          640: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+          1024: {
+            slidesPerView: 5,
+            spaceBetween: 50,
+          },
         }}
         modules={[FreeMode, Pagination, Autoplay]}
         className="brandCarousel"

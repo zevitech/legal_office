@@ -4,7 +4,7 @@ import React from "react";
 
 const LearningCard = ({ image, header, details }) => {
   return (
-    <div className="w-[500px] h-[550px] bg-white shadow-lg rounded-lg p-6">
+    <div className="w-[500px] max-md:w-full h-[550px] max-md:h-auto bg-white shadow-lg rounded-lg p-6">
       <Image
         width={400}
         height={400}

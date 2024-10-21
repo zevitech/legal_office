@@ -1,29 +1,19 @@
 import React from "react";
 import Header from "@/components/ui/Header";
-import StatisticCountBox from "@/components/ui/StatisticCountBox";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
-import { CiSearch } from "react-icons/ci";
 import HeaderText from "@/components/ui/HeaderText";
 import TMButton from "@/components/ui/TMButton";
-import { similarMarks, whyChooseUs } from "@/constant";
-import AttorneyCard from "@/components/ui/AttorneyCard";
-import StepCard from "@/components/ui/StepCard";
+import { whyChooseUs } from "@/constant";
 import Link from "next/link";
-import { FaArrowRightLong, FaShieldHeart } from "react-icons/fa6";
-import { TbWorld } from "react-icons/tb";
-import { IoMdTime } from "react-icons/io";
-import { FaRegUser } from "react-icons/fa";
-import BrandCarousel from "@/components/ui/BrandCarousel";
-import PackagesSection from "@/components/sections/PackagesSection";
+import { FaArrowRightLong } from "react-icons/fa6";
 import TestimonialSection from "@/components/sections/TestimonialSection";
-import LearningCard from "@/components/ui/LearningCard";
 import FooterSection from "@/components/sections/FooterSection";
 import SimilarMarks from "@/components/sections/similarMarks";
 
 export const metadata = {
   title:
-    "International Trademark - Legal Trademark Office | US Based trademark register website",
+    "Services - Legal Trademark Office | US Based trademark register website",
   description:
     "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
 };
@@ -34,17 +24,17 @@ const page = () => {
       <Header />
       <main className="bg-slate-100">
         {/* Hero Section */}
-        <section className="bg-itBanner w-full h-[85vh] bg-no-repeat bg-cover bg-bottom flex items-center px-20">
-          <div className=" flex-between -mt-24">
-            <div className="col-flex gap-6 w-[600px]">
-              <h1 className="text-4xl font-bold text-white">
+        <section className="bg-itBanner w-full h-[85vh] max-md:h-auto max-md:pt-[100px] bg-no-repeat bg-cover bg-bottom flex items-center px-20 max-md:px-5">
+          <div className=" flex-between -mt-24 max-md:mt-0 max-md:flex-col">
+            <div className="col-flex gap-6 max-md:gap-4 w-[600px] max-md:w-full">
+              <h1 className="text-4xl max-md:text-3xl font-bold text-white">
                 Protect Your Brand with Expert Trademark Services
               </h1>
               <p className="text-slate-100 text-lg">
                 Comprehensive Trademark Registration, Monitoring, and
                 Enforcement to Secure Your Business Identity
               </p>
-              <div className="flex items-center gap-10">
+              <div className="flex items-center gap-10 max-md:flex-col max-md:gap-1">
                 <TMButton px="80px" py="30px" text={"Start Now"} />
                 <Button
                   as={Link}
@@ -65,14 +55,14 @@ const page = () => {
               height={700}
               alt="image-gallary"
               src={`/images/image-gallary.png`}
-              className="object-contain absolute bottom-[-130px] right-0"
+              className="object-contain absolute bottom-[-130px] max-md:bottom-[-40px] right-0 max-md:relative max-md:w-full"
             />
           </div>
         </section>
 
         {/* experience partners */}
-        <section className="pt-40">
-          <div className="flex-center gap-20">
+        <section className="pt-40 max-md:pt-16 max-md:px-5">
+          <div className="flex-center gap-20 max-md:flex-col-reverse max-md:gap-8 ">
             <div className="">
               <Image
                 width={500}
@@ -132,12 +122,12 @@ const page = () => {
         </section>
 
         {/* similar marks section */}
-        <section className="py-28 ">
+        <section className="py-28 max-md:px-5 max-md:py-20">
           <SimilarMarks />
         </section>
 
         {/* why choose us */}
-        <section className="bg-[#E5F4FF] py-28 shadow-inner-md">
+        <section className="bg-[#E5F4FF] py-28 shadow-inner-md max-md:py-20 max-md:px-5">
           <div className="col-flex justify-center items-center gap-5 max-w-3xl m-auto !text-[#075A96]">
             <HeaderText text1=" " text2="Why Choose Us" />
             <p className=" text-base text-center">
@@ -145,11 +135,11 @@ const page = () => {
               to successfully register than those who go it alone.
             </p>
           </div>
-          <div className="flex-center gap-10 mt-14">
+          <div className="flex-center gap-10 mt-14 max-md:flex-col">
             {whyChooseUs.map((item, index) => (
               <div
                 key={index}
-                className="w-[250px] rounded-lg shadow-lg col-flex gap-5 p-6 text-center bg-slate-100 hover:shadow-none"
+                className="w-[250px] max-md:w-full rounded-lg shadow-lg col-flex gap-5 p-6 text-center bg-slate-100 hover:shadow-none"
               >
                 <Image
                   width={100}
@@ -167,7 +157,7 @@ const page = () => {
         </section>
 
         {/* testimonial section */}
-        <section className="pb-8 pt-28 pl-20">
+        <section className="pb-8 pt-32 max-md:pt-20 pl-20 max-md:px-5">
           <TestimonialSection />
         </section>
 

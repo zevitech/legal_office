@@ -8,12 +8,12 @@ const StatisticCountBox = ({ text, number }) => {
     <div className="col-flex justify-center">
       <CountUp start={0} end={number} delay={0}>
         {({ countUpRef }) => (
-          <div className="text-4xl font-semibold">
+          <div className="text-4xl max-md:text-3xl text-slate-800 font-semibold">
             <span ref={countUpRef} /> <span>+</span>
           </div>
         )}
       </CountUp>
-      <p className="text-gray-800 text-sm pt-2">{text}</p>
+      <p className="text-gray-800 text-sm pt-2 max-md:text-xs">{text}</p>
     </div>
   );
 };

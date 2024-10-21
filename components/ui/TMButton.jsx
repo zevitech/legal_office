@@ -11,10 +11,10 @@ const TMButton = ({ px, py, text, color, full }) => {
     <Button
       as={Link}
       href="/trademark-register"
-      className={`px-14 font-semibold bg-color-primary text-white w-fit capitalize ${
+      className={`px-14 font-semibold bg-color-primary text-white w-fit capitalize max-md:w-full ${
         full && `w-full`
       }`}
-      radius="md"
+      radius="sm"
       style={{ padding: `${py} ${px}`, background: `${color}` }}
       isLoading={isLoading}
       onClick={() => setLoading(true)}
