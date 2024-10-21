@@ -9,7 +9,7 @@ import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
 import TestimonialSection from "@/components/sections/TestimonialSection";
 import FooterSection from "@/components/sections/FooterSection";
-import SimilarMarks from "@/components/sections/similarMarks";
+import SimilarMarks from "@/components/sections/SimilarMarks";
 
 export const metadata = {
   title:

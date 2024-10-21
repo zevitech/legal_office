@@ -18,7 +18,7 @@ import PackagesSection from "@/components/sections/PackagesSection";
 import TestimonialSection from "@/components/sections/TestimonialSection";
 import LearningCard from "@/components/ui/LearningCard";
 import FooterSection from "@/components/sections/FooterSection";
-import SimilarMarks from "@/components/sections/similarMarks";
+import SimilarMarks from "@/components/sections/SimilarMarks";
 
 export const metadata = {
   title: "Legal Trademark Office | US Based trademark register website",
