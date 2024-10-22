@@ -12,7 +12,7 @@ export default function PackagesSection() {
           <PackageTab
             packageName={`Basic`}
             services={basic}
-            details={"lorem ispum dorol sit amet"}
+            details={""}
             amount={`35`}
           />
         </Tab>
@@ -20,7 +20,7 @@ export default function PackagesSection() {
           <PackageTab
             packageName={`Standard`}
             services={standard}
-            details={"lorem ispum dorol sit amet"}
+            details={""}
             amount={`135`}
           />
         </Tab>
@@ -28,7 +28,7 @@ export default function PackagesSection() {
           <PackageTab
             packageName={`Premium`}
             services={premium}
-            details={"lorem ispum dorol sit amet"}
+            details={""}
             amount={`235`}
           />
         </Tab>

@@ -135,22 +135,26 @@ const page = () => {
               to successfully register than those who go it alone.
             </p>
           </div>
-          <div className="flex-center gap-10 mt-14 max-md:flex-col">
+          <div className="flex-center gap-10 mt-20 max-md:flex-col max-md:gap-24">
             {whyChooseUs.map((item, index) => (
               <div
                 key={index}
-                className="w-[250px] max-md:w-full rounded-lg shadow-lg col-flex gap-5 p-6 text-center bg-slate-100 hover:shadow-none"
+                className="w-[250px] max-md:w-full rounded-lg shadow-lg  px-5 text-center bg-slate-100 hover:shadow-none md:h-[420px] relative items-start max-md:pb-[50px]"
               >
                 <Image
                   width={100}
                   height={100}
                   alt="icon"
                   src={`/images/${item.icon}`}
-                  className="object-contain m-auto"
+                  className="object-contain m-auto mt-[-20px]"
                 />
-                <h1 className="text-color-primary font-bold">{item.heading}</h1>
+                <h1 className="text-color-primary font-bold py-6">
+                  {item.heading}
+                </h1>
                 <p className="text-slate-600 text-sm">{item.details}</p>
-                <TMButton px="70px" py="30px" text={"Start Now"} />
+                <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2">
+                  <TMButton px="70px" py="30px" text={"Start Now"} />
+                </div>
               </div>
             ))}
           </div>

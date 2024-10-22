@@ -18,8 +18,21 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <meta
+        name="description"
+        content="At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!."
+      />
+      <meta
+        name="keywords"
+        content="Legal Trademark Office, brand identity, trademark registration, trademark,  protect business name"
+      />
+      <meta name="author" content="Legal Trademark Office" />
+      <meta name="developer" content="https://softenum.com/" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="canonical" href="https://legaltrademarkoffice.com/" />
+
       {/* Tawk.to */}
-      {/* <Script
+      <Script
         id="tawkTo"
         type="text/javascript"
         dangerouslySetInnerHTML={{
@@ -35,10 +48,10 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      /> */}
+      />
 
       {/* Google Tag Manager */}
-      {/* <Script
+      <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -49,10 +62,10 @@ export default function RootLayout({ children }) {
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
               })(window,document,'script','dataLayer','GTM-KJGHNHGM');`,
         }}
-      /> */}
+      />
 
       {/* MouseFlow Tracking */}
-      {/* <Script
+      <Script
         id="mfq"
         type="text/javascript"
         strategy="afterInteractive"
@@ -66,7 +79,7 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      /> */}
+      />
 
       <head>
         <meta
@@ -77,14 +90,14 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${poppins.className} bg-color-secondary`}>
         {/* Google Tag Manager (noscript) */}
-        {/* <noscript>
+        <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJGHNHGM"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript> */}
+        </noscript>
         {/* End Google Tag Manager (noscript) */}
         <GlobalProvider>{children}</GlobalProvider>
       </body>

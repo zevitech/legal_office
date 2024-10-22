@@ -51,7 +51,7 @@ const Header = () => {
         } fixed top-0 left-0 w-full z-[9999]`}
       >
         <div className="flex justify-between items-center px-24 max-md:px-12 max-sm:px-8 py-2 max-md:py-3">
-          <div>
+          <Link href={"/"}>
             <Image
               src={"/images/legal-trademark-office.png"}
               alt="Legal Trademark Office logo"
@@ -59,7 +59,7 @@ const Header = () => {
               height={80}
               className="object-contain max-md:w-[120px]"
             />
-          </div>
+          </Link>
 
           {/* Hamburger Icon for Mobile */}
           <div className="md:hidden flex items-center">

@@ -10,6 +10,7 @@ import TestimonialSection from "@/components/sections/TestimonialSection";
 import FooterSection from "@/components/sections/FooterSection";
 import CounterBoxTR from "@/components/ui/CounterBoxTR";
 import PackageCard from "@/components/ui/PackageCard";
+import ExpandableText from "@/components/ui/ExpandableText";
 
 export const metadata = {
   title:
@@ -112,17 +113,10 @@ const page = () => {
                 <HeaderText text1=" " text2="Legal Trademark Office" />
               </div>
               <div className="col-flex gap-3 text-lg text-slate-600">
-                <p>
-                  {`At Legal Trademark Office, we are dedicated to protecting your
-                  brand's identity and integrity. Our mission is to provide
-                  comprehensive trademark services that ensure your brand's
-                  uniqueness and value are safeguarded in an increasingly
-                  competitive marketplace.`}
-                </p>
-                <p>
-                  With years of expertise in trademark registration, monitoring,
-                  and enforcement, our team of legal professionals.
-                </p>
+                <ExpandableText
+                  text={`At Legal Trademark Office, we are dedicated to protecting your brand's identity and integrity. Our mission is to provide comprehensive trademark services that ensure your brand's uniqueness and value are safeguarded in an increasingly competitive marketplace. With years of expertise in trademark registration, we are committed to helping businesses of all sizes secure their intellectual property, ensuring that their brand's assets are protected for long-term success. Our team of skilled professionals offers personalized support, guiding you through each step of the trademark process with precision and care.
+We understand that your brand is one of your most valuable assets, and we treat it as such. At Legal Trademark Office, we take a proactive approach to ensure that your trademark registration is handled efficiently, minimizing risks and maximizing protection. From initial consultation to registration, we provide a seamless experience backed by industry knowledge and legal expertise. Our goal is to be your trusted partner in securing your brand's future, giving you the confidence to focus on growth and innovation.`}
+                />
               </div>
               <div className="flex items-center gap-10 mt-5 max-md:gap-5">
                 <TMButton px="80px" py="30px" text={"Start Now"} />

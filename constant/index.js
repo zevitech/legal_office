@@ -201,24 +201,24 @@ export const whyChooseUs = [
     icon: "wcu-1.png",
     heading: "Expertise You Can Trust",
     details:
-      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision. Let us guide you through the process with expert legal knowledge and a commitment to your success.",
   },
   {
     icon: "wcu-2.png",
     heading: "Comprehensive Trademark Services",
     details:
-      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+      "We offer a full suite of trademark services tailored to your needs. From application filing to brand monitoring, we handle everything to ensure your intellectual property is secured for the long term.",
   },
   {
     icon: "wcu-3.png",
     heading: "Personalized Support for Brand",
     details:
-      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+      "Your brand's journey is unique, and so is our approach. With personalized support from our dedicated team, you'll receive customized solutions that fit your business's goals, ensuring peace of mind throughout the trademark process",
   },
   {
     icon: "wcu-4.png",
     heading: "Fast and Reliable Registration Process",
     details:
-      "Our team of seasoned trademark professionals brings years of experience to ensure your brand is protected with precision.",
+      "Time is critical when it comes to protecting your brand. Our efficient and reliable registration process ensures that your trademark is filed and processed as quickly as possible, without compromising on quality.",
   },
 ];

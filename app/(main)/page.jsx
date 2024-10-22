@@ -34,7 +34,7 @@ const page = () => {
         {/* Hero Section */}
         <section className="bg-homeBanner w-full h-[88vh] max-md:h-auto max-md:py-28 max-md:px-5 bg-no-repeat bg-cover bg-bottom flex-center">
           <div className="w-[800px] max-md:w-full col-flex gap-10 -mt-20 max-md:mt-10">
-            <div className="flex gap-1">
+            <div className="flex gap-2 max-md:gap-1">
               <div className="flex items-start">
                 <Image
                   width={130}
@@ -45,8 +45,8 @@ const page = () => {
                 />
               </div>
               <h1 className="text-4xl max-md:text-3xl font-bold text-white text-center leading-normal">
-                Register a trademark for your Business Name, Slogan, or Logo
-                Starting at
+                {`Secure Your Brand's Identity - Name, Logo & More! Starting at
+                Just $49 + USPTO Filing Fee`}
               </h1>
               <div className="flex items-end">
                 <Image
@@ -129,11 +129,12 @@ const page = () => {
               />
             </div>
             <div className="col-flex justify-center items-center gap-4">
-              <HeaderText text2="attorneys with" text1="You on every step" />
+              <h1 className="text-4xl max-md:text-3xl text-slate-700">
+                <span className="font-bold text-color-primary">{`Attorneys with`}</span>
+                <span className="font-normal">{` You Every Step of the Way`}</span>
+              </h1>
               <p className="text-slate-600 text-base text-center">
-                Legal Trademark Office® attorneys have provided representation
-                for a diverse range of businesses, including Amazon sellers,
-                clothing designers, professional service providers, and more.
+                {`At Legal Trademark Office, our experienced attorneys have represented a wide range of businesses, from Amazon sellers and clothing designers to professional service providers. We understand the unique needs of every business and are dedicated to ensuring your brand is protected with expert legal guidance.`}
               </p>
             </div>
             <div className="flex items-end">
@@ -149,17 +150,17 @@ const page = () => {
           <div className="flex-center gap-10 max-md:flex-col">
             <AttorneyCard
               name={`Luez. kafe`}
-              details={`Legal Trademark Office® attorneys have provided representation`}
+              details={`Luez has extensive experience in trademark law and is committed to helping businesses protect their intellectual property, With over 7 years of legal experience.`}
               imageName={`attorney-1.png`}
             />
             <AttorneyCard
-              name={`Martiz cort`}
-              details={`Legal Trademark Office® attorneys have provided representation`}
+              name={`James Clarke`}
+              details={`James is a seasoned intellectual property attorney who has represented a diverse range of clients, from small businesses to international corporations. His strategic approach ensures your trademark is secure and fully compliant.`}
               imageName={`attorney-2.png`}
             />
             <AttorneyCard
-              name={`Sam William`}
-              details={`Legal Trademark Office® attorneys have provided representation`}
+              name={`Sophia Green`}
+              details={`With over 10 years of legal experience, Sophia specializes in helping startups secure their trademarks and grow their brand with confidence. She's known for her attention to detail and client-focused approach.`}
               imageName={`attorney-3.png`}
             />
           </div>
@@ -175,13 +176,10 @@ const page = () => {
               />
               <div className="col-flex gap-3 text-lg text-slate-700">
                 <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Ipsum cupiditate laboriosam quasi suscipit ullam praesentium
-                  molestias ratione exercitationem eveniet fuga.
+                  {`At Legal Trademark Office, we are proud to be trusted by attorneys across the country. Our services provide unmatched expertise in trademark law, helping businesses and legal professionals secure their intellectual property with ease and confidence.`}
                 </p>
                 <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Culpa, a.
+                  {`From startups to established businesses, our team has built a reputation for delivering exceptional trademark registration services, trusted by legal experts nationwide.`}
                 </p>
               </div>
               <TMButton
@@ -220,10 +218,9 @@ const page = () => {
                 text2="Trademark Insurance"
               />
               <div className="col-flex gap-3 text-lg text-slate-700">
-                <p>Insure your trademark for just $99.</p>
+                <p>{`Insure your trademark for just $49.`}</p>
                 <p>
-                  {`We guarantee that your trademark will get registered, or we'll
-                  refund our legal fees.*`}
+                  {`With Trademark Insurance, we guarantee that your trademark will get registered, or we'll refund your legal fees.* Protect your brand with confidence and secure your future.`}
                 </p>
               </div>
               <TMButton px="70px" py="30px" text={"Start Now"} />
@@ -256,7 +253,7 @@ const page = () => {
                 src={`/images/step-indicator.png`}
                 width={80}
                 height={80}
-                className=" scale-x-[-1]"
+                className=" max-md:scale-x-[-1]"
               />
             </div>
             <StepCard
@@ -264,7 +261,7 @@ const page = () => {
               header={`Prepare and File Your Application`}
               details={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office (USPTO). We'll ensure your application meets all legal requirements.`}
             />
-            <div className="mt-20 max-md:mt-0 rotate-[130deg]">
+            <div className="mt-20 max-md:mt-0 max-md:rotate-[130deg]">
               <Image
                 alt="step indicator"
                 src={`/images/step-indicator-2.png`}
@@ -304,7 +301,7 @@ const page = () => {
             <div className="flex-between max-md:items-start max-md:justify-start w-full max-md:flex-col">
               <div className="flex items-end max-md:items-start max-md:mb-5">
                 <h1 className="text-8xl max-md:text-6xl font-bold text-[#505050]">
-                  $99
+                  $49
                 </h1>
                 <span className="mb-4">+ Govt fee</span>
               </div>
@@ -345,12 +342,14 @@ const page = () => {
           </div>
           <div className="w-[500px] max-md:w-full col-flex gap-8 max-md:gap-10">
             <div className="bg-[#D8EEFD] px-8 py-5 col-flex gap-3 rounded-lg">
-              <h1 className="text-color-primary text-3xl font-bold">
-                Patent filing starts from
+              <h1 className="text-color-primary text-2xl font-bold">
+                Provisional Patent filing starts from
               </h1>
               <div className="col-flex w-full">
                 <div className="flex items-end mb-3 max-md:my-5">
-                  <h1 className="text-5xl font-bold text-[#505050]">$199</h1>
+                  <h1 className="text-5xl font-bold text-[#505050]">
+                    $500 <span className="text-xl">to</span> $800
+                  </h1>
                   <span className="mb-4">+ Govt fee</span>
                 </div>
                 <TMButton
@@ -363,11 +362,11 @@ const page = () => {
             </div>
             <div className="bg-[#D8FDF2] px-8 py-5 col-flex gap-3 rounded-lg">
               <h1 className="text-[#00A976] text-3xl font-bold">
-                Patent filing starts from
+                Copyright Filing Starts from
               </h1>
               <div className="col-flex w-full">
                 <div className="flex items-end mb-3 max-md:my-5">
-                  <h1 className="text-5xl font-bold text-[#505050]">$39</h1>
+                  <h1 className="text-5xl font-bold text-[#505050]">$189</h1>
                   <span className="mb-4">+ Govt fee</span>
                 </div>
                 <TMButton
@@ -390,17 +389,18 @@ const page = () => {
         <section className="py-20 max-md:px-5">
           <div className="flex-center gap-16 max-md:flex-col-reverse max-md:gap-6">
             <div className="max-w-2xl max-md:w-full col-flex gap-7">
-              <HeaderText
-                text1="Explore trademarks filed by"
-                text2="competing companies"
-              />
+              <h1 className="text-4xl max-md:text-3xl text-slate-700">
+                <span className="font-normal">{`Search Your `}</span>
+                <span className="font-bold text-color-primary">{`Brand Name `}</span>
+                <span className="font-normal">{`Availability`}</span>
+              </h1>
               <div className="col-flex gap-3 text-lg text-slate-700">
                 <p>
-                  Search for when trademark owners file, abandon, or renew
-                  trademarks for free.
+                  Search to see if your business name, slogan, or logo is
+                  available for trademark registration. Ensure your brand is
+                  unique and protected.
                 </p>
               </div>
-
               <div className="flex-center gap-4 max-md:flex-col">
                 <div className="relative w-[600px] max-md:w-full shadow-md rounded-lg">
                   <input
@@ -453,7 +453,7 @@ const page = () => {
         {/* blog section */}
         <section className="pb-20 max-md:px-5">
           <div className="flex-center max-md:justify-start">
-            <HeaderText text1="Our" text2="Blogs" />
+            <HeaderText text1="Recommended " text2="learning resources" />
           </div>
           <div className="flex flex-wrap justify-center items-center gap-10 mt-16 max-md:mt-7 max-md:gap-7">
             <LearningCard
@@ -476,6 +476,14 @@ const page = () => {
               header={`What's the cost to Register a Trademark?`}
               details={`The cost can vary drastically from one application to another. The bare minimum...`}
             />
+          </div>
+          <div className="flex-center mt-10 max-md:mt-5">
+            <Button
+              className="py-[35px] px-14 font-semibold bg-color-primary text-white max-md:w-full shadow-lg"
+              radius="md"
+            >
+              Explore learning center
+            </Button>
           </div>
         </section>
 

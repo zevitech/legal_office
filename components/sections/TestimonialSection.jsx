@@ -24,6 +24,7 @@ const TestimonialSection = () => {
           pagination={{
             clickable: true,
           }}
+          loop={true}
           modules={[Pagination, Autoplay]}
           autoplay={{
             delay: 3000,

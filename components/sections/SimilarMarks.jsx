@@ -11,13 +11,12 @@ const SimilarMarks = () => {
         <HeaderText text1="Search for" text2="similar marks" />
         <div className="col-flex gap-3 text-lg text-slate-700">
           <p>
-            Before you start your filing process, you can search to ensure that
-            your trademark is available and unique.
+            {`Ensure your trademark is unique and available by performing a thorough search before starting the registration process.`}
           </p>
           <p>
-            <b>Trademarkia</b>{" "}
-            {`is the world's largest search engine for
-                Trademarks.`}
+            {`At `}
+            <b>Legal Trademark Office,</b>{" "}
+            {`we provide access to Trademarkia, the world's largest trademark search engine, covering:`}
           </p>
         </div>
         <TMButton px="100px" py="30px" text={"Start searching trademarks"} />

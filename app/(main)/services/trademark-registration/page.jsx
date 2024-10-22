@@ -167,7 +167,7 @@ const page = () => {
             <PackageCard
               packageName={`Basic Package`}
               subHeading={``}
-              price={`35`}
+              price={`49`}
               list={[
                 "Direct-hit Search",
                 "Federal E-Filing with USPTO",
@@ -177,7 +177,7 @@ const page = () => {
             <PackageCard
               packageName={`Deluxe Package`}
               subHeading={`Includes everything from the Basic Package Plus:`}
-              price={`135`}
+              price={`149`}
               list={[
                 "Cease & letter ($35 value)",
                 "Transfer/Assignment ($35 value)",
@@ -187,7 +187,7 @@ const page = () => {
             <PackageCard
               packageName={`Premium Package`}
               subHeading={`Includes everything from the Deluxe Package Plus:`}
-              price={`235`}
+              price={`249`}
               list={[
                 "Private Registration ($60 value)",
                 "24-hour Expedited Processing",
