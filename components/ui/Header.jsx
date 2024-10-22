@@ -44,20 +44,20 @@ const Header = () => {
   }, [prevScrollPos]);
 
   return (
-    <div className="h-[70px] max-md:h-auto">
+    <div className="h-[70px] max-md:h-[40px]">
       <header
         className={`bg-white shadow-lg  transition-transform duration-300 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"
         } fixed top-0 left-0 w-full z-[9999]`}
       >
-        <div className="flex justify-between items-center px-24 max-md:px-12 max-sm:px-8 py-2 max-md:py-3">
+        <div className="flex justify-between items-center px-24 max-md:px-12 max-sm:px-8 py-2">
           <Link href={"/"}>
             <Image
               src={"/images/legal-trademark-office.png"}
               alt="Legal Trademark Office logo"
               width={100}
               height={80}
-              className="object-contain max-md:w-[120px]"
+              className="object-contain max-md:w-[90px]"
             />
           </Link>
 
@@ -65,7 +65,7 @@ const Header = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-              className="text-5xl text-[#2b5fae]"
+              className="text-4xl text-[#2b5fae]"
             >
               {isMobileNavOpen ? <HiOutlineX /> : <HiOutlineBars3BottomRight />}
             </button>
@@ -73,7 +73,7 @@ const Header = () => {
 
           {/* Mobile Navigation Bar */}
           <div
-            className={`00 absolute top-[80px] left-0 w-full bg-white transition-all duration-500 ease-in-out rounded-br-2xl rounded-bl-2xl shadow-lg ${
+            className={`00 absolute top-[65px] left-0 w-full bg-white transition-all duration-500 ease-in-out rounded-br-2xl rounded-bl-2xl shadow-lg ${
               isMobileNavOpen
                 ? `h-[490px] overflow-auto`
                 : "h-0 overflow-hidden"
@@ -83,7 +83,7 @@ const Header = () => {
             }}
           >
             <nav>
-              <ul className="flex flex-col items-start px-6 py-4 space-y-4 pt-8">
+              <ul className="flex flex-col items-start px-6 py-4 space-y-4 pt-7">
                 {mobileNavItems.map((item) => {
                   const isActive =
                     (pathname.includes(item.route) && item.route.length > 1) ||
@@ -93,7 +93,7 @@ const Header = () => {
                     <li key={item.id}>
                       <Link
                         href={`${item.route}`}
-                        className={`relative text-[#2b5fae] font-medium text-xl py-4 group-hover:text-blue-600 ${
+                        className={`relative text-[#2b5fae] text-xl py-4 group-hover:text-blue-600 ${
                           isActive ? "active" : ""
                         }`}
                       >

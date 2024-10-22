@@ -33,7 +33,7 @@ const page = () => {
       <main className="bg-slate-100">
         {/* Hero Section */}
         <section className="bg-homeBanner w-full h-[88vh] max-md:h-auto max-md:py-28 max-md:px-5 bg-no-repeat bg-cover bg-bottom flex-center">
-          <div className="w-[800px] max-md:w-full col-flex gap-10 -mt-20 max-md:mt-10">
+          <div className="w-[800px] max-md:w-full col-flex gap-10 -mt-20 max-md:mt-0">
             <div className="flex gap-2 max-md:gap-1">
               <div className="flex items-start">
                 <Image

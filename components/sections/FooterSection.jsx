@@ -1,3 +1,4 @@
+import { mobileNavItems } from "@/constant";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { CiSearch } from "react-icons/ci";
 const FooterSection = () => {
   return (
     <footer className="">
-      <div className="footer-bg max-md:px-6 pt-24 max-md:pt-20 pb-20 max-md:pb-16 flex justify-center gap-28 max-md:gap-10 max-md:flex-col">
+      <div className="footer-bg max-md:px-6 pt-24 max-md:pt-20 pb-10 max-md:pb-10 flex justify-center gap-28 max-md:gap-10 max-md:flex-col">
         <div className="col-flex gap-4 max-md:gap-3 max-w-[380px]">
           <Image
             width={150}
@@ -31,32 +32,22 @@ const FooterSection = () => {
 
         <div className="text-slate-100">
           <h4 className="text-lg font-bold mb-4">Quick Links</h4>
-          <ul className="col-flex gap-3">
-            <li>
-              <Link href={`#`} className="hover:underline">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href={`#`} className="hover:underline">
-                Our Services
-              </Link>
-            </li>
-            <li>
-              <Link href={`#`} className="hover:underline">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link href={`#`} className="hover:underline">
-                Contact Us
-              </Link>
-            </li>
-            <li>
-              <Link href={`#`} className="hover:underline">
-                FAQ
-              </Link>
-            </li>
+          <ul className="col-flex gap-1">
+            {mobileNavItems.map((item) => {
+              return (
+                <li key={item.id} className="group relative">
+                  <Link
+                    href={`${item.route}`}
+                    className={`text-slate-100 text-base py-1 block`}
+                  >
+                    {item.text}
+                    <span
+                      className={`absolute left-0 bottom-0 h-[1.5px] bg-[#c0d3ee] transition-all duration-300 w-0 group-hover:w-full`}
+                    ></span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
