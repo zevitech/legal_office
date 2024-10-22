@@ -19,6 +19,7 @@ import TestimonialSection from "@/components/sections/TestimonialSection";
 import LearningCard from "@/components/ui/LearningCard";
 import FooterSection from "@/components/sections/FooterSection";
 import SimilarMarks from "@/components/sections/SimilarMarks";
+import { BiSearch } from "react-icons/bi";
 
 export const metadata = {
   title: "Legal Trademark Office | US Based trademark register website",
@@ -34,7 +35,7 @@ const page = () => {
         {/* Hero Section */}
         <section className="bg-homeBanner w-full h-[88vh] max-md:h-auto max-md:py-28 max-md:px-5 bg-no-repeat bg-cover bg-bottom flex-center">
           <div className="w-[800px] max-md:w-full col-flex gap-10 -mt-20 max-md:mt-0">
-            <div className="flex gap-2 max-md:gap-1">
+            <div className="flex gap-3 max-md:gap-1">
               <div className="flex items-start">
                 <Image
                   width={130}
@@ -45,7 +46,7 @@ const page = () => {
                 />
               </div>
               <h1 className="text-4xl max-md:text-3xl font-bold text-white text-center leading-normal">
-                {`Secure Your Brand's Identity - Name, Logo & More! Starting at
+                {`Secure Your Brand's Identity - Name, Logo, Slogan & More! Starting at
                 Just $49 + USPTO Filing Fee`}
               </h1>
               <div className="flex items-end">
@@ -315,20 +316,20 @@ const page = () => {
             <div className="flex-between w-full mt-3">
               <ul className="col-flex gap-5 w-[60%] max-md:w-[90%] text-[15px] max-md:relative max-md:z-10">
                 <li className="text-slate-700 flex items-center gap-3">
-                  <TbWorld className="text-[20px] max-md:w-[20px]" />{" "}
-                  <span>File in 180+ countries</span>
+                  <BiSearch className="text-[20px] max-md:w-[20px]" />{" "}
+                  <span>Comprehensive Search</span>
                 </li>
                 <li className="text-slate-700 flex items-center gap-3">
                   <IoMdTime className="text-[20px] max-md:w-[20px]" />{" "}
-                  <span>Finish application in 5 minutes</span>
+                  <span>7-Day Processing</span>
                 </li>
                 <li className="text-slate-700 flex items-center gap-3">
                   <FaRegUser className="text-[20px] max-md:w-[20px]" />{" "}
-                  <span>Attorney-led filing</span>
+                  <span>Filing Prepared by Specialists</span>
                 </li>
                 <li className="text-slate-700 flex items-start gap-3">
                   <FaShieldHeart className="text-[20px] max-md:w-[20px]" />{" "}
-                  <span>{`World's most trusted trademark service`}</span>
+                  <span>100% Satisfaction Guarantee</span>
                 </li>
               </ul>
               <Image
@@ -381,9 +382,9 @@ const page = () => {
         </section>
 
         {/* registered brands */}
-        <section className="pt-16 pb-12 px-20 max-md:px-0 mb-20 max-md:mb-0 bg-[#E9EFF3]">
+        {/* <section className="pt-16 pb-12 px-20 max-md:px-0 mb-20 max-md:mb-0 bg-[#E9EFF3]">
           <BrandCarousel />
-        </section>
+        </section> */}
 
         {/* explore trademark */}
         <section className="py-20 max-md:px-5">

@@ -13,7 +13,7 @@ export default function PackagesSection() {
             packageName={`Basic`}
             services={basic}
             details={""}
-            amount={`35`}
+            amount={`49`}
           />
         </Tab>
         <Tab key="Standard" title="Standard" className="">
@@ -21,7 +21,7 @@ export default function PackagesSection() {
             packageName={`Standard`}
             services={standard}
             details={""}
-            amount={`135`}
+            amount={`149`}
           />
         </Tab>
         <Tab key="Premium" title="Premium" className="">
@@ -29,7 +29,7 @@ export default function PackagesSection() {
             packageName={`Premium`}
             services={premium}
             details={""}
-            amount={`235`}
+            amount={`249`}
           />
         </Tab>
       </Tabs>

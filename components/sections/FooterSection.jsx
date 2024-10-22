@@ -89,7 +89,7 @@ const FooterSection = () => {
                   className="py-[35px] max-md:py-[26px] px-14 max-md:px-8 font-semibold bg-color-primary text-white absolute top-1/2 -translate-y-1/2 right-[-3px] hover:opacity-100"
                   radius="md"
                 >
-                  Search
+                  Subscribe
                 </Button>
               </div>
             </div>

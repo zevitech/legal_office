@@ -8,8 +8,8 @@ const PackageTab = ({ packageName, services, details, amount }) => {
   return (
     <div className="text-slate-700">
       <h1 className="font-medium text-2xl max-md:text-xl text-center">
-        Trademark <span className="text-color-primary">logo and name</span> with
-        expert registration service.
+        Trademark <span className="text-color-primary">logo, name, slogan</span>{" "}
+        with expert registration service.
       </h1>
       <div className="bg-[#E9EFF3] p-7 -m-[4px] mt-8">
         <h4 className="text-xs uppercase font-semibold">for just</h4>
@@ -21,7 +21,7 @@ const PackageTab = ({ packageName, services, details, amount }) => {
         </div>
       </div>
       <div className="py-10 px-7 flex-between max-md:flex-col-reverse max-md:gap-7">
-        <div className="w-[55%] pr-10 max-md:w-full">
+        <div className="w-full pr-10 max-md:w-full">
           <h1 className="font-medium text-lg">
             Save up to 5% with{" "}
             <span className="text-color-primary">Subscribe to Save</span>
@@ -37,13 +37,13 @@ const PackageTab = ({ packageName, services, details, amount }) => {
             ))}
           </ul>
         </div>
-        <div className="border-l-1 w-[45%] pl-10 max-md:w-full max-md:border-none">
+        {/* <div className="border-l-1 w-[45%] pl-10 max-md:w-full max-md:border-none">
           <h1 className="font-medium text-lg">
             About <span className="text-color-primary">{packageName}</span>{" "}
             Package
           </h1>
           <p className="pt-4 max-md:pt-2 max-md:text-sm">{details}</p>
-        </div>
+        </div> */}
       </div>
       <div className="p-5">
         <TMButton
