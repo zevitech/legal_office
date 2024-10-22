@@ -114,11 +114,12 @@ const StepFour = () => {
             Next
           </Button>
         </ButtonContainer>
-        <p className="text-sm max-md:text-xs text-slate-500 mb-16 mt-7">
-          Once your search results have been reviewed and our specialists have
-          curated your trademark application, Legal Trademark Office will
-          collect the necessary fees and pay the discounted TEAS Standard
-          electronic filing fee of $350 on your behalf.
+        <p className="text-md max-md:text-sm text-slate-800 mb-16 mt-7 font-medium">
+          <span className="text-red-500 font-bold">Note:</span> Once your search
+          results have been reviewed and our specialists have curated your
+          trademark application, Legal Trademark Office will collect the
+          necessary fees and pay the discounted TEAS Standard electronic filing
+          fee of $350 on your behalf.
         </p>
       </form>
     </section>

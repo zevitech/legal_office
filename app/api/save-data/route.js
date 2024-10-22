@@ -5,6 +5,8 @@ import { createTransport } from "nodemailer";
 export async function POST(req) {
   const data = await req.json();
 
+  console.log("client already paid: ", data?.is_paid_log);
+
   try {
     // sending data to gmail account -start
     const transporter = createTransport({
@@ -53,7 +55,7 @@ export async function POST(req) {
       await axios
         .post(zohoEndPoint, data)
         .then((res) => {
-          console.log("zoho response", res?.data?.message);
+          console.log("zoho response: ", res?.data?.message);
         })
         .catch((err) => {
           console.log("zoho error", err);
