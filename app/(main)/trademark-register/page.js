@@ -1,12 +1,16 @@
-import FormHero from "@/components/form/FormHero";
+import SystemHeroSection from "@/components/form/new/system-hero-section";
 import StepOne from "@/components/form/steps/StepOne";
+import FooterSection from "@/components/sections/FooterSection";
+import Header from "@/components/ui/Header";
 import React from "react";
 
 const page = () => {
   return (
     <main className="">
-      <FormHero step={1} />
+      <Header />
+      <SystemHeroSection />
       <StepOne />
+      <FooterSection />
     </main>
   );
 };

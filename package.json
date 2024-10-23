@@ -16,6 +16,7 @@
     "@zohocrm/nodejs-sdk-2.0": "^6.1.0",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
+    "country-state-city": "^3.2.1",
     "email-validator": "^2.0.4",
     "file-saver": "^2.0.5",
     "framer-motion": "^11.2.13",

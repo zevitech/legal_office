@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       {/* Tawk.to */}
-      <Script
+      {/* <Script
         id="tawkTo"
         type="text/javascript"
         dangerouslySetInnerHTML={{
@@ -31,10 +31,10 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      />
+      /> */}
 
       {/* Google Tag Manager */}
-      <Script
+      {/* <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -45,10 +45,10 @@ export default function RootLayout({ children }) {
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-M76V8V3F');`,
         }}
-      />
+      /> */}
 
       {/* MouseFlow Tracking */}
-      <Script
+      {/* <Script
         id="mfq"
         type="text/javascript"
         strategy="afterInteractive"
@@ -62,19 +62,19 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      />
+      /> */}
       <body className={`${inter.className}`}>
         {/* Google Tag Manager (noscript) */}
-        <noscript>
+        {/* <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M76V8V3F"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript>
+        </noscript> */}
 
-        <div className={`bg-form-body`}></div>
+        <div className={`bg-form-bod`}></div>
         <GlobalProvider>{children}</GlobalProvider>
       </body>
     </html>

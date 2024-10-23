@@ -1,6 +1,8 @@
 import FormHero from "@/components/form/FormHero";
+import SystemHeroSection from "@/components/form/new/system-hero-section";
 import StepThree from "@/components/form/steps/StepThree";
 import StepTwo from "@/components/form/steps/StepTwo";
+import Header from "@/components/ui/Header";
 import React from "react";
 
 export const metadata = {
@@ -12,7 +14,8 @@ export const metadata = {
 const page = () => {
   return (
     <main className="mb-10">
-      <FormHero step={3} />
+      <Header />
+      <SystemHeroSection />
       <StepThree />
     </main>
   );
