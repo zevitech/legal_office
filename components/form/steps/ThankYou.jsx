@@ -13,6 +13,8 @@ import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
 import { BiHome } from "react-icons/bi";
 import CalendlyWidget from "@/components/ui/CalendlyWidget";
+import { DotLottiePlayer } from "@dotlottie/react-player";
+import SystemConfirmationAnimation from "@/public/new-form/animations/system-confirmation-animation.json";
 
 const ThankYou = () => {
   const router = useRouter();
@@ -47,36 +49,36 @@ const ThankYou = () => {
   };
 
   return (
-    <section>
-      <div className="flex-center py-8 ">
-        <div className="max-md:px-6">
-          <div className="w-[600px] max-md:w-full m-auto text-center">
-            <Image
-              src={`/images/payment-done.png`}
-              alt="payment done"
-              width={200}
-              height={200}
-              className="mb-10 m-auto"
-            />
-            <h1 className="text-orange-600 text-3xl font-semibold">
-              Thank You, Payment Done!
-            </h1>
-            <p className="text-slate-600 text-base mt-5">
-              We have received your application. Please wait for a call from one
-              of our specialists regarding your trademark application.
-            </p>
+    <main className="section-standard-layout flex flex-col items-center gap-4 py-10">
+      <DotLottiePlayer
+        src={SystemConfirmationAnimation}
+        className="w-[300px] h-[300px] max-md:w-[200px] max-md:h-[200px]"
+        autoplay
+        loop
+      />
+
+      <div className="w-full flex flex-col items-center gap-1">
+        <h1 className="font-inria text-heading-color md:text-[24px] text-[20px] text-center">
+          Thank You, Payment Completed!
+        </h1>
+        <p className="md:text-[16px] text-[12px] md:leading-[20px] leading-[16px] md:max-w-[800px] w-full text-center">
+          Thank you for submitting your application. Please schedule a call with
+          one of our representative to discuss the next steps for trademark
+          application.
+        </p>
+      </div>
+
+      <div>
+        <div className="flex justify-center gap-20 mt-14 max-md:flex-col">
+          <div ref={receiptRef}>
+            <Receipt />
           </div>
-          <br />
-          <div className="flex justify-center gap-20 mt-14 max-md:flex-col">
-            <div ref={receiptRef}>
-              <Receipt />
-            </div>
-            {/* <div>
+          {/* <div>
               <CalendlyWidget />
             </div> */}
-          </div>
-          <div className="flex-center gap-10  mt-7 mb-11 max-md:w-full">
-            {/* <Button
+        </div>
+        <div className="flex-center gap-10  mt-7 mb-11 max-md:w-full">
+          {/* <Button
               color="primary"
               variant="shadow"
               startContent={<BiHome />}
@@ -85,27 +87,26 @@ const ThankYou = () => {
             >
               Home
             </Button> */}
-            <Button
-              color="danger"
-              variant="shadow"
-              startContent={<MdOutlineCall />}
-            >
-              Call Us
-            </Button>
-            <Button
-              color="secondary"
-              variant="shadow"
-              type="submit"
-              startContent={<FaDownload />}
-              onClick={handleDownload}
-              isLoading={isLoading}
-            >
-              Download Receipt
-            </Button>
-          </div>
+          <Button
+            color="danger"
+            variant="shadow"
+            startContent={<MdOutlineCall />}
+          >
+            Call Us
+          </Button>
+          <Button
+            color="secondary"
+            variant="shadow"
+            type="submit"
+            startContent={<FaDownload />}
+            onClick={handleDownload}
+            isLoading={isLoading}
+          >
+            Download Receipt
+          </Button>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
 

@@ -1,4 +1,4 @@
-import SystemHeroSection from "@/components/form/new/system-hero-section";
+import SystemHeroSection from "@/components/form/form2.0/system-hero-section";
 import StepOne from "@/components/form/steps/StepOne";
 import FooterSection from "@/components/sections/FooterSection";
 import Header from "@/components/ui/Header";

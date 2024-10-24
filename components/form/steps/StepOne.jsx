@@ -39,6 +39,7 @@ import { GetGeographicalData } from "@/utils/get-geographical-data";
 const StepOne = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [wantToProtect, setWantToProtect] = useState("logo");
   const [selectedOwnerType, setSelectedOwnerType] = useState("individual");
@@ -117,7 +118,7 @@ const StepOne = () => {
     if (wantToProtect === "slogan" && !slogan)
       tempErrors.slogan = "Slogan is required";
     if (wantToProtect === "logo" && !logo) tempErrors.logo = "Logo is required";
-    if (wantToProtect === "all_three") {
+    if (wantToProtect === "all-of-them") {
       if (!name) tempErrors.name = "Name is required";
       if (!slogan) tempErrors.slogan = "Slogan is required";
       if (!logo) tempErrors.logo = "Logo is required";
@@ -147,11 +148,11 @@ const StepOne = () => {
     } else if (!validatePhoneNumber(phoneNumber)) {
       tempErrors.phoneNumber = "Invalid phone number";
     }
-    if (!landLineNumber) {
-      tempErrors.landLineNumber = "Preferred Phone number is required";
-    } else if (!validatePhoneNumber(landLineNumber)) {
-      tempErrors.landLineNumber = "Invalid phone number";
-    }
+    // if (!landLineNumber) {
+    //   tempErrors.landLineNumber = "Landline number is required";
+    // } else if (!validatePhoneNumber(landLineNumber)) {
+    //   tempErrors.landLineNumber = "Invalid phone number";
+    // }
     if (!emailAddress) {
       tempErrors.emailAddress = "Email address is required";
     } else if (!validator.validate(emailAddress)) {
@@ -175,51 +176,51 @@ const StepOne = () => {
   // Handle form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // setIsLoading(true);
+    setIsLoading(true);
 
     //return (stop) if there validation issue
     const firstErrorField = validateForm();
-    // if (firstErrorField) {
-    //   setIsLoading(false);
+    if (firstErrorField) {
+      setIsLoading(false);
 
-    //   // Scroll to the first error field
-    //   const errorRefs = {
-    //     protectName: protectNameRef,
-    //     sloganName: sloganNameRef,
-    //     logo: logoRef,
-    //     organizationName: organizationNameRef,
-    //     organizationType: organizationTypeRef,
-    //     countryOfFormation: countryOfFormationRef,
-    //     stateOfFormation: stateOfFormationRef,
-    //     position: positionRef,
-    //     firstName: firstNameRef,
-    //     lastName: lastNameRef,
-    //     address: addressRef,
-    //     city: cityRef,
-    //     state: stateRef,
-    //     zip: zipRef,
-    //     phone: phoneRef,
-    //     phone: preferredPhoneRef,
-    //     email: emailRef,
-    //     reChaptcha: reChaptchaRef,
-    //     preferredTime: preferredTimeRef,
-    //   };
-    //   // errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });if (firstErrorField)
-    //   if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
-    //     errorRefs[firstErrorField].current.scrollIntoView({
-    //       behavior: "smooth",
-    //     });
+      // Scroll to the first error field
+      const errorRefs = {
+        name: protectNameRef,
+        slogan: sloganNameRef,
+        logo: logoRef,
+        organizationName: organizationNameRef,
+        organizationType: organizationTypeRef,
+        countryFormation: countryOfFormationRef,
+        stateFormation: stateOfFormationRef,
+        organizationPosition: positionRef,
+        firstName: firstNameRef,
+        lastName: lastNameRef,
+        address: addressRef,
+        city: cityRef,
+        state: stateRef,
+        zipCode: zipRef,
+        phoneNumber: phoneRef,
+        // landLineNumber: preferredPhoneRef,
+        emailAddress: emailRef,
+        reChaptcha: reChaptchaRef,
+        contactTime: preferredTimeRef,
+      };
+      // errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });if (firstErrorField)
+      if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
+        errorRefs[firstErrorField].current.scrollIntoView({
+          behavior: "smooth",
+        });
 
-    //     // Wait for the scrolling to finish and then adjust by the offset
-    //     setTimeout(() => {
-    //       window.scrollBy({
-    //         top: -100,
-    //         behavior: "smooth",
-    //       });
-    //     }, 500);
-    //   }
-    //   return;
-    // }
+        // Wait for the scrolling to finish and then adjust by the offset
+        setTimeout(() => {
+          window.scrollBy({
+            top: -200,
+            behavior: "smooth",
+          });
+        }, 500);
+      }
+      return;
+    }
 
     const stepOne = {
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
@@ -251,7 +252,6 @@ const StepOne = () => {
     const stepOneWithValues = Object.fromEntries(
       Object.entries(stepOne).filter(([_, value]) => value !== "")
     );
-    console.log("stepOneWithValues", stepOneWithValues);
 
     // store data to state
     dispatch(saveStepOne(stepOneWithValues));
@@ -305,37 +305,97 @@ const StepOne = () => {
               </RadioGroup>
 
               {wantToProtect === "logo" && (
-                <div className="flex flex-col gap-2 w-full">
-                  <p className="text-[12px] text-[#B2B2B2]">
-                    Upload the logo you wish to protect
-                  </p>
-                  <Button
-                    startContent={
-                      <IoImageOutline className="text-[#5A5A5A] text-[20px]" />
-                    }
-                    className="h-[45px] bg-[#E4E4E4] rounded-[4px] text-[#5A5A5A] text-[15px]"
+                // <div className="flex flex-col gap-2 w-full">
+                //   <p className="text-[12px] text-[#B2B2B2]">
+                //     Upload the logo you wish to protect
+                //   </p>
+                //   <Button
+                //     startContent={
+                //       <IoImageOutline className="text-[#5A5A5A] text-[20px]" />
+                //     }
+                //     className="h-[45px] bg-[#E4E4E4] rounded-[4px] text-[#5A5A5A] text-[15px]"
+                //   >
+                //     Upload Image
+                //   </Button>
+                // </div>
+                <>
+                  <TinyWarning text="Upload the logo you wish to protect" />
+                  <CldUploadWidget
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                    onSuccess={(results) => {
+                      const public_url = results?.info?.url;
+                      setLogo(public_url);
+                    }}
+                    onOpen={() => setIsUploading(true)}
+                    onClose={() => setIsUploading(false)}
                   >
-                    Upload Image
-                  </Button>
-                </div>
+                    {({ open }) => {
+                      return (
+                        <div className="w-full">
+                          <div className="flex gap-3">
+                            <div
+                              onClick={() => open()}
+                              className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
+                                isUploading && `cursor-not-allowed opacity-75`
+                              }`}
+                              ref={logoRef}
+                            >
+                              {isUploading ? (
+                                <LuLoader className=" animate-spin text-2xl" />
+                              ) : (
+                                "Select Image"
+                              )}
+                            </div>
+                            {logo && (
+                              <Image
+                                src={logo}
+                                alt="Logo"
+                                width={100}
+                                height={44}
+                                className="h-[44px] w-auto"
+                              />
+                            )}
+                          </div>
+                          {!!errors.logo && (
+                            <p className="text-[#f31260] text-xs pt-2">
+                              Please select an image
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }}
+                  </CldUploadWidget>
+                </>
               )}
 
-              {(wantToProtect === "name" || wantToProtect === "slogan") && (
+              {wantToProtect === "name" && (
                 <Input
                   type="text"
                   variant="underlined"
-                  label={`Enter the ${wantToProtect} you wish to protect`}
+                  label={`Enter the name you wish to protect`}
                   className="w-full"
-                  value={wantToProtect === "name" ? name : slogan}
+                  value={name}
                   onChange={(e) => {
-                    if (wantToProtect === "name") {
-                      setName(e.target.value);
-                    } else if (wantToProtect === "slogan") {
-                      setSlogan(e.target.value);
-                    }
+                    setName(e.target.value);
                   }}
-                  errorMessage={errors.wantToProtect}
-                  isInvalid={!!errors.wantToProtect}
+                  errorMessage={errors.name}
+                  isInvalid={!!errors.name}
+                  ref={protectNameRef}
+                />
+              )}
+              {wantToProtect === "slogan" && (
+                <Input
+                  type="text"
+                  variant="underlined"
+                  label={`Enter the slogan you wish to protect`}
+                  className="w-full"
+                  value={slogan}
+                  onChange={(e) => {
+                    setSlogan(e.target.value);
+                  }}
+                  errorMessage={errors.slogan}
+                  isInvalid={!!errors.slogan}
+                  ref={sloganNameRef}
                 />
               )}
 
@@ -348,6 +408,9 @@ const StepOne = () => {
                     className="w-full"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    errorMessage={errors.name}
+                    isInvalid={!!errors.name}
+                    ref={protectNameRef}
                   />
 
                   <Input
@@ -357,16 +420,67 @@ const StepOne = () => {
                     className="w-full"
                     value={slogan}
                     onChange={(e) => setSlogan(e.target.value)}
+                    errorMessage={errors.slogan}
+                    isInvalid={!!errors.slogan}
+                    ref={sloganNameRef}
                   />
 
-                  <Button
+                  {/* <Button
                     startContent={
                       <IoImageOutline className="text-[#5A5A5A] text-[20px]" />
                     }
                     className="h-[45px] bg-[#E4E4E4] rounded-[4px] text-[#5A5A5A] text-[15px]"
                   >
                     Upload Image
-                  </Button>
+                  </Button> */}
+                  <>
+                    <TinyWarning text="Upload the logo you wish to protect" />
+                    <CldUploadWidget
+                      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                      onSuccess={(results) => {
+                        const public_url = results?.info?.url;
+                        setLogo(public_url);
+                      }}
+                      onOpen={() => setIsUploading(true)}
+                      onClose={() => setIsUploading(false)}
+                    >
+                      {({ open }) => {
+                        return (
+                          <div className="w-full">
+                            <div className="flex gap-3">
+                              <div
+                                onClick={() => open()}
+                                className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
+                                  isUploading && `cursor-not-allowed opacity-75`
+                                }`}
+                                ref={logoRef}
+                              >
+                                {isUploading ? (
+                                  <LuLoader className=" animate-spin text-2xl" />
+                                ) : (
+                                  "Select Image"
+                                )}
+                              </div>
+                              {logo && (
+                                <Image
+                                  src={logo}
+                                  alt="Logo"
+                                  width={100}
+                                  height={44}
+                                  className="h-[44px] w-auto"
+                                />
+                              )}
+                            </div>
+                            {!!errors.logo && (
+                              <p className="text-[#f31260] text-xs pt-2">
+                                Please select an image
+                              </p>
+                            )}
+                          </div>
+                        );
+                      }}
+                    </CldUploadWidget>
+                  </>
                 </div>
               )}
             </div>
@@ -448,6 +562,7 @@ const StepOne = () => {
                   onChange={(e) => setOrganizationName(e.target.value)}
                   errorMessage={errors.organizationName}
                   isInvalid={!!errors.organizationName}
+                  ref={organizationNameRef}
                 />
 
                 {/* FIELD 1.2.1.2 */}
@@ -461,6 +576,9 @@ const StepOne = () => {
                   size="lg"
                   value={organizationType}
                   onChange={(e) => setOrganizationType(e.target.value)}
+                  ref={organizationTypeRef}
+                  errorMessage={errors.organizationType}
+                  isInvalid={!!errors.organizationType}
                 >
                   {OrganizationType.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
@@ -518,6 +636,9 @@ const StepOne = () => {
                   size="lg"
                   value={organizationPosition}
                   onChange={(e) => setOrganizationPosition(e.target.value)}
+                  ref={positionRef}
+                  errorMessage={errors.organizationPosition}
+                  isInvalid={!!errors.organizationPosition}
                 />
               </div>
             </div>
@@ -542,6 +663,9 @@ const StepOne = () => {
               size="lg"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              ref={firstNameRef}
+              errorMessage={errors.firstName}
+              isInvalid={!!errors.firstName}
             />
 
             <Input
@@ -555,6 +679,9 @@ const StepOne = () => {
               size="lg"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              ref={lastNameRef}
+              errorMessage={errors.lastName}
+              isInvalid={!!errors.lastName}
             />
           </div>
 
@@ -573,6 +700,9 @@ const StepOne = () => {
               }
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              ref={addressRef}
+              errorMessage={errors.address}
+              isInvalid={!!errors.address}
             />
           </div>
 
@@ -588,6 +718,9 @@ const StepOne = () => {
               size="lg"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              ref={cityRef}
+              errorMessage={errors.city}
+              isInvalid={!!errors.city}
             />
 
             <Select
@@ -600,6 +733,9 @@ const StepOne = () => {
               size="lg"
               value={state}
               onChange={(e) => setState(e.target.value)}
+              ref={stateRef}
+              errorMessage={errors.state}
+              isInvalid={!!errors.state}
             >
               {GetGeographicalData("state", "US").map((data) => (
                 <SelectItem key={data.value} value={data.value}>
@@ -621,6 +757,9 @@ const StepOne = () => {
               size="lg"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              ref={phoneRef}
+              errorMessage={errors.phoneNumber}
+              isInvalid={!!errors.phoneNumber}
             />
 
             <Input
@@ -649,6 +788,9 @@ const StepOne = () => {
               size="lg"
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
+              ref={zipRef}
+              errorMessage={errors.zipCode}
+              isInvalid={!!errors.zipCode}
             />
 
             <Input
@@ -665,17 +807,20 @@ const StepOne = () => {
               }
               value={emailAddress}
               onChange={(e) => setEmailAddress(e.target.value)}
+              ref={emailRef}
+              errorMessage={errors.emailAddress}
+              isInvalid={!!errors.emailAddress}
             />
           </div>
 
           <div className="w-full">
             <Input
               type="text"
-              label="Preffered Contact Time"
+              label="Preferred Contact Time"
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. 8:00 AM to 11:00 AM"
-              description="Enter your preffered time to call (must be business hours)"
+              description="Enter your preferred time to call (must be business hours)"
               radius="sm"
               size="lg"
               startContent={
@@ -683,6 +828,9 @@ const StepOne = () => {
               }
               value={contactTime}
               onChange={(e) => setContactTime(e.target.value)}
+              ref={preferredTimeRef}
+              errorMessage={errors.contactTime}
+              isInvalid={!!errors.contactTime}
             />
           </div>
         </div>
@@ -700,6 +848,7 @@ const StepOne = () => {
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}
               onChange={ReCAPTCHAHandle}
+              ref={reChaptchaRef}
             />
             {!reChaptcha && (
               <p

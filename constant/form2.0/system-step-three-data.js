@@ -3,6 +3,7 @@ export const SystemStepThreeData = [
     id: 1,
     planName: "Basic",
     planPrice: "$35",
+    price: 35,
     planSubtext: "+USPTO Fee $350/Class",
     OfferedDetails: [
       {
@@ -48,6 +49,7 @@ export const SystemStepThreeData = [
     id: 2,
     planName: "Premium",
     planPrice: "$235",
+    price: 235,
     planSubtext: "+USPTO Fee $350/Class",
     OfferedDetails: [
       {
@@ -56,7 +58,7 @@ export const SystemStepThreeData = [
           "Includes federal and state trademark searches for similar names, logos, or slogans, ensuring thorough coverage.",
       },
       {
-        title: "24 – 48 Hours Processing",
+        title: "24 - 48 Hours Processing",
         description:
           "Completion of trademark application within 14 business days after approval.",
       },
@@ -91,6 +93,7 @@ export const SystemStepThreeData = [
     id: 3,
     planName: "Standard",
     planPrice: "$135",
+    price: 135,
     planSubtext: "+USPTO Fee $350/Class",
     OfferedDetails: [
       {

@@ -1,5 +1,7 @@
 import FormHero from "@/components/form/FormHero";
 import Payment from "@/components/form/steps/Payment";
+import FooterSection from "@/components/sections/FooterSection";
+import Header from "@/components/ui/Header";
 
 export const metadata = {
   title: "Payment - Register Trademark | Legal Trademark Office",
@@ -10,8 +12,9 @@ export const metadata = {
 const page = () => {
   return (
     <main>
-      <FormHero />
+      <Header />
       <Payment />
+      <FooterSection />
     </main>
   );
 };

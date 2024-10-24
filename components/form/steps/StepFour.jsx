@@ -20,9 +20,9 @@ const StepFour = () => {
   const stepThreeData = useSelector((state) => state.form.stepThree);
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepThreeData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepThreeData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   // handle form submission
   const handleFormSubmit = async (e) => {
@@ -98,18 +98,16 @@ const StepFour = () => {
         {/* next or previous button */}
         <ButtonContainer>
           <Button
-            color="secondary"
-            variant="shadow"
             onClick={() => router.back()}
+            className="h-[60px] bg-white w-full md:w-[165px] rounded-[5px] text-primary-theme border-2 border-primary-theme font-inria font-bold text-[20px]"
           >
             Previous
           </Button>
+
           <Button
-            color="primary"
-            variant="shadow"
+            className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
             type="submit"
             isLoading={isLoading}
-            className="px-10"
           >
             Next
           </Button>
