@@ -10,19 +10,23 @@ import { useRouter } from "next/navigation";
 import { IoTimerOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { saveStepFour } from "@/features/formSlice";
+import { FaCreditCard } from "react-icons/fa6";
 
 const StepFour = () => {
   const rushAmount = 29;
+  const govermentFeesAmount = 350;
   const router = useRouter();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isRushProcessing, setIsRushProcessing] = useState(false);
+  const [isGovermentFeesProcessing, setIsGovermentFeesProcessing] =
+    useState(false);
   const stepThreeData = useSelector((state) => state.form.stepThree);
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepThreeData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepThreeData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   // handle form submission
   const handleFormSubmit = async (e) => {
@@ -32,6 +36,7 @@ const StepFour = () => {
     const data = {
       isRushProcessing,
       rushAmount: isRushProcessing ? rushAmount : 0,
+      govermentFeesAmount: isGovermentFeesProcessing ? govermentFeesAmount : 0,
       previous: true,
       receipt_ID: Math.floor(Math.random() * 900000 + 100000),
     };
@@ -49,7 +54,7 @@ const StepFour = () => {
         encType="multipart/form-data"
       >
         <h1 className="text-slate-700 font-semibold text-2xl mb-5">
-          Add rush processing to expedite your application
+          Add Rush Processing and Additional Government Fees
         </h1>
         <div className="relative">
           <Image
@@ -60,22 +65,12 @@ const StepFour = () => {
             className="absolute right-[-5px] top-[-5px]"
           />
           <FieldContainer>
-            <h1 className="text-[#03589c] font-medium text-2xl">
-              {`You're nearly finished!`}
-            </h1>
-            <h1 className="text-[#03589c] font-medium text-lg  ">
-              {`Do you need your order processed faster?`}
-            </h1>
-            <div className="flex gap-4 text-slate-700 mt-6 mb-3">
+            <div className="flex gap-4 items-center text-slate-700 mt-6 mb-3">
               <IoTimerOutline className="text-2xl max-md:text-5xl" />
-              <div>
-                <p className="text-slate-700 text-sm font-bold">
-                  RUSH PROCESSING.
-                </p>
-                <p className="text-slate-700 text-sm font-bold">
-                  COMPLETED NEXT DAY WHEN TIME IS OF THE ESSENCE.
-                </p>
-              </div>
+
+              <p className="text-slate-700 text-sm font-bold uppercase">
+                Rush Processing.
+              </p>
             </div>
 
             <SmallLabel
@@ -85,11 +80,45 @@ const StepFour = () => {
               isSelected={isRushProcessing}
               onValueChange={setIsRushProcessing}
               size="md"
+              className="mt-4"
             >
-              <span className="text-orange-600">*</span>24-hour Expedited
-              Processing (Next Business Day):{" "}
-              <span className="text-orange-600 font-semibold">
+              24-hour Expedited Processing (Next Business Day):{" "}
+              <span className="text-primary-theme font-semibold">
                 ${rushAmount}.00 USD
+              </span>
+            </Checkbox>
+          </FieldContainer>
+        </div>
+
+        <div className="relative mt-4">
+          <Image
+            src={`/images/optional-bagde.png`}
+            alt="optional badge"
+            width={80}
+            height={10}
+            className="absolute right-[-5px] top-[-5px]"
+          />
+          <FieldContainer>
+            <div className="flex items-center gap-4 text-slate-700 mt-6 mb-3">
+              <FaCreditCard className="text-2xl max-md:text-5xl" />
+
+              <p className="text-slate-700 text-sm font-bold uppercase">
+                ADDITIONAL GOVERNMENT FILING FIELD.
+              </p>
+            </div>
+
+            <SmallLabel
+              text={`When your application is ready to file, we'll charge an additional $250-350 per class to cover the government filing fee. We'll help you figure out the classes and the trademark type in your upcoming consultation.`}
+            />
+            <Checkbox
+              isSelected={isGovermentFeesProcessing}
+              onValueChange={setIsGovermentFeesProcessing}
+              size="md"
+              className="mt-4"
+            >
+              Government fees will apply:{" "}
+              <span className="text-primary-theme font-semibold">
+                ${govermentFeesAmount}.00 USD
               </span>
             </Checkbox>
           </FieldContainer>
