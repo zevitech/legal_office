@@ -13,10 +13,11 @@ import {
   RadioGroup,
   Input,
   Button,
-  Select,
-  SelectItem,
   Tabs,
   Tab,
+  DatePicker,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import InputCol from "../InputCol";
 import { stateList, organizationTypes } from "@/constant";
@@ -35,20 +36,31 @@ import {
   ServiceProvided,
 } from "@/constant/form2.0/system-step-one-data";
 import { GetGeographicalData } from "@/utils/get-geographical-data";
+import { now, getLocalTimeZone } from "@internationalized/date";
 
 const StepOne = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [wantToProtect, setWantToProtect] = useState("logo");
+  const [wantToProtect, setWantToProtect] = useState("name");
   const [selectedOwnerType, setSelectedOwnerType] = useState("individual");
   const [selectedFormationType, setSelectedFormationType] =
     useState("us_based");
 
   // BRAND INFORMATION
-  const [logo, setLogo] = useState("");
   const [name, setName] = useState("");
+  const [logo, setLogo] = useState("");
+  const [logoColors, setLogoColors] = useState("");
+  const [logoProtectionDescription, setLogoProtectionDescription] =
+    useState("");
+
+  const [trademarkCurrentlyBeingUsed, setTrademarkCurrentlyBeingUsed] =
+    useState("");
+  const [firstAnywhereDate, setFirstAnywhereDate] = useState(null);
+  const [firstCommenceDate, setFirstCommenceDate] = useState(null);
+  const [ownershipDetail, setOwnershipDetail] = useState("");
+
   const [slogan, setSlogan] = useState("");
   const [organizationName, setOrganizationName] = useState("");
   const [organizationType, setOrganizationType] = useState("");
@@ -71,7 +83,7 @@ const StepOne = () => {
   const [landLineNumber, setLandLineNumber] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
-  const [contactTime, setContactTime] = useState("");
+  const [contactTime, setContactTime] = useState(now(getLocalTimeZone()));
 
   const router = useRouter();
 
@@ -88,6 +100,12 @@ const StepOne = () => {
   const protectNameRef = useRef(null);
   const sloganNameRef = useRef(null);
   const logoRef = useRef(null);
+  const logoColorsRef = useRef(null);
+  const logoProtectionDescriptionRef = useRef(null);
+  const trademarkCurrentlyBeingUsedRef = useRef(null);
+  const firstAnywhereDateRef = useRef(null);
+  const firstCommenceDateRef = useRef(null);
+  const ownershipDetailRef = useRef(null);
   const organizationNameRef = useRef(null);
   const organizationTypeRef = useRef(null);
   const countryOfFormationRef = useRef(null);
@@ -100,10 +118,8 @@ const StepOne = () => {
   const stateRef = useRef(null);
   const zipRef = useRef(null);
   const phoneRef = useRef(null);
-  const preferredPhoneRef = useRef(null);
   const emailRef = useRef(null);
   const reChaptchaRef = useRef(null);
-  const preferredTimeRef = useRef(null);
 
   // validate the phone number
   const validatePhoneNumber = (phoneNumber) => {
@@ -114,15 +130,35 @@ const StepOne = () => {
   // validate the form input
   const validateForm = () => {
     let tempErrors = {};
+
     if (wantToProtect === "name" && !name) tempErrors.name = "Name is required";
     if (wantToProtect === "slogan" && !slogan)
       tempErrors.slogan = "Slogan is required";
     if (wantToProtect === "logo" && !logo) tempErrors.logo = "Logo is required";
+    if (wantToProtect === "logo" && !logo && !logoColors)
+      tempErrors.logoColors = "Logo colors is required";
+    if (wantToProtect === "logo" && !logo && !logoProtectionDescription)
+      tempErrors.logoProtectionDescription =
+        "Logo protection description is required";
     if (wantToProtect === "all-of-them") {
       if (!name) tempErrors.name = "Name is required";
       if (!slogan) tempErrors.slogan = "Slogan is required";
       if (!logo) tempErrors.logo = "Logo is required";
+      if (!logoColors) tempErrors.logoColors = "Logo colors is required";
+      if (!logoProtectionDescription)
+        tempErrors.logoProtectionDescription =
+          "Logo protection description is required";
     }
+    if (!trademarkCurrentlyBeingUsed)
+      tempErrors.trademarkCurrentlyBeingUsed =
+        "Please select trademarke using anywhere";
+    if (trademarkCurrentlyBeingUsed === "yes" && !firstAnywhereDate)
+      tempErrors.firstAnywhereDate = "Please select first use anywhere date";
+    if (trademarkCurrentlyBeingUsed === "yes" && !firstCommenceDate)
+      tempErrors.firstCommenceDate =
+        "Please select first use commerce anywhere date";
+    if (trademarkCurrentlyBeingUsed === "yes" && !ownershipDetail)
+      tempErrors.ownershipDetail = "Ownership detail is required";
 
     if (selectedOwnerType === "organization") {
       if (!organizationName)
@@ -148,11 +184,6 @@ const StepOne = () => {
     } else if (!validatePhoneNumber(phoneNumber)) {
       tempErrors.phoneNumber = "Invalid phone number";
     }
-    // if (!landLineNumber) {
-    //   tempErrors.landLineNumber = "Landline number is required";
-    // } else if (!validatePhoneNumber(landLineNumber)) {
-    //   tempErrors.landLineNumber = "Invalid phone number";
-    // }
     if (!emailAddress) {
       tempErrors.emailAddress = "Email address is required";
     } else if (!validator.validate(emailAddress)) {
@@ -161,12 +192,9 @@ const StepOne = () => {
     if (!reChaptcha) {
       tempErrors.reChaptcha = "Please verify that you are not a robot";
     }
-    if (!contactTime) {
-      tempErrors.contactTime = "Please enter your preferred time to call you";
-    }
 
     setErrors(tempErrors);
-    return Object.keys(tempErrors)[0]; // Return the first error key
+    return Object.keys(tempErrors)[0];
   };
 
   const ReCAPTCHAHandle = (value) => {
@@ -188,6 +216,12 @@ const StepOne = () => {
         name: protectNameRef,
         slogan: sloganNameRef,
         logo: logoRef,
+        logoColors: logoColorsRef,
+        logoProtectionDescription: logoProtectionDescriptionRef,
+        trademarkCurrentlyBeingUsed: trademarkCurrentlyBeingUsedRef,
+        firstAnywhereDate: firstAnywhereDateRef,
+        firstCommenceDate: firstCommenceDateRef,
+        ownershipDetail: ownershipDetailRef,
         organizationName: organizationNameRef,
         organizationType: organizationTypeRef,
         countryFormation: countryOfFormationRef,
@@ -200,7 +234,6 @@ const StepOne = () => {
         state: stateRef,
         zipCode: zipRef,
         phoneNumber: phoneRef,
-        // landLineNumber: preferredPhoneRef,
         emailAddress: emailRef,
         reChaptcha: reChaptchaRef,
         contactTime: preferredTimeRef,
@@ -228,6 +261,13 @@ const StepOne = () => {
       name,
       slogan,
       logo,
+      logoColors,
+      logoProtectionDescription,
+      trademarkCurrentlyBeingUsed,
+      firstAnywhereDate,
+      firstCommenceDate,
+      ownershipDetail,
+      organizationName,
       selectedOwnerType,
       selectedFormationType,
       countryFormation,
@@ -278,163 +318,65 @@ const StepOne = () => {
     <section className="system-page-standard-layout">
       <div className="w-full h-full flex flex-col gap-8">
         {/* SERVICE INFORMATION FIELDS 1 */}
-        <div className="w-full h-full grid md:grid-cols-2 grid-cols-1 gap-4">
-          {/* FIELD 1.1 */}
-          <div
-            className={`w-full flex flex-col ${
-              wantToProtect === "all-of-them" ? "lg:h-[350px]" : "lg:h-[250px]"
-            }`}
-          >
-            <div className="bg-primary-theme text-white font-inria lg:text-[24px] text-[20px] max-lg:leading-[20px] p-4 w-full text-center rounded-[8px_8px_0px_0px]">
-              Select what you are trying to protect
-            </div>
-            <div className="w-full h-full rounded-[0px_0px_8px_8px] flex flex-col justify-between p-4 border border-border-color max-md:gap-8">
-              <RadioGroup
-                label="Select what you are trying to protect"
-                orientation="horizontal"
-                color="warning"
-                value={wantToProtect}
-                onChange={(e) => setWantToProtect(e.target.value)}
-                size="md"
-              >
-                {ServiceProvided.map((service, index) => (
-                  <Radio key={index} value={service.value}>
-                    {service.name}
-                  </Radio>
-                ))}
-              </RadioGroup>
+        <div className="w-full h-full grid grid-cols-1 gap-12">
+          <div className="flex flex-col gap-4">
+            <h1 className="font-inria text-heading-color text-[24px] w-full">
+              Register Your Brand
+            </h1>
 
-              {wantToProtect === "logo" && (
-                // <div className="flex flex-col gap-2 w-full">
-                //   <p className="text-[12px] text-[#B2B2B2]">
-                //     Upload the logo you wish to protect
-                //   </p>
-                //   <Button
-                //     startContent={
-                //       <IoImageOutline className="text-[#5A5A5A] text-[20px]" />
-                //     }
-                //     className="h-[45px] bg-[#E4E4E4] rounded-[4px] text-[#5A5A5A] text-[15px]"
-                //   >
-                //     Upload Image
-                //   </Button>
-                // </div>
-                <>
-                  <TinyWarning text="Upload the logo you wish to protect" />
-                  <CldUploadWidget
-                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
-                    onSuccess={(results) => {
-                      const public_url = results?.info?.url;
-                      setLogo(public_url);
-                    }}
-                    onOpen={() => setIsUploading(true)}
-                    onClose={() => setIsUploading(false)}
-                  >
-                    {({ open }) => {
-                      return (
-                        <div className="w-full">
-                          <div className="flex gap-3">
-                            <div
-                              onClick={() => open()}
-                              className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
-                                isUploading && `cursor-not-allowed opacity-75`
-                              }`}
-                              ref={logoRef}
-                            >
-                              {isUploading ? (
-                                <LuLoader className=" animate-spin text-2xl" />
-                              ) : (
-                                "Select Image"
-                              )}
-                            </div>
-                            {logo && (
-                              <Image
-                                src={logo}
-                                alt="Logo"
-                                width={100}
-                                height={44}
-                                className="h-[44px] w-auto"
-                              />
-                            )}
-                          </div>
-                          {!!errors.logo && (
-                            <p className="text-[#f31260] text-xs pt-2">
-                              Please select an image
-                            </p>
-                          )}
-                        </div>
-                      );
-                    }}
-                  </CldUploadWidget>
-                </>
-              )}
+            {/* FIELD 1.1 */}
+            <div className={`w-full flex flex-col`}>
+              <div className="bg-primary-theme text-white font-inria lg:text-[24px] text-[20px] max-lg:leading-[20px] p-4 w-full text-center rounded-[8px_8px_0px_0px]">
+                Select what you are trying to protect
+              </div>
+              <div className="w-full h-full rounded-[0px_0px_8px_8px] flex flex-col justify-between p-8 border border-border-color gap-8">
+                <RadioGroup
+                  label="Select what you are trying to protect"
+                  orientation="horizontal"
+                  color="primary" // TAG - 1001
+                  value={wantToProtect}
+                  onChange={(e) => setWantToProtect(e.target.value)}
+                  size="md"
+                >
+                  {ServiceProvided.map((service, index) => (
+                    <Radio key={index} value={service.value}>
+                      {service.name}
+                    </Radio>
+                  ))}
+                </RadioGroup>
 
-              {wantToProtect === "name" && (
-                <Input
-                  type="text"
-                  variant="underlined"
-                  label={`Enter the name you wish to protect`}
-                  className="w-full"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  errorMessage={errors.name}
-                  isInvalid={!!errors.name}
-                  ref={protectNameRef}
-                />
-              )}
-              {wantToProtect === "slogan" && (
-                <Input
-                  type="text"
-                  variant="underlined"
-                  label={`Enter the slogan you wish to protect`}
-                  className="w-full"
-                  value={slogan}
-                  onChange={(e) => {
-                    setSlogan(e.target.value);
-                  }}
-                  errorMessage={errors.slogan}
-                  isInvalid={!!errors.slogan}
-                  ref={sloganNameRef}
-                />
-              )}
-
-              {wantToProtect === "all-of-them" && (
-                <div className="flex flex-col gap-4 w-full">
-                  <Input
-                    type="text"
-                    variant="underlined"
-                    label="Enter the name you wish to protect"
-                    className="w-full"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    errorMessage={errors.name}
-                    isInvalid={!!errors.name}
-                    ref={protectNameRef}
-                  />
-
-                  <Input
-                    type="text"
-                    variant="underlined"
-                    label="Enter the slogan you wish to protect"
-                    className="w-full"
-                    value={slogan}
-                    onChange={(e) => setSlogan(e.target.value)}
-                    errorMessage={errors.slogan}
-                    isInvalid={!!errors.slogan}
-                    ref={sloganNameRef}
-                  />
-
-                  {/* <Button
-                    startContent={
-                      <IoImageOutline className="text-[#5A5A5A] text-[20px]" />
-                    }
-                    className="h-[45px] bg-[#E4E4E4] rounded-[4px] text-[#5A5A5A] text-[15px]"
-                  >
-                    Upload Image
-                  </Button> */}
+                {wantToProtect === "logo" && (
                   <>
-                    <TinyWarning text="Upload the logo you wish to protect" />
+                    {/* TAG 1001 */}
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label={`List of colors that appears in the logo`}
+                      className="w-full"
+                      value={logoColors}
+                      onChange={(e) => {
+                        setLogoColors(e.target.value);
+                      }}
+                      errorMessage={errors.logoColors}
+                      isInvalid={!!errors.logoColors}
+                      ref={logoColorsRef}
+                    />
+
+                    {/* TAG 1001 */}
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label={`Any literal element that appears in the logo`}
+                      className="w-full"
+                      value={logoProtectionDescription}
+                      onChange={(e) => {
+                        setLogoProtectionDescription(e.target.value);
+                      }}
+                      errorMessage={errors.logoProtectionDescription}
+                      isInvalid={!!errors.logoProtectionDescription}
+                      ref={logoProtectionDescriptionRef}
+                    />
+
                     <CldUploadWidget
                       uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
                       onSuccess={(results) => {
@@ -481,174 +423,380 @@ const StepOne = () => {
                       }}
                     </CldUploadWidget>
                   </>
-                </div>
-              )}
+                )}
+
+                {wantToProtect === "name" && (
+                  <Input
+                    type="text"
+                    variant="underlined"
+                    label={`Enter the name you wish to protect`}
+                    className="w-full"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                    errorMessage={errors.name}
+                    isInvalid={!!errors.name}
+                    ref={protectNameRef}
+                  />
+                )}
+
+                {wantToProtect === "slogan" && (
+                  <Input
+                    type="text"
+                    variant="underlined"
+                    label={`Enter the slogan you wish to protect`}
+                    className="w-full"
+                    value={slogan}
+                    onChange={(e) => {
+                      setSlogan(e.target.value);
+                    }}
+                    errorMessage={errors.slogan}
+                    isInvalid={!!errors.slogan}
+                    ref={sloganNameRef}
+                  />
+                )}
+
+                {wantToProtect === "all-of-them" && (
+                  <div className="flex flex-col gap-4 w-full">
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label="Enter the name you wish to protect"
+                      className="w-full"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      errorMessage={errors.name}
+                      isInvalid={!!errors.name}
+                      ref={protectNameRef}
+                    />
+
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label="Enter the slogan you wish to protect"
+                      className="w-full"
+                      value={slogan}
+                      onChange={(e) => setSlogan(e.target.value)}
+                      errorMessage={errors.slogan}
+                      isInvalid={!!errors.slogan}
+                      ref={sloganNameRef}
+                    />
+
+                    {/* TAG 1001 */}
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label={`List of colors that appears in the logo`}
+                      className="w-full"
+                      value={logoColors}
+                      onChange={(e) => {
+                        setLogoColors(e.target.value);
+                      }}
+                      errorMessage={errors.logoColors}
+                      isInvalid={!!errors.logoColors}
+                      ref={logoColorsRef}
+                    />
+
+                    {/* TAG 1001 */}
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label={`Any literal element that appears in the logo`}
+                      className="w-full"
+                      value={logoProtectionDescription}
+                      onChange={(e) => {
+                        setLogoProtectionDescription(e.target.value);
+                      }}
+                      errorMessage={errors.logoProtectionDescription}
+                      isInvalid={!!errors.logoProtectionDescription}
+                      ref={logoProtectionDescriptionRef}
+                    />
+
+                    <CldUploadWidget
+                      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                      onSuccess={(results) => {
+                        const public_url = results?.info?.url;
+                        setLogo(public_url);
+                      }}
+                      onOpen={() => setIsUploading(true)}
+                      onClose={() => setIsUploading(false)}
+                    >
+                      {({ open }) => {
+                        return (
+                          <div className="w-full mt-8">
+                            <div className="flex gap-3">
+                              <div
+                                onClick={() => open()}
+                                className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
+                                  isUploading && `cursor-not-allowed opacity-75`
+                                }`}
+                                ref={logoRef}
+                              >
+                                {isUploading ? (
+                                  <LuLoader className=" animate-spin text-2xl" />
+                                ) : (
+                                  "Select Image"
+                                )}
+                              </div>
+                              {logo && (
+                                <Image
+                                  src={logo}
+                                  alt="Logo"
+                                  width={100}
+                                  height={44}
+                                  className="h-[44px] w-auto"
+                                />
+                              )}
+                            </div>
+                            {!!errors.logo && (
+                              <p className="text-[#f31260] text-xs pt-2">
+                                Please select an image
+                              </p>
+                            )}
+                          </div>
+                        );
+                      }}
+                    </CldUploadWidget>
+                  </div>
+                )}
+
+                <Select
+                  onSelectionChange={(value) => {
+                    const selectedValue =
+                      Array.isArray(value) || value instanceof Set
+                        ? [...value][0]
+                        : value;
+                    setTrademarkCurrentlyBeingUsed(selectedValue);
+                  }}
+                  label="Are you currently using this trademark anywhere?"
+                  radius="none"
+                  variant="underlined"
+                  errorMessage={errors.trademarkCurrentlyBeingUsed}
+                  isInvalid={!!errors.trademarkCurrentlyBeingUsed}
+                  ref={trademarkCurrentlyBeingUsedRef}
+                >
+                  <SelectItem key="yes" value="yes">
+                    Yes, It is being used
+                  </SelectItem>
+                  <SelectItem key="no" value="no">
+                    No, It's not being used anywhere
+                  </SelectItem>
+                </Select>
+
+                {trademarkCurrentlyBeingUsed === "yes" && (
+                  <>
+                    <DatePicker
+                      label="Select trademark first use anywhere date"
+                      variant="underlined"
+                      className="w-full"
+                      value={firstAnywhereDate}
+                      onChange={setFirstAnywhereDate}
+                      errorMessage={errors.firstAnywhereDate}
+                      isInvalid={!!errors.firstAnywhereDate}
+                      ref={firstAnywhereDateRef}
+                    />
+
+                    <DatePicker
+                      label="Select trademark first use commerce anywhere date"
+                      variant="underlined"
+                      className="w-full"
+                      value={firstCommenceDate}
+                      onChange={setFirstCommenceDate}
+                      errorMessage={errors.firstCommenceDate}
+                      isInvalid={!!errors.firstCommenceDate}
+                      ref={firstCommenceDateRef}
+                    />
+
+                    <Input
+                      type="text"
+                      variant="underlined"
+                      label="Enter ownership details affilated with your trademark"
+                      className="w-full"
+                      value={ownershipDetail}
+                      onChange={(e) => setOwnershipDetail(e.target.value)}
+                      errorMessage={errors.ownershipDetail}
+                      isInvalid={!!errors.ownershipDetail}
+                      ref={ownershipDetailRef}
+                    />
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
           {/* FIELD 1.2 */}
-          <div
-            className={`w-full flex flex-col items-center justify-center px-4 gap-4 border border-border-color rounded-[8px]   ${
-              wantToProtect === "all-of-them"
-                ? "lg:h-[350px]"
-                : "lg:h-[250px] max-lg:py-8"
-            }`}
-          >
-            <h1 className="font-inria font-bold lg:text-[24px] text-[20px] lg:leading-[26px] leading-[22px] text-heading-color">
-              Will the trademark be owned by an individual or an entity such as
-              a corporation or LLC?
+          <div className="flex flex-col gap-4">
+            <h1 className="font-inria text-heading-color text-[24px] w-full">
+              Formation Information
             </h1>
-            <p className="font-light text-[12px] leading-[18px]">
-              Identify the owner of the trademark. This is the person or
-              organization who will be the owner of record. If you choose
-              individuals, you can enter as many names as you want who own the
-              mark. With an organization, you will have to identify someone to
-              be the person of contact for the organization.
-            </p>
 
-            <Tabs
-              aria-label="owner-type"
-              radius="none"
-              size="lg"
-              fullWidth={true}
-              selectedKey={selectedOwnerType}
-              onSelectionChange={setSelectedOwnerType}
-              classNames={{
-                tab: "h-[55px]",
-              }}
+            <div
+              className={`w-full flex flex-col border border-border-color rounded-[8px] justify-start p-8 gap-4`}
             >
-              <Tab key="individual" title="Individual" />
-              <Tab key="organization" title="Organization" />
-            </Tabs>
-          </div>
-        </div>
-
-        {/* ORGANIZATION FIELDS 1.2.1 */}
-        {selectedOwnerType === "organization" && (
-          <div className="w-full h-full flex flex-col gap-8">
-            <div className="w-full flex flex-col gap-2">
-              <h1 className="font-inria text-heading-color text-[24px] w-full">
-                FORMATION
+              <h1 className="font-inria font-bold lg:text-[24px] text-[20px] lg:leading-[26px] leading-[22px] text-heading-color">
+                Will the trademark be owned by an individual or an entity such
+                as a corporation or LLC?
               </h1>
+              <p className="font-light text-[12px] leading-[18px]">
+                Identify the owner of the trademark. This is the person or
+                organization who will be the owner of record. If you choose
+                individuals, you can enter as many names as you want who own the
+                mark. With an organization, you will have to identify someone to
+                be the person of contact for the organization.
+              </p>
+
               <Tabs
-                aria-label="formation-type"
-                size="lg"
-                radius="none"
+                aria-label="owner-type"
+                radius="sm"
+                size="md"
+                color="primary" // TAG - 1001
                 fullWidth={true}
-                selectedKey={selectedFormationType}
-                onSelectionChange={setSelectedFormationType}
+                selectedKey={selectedOwnerType}
+                onSelectionChange={setSelectedOwnerType}
                 classNames={{
-                  tab: "h-[55px]",
+                  tab: "h-[40px]",
                 }}
               >
-                <Tab key="us_based" title="Us Based" className="" />
-                <Tab key="non_us_based" title="Non Us Based" className="" />
+                <Tab key="individual" title="Individual" />
+                <Tab key="organization" title="Organization" />
               </Tabs>
-            </div>
 
-            <div className="w-full flex flex-col gap-4">
-              <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
-                {/* FIELD 1.2.1.1 */}
-                <Input
-                  type="text"
-                  label="Organization Name"
-                  variant="bordered"
-                  labelPlacement="outside"
-                  placeholder="Ex. Global Giving"
-                  description="Enter the name of your organization"
-                  radius="sm"
-                  size="lg"
-                  value={organizationName}
-                  onChange={(e) => setOrganizationName(e.target.value)}
-                  errorMessage={errors.organizationName}
-                  isInvalid={!!errors.organizationName}
-                  ref={organizationNameRef}
-                />
+              {/* ORGANIZATION FIELDS 1.2.1 */}
+              {selectedOwnerType === "organization" && (
+                <div className="w-full h-full flex flex-col gap-8 mt-8">
+                  <div className="w-full flex flex-col gap-2">
+                    <Tabs
+                      aria-label="formation-type"
+                      size="md"
+                      radius="sm"
+                      color="primary" // TAG - 1001
+                      fullWidth={true}
+                      selectedKey={selectedFormationType}
+                      onSelectionChange={setSelectedFormationType}
+                      classNames={{
+                        tab: "h-[40px]",
+                      }}
+                    >
+                      <Tab key="us_based" title="Us Based" className="" />
+                      <Tab
+                        key="non_us_based"
+                        title="Non Us Based"
+                        className=""
+                      />
+                    </Tabs>
+                  </div>
 
-                {/* FIELD 1.2.1.2 */}
-                <Select
-                  label="Organization Type"
-                  variant="bordered"
-                  labelPlacement="outside"
-                  placeholder="Ex. C Corporation"
-                  description="Select the type of your organization"
-                  radius="sm"
-                  size="lg"
-                  value={organizationType}
-                  onChange={(e) => setOrganizationType(e.target.value)}
-                  ref={organizationTypeRef}
-                  errorMessage={errors.organizationType}
-                  isInvalid={!!errors.organizationType}
-                >
-                  {OrganizationType.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
+                  <div className="w-full flex flex-col gap-4">
+                    <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
+                      {/* FIELD 1.2.1.1 */}
+                      <Input
+                        type="text"
+                        label="Organization Name"
+                        variant="bordered"
+                        labelPlacement="outside"
+                        placeholder="Ex. Global Giving"
+                        description="Enter the name of your organization"
+                        radius="sm"
+                        size="lg"
+                        value={organizationName}
+                        onChange={(e) => setOrganizationName(e.target.value)}
+                        errorMessage={errors.organizationName}
+                        isInvalid={!!errors.organizationName}
+                        ref={organizationNameRef}
+                      />
 
-              <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
-                {/* FIELD 1.2.1.3 */}
-                <Select
-                  label={
-                    selectedFormationType === "us_based"
-                      ? "State Of Formation"
-                      : "Country Of Formation"
-                  }
-                  variant="bordered"
-                  labelPlacement="outside"
-                  placeholder="Ex. C Corporation"
-                  description={`Select the ${
-                    selectedFormationType === "us_based" ? "State" : "Country"
-                  } of Formation `}
-                  radius="sm"
-                  size="lg"
-                  value={
-                    selectedFormationType === "us_based"
-                      ? stateFormation
-                      : countryFormation
-                  }
-                  onChange={(e) => {
-                    if (selectedFormationType === "us_based") {
-                      setStateFormation(e.target.value);
-                    } else if (selectedFormationType === "non_us_based") {
-                      setCountryFormation(e.target.value);
-                    }
-                  }}
-                >
-                  {formationGeographicalData.map((data) => (
-                    <SelectItem key={data.value} value={data.value}>
-                      {data.name}
-                    </SelectItem>
-                  ))}
-                </Select>
+                      {/* FIELD 1.2.1.2 */}
+                      <Select
+                        label="Organization Type"
+                        variant="bordered"
+                        labelPlacement="outside"
+                        placeholder="Ex. C Corporation"
+                        description="Select the type of your organization"
+                        radius="sm"
+                        size="lg"
+                        value={organizationType}
+                        onChange={(e) => setOrganizationType(e.target.value)}
+                        ref={organizationTypeRef}
+                        errorMessage={errors.organizationType}
+                        isInvalid={!!errors.organizationType}
+                      >
+                        {OrganizationType.map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            {type.name}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    </div>
 
-                {/* FIELD 1.2.1.4 */}
-                <Input
-                  type="text"
-                  label="Organization Position"
-                  variant="bordered"
-                  labelPlacement="outside"
-                  placeholder="Ex. Global Giving"
-                  description="Enter the position of your organization"
-                  radius="sm"
-                  size="lg"
-                  value={organizationPosition}
-                  onChange={(e) => setOrganizationPosition(e.target.value)}
-                  ref={positionRef}
-                  errorMessage={errors.organizationPosition}
-                  isInvalid={!!errors.organizationPosition}
-                />
-              </div>
+                    <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
+                      {/* FIELD 1.2.1.3 */}
+                      <Select
+                        label={
+                          selectedFormationType === "us_based"
+                            ? "State Of Formation"
+                            : "Country Of Formation"
+                        }
+                        variant="bordered"
+                        labelPlacement="outside"
+                        placeholder="Ex. C Corporation"
+                        description={`Select the ${
+                          selectedFormationType === "us_based"
+                            ? "State"
+                            : "Country"
+                        } of Formation `}
+                        radius="sm"
+                        size="lg"
+                        value={
+                          selectedFormationType === "us_based"
+                            ? stateFormation
+                            : countryFormation
+                        }
+                        onChange={(e) => {
+                          if (selectedFormationType === "us_based") {
+                            setStateFormation(e.target.value);
+                          } else if (selectedFormationType === "non_us_based") {
+                            setCountryFormation(e.target.value);
+                          }
+                        }}
+                      >
+                        {formationGeographicalData.map((data) => (
+                          <SelectItem key={data.value} value={data.value}>
+                            {data.name}
+                          </SelectItem>
+                        ))}
+                      </Select>
+
+                      {/* FIELD 1.2.1.4 */}
+                      <Input
+                        type="text"
+                        label="Organization Position"
+                        variant="bordered"
+                        labelPlacement="outside"
+                        placeholder="Ex. Global Giving"
+                        description="Enter the position of your organization"
+                        radius="sm"
+                        size="lg"
+                        value={organizationPosition}
+                        onChange={(e) =>
+                          setOrganizationPosition(e.target.value)
+                        }
+                        ref={positionRef}
+                        errorMessage={errors.organizationPosition}
+                        isInvalid={!!errors.organizationPosition}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
 
         {/* PERSONAL INFORMATION FIELDS 2 */}
         <div className="w-full flex flex-col gap-4">
           <h1 className="font-inria text-heading-color text-[24px] w-full">
-            REGISTERING YOUR BRAND
+            Personal Information
           </h1>
 
           <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -814,23 +962,20 @@ const StepOne = () => {
           </div>
 
           <div className="w-full">
-            <Input
-              type="text"
-              label="Preferred Contact Time"
+            <DatePicker
+              fullWidth
+              label="Preferred Contact Date"
               variant="bordered"
               labelPlacement="outside"
-              placeholder="Ex. 8:00 AM to 11:00 AM"
-              description="Enter your preferred time to call (must be business hours)"
+              description="Select your preferred date and time to call (must be business hours)"
               radius="sm"
               size="lg"
+              hideTimeZone
               startContent={
                 <LuClock3 className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
               }
               value={contactTime}
-              onChange={(e) => setContactTime(e.target.value)}
-              ref={preferredTimeRef}
-              errorMessage={errors.contactTime}
-              isInvalid={!!errors.contactTime}
+              onChange={setContactTime}
             />
           </div>
         </div>

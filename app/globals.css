@@ -10,8 +10,10 @@
 
 @layer base {
   :root {
-    --primary-theme: #f25601;
-    --primary-hovered: #e95200;
+    /* TAG - 1001 */
+
+    --primary-theme: #027dd6;
+    --primary-hovered: #0288e8;
 
     --heading-color: #141c2f;
     --paragraph-color: #141c2fb2;

@@ -1,6 +1,6 @@
 export const ServiceProvided = [
-  { name: "Logo", value: "logo" },
   { name: "Name", value: "name" },
+  { name: "Logo", value: "logo" },
   { name: "Slogan", value: "slogan" },
   { name: "All of them", value: "all-of-them" },
 ];

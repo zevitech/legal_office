@@ -17,7 +17,8 @@ const page = () => {
     <main className="">
       <Header />
       <SystemHeroSection />
-      <SystemStepProgressTracker />
+      {/* TAG - 1001 */}
+      <SystemStepProgressTracker p_value={50} />
       <StepTwo />
       <FooterSection />
     </main>

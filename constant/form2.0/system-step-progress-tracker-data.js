@@ -1,22 +1,22 @@
 export const SystemStepProgressTrackerStepsData = [
   {
-    path: "/trademark-registration/step-1",
+    path: "/trademark-register", // TAG - 1001
     title: "Personal Information",
     subtext: "Let's get started with your basic details.",
   },
   {
-    path: "/trademark-registration/step-2",
+    path: "/trademark-register/step-2", // TAG - 1001
     title: "Trademark Description",
     subtext:
       "Describe your trademark or logo to help us understand your brand better.",
   },
   {
-    path: "/trademark-registration/step-3",
+    path: "/trademark-register/step-3", // TAG - 1001 
     title: "Choose Subscription Plan",
     subtext: "Select a package that best fits your registration needs.",
   },
   {
-    path: "/trademark-registration/step-4",
+    path: "/trademark-register/step-4", // TAG - 1001
     title: "Priority Processing",
     subtext: "Want faster service? Opt for expedited processing.",
   },

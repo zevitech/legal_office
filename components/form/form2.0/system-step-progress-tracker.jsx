@@ -10,8 +10,8 @@ import {
   SystemStepProgressTrackerStepsDefaultSubTextData,
 } from "@/constant/form2.0/system-step-progress-tracker-data";
 
-const SystemStepProgressTracker = () => {
-  const [value, setValue] = useState(50);
+const SystemStepProgressTracker = ({ p_value }) => {
+  const [value, setValue] = useState(p_value);
 
   const pathname = usePathname();
 
@@ -36,7 +36,7 @@ const SystemStepProgressTracker = () => {
         </div>
 
         <Progress
-          aria-label="Downloading..."
+          aria-label="Steps"
           size="lg"
           value={value}
           color="success"

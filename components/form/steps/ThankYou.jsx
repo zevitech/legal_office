@@ -87,20 +87,21 @@ const ThankYou = () => {
             >
               Home
             </Button> */}
+
+
+            {/* TAG - 1001 */}
           <Button
-            color="danger"
-            variant="shadow"
             startContent={<MdOutlineCall />}
-          >
+            className="h-[50px] bg-white rounded-[5px] text-primary-theme border-2 border-primary-theme font-bold text-[20px] p-4"
+          > 
             Call Us
           </Button>
           <Button
-            color="secondary"
-            variant="shadow"
             type="submit"
             startContent={<FaDownload />}
             onClick={handleDownload}
             isLoading={isLoading}
+            className="h-[50px] bg-primary-theme rounded-[5px] text-white font-bold text-[20px] p-4"
           >
             Download Receipt
           </Button>
