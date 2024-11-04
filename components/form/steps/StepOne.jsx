@@ -121,10 +121,29 @@ const StepOne = () => {
   const emailRef = useRef(null);
   const reChaptchaRef = useRef(null);
 
+  const honeypotRef = useRef(null);
+
   // validate the phone number
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberObject = parsePhoneNumberFromString(phoneNumber, "US");
     return phoneNumberObject ? phoneNumberObject.isValid() : false;
+  };
+
+  // validate the Email Address
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    setEmailAddress(email);
+
+    if (!validateEmail(email)) {
+      setErrors({ emailAddress: "Please enter a valid email address." });
+    } else {
+      setErrors({});
+    }
   };
 
   // validate the form input
@@ -188,6 +207,10 @@ const StepOne = () => {
       tempErrors.emailAddress = "Email address is required";
     } else if (!validator.validate(emailAddress)) {
       tempErrors.emailAddress = "Invalid email address";
+    }
+    if (!validateEmail(emailAddress)) {
+      setErrors({ emailAddress: "Invalid email address" });
+      return;
     }
     if (!reChaptcha) {
       tempErrors.reChaptcha = "Please verify that you are not a robot";
@@ -954,7 +977,7 @@ const StepOne = () => {
                 <IoMail className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
               }
               value={emailAddress}
-              onChange={(e) => setEmailAddress(e.target.value)}
+              onChange={handleEmailChange}
               ref={emailRef}
               errorMessage={errors.emailAddress}
               isInvalid={!!errors.emailAddress}

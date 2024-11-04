@@ -141,6 +141,7 @@ const StepFour = () => {
             Next
           </Button>
         </ButtonContainer>
+
         <p className="text-md max-md:text-sm text-slate-800 mb-16 mt-7 font-medium">
           <span className="text-red-500 font-bold">Note:</span> Once your search
           results have been reviewed and our specialists have curated your

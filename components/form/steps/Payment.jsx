@@ -56,6 +56,13 @@ const Payment = () => {
         amount: stepFourData.rushAmount,
       });
     }
+    
+    if (stepFourData.govermentFeesAmount !== 0) {
+      baseDetails.push({
+        title: "Goverment Fees",
+        amount: stepFourData.govermentFeesAmount,
+      });
+    }
 
     return baseDetails;
   }, [nestedLeadData, stepFourData]);
@@ -145,7 +152,7 @@ const Payment = () => {
           )}
         </div>
 
-        <div className="h-[500px] w-full flex items-center justify-center">
+        <div className="w-full flex items-start justify-center">
           <Card className="w-[400px] py-4 rounded-[4px] max-md:shadow-none max-md:border">
             <CardHeader className="w-full flex items-center justify-center">
               <h1 className="md:text-[24px] text-[20px] font-inria font-bold text-heading-color">
