@@ -55,7 +55,7 @@ const Receipt = () => {
     axios.post(endPoint, receiptData).catch((err) => {
       console.log("Failed to send receipt in mail:", err);
     });
-  }, []);
+  }, [receiptData]);
 
   return (
     <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono ">

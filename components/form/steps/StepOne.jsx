@@ -121,8 +121,6 @@ const StepOne = () => {
   const emailRef = useRef(null);
   const reChaptchaRef = useRef(null);
 
-  const honeypotRef = useRef(null);
-
   // validate the phone number
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberObject = parsePhoneNumberFromString(phoneNumber, "US");
@@ -208,10 +206,6 @@ const StepOne = () => {
     } else if (!validator.validate(emailAddress)) {
       tempErrors.emailAddress = "Invalid email address";
     }
-    if (!validateEmail(emailAddress)) {
-      setErrors({ emailAddress: "Invalid email address" });
-      return;
-    }
     if (!reChaptcha) {
       tempErrors.reChaptcha = "Please verify that you are not a robot";
     }
@@ -259,8 +253,8 @@ const StepOne = () => {
         phoneNumber: phoneRef,
         emailAddress: emailRef,
         reChaptcha: reChaptchaRef,
-        contactTime: preferredTimeRef,
       };
+
       // errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });if (firstErrorField)
       if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
         errorRefs[firstErrorField].current.scrollIntoView({
