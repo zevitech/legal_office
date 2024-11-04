@@ -2,8 +2,8 @@ export const SystemStepThreeData = [
   {
     id: 1,
     planName: "Basic",
-    planPrice: "$35",
-    price: 35,
+    planPrice: "$49",
+    price: 49,
     planSubtext: "+USPTO Fee $350/Class",
     OfferedDetails: [
       {
