@@ -603,7 +603,7 @@ const StepOne = () => {
                     Yes, It is being used
                   </SelectItem>
                   <SelectItem key="no" value="no">
-                    No, It's not being used anywhere
+                    No, It&apos;s not being used anywhere
                   </SelectItem>
                 </Select>
 

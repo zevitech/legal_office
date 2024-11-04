@@ -48,8 +48,8 @@ export const SystemStepThreeData = [
   {
     id: 2,
     planName: "Premium",
-    planPrice: "$235",
-    price: 235,
+    planPrice: "$249",
+    price: 249,
     planSubtext: "+USPTO Fee $350/Class",
     OfferedDetails: [
       {
@@ -92,8 +92,8 @@ export const SystemStepThreeData = [
   {
     id: 3,
     planName: "Standard",
-    planPrice: "$135",
-    price: 135,
+    planPrice: "$149",
+    price: 149,
     planSubtext: "+USPTO Fee $350/Class",
     OfferedDetails: [
       {
