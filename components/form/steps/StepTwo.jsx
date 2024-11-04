@@ -53,9 +53,8 @@ const StepTwo = () => {
           TRADEMARK CLASSIFICATION
         </h1>
         <p>
-          Start describing the goods and services related to your mark. Secure
-          Your Mark compare the description you provide and provides
-          descriptions from the USPTO ID Manual for your considerations.
+          Enter the products or services you plan to sell using your trademark
+          (i.e.: shirts, coffee, restaurants, retail stores, etc).
         </p>
       </div>
 
@@ -64,8 +63,7 @@ const StepTwo = () => {
           label="Trademark Classification Description"
           variant="bordered"
           labelPlacement="outside"
-          placeholder={`EX. Class 9: Computer software, mobile applications, downloadable media...`}
-          description="Please provide a description of your goods or services"
+          placeholder={`i.e.: shirts, coffee, restaurants, retail stores...`}
           radius="sm"
           className="w-full"
           maxRows={12}

@@ -60,7 +60,7 @@ export const SystemStepThreeData = [
       {
         title: "24 - 48 Hours Processing",
         description:
-          "Completion of trademark application within 14 business days after approval.",
+          "Completion of trademark application within 24 to 48 Hours after approval.",
       },
       {
         title: "Full Paralegal Support",

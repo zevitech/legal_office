@@ -29,7 +29,7 @@ import Image from "next/image";
 import { LuClock3, LuLoader } from "react-icons/lu";
 import { IoMdLock } from "react-icons/io";
 import ReCAPTCHA from "react-google-recaptcha";
-import { IoImageOutline, IoMail } from "react-icons/io5";
+import { IoMail } from "react-icons/io5";
 import { RiHome5Fill } from "react-icons/ri";
 import {
   OrganizationType,
@@ -144,6 +144,17 @@ const StepOne = () => {
     }
   };
 
+  const formatDate = (dateObj) => {
+    if (dateObj) {
+      const { year, month, day } = dateObj; // Extract year, month, and day
+      return new Date(year, month - 1, day).toISOString(); // Convert to ISO string
+    }
+    return null; // Return null if no date is provided
+  };
+
+  console.log("first anywhere date: ", firstAnywhereDate);
+  console.log("first commerce date: ", firstAnywhereDate);
+
   // validate the form input
   const validateForm = () => {
     let tempErrors = {};
@@ -172,8 +183,7 @@ const StepOne = () => {
     if (trademarkCurrentlyBeingUsed === "yes" && !firstAnywhereDate)
       tempErrors.firstAnywhereDate = "Please select first use anywhere date";
     if (trademarkCurrentlyBeingUsed === "yes" && !firstCommenceDate)
-      tempErrors.firstCommenceDate =
-        "Please select first use commerce anywhere date";
+      tempErrors.firstCommenceDate = "Please select first use commerce date";
     if (trademarkCurrentlyBeingUsed === "yes" && !ownershipDetail)
       tempErrors.ownershipDetail = "Ownership detail is required";
 
@@ -615,7 +625,7 @@ const StepOne = () => {
                     />
 
                     <DatePicker
-                      label="Select trademark first use commerce anywhere date"
+                      label="Select trademark first use commerce date"
                       variant="underlined"
                       className="w-full"
                       value={firstCommenceDate}

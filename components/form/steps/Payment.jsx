@@ -56,10 +56,10 @@ const Payment = () => {
         amount: stepFourData.rushAmount,
       });
     }
-    
+
     if (stepFourData.govermentFeesAmount !== 0) {
       baseDetails.push({
-        title: "Goverment Fees",
+        title: "Goverment Fee",
         amount: stepFourData.govermentFeesAmount,
       });
     }

@@ -103,12 +103,14 @@ const StepFour = () => {
               <FaCreditCard className="text-2xl max-md:text-5xl" />
 
               <p className="text-slate-700 text-sm font-bold uppercase">
-                ADDITIONAL GOVERNMENT FILING FIELD.
+                Government Filing Fee (1 - Class) $350
               </p>
             </div>
 
+            <p className="font-bold text-[14px]">Disclaimer</p>
+
             <SmallLabel
-              text={`When your application is ready to file, we'll charge an additional $250-350 per class to cover the government filing fee. We'll help you figure out the classes and the trademark type in your upcoming consultation.`}
+              text={`The package includes the government fee of $350 for the registration of one mandatory class for your trademark. Our expert paralegals will review your case to determine the optimal number of classes needed to fully protect your business name, logo, or slogan. Additional government fees may apply for each additional class identified during the paralegal team's review. You will be informed about additional classes before proceeding. Our goal is to ensure comprehensive protection for your intellectual property, and our team will guide you through the process with transparency and expertise.`}
             />
             <Checkbox
               isSelected={isGovermentFeesProcessing}
@@ -116,7 +118,7 @@ const StepFour = () => {
               size="md"
               className="mt-4"
             >
-              Government fees will apply:{" "}
+              Government fee:{" "}
               <span className="text-primary-theme font-semibold">
                 ${govermentFeesAmount}.00 USD
               </span>
