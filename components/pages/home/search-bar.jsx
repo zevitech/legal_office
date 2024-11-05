@@ -97,7 +97,7 @@ const Searchbar = () => {
                 {isSearchComplete ? (
                   <p className="mb-4">
                     &quot;<span className="font-semibold">{searchInput}</span>&quot; is
-                    available! Hurry and trademark it now before it's too late.
+                    available! Hurry and trademark it now before its too late.
                   </p>
                 ) : (
                   <p className="mb-4 text-black/50">
