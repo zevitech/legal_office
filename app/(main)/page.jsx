@@ -20,6 +20,7 @@ import LearningCard from "@/components/ui/LearningCard";
 import FooterSection from "@/components/sections/FooterSection";
 import SimilarMarks from "@/components/sections/SimilarMarks";
 import { BiSearch } from "react-icons/bi";
+import Searchbar from "@/components/pages/home/search-bar";
 
 export const metadata = {
   title: "Legal Trademark Office | US Based trademark register website",
@@ -59,22 +60,7 @@ const page = () => {
                 />
               </div>
             </div>
-            <div className="flex-center gap-4 max-md:flex-col">
-              <div className="relative w-[650px] max-md:w-full">
-                <input
-                  className="p-6 rounded-lg  text-sm w-full outline-blue-600"
-                  type="text"
-                  placeholder="Search Trademark Here..."
-                />
-                <CiSearch className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
-              </div>
-              <Button
-                className="py-[35px] px-14 font-semibold bg-color-primary text-white"
-                radius="md"
-              >
-                Search
-              </Button>
-            </div>
+            <Searchbar />
           </div>
         </section>
 
