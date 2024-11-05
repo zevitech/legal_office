@@ -36,7 +36,11 @@ import {
   ServiceProvided,
 } from "@/constant/form2.0/system-step-one-data";
 import { GetGeographicalData } from "@/utils/get-geographical-data";
-import { now, getLocalTimeZone } from "@internationalized/date";
+import {
+  now,
+  getLocalTimeZone,
+  parseZonedDateTime,
+} from "@internationalized/date";
 
 const StepOne = () => {
   const dispatch = useDispatch();
@@ -57,8 +61,8 @@ const StepOne = () => {
 
   const [trademarkCurrentlyBeingUsed, setTrademarkCurrentlyBeingUsed] =
     useState("");
-  const [firstAnywhereDate, setFirstAnywhereDate] = useState(null);
-  const [firstCommenceDate, setFirstCommenceDate] = useState(null);
+  const [firstAnywhereDate, setFirstAnywhereDate] = useState("");
+  const [firstCommenceDate, setFirstCommenceDate] = useState("");
   const [ownershipDetail, setOwnershipDetail] = useState("");
 
   const [slogan, setSlogan] = useState("");
@@ -83,7 +87,7 @@ const StepOne = () => {
   const [landLineNumber, setLandLineNumber] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
-  const [contactTime, setContactTime] = useState(now(getLocalTimeZone()));
+  const [contactTime, setContactTime] = useState("");
 
   const router = useRouter();
 
@@ -105,7 +109,6 @@ const StepOne = () => {
   const trademarkCurrentlyBeingUsedRef = useRef(null);
   const firstAnywhereDateRef = useRef(null);
   const firstCommenceDateRef = useRef(null);
-  const ownershipDetailRef = useRef(null);
   const organizationNameRef = useRef(null);
   const organizationTypeRef = useRef(null);
   const countryOfFormationRef = useRef(null);
@@ -173,8 +176,6 @@ const StepOne = () => {
       tempErrors.firstAnywhereDate = "Please select first use anywhere date";
     if (trademarkCurrentlyBeingUsed === "yes" && !firstCommenceDate)
       tempErrors.firstCommenceDate = "Please select first use commerce date";
-    if (trademarkCurrentlyBeingUsed === "yes" && !ownershipDetail)
-      tempErrors.ownershipDetail = "Ownership detail is required";
 
     if (selectedOwnerType === "organization") {
       if (!organizationName)
@@ -237,7 +238,6 @@ const StepOne = () => {
         trademarkCurrentlyBeingUsed: trademarkCurrentlyBeingUsedRef,
         firstAnywhereDate: firstAnywhereDateRef,
         firstCommenceDate: firstCommenceDateRef,
-        ownershipDetail: ownershipDetailRef,
         organizationName: organizationNameRef,
         organizationType: organizationTypeRef,
         countryFormation: countryOfFormationRef,
@@ -328,6 +328,20 @@ const StepOne = () => {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  console.log(firstAnywhereDate);
+  console.log(firstCommenceDate);
+
+  const formatDateString = (date) => {
+    if (date) {
+      const { year, month, day } = date;
+      return `${String(month).padStart(2, "0")}-${String(day).padStart(
+        2,
+        "0"
+      )}-${year}`;
+    }
+    return "";
   };
 
   return (
@@ -602,12 +616,14 @@ const StepOne = () => {
 
                 {trademarkCurrentlyBeingUsed === "yes" && (
                   <>
-                    <DatePicker
+                    {/* <DatePicker
                       label="Select trademark first use anywhere date"
                       variant="underlined"
                       className="w-full"
                       value={firstAnywhereDate}
-                      onChange={setFirstAnywhereDate}
+                      onChange={(date) =>
+                        setFirstAnywhereDate(formatDateString(date))
+                      }
                       errorMessage={errors.firstAnywhereDate}
                       isInvalid={!!errors.firstAnywhereDate}
                       ref={firstAnywhereDateRef}
@@ -619,6 +635,35 @@ const StepOne = () => {
                       className="w-full"
                       value={firstCommenceDate}
                       onChange={setFirstCommenceDate}
+                      defaultValue={parseZonedDateTime(
+                        "2022-11-07T00:45[America/Los_Angeles]"
+                      )}
+                      errorMessage={errors.firstCommenceDate}
+                      isInvalid={!!errors.firstCommenceDate}
+                      ref={firstCommenceDateRef}
+                    /> */}
+
+                    <Input
+                      type="text"
+                      label="Select trademark first use anywhere date"
+                      variant="underlined"
+                      className="w-full"
+                      placeholder="Ex. 10-208-2024"
+                      value={firstAnywhereDate}
+                      onChange={(e) => setFirstAnywhereDate(e.target.value)}
+                      errorMessage={errors.firstAnywhereDate}
+                      isInvalid={!!errors.firstAnywhereDate}
+                      ref={firstAnywhereDateRef}
+                    />
+
+                    <Input
+                      type="text"
+                      label="Select trademark first use commerce date"
+                      variant="underlined"
+                      className="w-full"
+                      placeholder="Ex. 10-208-2024"
+                      value={firstCommenceDate}
+                      onChange={(e) => setFirstCommenceDate(e.target.value)}
                       errorMessage={errors.firstCommenceDate}
                       isInvalid={!!errors.firstCommenceDate}
                       ref={firstCommenceDateRef}
@@ -631,9 +676,6 @@ const StepOne = () => {
                       className="w-full"
                       value={ownershipDetail}
                       onChange={(e) => setOwnershipDetail(e.target.value)}
-                      errorMessage={errors.ownershipDetail}
-                      isInvalid={!!errors.ownershipDetail}
-                      ref={ownershipDetailRef}
                     />
                   </>
                 )}
@@ -978,7 +1020,7 @@ const StepOne = () => {
           </div>
 
           <div className="w-full">
-            <DatePicker
+            {/* <DatePicker
               fullWidth
               label="Preferred Contact Date"
               variant="bordered"
@@ -992,6 +1034,22 @@ const StepOne = () => {
               }
               value={contactTime}
               onChange={setContactTime}
+            /> */}
+
+            <Input
+              type="text"
+              label="Preferred Contact Date"
+              variant="bordered"
+              labelPlacement="outside"
+              placeholder="Ex. 10-208-2024, 8:00 AM to 9:30 Am"
+              description="Enter your preferred date and time to call (must be business hours)"
+              radius="sm"
+              size="lg"
+              startContent={
+                <LuClock3 className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
+              }
+              value={contactTime}
+              onChange={(e) => setContactTime(e.target.value)}
             />
           </div>
         </div>
