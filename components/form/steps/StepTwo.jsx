@@ -54,7 +54,7 @@ const StepTwo = () => {
         </h1>
         <p>
           Enter the products or services you plan to sell using your trademark
-          (i.e.: clothing, coffee shop, restaurants, retail stores, etc).
+          (i.e.: clothing, coffee shops, restaurants, retail stores, etc).
         </p>
       </div>
 
@@ -63,7 +63,7 @@ const StepTwo = () => {
           label="Trademark Classification Description"
           variant="bordered"
           labelPlacement="outside"
-          placeholder={`i.e.: clothing, coffee shop, restaurants, retail stores...`}
+          placeholder={`i.e.: clothing, coffee shops, restaurants, retail stores...`}
           radius="sm"
           className="w-full"
           maxRows={12}
