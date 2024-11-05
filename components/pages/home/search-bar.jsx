@@ -96,7 +96,7 @@ const Searchbar = () => {
                 <Divider />
                 {isSearchComplete ? (
                   <p className="mb-4">
-                    "<span className="font-semibold">{searchInput}</span>" is
+                    &quot;<span className="font-semibold">{searchInput}</span>&quot; is
                     available! Hurry and trademark it now before it's too late.
                   </p>
                 ) : (
