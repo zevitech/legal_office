@@ -40,7 +40,7 @@ const SystemStepProgressTracker = ({ p_value }) => {
           size="lg"
           value={value}
           color="success"
-          className="w-[900px]"
+          className="w-[90%]"
           classNames={{
             indicator: "bg-primary-theme",
           }}

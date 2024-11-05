@@ -144,17 +144,6 @@ const StepOne = () => {
     }
   };
 
-  const formatDate = (dateObj) => {
-    if (dateObj) {
-      const { year, month, day } = dateObj; // Extract year, month, and day
-      return new Date(year, month - 1, day).toISOString(); // Convert to ISO string
-    }
-    return null; // Return null if no date is provided
-  };
-
-  console.log("first anywhere date: ", firstAnywhereDate);
-  console.log("first commerce date: ", firstAnywhereDate);
-
   // validate the form input
   const validateForm = () => {
     let tempErrors = {};
