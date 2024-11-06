@@ -44,7 +44,7 @@ const page = () => {
             </h1>
             <p className="text-white/70 sm:text-[15px] text-[12px] sm:leading-[22.5px] font-normal mb-4">
               Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
+              industry. Lorem Ipsum has been the industry&apos;s standard dummy text
               ever since the 1500s,
             </p>
             <Button className="lg:w-[252px] w-full h-[58px] rounded-[5px] bg-white text-black font-normal">
@@ -76,7 +76,7 @@ const page = () => {
             ))
           ) : (
             <p className="text-center w-full text-gray-500 text-lg">
-              No results found for "{searchTerm}". Try searching for another
+              No results found for &quot;{searchTerm}&quot;. Try searching for another
               topic.
             </p>
           )}

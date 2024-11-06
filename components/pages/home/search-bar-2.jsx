@@ -16,7 +16,7 @@ import { CiSearch } from "react-icons/ci";
 import SearchingAnimation from "../../../public/new-form/animations/searching-animation.json";
 import SearchedAnimation from "../../../public/new-form/animations/searched-animation.json";
 
-const Searchbar = () => {
+const Searchbar2 = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSearching, setIsSearching] = useState(false);
   const [isSearchComplete, setIsSearchComplete] = useState(false);
@@ -125,4 +125,4 @@ const Searchbar = () => {
   );
 };
 
-export default Searchbar;
+export default Searchbar2;
