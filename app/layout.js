@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
       <link rel="canonical" href="https://legaltrademarkoffice.com/" />
 
       {/* Tawk.to */}
-      {/* <Script
+      <Script
         id="tawkTo"
         type="text/javascript"
         dangerouslySetInnerHTML={{
@@ -48,10 +48,10 @@ export default function RootLayout({ children }) {
               })();
             `,
         }}
-      /> */}
+      />
 
       {/* Google Tag Manager */}
-      {/* <Script
+      <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -62,24 +62,7 @@ export default function RootLayout({ children }) {
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-M76V8V3F');`,
         }}
-      /> */}
-
-      {/* MouseFlow Tracking */}
-      {/* <Script
-        id="mfq"
-        type="text/javascript"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: ` window._mfq = window._mfq || [];
-              (function() {
-                var mf = document.createElement("script");
-                mf.type = "text/javascript"; mf.defer = true;
-                mf.src = "//cdn.mouseflow.com/projects/6d88ebfa-5138-492c-b0b1-2f54e50b2048.js";
-                document.getElementsByTagName("head")[0].appendChild(mf);
-              })();
-            `,
-        }}
-      /> */}
+      />
 
       <head>
         <meta
@@ -90,14 +73,14 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${poppins.className} bg-color-secondary`}>
         {/* Google Tag Manager (noscript) */}
-        {/* <noscript>
+        <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M76V8V3F"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript> */}
+        </noscript>
         {/* End Google Tag Manager (noscript) */}
         <GlobalProvider>
           {children}
