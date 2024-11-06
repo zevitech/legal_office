@@ -81,7 +81,7 @@ const BlogPage = () => {
                 title={blog.title}
                 desc={blog.desc}
                 searchTerm={searchTerm}
-                isLoading={loadingStates[index]} // Pass the loading state for each card
+                isLoading={loadingStates[index]}
               />
             ))
           ) : (

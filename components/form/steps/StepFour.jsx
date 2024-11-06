@@ -56,6 +56,43 @@ const StepFour = () => {
         <h1 className="text-slate-700 font-semibold text-2xl mb-5">
           Add Rush Processing and Additional Government Fees
         </h1>
+
+        <div className="relative mt-4">
+          <Image
+            src={`/images/optional-bagde.png`}
+            alt="optional badge"
+            width={80}
+            height={10}
+            className="absolute right-[-5px] top-[-5px]"
+          />
+          <FieldContainer>
+            <div className="flex items-center gap-4 text-slate-700 mt-6 mb-3">
+              <FaCreditCard className="text-2xl max-md:text-5xl" />
+
+              <p className="text-slate-700 text-sm font-bold uppercase">
+                Federal Filing Fee (1 - Class) $350
+              </p>
+            </div>
+
+            <p className="font-bold text-[14px]">Disclaimer</p>
+
+            <SmallLabel
+              text={`The package includes the government fee of $350 for the registration of one mandatory class for your trademark. Our expert paralegals will review your case to determine the optimal number of classes needed to fully protect your business name, logo, or slogan. Additional government fees may apply for each additional class identified during the paralegal team's review. You will be informed about additional classes before proceeding. Our goal is to ensure comprehensive protection for your intellectual property, and our team will guide you through the process with transparency and expertise.`}
+            />
+            <Checkbox
+              isSelected={isGovermentFeesProcessing}
+              onValueChange={setIsGovermentFeesProcessing}
+              size="md"
+              className="mt-4"
+            >
+              Federal fee:{" "}
+              <span className="text-primary-theme font-semibold">
+                ${govermentFeesAmount}.00 USD
+              </span>
+            </Checkbox>
+          </FieldContainer>
+        </div>
+
         <div className="relative">
           <Image
             src={`/images/optional-bagde.png`}
@@ -85,42 +122,6 @@ const StepFour = () => {
               24-hour Expedited Processing (Next Business Day):{" "}
               <span className="text-primary-theme font-semibold">
                 ${rushAmount}.00 USD
-              </span>
-            </Checkbox>
-          </FieldContainer>
-        </div>
-
-        <div className="relative mt-4">
-          <Image
-            src={`/images/optional-bagde.png`}
-            alt="optional badge"
-            width={80}
-            height={10}
-            className="absolute right-[-5px] top-[-5px]"
-          />
-          <FieldContainer>
-            <div className="flex items-center gap-4 text-slate-700 mt-6 mb-3">
-              <FaCreditCard className="text-2xl max-md:text-5xl" />
-
-              <p className="text-slate-700 text-sm font-bold uppercase">
-                Government Filing Fee (1 - Class) $350
-              </p>
-            </div>
-
-            <p className="font-bold text-[14px]">Disclaimer</p>
-
-            <SmallLabel
-              text={`The package includes the government fee of $350 for the registration of one mandatory class for your trademark. Our expert paralegals will review your case to determine the optimal number of classes needed to fully protect your business name, logo, or slogan. Additional government fees may apply for each additional class identified during the paralegal team's review. You will be informed about additional classes before proceeding. Our goal is to ensure comprehensive protection for your intellectual property, and our team will guide you through the process with transparency and expertise.`}
-            />
-            <Checkbox
-              isSelected={isGovermentFeesProcessing}
-              onValueChange={setIsGovermentFeesProcessing}
-              size="md"
-              className="mt-4"
-            >
-              Government fee:{" "}
-              <span className="text-primary-theme font-semibold">
-                ${govermentFeesAmount}.00 USD
               </span>
             </Checkbox>
           </FieldContainer>

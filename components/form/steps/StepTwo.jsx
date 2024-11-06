@@ -20,9 +20,9 @@ const StepTwo = () => {
   const [validation, setValidation] = useState(false);
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepOneData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepOneData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   // PREVIOUS BUTTON HANDLER
   const handlePrevious = () => {
