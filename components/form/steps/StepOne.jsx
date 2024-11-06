@@ -46,6 +46,7 @@ const StepOne = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
 
   const [wantToProtect, setWantToProtect] = useState("name");
   const [selectedOwnerType, setSelectedOwnerType] = useState("individual");
@@ -130,22 +131,42 @@ const StepOne = () => {
     return phoneNumberObject ? phoneNumberObject.isValid() : false;
   };
 
-  // validate the Email Address
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // -----------EMAIL VALIDATION----------------------
+
+  // VALIDATE EMAIL ADRESS STRUCTURE
+  const validateEmailFormat = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
 
+  // VALIDATE EMAIL ADRESS AUTHENTICITY
+  const verifyEmailWithZeroBounce = async (email) => {
+    const API_KEY = process.env.NEXT_PUBLIC_ZEROBOUNCE_API_KEY;
+
+    try {
+      const response = await axios.get(
+        `https://api.zerobounce.net/v2/validate?api_key=${API_KEY}&email=${email}`
+      );
+      return response.data.status === "valid";
+    } catch (error) {
+      console.error("Error verifying email:", error);
+      return false;
+    }
+  };
+
+  // EMAIL VALIDATOR ON CHANGE
   const handleEmailChange = (e) => {
     const email = e.target.value;
     setEmailAddress(email);
 
-    if (!validateEmail(email)) {
+    if (!validateEmailFormat(email)) {
       setErrors({ emailAddress: "Please enter a valid email address." });
     } else {
       setErrors({});
     }
   };
+
+  // --------------------------------------------------
 
   // validate the form input
   const validateForm = () => {
@@ -271,6 +292,24 @@ const StepOne = () => {
       return;
     }
 
+    // HANDLE EMAIL AUTHENTICITY
+    if (validateEmailFormat(emailAddress)) {
+      setIsChecking(true);
+      const isAuthentic = await verifyEmailWithZeroBounce(emailAddress);
+      setIsChecking(false);
+
+      if (!isAuthentic) {
+        setErrors({
+          emailAddress:
+            "Invalid or non-existent email address. Please use a real email.",
+        });
+      } else {
+        setErrors({});
+      }
+    } else {
+      setErrors({ emailAddress: "Please enter a valid email address." });
+    }
+
     const stepOne = {
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
       wantToProtect,
@@ -328,20 +367,6 @@ const StepOne = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  };
-
-  console.log(firstAnywhereDate);
-  console.log(firstCommenceDate);
-
-  const formatDateString = (date) => {
-    if (date) {
-      const { year, month, day } = date;
-      return `${String(month).padStart(2, "0")}-${String(day).padStart(
-        2,
-        "0"
-      )}-${year}`;
-    }
-    return "";
   };
 
   return (
@@ -1013,7 +1038,7 @@ const StepOne = () => {
               }
               value={emailAddress}
               onChange={handleEmailChange}
-              ref={emailRef}
+              isLoading={isChecking}
               errorMessage={errors.emailAddress}
               isInvalid={!!errors.emailAddress}
             />
