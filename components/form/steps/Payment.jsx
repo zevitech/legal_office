@@ -17,7 +17,7 @@ import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 const Payment = () => {
   const router = useRouter();
   const [isDataSent, setIsDataSent] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [paymentError, setPaymentError] = useState("");
 
   // const [clientSecret, setClientSecret] = useState(""); -- STRIPE
@@ -114,7 +114,7 @@ const Payment = () => {
               }
             })
             .catch((err) => {
-              setIsLoading(false);
+              // setIsLoading(false);
               console.log(
                 "Error sending data to save-data endpoint in payment page: ",
                 err
