@@ -8,17 +8,19 @@ import StripePayment from "../StripePayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import NormalLabel from "@/components/form/NormalLabel";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+// const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY); -- STRIPE
 
 const Payment = () => {
   const router = useRouter();
   const [isDataSent, setIsDataSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState("");
   const [paymentError, setPaymentError] = useState("");
+
+  // const [clientSecret, setClientSecret] = useState(""); -- STRIPE
 
   const nestedLeadData = useSelector((state) => state.form);
   const stepFourData = nestedLeadData.stepFour;
@@ -75,6 +77,62 @@ const Payment = () => {
   leadDataWithValues.totalAmount = totalAmount;
   leadDataWithValues.zoho_step = 2;
 
+  // ---------------------------------------------------
+
+  const createOrder = async () => {
+    return await axios
+      .post("/api/paypal-checkout/create-order", { totalAmount })
+      .then((res) => {
+        return res?.data?.order.id;
+      })
+      .catch((err) => {
+        console.log("Error creating order:", err);
+        setPaymentError("Something went wrong, please try again.");
+      });
+  };
+
+  // handle capture order and passing some order data
+  const onApprove = async (data) => {
+    const orderData = {
+      orderId: data.orderID,
+    };
+
+    return await axios
+      .post("/api/paypal-checkout/capture-order", orderData)
+      .then((res) => {
+        // payment successful. now make a request to send the data to mail and zoho
+        if (res?.data?.result?.status == "COMPLETED") {
+          setLoader(true);
+          setPaymentError("");
+          leadDataWithValues.is_paid = true;
+          leadDataWithValues.zoho_step = 3;
+          axios
+            .post(endPoint, leadDataWithValues)
+            .then((res) => {
+              if (res.data.success) {
+                return router.push("/trademark-register/thank-you");
+              }
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              console.log(
+                "Error sending data to save-data endpoint in payment page: ",
+                err
+              );
+              alert(
+                "Payment Successful. But something went wrong, please check your network or contact for support."
+              );
+            });
+        }
+      })
+      .catch((err) => {
+        console.log("Error capturing order:", err);
+        setPaymentError("Checkout Failed, Please try again.");
+      });
+  };
+
+  // --------------------------------------------------------
+
   // send the data to mail and zoho
   const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
   useEffect(() => {
@@ -94,30 +152,30 @@ const Payment = () => {
   }, [isDataSent, leadDataWithValues, endPoint]);
 
   // initialize the payment
-  useEffect(() => {
-    setIsLoading(true);
-    const description = `Payment from ${nestedLeadData?.stepOne?.firstName} ${nestedLeadData?.stepOne?.lastName}. And receipt ID is ${nestedLeadData?.stepFour?.receipt_ID}`;
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const description = `Payment from ${nestedLeadData?.stepOne?.firstName} ${nestedLeadData?.stepOne?.lastName}. And receipt ID is ${nestedLeadData?.stepFour?.receipt_ID}`;
 
-    if (totalAmount > 1) {
-      axios
-        .post("/api/stripe", { amount: totalAmount, description })
-        .then((res) => {
-          setClientSecret(res?.data?.paymentIntent?.client_secret);
-        })
-        .catch((err) => {
-          console.log("Error processing stripe: ", err);
-          setPaymentError(err.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [totalAmount, nestedLeadData]);
+  //   if (totalAmount > 1) {
+  //     axios
+  //       .post("/api/stripe", { amount: totalAmount, description })
+  //       .then((res) => {
+  //         setClientSecret(res?.data?.paymentIntent?.client_secret);
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error processing stripe: ", err);
+  //         setPaymentError(err.message);
+  //       })
+  //       .finally(() => {
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }, [totalAmount, nestedLeadData]);  -- STRIPE
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepFourData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // if (Object.keys(stepFourData).length === 0) {
+  //   return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  // }
 
   return (
     <main className="system-page-standard-layout flex flex-col gap-4">
@@ -134,7 +192,9 @@ const Payment = () => {
 
       <section className="w-full h-full grid md:grid-cols-2 grid-cols-1 gap-4">
         {/* PAYMENT GATEWAY INTEGRATION WILL COME HERE */}
-        <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
+
+        {/* STRIPE */}
+        {/* <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
           {clientSecret ? (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
               {isLoading ? (
@@ -149,6 +209,30 @@ const Payment = () => {
             <div className="w-full h-20 flex-center">
               <FaSpinner className=" animate-spin font-bold text-5xl text-slate-900" />
             </div>
+          )}
+        </div> */}
+
+        {/* PAYPAL */}
+        <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
+          <PayPalScriptProvider
+            options={{
+              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+              components: "buttons",
+              currency: "USD",
+              disableFunding: "paylater",
+            }}
+          >
+            <PayPalButtons
+              style={{ layout: "vertical" }}
+              disabled={false}
+              createOrder={createOrder}
+              onApprove={onApprove}
+            />
+          </PayPalScriptProvider>
+          {paymentError && (
+            <p className="text-[#f31260] text-sm text-center mt-4 mb-1 capitalize">
+              {paymentError}
+            </p>
           )}
         </div>
 
