@@ -43,9 +43,9 @@ const Searchbar2 = () => {
   return (
     <>
       <div className="flex-center gap-4 max-md:flex-col">
-        <div className="relative w-[650px] max-md:w-full">
+        <div className="relative w-[600px] max-md:w-full shadow-md rounded-lg">
           <input
-            className="p-6 h-[30px] rounded-md text-sm w-full outline-blue-600"
+            className="p-6 rounded-lg text-sm w-full outline-blue-600"
             type="text"
             placeholder="Search Trademark Here..."
             value={searchInput}
@@ -54,8 +54,8 @@ const Searchbar2 = () => {
           <CiSearch className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
         </div>
         <Button
-          className="py-[25px] px-14 font-semibold bg-color-primary text-white"
-          radius="sm"
+          className="py-[35px] px-14 font-semibold bg-color-primary text-white  max-md:w-full"
+          radius="md"
           onClick={handleOpen}
           disabled={!searchInput.trim()}
         >
@@ -72,7 +72,9 @@ const Searchbar2 = () => {
               </ModalHeader>
               <ModalBody>
                 <div className="flex items-center justify-between">
-                  <p className="text-black/60 text-[24px]">{searchInput || "Trademark"}</p>
+                  <p className="text-black/60 text-[24px]">
+                    {searchInput || "Trademark"}
+                  </p>
                   {isSearchComplete ? (
                     <>
                       <DotLottiePlayer
@@ -96,8 +98,9 @@ const Searchbar2 = () => {
                 <Divider />
                 {isSearchComplete ? (
                   <p className="mb-4">
-                    &quot;<span className="font-semibold">{searchInput}</span>&quot; is
-                    available! Hurry and trademark it now before it&apos;s too late.
+                    &quot;<span className="font-semibold">{searchInput}</span>
+                    &quot; is available! Hurry and trademark it now before
+                    it&apos;s too late.
                   </p>
                 ) : (
                   <p className="mb-4 text-black/50">
