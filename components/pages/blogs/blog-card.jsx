@@ -5,17 +5,7 @@ import { Button, Card, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import PropTypes from "prop-types";
 
-const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130 }) => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
-
+const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130, isLoading }) => {
   const highlightText = (text) => {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, "gi");
@@ -40,6 +30,8 @@ const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130 }) => {
           <Image
             src={img}
             alt={title}
+            width={200}
+            height={300}
             className="w-auto h-auto bg-cover rounded-lg"
           />
         </div>
@@ -77,6 +69,7 @@ BlogCard.propTypes = {
   desc: PropTypes.string.isRequired,
   searchTerm: PropTypes.string,
   maxDescLength: PropTypes.number,
+  isLoading: PropTypes.bool.isRequired, 
 };
 
 export default BlogCard;

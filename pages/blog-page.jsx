@@ -1,77 +1,87 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import FooterSection from "@/components/sections/FooterSection";
 import Header from "@/components/ui/Header";
-
-import BlogHeroImg from "../public/images/blog-hero.svg";
-import Image from "next/image";
-import { Button } from "@nextui-org/react";
+import { Pagination } from "@nextui-org/react";
 import SearchbarBlog from "@/components/pages/blogs/search-bar";
 import BlogCard from "@/components/pages/blogs/blog-card";
-import blogData from "@/constant/blog-data";
+import BlogHeroSection from "@/components/pages/blogs/blog-hero-section";
+import client from "@/utils/contentful";
 
 const BlogPage = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loadingStates, setLoadingStates] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
 
-  const filteredBlogs = blogData.filter(
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      const response = await client.getEntries({
+        content_type: "LegalTrademarkOfficeBlogPost",
+      });
+
+      const formattedBlogs = response.items.map((item) => ({
+        id: item.sys.id,
+        img: `https:${item.fields.blogImage.fields.file.url}`,
+        title: item.fields.blogTitle,
+        desc: item.fields.blogParagraph,
+      }));
+
+      setBlogs(formattedBlogs);
+
+      setLoadingStates(new Array(formattedBlogs.length).fill(false));
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const filteredBlogs = blogs.filter(
     (blog) =>
       blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.desc.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+
   const handleSearch = (term) => {
     setSearchTerm(term);
+    setCurrentPage(1);
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const currentBlogs = filteredBlogs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <>
       <Header />
       <div className="w-[90%] mx-auto py-[4rem] flex flex-col gap-8">
-        {/* HERO SECTION */}
-        <div
-          className="py-8 rounded-md background-gradient-blog w-full my-8 flex lg:flex-row flex-col items-center gap-8 lg:px-16 sm:px-8 px-4"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-        >
-          <Image
-            src={BlogHeroImg}
-            alt="Welcome to Our Blog Page"
-            className="max-lg:w-full h-auto"
-          />
-          <div className="flex flex-col gap-4">
-            <h1 className="text-white lg:text-[32px] sm:text-[24.73px] text-[18px] font-[600] lg:leading-[34px] sm:leading-[28.09px] leading-[20px]">
-              Lorem Ipsum is simply dummy text of the printing
-            </h1>
-            <p className="text-white/70 sm:text-[15px] text-[12px] sm:leading-[22.5px] font-normal mb-4">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry&apos;s standard dummy
-              text ever since the 1500s,
-            </p>
-            <Button className="lg:w-[252px] w-full h-[58px] rounded-[5px] bg-white text-black font-normal">
-              Register Now
-            </Button>
-          </div>
-        </div>
-
-        {/* SEARCH BAR */}
+        <BlogHeroSection />
         <SearchbarBlog onSearch={handleSearch} />
 
-        {/* BLOG SECTION */}
         <div
-          className={`w-full  gap-4 ${
-            filteredBlogs.length > 0
+          className={`w-full gap-4 ${
+            currentBlogs.length > 0
               ? "grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1"
               : "flex items-center justify-center"
           }`}
         >
-          {filteredBlogs.length > 0 ? (
-            filteredBlogs.map((blog, index) => (
+          {currentBlogs.length > 0 ? (
+            currentBlogs.map((blog, index) => (
               <BlogCard
-                key={index}
+                key={blog.id}
                 img={blog.img}
                 title={blog.title}
                 desc={blog.desc}
                 searchTerm={searchTerm}
+                isLoading={loadingStates[index]} // Pass the loading state for each card
               />
             ))
           ) : (
@@ -81,6 +91,18 @@ const BlogPage = () => {
             </p>
           )}
         </div>
+
+        {filteredBlogs.length > itemsPerPage && (
+          <div className="w-full my-8 flex items-center justify-center">
+            <Pagination
+              total={totalPages}
+              initialPage={1}
+              page={currentPage}
+              onChange={handlePageChange}
+              variant={"bordered"}
+            />
+          </div>
+        )}
       </div>
       <FooterSection />
     </>

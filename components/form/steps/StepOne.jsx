@@ -139,7 +139,7 @@ const StepOne = () => {
 
   // VALIDATE EMAIL ADRESS AUTHENTICITY
   const verifyEmailWithZeroBounce = async (email) => {
-    const API_KEY = "17b4b350b9e44daa95ceb0771b693c2a";
+    const API_KEY = "a19ffe28ca9f474aae800e31900febbd";
 
     try {
       const response = await axios.get(
