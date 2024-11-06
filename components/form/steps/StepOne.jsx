@@ -46,7 +46,6 @@ const StepOne = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [isChecking, setIsChecking] = useState(false);
 
   const [wantToProtect, setWantToProtect] = useState("name");
   const [selectedOwnerType, setSelectedOwnerType] = useState("individual");
@@ -132,7 +131,6 @@ const StepOne = () => {
   };
 
   // -----------EMAIL VALIDATION----------------------
-
   // VALIDATE EMAIL ADRESS STRUCTURE
   const validateEmailFormat = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -155,17 +153,24 @@ const StepOne = () => {
   };
 
   // EMAIL VALIDATOR ON CHANGE
-  const handleEmailChange = (e) => {
+  const handleEmailChange = async (e) => {
     const email = e.target.value;
     setEmailAddress(email);
 
     if (!validateEmailFormat(email)) {
       setErrors({ emailAddress: "Please enter a valid email address." });
     } else {
-      setErrors({});
+      setErrors({ emailAddress: "Checking email authenticity..." });
+
+      const isAuthentic = await verifyEmailWithZeroBounce(email);
+
+      if (isAuthentic) {
+        setErrors({});
+      } else {
+        setErrors({ emailAddress: "The email address is not authentic." });
+      }
     }
   };
-
   // --------------------------------------------------
 
   // validate the form input
@@ -290,24 +295,6 @@ const StepOne = () => {
         }, 500);
       }
       return;
-    }
-
-    // HANDLE EMAIL AUTHENTICITY
-    if (validateEmailFormat(emailAddress)) {
-      setIsChecking(true);
-      const isAuthentic = await verifyEmailWithZeroBounce(emailAddress);
-      setIsChecking(false);
-
-      if (!isAuthentic) {
-        setErrors({
-          emailAddress:
-            "Invalid or non-existent email address. Please use a real email.",
-        });
-      } else {
-        setErrors({});
-      }
-    } else {
-      setErrors({ emailAddress: "Please enter a valid email address." });
     }
 
     const stepOne = {
@@ -1038,7 +1025,6 @@ const StepOne = () => {
               }
               value={emailAddress}
               onChange={handleEmailChange}
-              isLoading={isChecking}
               errorMessage={errors.emailAddress}
               isInvalid={!!errors.emailAddress}
             />
