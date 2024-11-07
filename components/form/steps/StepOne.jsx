@@ -76,6 +76,7 @@ const StepOne = () => {
   const [organizationPosition, setOrganizationPosition] = useState("");
   const [reChaptcha, setReChaptcha] = useState("");
   const [errors, setErrors] = useState({});
+  const [isEmailAuthentic, setIsEmailAuthentic] = useState(false);
 
   // PERSONAL INFORMATION
   const [firstName, setFirstName] = useState("");
@@ -159,10 +160,12 @@ const StepOne = () => {
 
     if (!validateEmailFormat(email)) {
       setErrors({ emailAddress: "Please enter a valid email address." });
+      setIsEmailAuthentic(false);
     } else {
       setErrors({ emailAddress: "Checking email authenticity..." });
 
       const isAuthentic = await verifyEmailWithZeroBounce(email);
+      setIsEmailAuthentic(isAuthentic);
 
       if (isAuthentic) {
         setErrors({});
