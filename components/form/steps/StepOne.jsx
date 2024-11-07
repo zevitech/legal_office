@@ -229,8 +229,8 @@ const StepOne = () => {
     }
     if (!emailAddress) {
       tempErrors.emailAddress = "Email address is required";
-    } else if (!validator.validate(emailAddress)) {
-      tempErrors.emailAddress = "Invalid email address";
+    } else if (!verifyEmailWithZeroBounce(emailAddress)) {
+      tempErrors.emailAddress = "Invalid email dosent exists";
     }
     if (!reChaptcha) {
       tempErrors.reChaptcha = "Please verify that you are not a robot";
