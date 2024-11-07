@@ -232,15 +232,17 @@ const StepOne = () => {
     }
     if (!emailAddress) {
       tempErrors.emailAddress = "Email address is required";
-    } else if (!verifyEmailWithZeroBounce(emailAddress)) {
-      tempErrors.emailAddress = "Invalid email dosent exists";
+    } else if (!validateEmailFormat(emailAddress)) {
+      tempErrors.emailAddress = "Invalid email address";
+    } else if (!isEmailAuthentic) {
+      tempErrors.emailAddress = "The email address is not authentic.";
     }
     if (!reChaptcha) {
       tempErrors.reChaptcha = "Please verify that you are not a robot";
     }
 
     setErrors(tempErrors);
-    return Object.keys(tempErrors)[0];
+    return Object.keys(tempErrors).length ? Object.keys(tempErrors)[0] : null;
   };
 
   const ReCAPTCHAHandle = (value) => {
@@ -283,18 +285,28 @@ const StepOne = () => {
         reChaptcha: reChaptchaRef,
       };
 
-      // errorRefs[firstErrorField].current.scrollIntoView({ behavior: "smooth" });if (firstErrorField)
+      //   if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
+      //     errorRefs[firstErrorField].current.scrollIntoView({
+      //       behavior: "smooth",
+      //     });
+
+      //     // Wait for the scrolling to finish and then adjust by the offset
+      //     setTimeout(() => {
+      //       window.scrollBy({
+      //         top: -200,
+      //         behavior: "smooth",
+      //       });
+      //     }, 500);
+      //   }
+      //   return;
+      // }
+
       if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
         errorRefs[firstErrorField].current.scrollIntoView({
           behavior: "smooth",
         });
-
-        // Wait for the scrolling to finish and then adjust by the offset
         setTimeout(() => {
-          window.scrollBy({
-            top: -200,
-            behavior: "smooth",
-          });
+          window.scrollBy({ top: -200, behavior: "smooth" });
         }, 500);
       }
       return;
