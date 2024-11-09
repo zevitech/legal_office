@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       />
 
       {/* Google Tag Manager */}
-{<Script
+<Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
       />
 
       {/* MouseFlow Tracking */}
-{ <Script
+<Script
         id="mfq"
         type="text/javascript"
         strategy="afterInteractive"
@@ -65,7 +65,7 @@ export default function RootLayout({ children }) {
       />
       <body className={`${inter.className}`}>
         {/* Google Tag Manager (noscript) */}
-{ <noscript>
+<noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M76V8V3F"
             height="0"
