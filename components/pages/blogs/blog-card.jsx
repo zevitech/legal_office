@@ -1,11 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button, Card, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import PropTypes from "prop-types";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130, isLoading }) => {
+const BlogCard = ({
+  id,
+  img,
+  title,
+  desc,
+  searchTerm,
+  maxDescLength = 130,
+  isLoading,
+}) => {
+  const router = useRouter();
+
   const highlightText = (text) => {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, "gi");
@@ -20,11 +32,13 @@ const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130, isLoading
     );
   };
 
+  const handleOpenBlog = (e) => {
+    e.preventDefault();
+    router.push(`/blogs/${id}`);
+  };
+
   return (
-    <Card
-      className="grid grid-rows-2 h-fit items-center p-4"
-      radius="lg"
-    >
+    <Card className="grid grid-rows-2 h-fit items-center p-4" radius="lg">
       <Skeleton isLoaded={!isLoading} className="rounded-lg">
         <div className="w-full mx-auto h-fit rounded-lg">
           <Image
@@ -47,14 +61,20 @@ const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130, isLoading
           <div className="text-[14px] leading-[18px] text-black/70 font-[400]">
             {highlightText(desc.substring(0, maxDescLength))}
             {desc.length > maxDescLength && (
-              <span className="text-blue-500 cursor-pointer ml-1">
+              <Link
+                href={`/blogs/${id}`}
+                className="text-blue-500 cursor-pointer ml-1"
+              >
                 ...read more
-              </span>
+              </Link>
             )}
           </div>
         </Skeleton>
         <Skeleton isLoaded={!isLoading} className="rounded-lg">
-          <Button className="h-[53px] w-full rounded-lg text-white bg-primary">
+          <Button
+            onClick={handleOpenBlog}
+            className="h-[53px] w-full rounded-lg text-white bg-primary"
+          >
             Read Blog
           </Button>
         </Skeleton>
@@ -64,12 +84,13 @@ const BlogCard = ({ img, title, desc, searchTerm, maxDescLength = 130, isLoading
 };
 
 BlogCard.propTypes = {
+  id: PropTypes.string.isRequired,
   img: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
   searchTerm: PropTypes.string,
   maxDescLength: PropTypes.number,
-  isLoading: PropTypes.bool.isRequired, 
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default BlogCard;

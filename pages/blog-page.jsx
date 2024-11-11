@@ -19,14 +19,14 @@ const BlogPage = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       const response = await client.getEntries({
-        content_type: "LegalTrademarkOfficeBlogPost",
+        content_type: "legalTrademarkOffice",
       });
 
       const formattedBlogs = response.items.map((item) => ({
         id: item.sys.id,
         img: `https:${item.fields.blogImage.fields.file.url}`,
         title: item.fields.blogTitle,
-        desc: item.fields.blogParagraph,
+        desc: item.fields.blogDescription,
       }));
 
       setBlogs(formattedBlogs);
@@ -77,6 +77,7 @@ const BlogPage = () => {
             currentBlogs.map((blog, index) => (
               <BlogCard
                 key={blog.id}
+                id={blog.id}
                 img={blog.img}
                 title={blog.title}
                 desc={blog.desc}
