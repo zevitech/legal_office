@@ -102,7 +102,7 @@ const Payment = () => {
       .then((res) => {
         // payment successful. now make a request to send the data to mail and zoho
         if (res?.data?.result?.status == "COMPLETED") {
-          setLoader(true);
+          // setLoader(true);
           setPaymentError("");
           leadDataWithValues.is_paid = true;
           leadDataWithValues.zoho_step = 3;
