@@ -40,13 +40,13 @@ const BlogCard = ({
   return (
     <Card className="grid grid-rows-2 h-fit items-center p-4" radius="lg">
       <Skeleton isLoaded={!isLoading} className="rounded-lg">
-        <div className="w-full mx-auto h-fit rounded-lg">
+        <div className="w-full mx-auto h-fit rounded-lg mb-4">
           <Image
             src={img}
             alt={title}
             width={200}
             height={300}
-            className="w-auto h-auto bg-cover rounded-lg"
+            className="!w-full h-auto bg-cover rounded-lg"
           />
         </div>
       </Skeleton>

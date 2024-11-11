@@ -37,7 +37,7 @@ const SpecificBlogPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-16">
+      <div className="w-full h-full flex items-center justify-center py-16">
         <p className="text-xl">Loading...</p>
       </div>
     );
