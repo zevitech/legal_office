@@ -7,8 +7,11 @@ const nextConfig = {
         hostname: "res.cloudinary.com",
       },
     ],
+    domains: ["images.ctfassets.net"],
   },
+  reactStrictMode: true,
 };
+
 // module.exports = {
 //   async rewrites() {
 //     return [

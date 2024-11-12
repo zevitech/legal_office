@@ -1,5 +1,9 @@
 import FormHero from "@/components/form/FormHero";
+import SystemHeroSection from "@/components/form/form2.0/system-hero-section";
+import SystemStepProgressTracker from "@/components/form/form2.0/system-step-progress-tracker";
 import StepTwo from "@/components/form/steps/StepTwo";
+import FooterSection from "@/components/sections/FooterSection";
+import Header from "@/components/ui/Header";
 import React from "react";
 
 export const metadata = {
@@ -11,8 +15,12 @@ export const metadata = {
 const page = () => {
   return (
     <main className="">
-      <FormHero step={2} />
+      <Header />
+      <SystemHeroSection />
+      {/* TAG - 1001 */}
+      <SystemStepProgressTracker p_value={50} />
       <StepTwo />
+      <FooterSection />
     </main>
   );
 };

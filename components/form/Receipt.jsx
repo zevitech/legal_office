@@ -8,10 +8,34 @@ import { FaRegCopyright } from "react-icons/fa6";
 
 const Receipt = () => {
   const nestedLeadData = useSelector((state) => state.form);
+
+  const {
+    isRushProcessing,
+    isGovermentFeesProcessing,
+    rushAmount,
+    govermentFeesAmount,
+  } = nestedLeadData.stepFour;
+  const basePrice = nestedLeadData.stepThree.price;
+
   const totalPrice =
-    nestedLeadData.stepFour.isRushProcessing === true
-      ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
-      : nestedLeadData.stepThree.price;
+    basePrice +
+    (isRushProcessing ? rushAmount : 0) +
+    (isGovermentFeesProcessing ? govermentFeesAmount : 0);
+
+  // const totalPrice =
+  //   nestedLeadData.stepFour.isRushProcessing === true &&
+  //   nestedLeadData.stepFour.isGovermentFeesProcessing === false
+  //     ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
+  //     : nestedLeadData.stepFour.isRushProcessing === false &&
+  //       nestedLeadData.stepFour.isGovermentFeesProcessing === true
+  //     ? nestedLeadData.stepThree.price +
+  //       nestedLeadData.stepFour.govermentFeesAmount
+  //     : nestedLeadData.stepFour.isRushProcessing === true &&
+  //       nestedLeadData.stepFour.isGovermentFeesProcessing === true
+  //     ? nestedLeadData.stepThree.price +
+  //       nestedLeadData.stepFour.govermentFeesAmount +
+  //       nestedLeadData.stepFour.rushAmount
+  //     : nestedLeadData.stepThree.price;
 
   const today = new Date().toLocaleDateString(undefined, {
     year: "numeric",
@@ -31,7 +55,7 @@ const Receipt = () => {
     axios.post(endPoint, receiptData).catch((err) => {
       console.log("Failed to send receipt in mail:", err);
     });
-  }, []);
+  }, [receiptData]);
 
   return (
     <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono ">
@@ -94,6 +118,18 @@ const Receipt = () => {
               <p className="w-full bg-slate-400 h-[1px]"></p>
               <p className="text-slate-700 font-normal">
                 ${nestedLeadData.stepFour.rushAmount}
+              </p>
+            </div>
+          )}
+
+          {nestedLeadData.stepFour.isGovermentFeesProcessing === true && (
+            <div className="flex flex-1 items-center gap-3 py-1">
+              <p className="text-slate-500 font-thin flex-none text-sm">
+                Goverment Fees
+              </p>
+              <p className="w-full bg-slate-400 h-[1px]"></p>
+              <p className="text-slate-700 font-normal">
+                ${nestedLeadData.stepFour.govermentFeesAmount}
               </p>
             </div>
           )}

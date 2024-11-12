@@ -8,16 +8,19 @@ import StripePayment from "../StripePayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import NormalLabel from "@/components/form/NormalLabel";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import React, { useEffect, useMemo, useState } from "react";
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+// const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY); -- STRIPE
 
 const Payment = () => {
   const router = useRouter();
   const [isDataSent, setIsDataSent] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState("");
+  // const [isLoading, setIsLoading] = useState(false);
   const [paymentError, setPaymentError] = useState("");
+
+  // const [clientSecret, setClientSecret] = useState(""); -- STRIPE
 
   const nestedLeadData = useSelector((state) => state.form);
   const stepFourData = nestedLeadData.stepFour;
@@ -56,6 +59,13 @@ const Payment = () => {
       });
     }
 
+    if (stepFourData.govermentFeesAmount !== 0) {
+      baseDetails.push({
+        title: "Goverment Fee",
+        amount: stepFourData.govermentFeesAmount,
+      });
+    }
+
     return baseDetails;
   }, [nestedLeadData, stepFourData]);
 
@@ -66,6 +76,62 @@ const Payment = () => {
   );
   leadDataWithValues.totalAmount = totalAmount;
   leadDataWithValues.zoho_step = 2;
+
+  // ---------------------------------------------------
+
+  const createOrder = async () => {
+    return await axios
+      .post("/api/paypal-checkout/create-order", { totalAmount })
+      .then((res) => {
+        return res?.data?.order.id;
+      })
+      .catch((err) => {
+        console.log("Error creating order:", err);
+        setPaymentError("Something went wrong, please try again.");
+      });
+  };
+
+  // handle capture order and passing some order data
+  const onApprove = async (data) => {
+    const orderData = {
+      orderId: data.orderID,
+    };
+
+    return await axios
+      .post("/api/paypal-checkout/capture-order", orderData)
+      .then((res) => {
+        // payment successful. now make a request to send the data to mail and zoho
+        if (res?.data?.result?.status == "COMPLETED") {
+          // setLoader(true);
+          setPaymentError("");
+          leadDataWithValues.is_paid = true;
+          leadDataWithValues.zoho_step = 3;
+          axios
+            .post(endPoint, leadDataWithValues)
+            .then((res) => {
+              if (res.data.success) {
+                return router.push("/trademark-register/thank-you");
+              }
+            })
+            .catch((err) => {
+              // setIsLoading(false);
+              console.log(
+                "Error sending data to save-data endpoint in payment page: ",
+                err
+              );
+              alert(
+                "Payment Successful. But something went wrong, please check your network or contact for support."
+              );
+            });
+        }
+      })
+      .catch((err) => {
+        console.log("Error capturing order:", err);
+        setPaymentError("Checkout Failed, Please try again.");
+      });
+  };
+
+  // --------------------------------------------------------
 
   // send the data to mail and zoho
   const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
@@ -86,25 +152,25 @@ const Payment = () => {
   }, [isDataSent, leadDataWithValues, endPoint]);
 
   // initialize the payment
-  useEffect(() => {
-    setIsLoading(true);
-    const description = `Payment from ${nestedLeadData?.stepOne?.firstName} ${nestedLeadData?.stepOne?.lastName}. And receipt ID is ${nestedLeadData?.stepFour?.receipt_ID}`;
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const description = `Payment from ${nestedLeadData?.stepOne?.firstName} ${nestedLeadData?.stepOne?.lastName}. And receipt ID is ${nestedLeadData?.stepFour?.receipt_ID}`;
 
-    if (totalAmount > 1) {
-      axios
-        .post("/api/stripe", { amount: totalAmount, description })
-        .then((res) => {
-          setClientSecret(res?.data?.paymentIntent?.client_secret);
-        })
-        .catch((err) => {
-          console.log("Error processing stripe: ", err);
-          setPaymentError(err.message);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [totalAmount, nestedLeadData]);
+  //   if (totalAmount > 1) {
+  //     axios
+  //       .post("/api/stripe", { amount: totalAmount, description })
+  //       .then((res) => {
+  //         setClientSecret(res?.data?.paymentIntent?.client_secret);
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error processing stripe: ", err);
+  //         setPaymentError(err.message);
+  //       })
+  //       .finally(() => {
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }, [totalAmount, nestedLeadData]);  -- STRIPE
 
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepFourData).length === 0) {
@@ -112,63 +178,92 @@ const Payment = () => {
   }
 
   return (
-    <div className="px-16 mt-16 mb-14 max-sm:px-2 max-md:mt-12 max-md:mb-8">
-      <div className="flex flex-col mb-8 gap-3 w-[800px] max-md:w-auto max-sm:px-4">
-        <h1 className="text-[#03589c] font-semibold text-4xl max-md:text-3xl">
-          Confirm order and Pay
+    <main className="system-page-standard-layout flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-1 mb-10">
+        <h1 className="font-inria text-heading-color md:text-[24px] text-[20px] w-full">
+          CONFIRM, ORDER & PAY
         </h1>
-        <NormalLabel
-          text={`
-            Please enter your payment details below to complete your Trademark
-            order. Once completed, our experts will immediately begin reviewing
-            and processing your submission.`}
-        />
+        <p className="md:text-[16px] text-[12px] md:leading-[18px] leading-[14px]">
+          Please enter your payment details below to complete your Trademark
+          order. Once completed, our experts will immediately begin reviewing
+          and processing your submission.
+        </p>
       </div>
-      <div className="flex max-md:flex-col-reverse">
-        <section className=" w-3/5 px-20 max-md:px-0 max-md:w-full">
-          <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
-            {clientSecret ? (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                {isLoading ? (
-                  <div className="w-full h-20 flex-center">
-                    <FaSpinner className=" animate-spin font-bold text-5xl text-slate-900" />
-                  </div>
-                ) : (
-                  <StripePayment loading={isLoading} em={paymentError} />
-                )}
-              </Elements>
-            ) : (
-              <div className="w-full h-20 flex-center">
-                <FaSpinner className=" animate-spin font-bold text-5xl text-slate-900" />
-              </div>
-            )}
-          </div>
-        </section>
-        <section className="w-2/5 flex-center max-md:w-full">
-          <div className="bg-white border-t-3 border-t-orange-500 flex flex-col gap-3 mb-6 w-full">
-            <h1 className="text-2xl font-semibold text-slate-700 text-center pt-8 py-6">
-              My Order Details
-            </h1>
-            <hr />
-            <div className="p-8 flex flex-col gap-5">
-              {orderDetails.map(({ title, amount }, index) => (
-                <div
-                  className="flex-between font-medium text-sm text-slate-600 pb-3 border-b-1 border-slate-200"
-                  key={index}
-                >
-                  <div>{title}</div>
-                  <div>${amount}.00</div>
+
+      <section className="w-full h-full grid md:grid-cols-2 grid-cols-1 gap-4">
+        {/* PAYMENT GATEWAY INTEGRATION WILL COME HERE */}
+
+        {/* STRIPE */}
+        {/* <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
+          {clientSecret ? (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              {isLoading ? (
+                <div className="w-full h-20 flex-center">
+                  <FaSpinner className=" animate-spin font-bold text-5xl text-slate-900" />
                 </div>
-              ))}
-              <div className="flex-between font-semibold text-base text-slate-600">
-                <div>{`Total Amount`}</div>
-                <div>${totalAmount}.00</div>
-              </div>
+              ) : (
+                <StripePayment loading={isLoading} em={paymentError} />
+              )}
+            </Elements>
+          ) : (
+            <div className="w-full h-20 flex-center">
+              <FaSpinner className=" animate-spin font-bold text-5xl text-slate-900" />
             </div>
-          </div>
-        </section>
-      </div>
-    </div>
+          )}
+        </div> */}
+
+        {/* PAYPAL */}
+        <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
+          <PayPalScriptProvider
+            options={{
+              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+              components: "buttons",
+              currency: "USD",
+              disableFunding: "paylater",
+            }}
+          >
+            <PayPalButtons
+              style={{ layout: "vertical" }}
+              disabled={false}
+              createOrder={createOrder}
+              onApprove={onApprove}
+            />
+          </PayPalScriptProvider>
+          {paymentError && (
+            <p className="text-[#f31260] text-sm text-center mt-4 mb-1 capitalize">
+              {paymentError}
+            </p>
+          )}
+        </div>
+
+        <div className="w-full flex items-start justify-center">
+          <Card className="w-[400px] py-4 rounded-[4px] max-md:shadow-none max-md:border">
+            <CardHeader className="w-full flex items-center justify-center">
+              <h1 className="md:text-[24px] text-[20px] font-inria font-bold text-heading-color">
+                My Order Details
+              </h1>
+            </CardHeader>
+            <Divider />
+            <CardBody className="w-full flex flex-col gap-6 p-8">
+              {orderDetails.map(({ title, amount }, index) => (
+                <>
+                  <div className="w-full flex items-center justify-between md:text-[16px] text-[14px]">
+                    <h1 className="text-heading-color">{title}:</h1>
+                    <p>${amount}</p>
+                  </div>
+                  <Divider />
+                </>
+              ))}
+
+              <div className="w-full flex items-center justify-between md:text-[20px] text-[16px]">
+                <h1 className="font-bold text-heading-color">Total Amount:</h1>
+                <p className="font-bold">${totalAmount}.00</p>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </section>
+    </main>
   );
 };
 

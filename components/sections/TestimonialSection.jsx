@@ -49,7 +49,7 @@ const TestimonialSection = () => {
         >
           {testimonials.map((item, index) => (
             <SwiperSlide key={index}>
-              <div className="w-[370px] max-md:w-full max-md:h-auto h-[300px] bg-white p-8 border-1 border-blue-500 rounded-lg shadow-lg">
+              <div className="lg:w-[460px] md:w-[350px] w-full h-auto lg:h-[300px] md:h-[320px] bg-white p-8 border-1 border-blue-500 rounded-lg shadow-lg">
                 <h1 className="text-2xl text-slate-800 font-semibold mb-6">
                   {item.title}
                 </h1>

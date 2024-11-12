@@ -37,11 +37,11 @@ export async function POST(req) {
 
     const subject =
       "previous" in data
-        ? `Previous form data of ${data.email}.`
-        : `Another new form submission from ${data.email}.`;
+        ? `Previous form data of ${data.emailAddress}.`
+        : `Another new form submission from ${data.emailAddress}.`;
 
     await transporter.sendMail({
-      from: data.email,
+      from: data.emailAddress,
       to: process.env.MAILER_EMAIL,
       subject: subject,
       html: formBody,

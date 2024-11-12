@@ -4,16 +4,27 @@ import Package from "../Package";
 import React, { useEffect, useState } from "react";
 import NormalLabel from "../NormalLabel";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { saveStepThree } from "@/features/formSlice";
 import { _35_USD, _135_USD, _235_USD } from "@/constant/packages";
 import PageLoader from "@/components/pages/PageLoader";
+import { IoMdCloseCircle } from "react-icons/io";
+import { FaCircleCheck } from "react-icons/fa6";
+import { SystemStepThreeData } from "@/constant/form2.0/system-step-three-data";
 
 const StepThree = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
+  const [isLoading3, setIsLoading3] = useState(false);
   const stepTwoData = useSelector((state) => state.form.stepTwo);
 
   // page authorization | redirect if previous step has no data
@@ -22,68 +33,147 @@ const StepThree = () => {
   }
 
   // handle form submission
-  const handleNext = ({ packageName, price }) => {
-    setIsLoading(true);
+  const handleNext = (data) => {
+    const packageName = data.planName;
+    const price = data.price;
+
+    if (data.id === 1) {
+      setIsLoading1(true);
+    } else if (data.id === 2) {
+      setIsLoading2(true);
+    } else if (data.id === 3) {
+      setIsLoading3(true);
+    }
+
     dispatch(saveStepThree({ packageName, price })); // store data to state
 
     return router.push("/trademark-register/step-4");
   };
 
   return (
-    <>
-      <section className="m-auto w-full flex flex-col gap-9 max-md:gap-4 mt-16 max-md:mt-10">
-        {isLoading && <PageLoader />}
-        <div className="flex flex-col gap-3 m-auto w-[700px] px-4 max-md:w-auto">
-          <h1 className="text-slate-600 font-semibold text-3xl max-md:text-2xl">
-            Choose a Package
-          </h1>
-          <NormalLabel
-            text={`All packages include lifetime customer support and our 100% satisfaction guaranteed.`}
-          />
-        </div>
-        <div className="flex justify-center max-md:flex-col max-md:items-center gap-7 pb-11">
-          <Package
-            price={49}
-            packageName={`Basic`}
-            complementaryTreat={`+ USPTO Fee $350/Class*`}
-            rows={_35_USD}
-            handleNext={handleNext}
-          />
-          <Package
-            price={149}
-            packageName={`Standard`}
-            complementaryTreat={`+ USPTO Fee $350/Class*`}
-            rows={_135_USD}
-            handleNext={handleNext}
-          />
-          <Package
-            price={249}
-            badge={true}
-            packageName={`Premium`}
-            complementaryTreat={`+ USPTO Fee $350/Class*`}
-            rows={_235_USD}
-            handleNext={handleNext}
-          />
-        </div>
-        {/*previous button */}
-        <div className="w-[90%] m-auto float-right">
-          <Button
-            color="secondary"
-            variant="shadow"
-            onClick={() => router.back()}
+    <main className="system-page-standard-layout flex flex-col gap-8">
+      <div className="flex flex-col">
+        <h1 className="font-inria md:text-[48px] text-[30px] text-heading-color font-bold w-full text-center">
+          Choose Your Plan
+        </h1>
+
+        <p className="text-paragraph-color md:text-[26px] text-[26px] w-full text-center">
+          Best Plans For{" "}
+          <span className="text-primary-theme-color">
+            Trademark Registration
+          </span>
+        </p>
+      </div>
+
+      <div className="w-full flex max-lg:flex-col justify-center lg:items-end items-center gap-8 py-12">
+        {SystemStepThreeData.map((data) => (
+          <Card
+            key={data.id}
+            className={`p-4 lg:w-[400px] md:w-[600px] w-full h-full flex flex-col gap-4 items-center ${
+              data.id == 1 || data.id == 3
+                ? "lg:h-[1100px]"
+                : "bg-primary-theme lg:h-[1150px]"
+            }`}
           >
-            Previous
-          </Button>
-          <p className="text-md max-md:text-sm text-slate-800 mb-16 mt-7 font-medium">
-            <span className="text-red-500 font-bold">Note:</span> Once your
-            search results have been reviewed and our specialists have curated
-            your trademark application, Legal Trademark Office will collect the
-            necessary fees and pay the discounted TEAS Standard electronic
-            filing fee of $350 on your behalf.
-          </p>
-        </div>
-      </section>
-    </>
+            <CardHeader className="w-full flex flex-col items-center">
+              <div
+                className={`w-[128px] h-[42px] border-2  rounded-[10px] font-semibold  flex items-center justify-center ${
+                  data.id == 1 || data.id == 3
+                    ? "border-primary-theme text-primary-theme"
+                    : " border-white text-white"
+                }`}
+              >
+                {data.planName}
+              </div>
+              <h1
+                className={`font-semibold text-[60px]  ${
+                  data.id == 1 || data.id == 3
+                    ? "text-heading-color"
+                    : " text-white"
+                }`}
+              >
+                {data.planPrice}
+              </h1>
+              <p
+                className={`text-[15px] ${
+                  data.id == 1 || data.id == 3
+                    ? "text-paragraph-color"
+                    : "text-white/70"
+                }`}
+              >
+                {data.planSubtext}
+              </p>
+            </CardHeader>
+
+            <CardBody className="w-full flex items-center justify-center flex-col gap-8">
+              {data.OfferedDetails.map((detail, index) => (
+                <div className="w-full flex gap-2" key={index}>
+                  <FaCircleCheck
+                    className={`text-[20px] translate-y-1 text-[#2DC937]`}
+                  />
+
+                  <div className="flex w-full gap-2 flex-col">
+                    <h1
+                      className={`text-[16px] ${
+                        data.id == 1 || data.id == 3 ? "" : " text-white"
+                      }`}
+                    >
+                      {detail.title}
+                    </h1>
+                    <p
+                      className={`text-[12px] ${
+                        data.id == 1 || data.id == 3 ? "" : " text-white/70"
+                      }`}
+                    >
+                      {detail.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              {data.NotOfferedDetails &&
+                data.NotOfferedDetails.length > 0 &&
+                data.NotOfferedDetails.map((detail, index) => (
+                  <div className="w-full flex gap-2" key={index}>
+                    <IoMdCloseCircle
+                      className={`text-[20px] translate-y-1 text-black/50`}
+                    />
+
+                    <div className="flex w-full gap-2 flex-col">
+                      <h1 className="text-[16px] text-black/50">
+                        {detail.title}
+                      </h1>
+                      <p className="text-[12px] text-black/50">
+                        {detail.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </CardBody>
+
+            <CardFooter>
+              <Button
+                className={`w-full h-[50px] rounded-lg font-inria ${
+                  data.id == 1 || data.id == 3
+                    ? "bg-primary-theme text-white"
+                    : "bg-white text-heading-color"
+                }`}
+                isLoading={
+                  data.id === 1
+                    ? isLoading1
+                    : data.id === 2
+                    ? isLoading2
+                    : isLoading3
+                }
+                onClick={() => handleNext(data)}
+              >
+                SELECT
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </main>
   );
 };
 

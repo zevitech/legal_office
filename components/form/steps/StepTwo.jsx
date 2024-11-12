@@ -16,81 +16,93 @@ const StepTwo = () => {
   const dispatch = useDispatch();
   const stepOneData = useSelector((state) => state.form.stepOne);
   const [isLoading, setIsLoading] = useState(false);
-  const [classification, setClassification] = useState("");
+  const [trademarkClassification, setTrademarkClassification] = useState("");
+  const [validation, setValidation] = useState(false);
 
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepOneData).length === 0) {
     return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
   }
 
+  // PREVIOUS BUTTON HANDLER
+  const handlePrevious = () => {
+    router.back();
+  };
+
   // handle form submission
   const handleFormSubmit = async (e) => {
     setIsLoading(true);
     e.preventDefault();
 
+    // if not validate, return or stop
+    if (!trademarkClassification) {
+      setValidation(true);
+      setIsLoading(false);
+      return;
+    }
+
     // store the data to state and foreword to next step
-    dispatch(saveStepTwo({ classification }));
+    dispatch(saveStepTwo({ trademarkClassification }));
     return router.push("/trademark-register/step-3");
   };
 
   return (
-    <section className="w-[70%] max-md:w-[95%] m-auto mt-16 max-md:mt-10">
-      <form
-        action=""
-        method="post"
-        onSubmit={handleFormSubmit}
-        encType="multipart/form-data"
-      >
-        <FieldContainer>
-          <BoldLabel text={`Trademark Classification`} />
-          <SmallLabel
-            text={`Start describing the goods and services related to your mark. ${process.env.NEXT_PUBLIC_APP_NAME} compare the description you provide and provides descriptions from the USPTO ID Manual for your considerations.`}
-          />
-          <Textarea
-            variant="bordered"
-            label="Please provide a description of your goods or services:"
-            labelPlacement="outside"
-            placeholder="Enter your description"
-            className="col-span-12 md:col-span-6 mb-6 md:mb-0"
-            value={classification}
-            onChange={(e) => setClassification(e.target.value)}
-          />
-        </FieldContainer>
+    <main className="system-page-standard-layout flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-1">
+        <h1 className="font-inria text-heading-color text-[24px] w-full">
+          TRADEMARK CLASSIFICATION
+        </h1>
+        <p>
+          Enter the products or services you plan to sell using your trademark
+          (i.e.: clothing, coffee shops, restaurants, retail stores, etc).
+        </p>
+      </div>
 
-        {/* next or previous button */}
-        <ButtonContainer>
-          <Button
-            color="secondary"
-            variant="shadow"
-            onClick={() => router.back()}
-          >
-            Previous
-          </Button>
-          <Button
-            color="primary"
-            variant="shadow"
-            type="submit"
-            isLoading={isLoading}
-            className="px-10"
-          >
-            Next
-          </Button>
-        </ButtonContainer>
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-2 text-slate-700">
-            <IoMdLock className="text-lg max-md:text-2xl" />
-            <p className="max-md:text-sm">{`Click on "Next" to save your application`}</p>
+      <div className="w-full h-full flex flex-col gap-8">
+        <Textarea
+          label="Trademark Classification Description"
+          variant="bordered"
+          labelPlacement="outside"
+          placeholder={`i.e.: clothing, coffee shops, restaurants, retail stores...`}
+          radius="sm"
+          className="w-full"
+          maxRows={12}
+          minRows={12}
+          value={trademarkClassification}
+          onChange={(e) => setTrademarkClassification(e.target.value)}
+          errorMessage={`Please provide a description of your goods or services.`}
+          isInvalid={validation}
+        />
+
+        {/* BUTTONS AND CAPCHA */}
+        <div className="w-full h-full flex flex-col gap-4">
+          <div className="flex items-center gap-1">
+            <IoMdLock className="text-[14px] -translate-y-[2px]" />
+
+            <p className="text-[14px] font-semibold">{`Click on "Next" to save your application`}</p>
           </div>
-          <p className="text-md max-md:text-sm text-slate-800 mb-16 mt-7 font-medium">
-            <span className="text-red-500 font-bold">Note:</span> Once your
-            search results have been reviewed and our specialists have curated
-            your trademark application, Legal Trademark Office will collect the
-            necessary fees and pay the discounted TEAS Standard electronic
-            filing fee of $350 on your behalf.
-          </p>
+
+          <div className="w-full flex max-md:flex-col max-md:gap-4 md:justify-between">
+            {/* PREVIOUS BUTTON */}
+            <Button
+              onClick={handlePrevious}
+              className="h-[60px] bg-white w-full md:w-[165px] rounded-[5px] text-primary-theme border-2 border-primary-theme font-inria font-bold text-[20px]"
+            >
+              Previous
+            </Button>
+
+            {/* SUBMIT BUTTON */}
+            <Button
+              onClick={handleFormSubmit}
+              className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
+              isLoading={isLoading}
+            >
+              Next
+            </Button>
+          </div>
         </div>
-      </form>
-    </section>
+      </div>
+    </main>
   );
 };
 

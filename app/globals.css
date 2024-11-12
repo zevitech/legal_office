@@ -8,9 +8,26 @@
   box-sizing: border-box;
 }
 
+@layer base {
+  :root {
+    /* TAG - 1001 */
+
+    --primary-theme: #027dd6;
+    --primary-hovered: #0288e8;
+
+    --heading-color: #141c2f;
+    --paragraph-color: #141c2fb2;
+
+    --border-color: #e0e0e0;
+    --muted-color: #d1d5db;
+  }
+}
+
 html,
 body {
   scroll-behavior: smooth;
+  /* font-family: var(--font-poppins), sans-serif; */
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -195,6 +212,34 @@ a {
   box-shadow: 0px 0px 12px 5px #51abe83d;
 }
 
+<<<<<<< HEAD
 .bg-lineCard {
   background: linear-gradient(90deg, #005099 0%, #0085ff 100%);
 }
+=======
+/* for the new form */
+.system-page-standard-layout {
+  max-width: 1536px;
+  width: 90%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  .system-page-standard-layout {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+}
+
+.bg-color-footer-gradient {
+  background: linear-gradient(102.29deg, #002654 0%, #080e1c 100%);
+}
+
+.background-gradient-blog {
+  background: linear-gradient(135deg, #000000 0%, #0d1f35 50%, #0066cc 100%);
+}
+>>>>>>> origin/master-new-form

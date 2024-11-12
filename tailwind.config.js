@@ -6,6 +6,7 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./utils/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -23,6 +24,29 @@ module.exports = {
         faqBg: "url('/images/faq-page-bg.png')",
         freeSearch: "url('/images/free-trademark-search-bg.png')",
         renewal: "url('/images/trademark-renewal.png')",
+      },
+
+      colors: {
+        "primary-theme": "var(--primary-theme)",
+        "primary-hovered": "var(--primary-hovered)",
+
+        "heading-color": "var(--heading-color)",
+        "paragraph-color": "var(--paragraph-color)",
+
+        "border-color": "var(--border-color)",
+        "muted-color": "var(--muted-color)",
+      },
+      fontFamily: {
+        inria: ["var(--font-inria-serif)", "serif"],
+        poppins: ["var(--font-poppins)", "sans-serif"],
+      },
+      screens: {
+        xs: "320px",
+        sm: "480px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1440px",
+        "2xl": "1536px",
       },
     },
   },

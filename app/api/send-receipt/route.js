@@ -132,7 +132,7 @@ export async function POST(req) {
   const mailOptions = {
     from: process.env.MAILER_EMAIL,
     to: admin_email,
-    cc: data?.nestedLeadData?.stepOne?.email,
+    cc: data?.nestedLeadData?.stepOne?.emailAddress,
     subject: "Your Order Receipt | Legal Trademark Office",
     html: receiptHtml,
   };

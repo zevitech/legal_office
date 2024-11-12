@@ -90,7 +90,7 @@ export const standard = [
 
 export const premium = [
   "Comprehensive Trademark Search: Includes federal and state trademark searches for similar names, logos, or slogans, ensuring thorough coverage.",
-  "24 - 48 Hours Processing: Completion of trademark application within 14 business days after approval.",
+  "24 - 48 Hours Processing: Completion of trademark application within 24-48 Hours days after approval.",
   "Full Paralegal Support: A team of U.S. licensed paralegals will guide you through the application process, from preparation to response to any USPTO inquiries.",
   "Office Action Support: In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
   "6 Months of Trademark Monitoring: Monitoring service extended for six months to detect any infringing marks after registration.",
