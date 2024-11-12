@@ -24,7 +24,7 @@ const page = () => {
       <Header />
       <main className="bg-slate-100">
         {/* Hero Section */}
-        <section className="bg-strBanner w-full h-[90vh] max-md:h-auto max-md:pt-[100px] max-md:pb-[60px] bg-no-repeat bg-cover bg-bottom flex-center px-20 max-md:px-5">
+        <section className="bg-strBanner bg-fixed w-full h-[90vh] max-md:h-auto max-md:pt-[100px] max-md:pb-[60px] bg-no-repeat bg-cover bg-bottom flex-center px-20 max-md:px-5">
           <div className="col-flex gap-6">
             <h1 className="text-4xl max-md:text-3xl font-bold text-white">
               Protect Your Brand with Expert Trademark Services

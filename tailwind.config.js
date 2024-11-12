@@ -21,6 +21,8 @@ module.exports = {
         aboutBg: "url('/images/about-bg.png')",
         contactBg: "url('/images/contact-bg.png')",
         faqBg: "url('/images/faq-page-bg.png')",
+        freeSearch: "url('/images/free-trademark-search-bg.png')",
+        renewal: "url('/images/trademark-renewal.png')",
       },
     },
   },

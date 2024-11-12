@@ -100,10 +100,26 @@ export const navItems = [
         text: "Trademark Registration",
         route: "/services/trademark-registration",
       },
-      { id: 2, text: "Free Trademark Search", route: "#" },
-      { id: 3, text: "International Trademark ", route: "#" },
-      { id: 4, text: "Trademark Renewal", route: "#" },
-      { id: 5, text: "Trademark Revival", route: "#" },
+      {
+        id: 2,
+        text: "Free Trademark Search",
+        route: "/services/free-trademark-search",
+      },
+      {
+        id: 3,
+        text: "International Trademark ",
+        route: "/services/international-trademark",
+      },
+      {
+        id: 4,
+        text: "Trademark Renewal",
+        route: "/services/trademark-renewal",
+      },
+      {
+        id: 5,
+        text: "Trademark Revival",
+        route: "/services/trademark-revival",
+      },
     ],
   },
   {
@@ -154,10 +170,22 @@ export const mobileNavItems = [
     text: "Trademark Registration",
     route: "/services/trademark-registration",
   },
-  { id: 9, text: "Free Trademark Search", route: "#" },
-  { id: 10, text: "International Trademark ", route: "#" },
-  { id: 11, text: "Trademark Renewal", route: "#" },
-  { id: 12, text: "Trademark Revival", route: "#" },
+  {
+    id: 8,
+    text: "Free Trademark Search",
+    route: "/services/free-trademark-search",
+  },
+  {
+    id: 9,
+    text: "International Trademark ",
+    route: "/services/international-trademark",
+  },
+  {
+    id: 10,
+    text: "Trademark Renewal",
+    route: "/services/trademark-renewal",
+  },
+  { id: 11, text: "Trademark Revival", route: "/services/trademark-revival" },
 ];
 
 export const similarMarks = [
