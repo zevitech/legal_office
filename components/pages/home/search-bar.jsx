@@ -15,6 +15,7 @@ import {
 import { CiSearch } from "react-icons/ci";
 import SearchingAnimation from "../../../public/new-form/animations/searching-animation.json";
 import SearchedAnimation from "../../../public/new-form/animations/searched-animation.json";
+import TMButton from "@/components/ui/TMButton";
 
 const Searchbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,7 +73,9 @@ const Searchbar = () => {
               </ModalHeader>
               <ModalBody>
                 <div className="flex items-center justify-between">
-                  <p className="text-black/60 text-[24px]">{searchInput || "Trademark"}</p>
+                  <p className="text-black/60 text-[24px]">
+                    {searchInput || "Trademark"}
+                  </p>
                   {isSearchComplete ? (
                     <>
                       <DotLottiePlayer
@@ -96,8 +99,9 @@ const Searchbar = () => {
                 <Divider />
                 {isSearchComplete ? (
                   <p className="mb-4">
-                    &quot;<span className="font-semibold">{searchInput}</span>&quot; is
-                    available! Hurry and trademark it now before it&apos;s too late.
+                    &quot;<span className="font-semibold">{searchInput}</span>
+                    &quot; is available! Hurry and trademark it now before
+                    it&apos;s too late.
                   </p>
                 ) : (
                   <p className="mb-4 text-black/50">
@@ -106,14 +110,19 @@ const Searchbar = () => {
                 )}
               </ModalBody>
               <ModalFooter>
-                <Button
+                {/* <Button
                   className="bg-primary text-white"
                   onPress={onClose}
                   disabled={isSearching}
                 >
                   Trademark Now
-                </Button>
-                <Button className="bg-danger text-white" onPress={onClose}>
+                </Button> */}
+
+                <TMButton px="40px" py="10px" text={"Trademark Now"} />
+                <Button
+                  className="bg-danger text-white font-bold"
+                  onPress={onClose}
+                >
                   Close
                 </Button>
               </ModalFooter>

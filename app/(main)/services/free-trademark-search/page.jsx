@@ -8,6 +8,7 @@ import PatentSection from "@/components/sections/PatentSection";
 import CounterBoxTR from "@/components/ui/CounterBoxTR";
 import TestimonialSection from "@/components/sections/TestimonialSection";
 import BusinessStructure from "@/components/sections/BusinessStructure";
+import Searchbar from "@/components/pages/home/search-bar";
 
 export const metadata = {
   title: "Free Trademark Search | US Based trademark register website",
@@ -29,22 +30,8 @@ const Page = () => {
                 Just $49 + USPTO Filing Fee`}
               </h1>
             </div>
-            <div className="flex-center gap-4 max-md:flex-col">
-              <div className="relative w-[650px] max-md:w-full">
-                <input
-                  className="p-6 rounded-lg  text-sm w-full outline-blue-600"
-                  type="text"
-                  placeholder="Search Trademark Here..."
-                />
-                <CiSearch className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
-              </div>
-              <Button
-                className="py-[35px] px-14 font-semibold bg-color-primary text-white"
-                radius="md"
-              >
-                Search
-              </Button>
-            </div>
+
+            <Searchbar />
           </div>
         </section>
 
