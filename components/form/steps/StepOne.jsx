@@ -378,7 +378,7 @@ const StepOne = () => {
         <div className="w-full h-full grid grid-cols-1 gap-12">
           <div className="flex flex-col gap-4">
             <h1 className="font-inria text-heading-color text-[24px] w-full">
-              Registeer Your Brand
+              Register Your Brand
             </h1>
 
             {/* FIELD 1.1 */}
