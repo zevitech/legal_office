@@ -163,7 +163,7 @@ const page = () => {
               business pricing plan, designed to support your growth.
             </p>
           </div>
-          <div className="flex-center gap-10 max-md:flex-col max-md:gap-9">
+          <div className="flex-center gap-10 max-md:flex-col max-md:gap-9 mb-[8rem]">
             <PackageCard
               packageName={`Basic Package`}
               subHeading={``}
@@ -194,11 +194,6 @@ const page = () => {
               ]}
             />
           </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pb-8 pt-32 max-md:pt-20 pl-20 max-md:px-5">
-          <TestimonialSection />
         </section>
 
         {/* footer section */}

@@ -126,7 +126,7 @@ const page = () => {
         </section>
 
         {/* pricing section */}
-        <section className="flex-center gap-7 max-md:gap-10 pt-32 max-md:pt-5 pb-10 max-md:flex-col max-md:px-5">
+        <section className="flex-center gap-7 max-md:gap-10 pt-32 max-md:pt-5 pb-10 max-md:flex-col max-md:px-5 mb-[8rem]">
           <div className="w-[600px] max-md:w-full bg-[#E9EFF3] px-8 py-9 col-flex items-center gap-8 rounded-lg relative">
             <h1 className="text-color-primary text-3xl font-bold">
               Trademark registration start from
@@ -211,11 +211,6 @@ const page = () => {
               </div>
             </div>
           </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pt-20 pb-8 pl-20 max-md:pl-5 max-md:px-5">
-          <TestimonialSection />
         </section>
 
         {/* footer section */}

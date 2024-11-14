@@ -202,11 +202,6 @@ const page = () => {
           </div>
         </section>
 
-        {/* testimonial section */}
-        <section className="pt-20 pb-8 pl-20 max-md:pl-5 max-md:px-5">
-          <TestimonialSection />
-        </section>
-
         {/* footer section */}
         <FooterSection />
       </main>

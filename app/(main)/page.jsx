@@ -21,6 +21,7 @@ import FooterSection from "@/components/sections/FooterSection";
 import SimilarMarks from "@/components/sections/SimilarMarks";
 import { BiSearch } from "react-icons/bi";
 import Searchbar from "@/components/pages/home/search-bar";
+import PackageCard from "@/components/ui/PackageCard";
 
 export const metadata = {
   title: "Legal Trademark Office | US Based trademark register website.",
@@ -367,11 +368,6 @@ const page = () => {
           </div>
         </section>
 
-        {/* registered brands */}
-        {/* <section className="pt-16 pb-12 px-20 max-md:px-0 mb-20 max-md:mb-0 bg-[#E9EFF3]">
-          <BrandCarousel />
-        </section> */}
-
         {/* explore trademark */}
         <section className="py-20 max-md:px-5">
           <div className="flex-center gap-16 max-md:flex-col-reverse max-md:gap-6">
@@ -388,22 +384,7 @@ const page = () => {
                   unique and protected.
                 </p>
               </div>
-              <div className="flex-center gap-4 max-md:flex-col">
-                <div className="relative w-[600px] max-md:w-full shadow-md rounded-lg">
-                  <input
-                    className="p-6 rounded-lg  text-sm w-full outline-blue-600"
-                    type="text"
-                    placeholder="Search Trademark Here..."
-                  />
-                  <CiSearch className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
-                </div>
-                <Button
-                  className="py-[35px] px-14 font-semibold bg-color-primary text-white max-md:w-full"
-                  radius="md"
-                >
-                  Search
-                </Button>
-              </div>
+              <Searchbar />
             </div>
             <div className="">
               <Image
@@ -418,7 +399,7 @@ const page = () => {
         </section>
 
         {/* packages - tab */}
-        <section className="py-10 max-md:px-2">
+        <section className="py-10 max-md:px-2 mb-[5rem]">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
             <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center max-md:text-start">
@@ -427,50 +408,36 @@ const page = () => {
               designers, professional service providers, and more.
             </p>
           </div>
-          <div className="max-w-4xl max-md:w-full m-auto pt-20 max-md:pt-5">
-            <PackagesSection />
-          </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pt-20 pb-8 pl-20 max-md:pl-5 max-md:px-5">
-          <TestimonialSection />
-        </section>
-
-        {/* blog section */}
-        <section className="pb-20 max-md:px-5">
-          <div className="flex-center max-md:justify-start">
-            <HeaderText text1="Recommended " text2="learning resources" />
-          </div>
-          <div className="flex flex-wrap justify-center items-center gap-10 mt-16 max-md:mt-7 max-md:gap-7">
-            <LearningCard
-              image={`rlp-1.png`}
-              header={`What's the cost to Register a Trademark?`}
-              details={`The cost can vary drastically from one application to another. The bare minimum...`}
+          <div className="max-w-4xl flex-center gap-10 max-md:flex-col max-md:gap-9 max-md:w-full m-auto pt-20 max-md:pt-5">
+            <PackageCard
+              packageName={`Basic Package`}
+              subHeading={``}
+              price={`49`}
+              list={[
+                "Direct-hit Search",
+                "Federal E-Filing with USPTO",
+                "Electronic Delivery",
+              ]}
             />
-            <LearningCard
-              image={`rlp-2.png`}
-              header={`What's the cost to Register a Trademark?`}
-              details={`The cost can vary drastically from one application to another. The bare minimum...`}
+            <PackageCard
+              packageName={`Deluxe Package`}
+              subHeading={`Includes everything from the Basic Package Plus:`}
+              price={`149`}
+              list={[
+                "Cease & letter ($35 value)",
+                "Transfer/Assignment ($35 value)",
+                "Trademark Monitoring (1 Month)",
+              ]}
             />
-            <LearningCard
-              image={`rlp-3.png`}
-              header={`What's the cost to Register a Trademark?`}
-              details={`The cost can vary drastically from one application to another. The bare minimum...`}
+            <PackageCard
+              packageName={`Premium Package`}
+              subHeading={`Includes everything from the Deluxe Package Plus:`}
+              price={`249`}
+              list={[
+                "Private Registration ($60 value)",
+                "24-hour Expedited Processing",
+              ]}
             />
-            <LearningCard
-              image={`rlp-1.png`}
-              header={`What's the cost to Register a Trademark?`}
-              details={`The cost can vary drastically from one application to another. The bare minimum...`}
-            />
-          </div>
-          <div className="flex-center mt-10 max-md:mt-5">
-            <Button
-              className="py-[35px] px-14 font-semibold bg-color-primary text-white max-md:w-full shadow-lg"
-              radius="md"
-            >
-              Explore learning center
-            </Button>
           </div>
         </section>
 

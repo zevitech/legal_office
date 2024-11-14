@@ -69,11 +69,6 @@ const Page = () => {
           <BusinessStructure />
         </section>
 
-        {/* testimonial section */}
-        <section className="pb-8 pt-32 max-md:pt-16 pl-20 max-md:px-5">
-          <TestimonialSection />
-        </section>
-
         {/* footer section */}
         <FooterSection />
       </main>

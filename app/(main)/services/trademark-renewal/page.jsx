@@ -23,6 +23,7 @@ import { BiSearch } from "react-icons/bi";
 import SimilarMarksInter from "@/components/sections/SimilarMarksInter";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import HowItWorkLine from "@/components/ui/HowItWorkLine";
+import PackageCard from "@/components/ui/PackageCard";
 
 export const metadata = {
   title: "International Trademark | US Based trademark register website",
@@ -238,14 +239,37 @@ const page = () => {
               designers, professional service providers, and more.
             </p>
           </div>
-          <div className="max-w-4xl max-md:w-full m-auto pt-20 max-md:pt-5">
-            <PackagesSection />
+          <div className="flex-center gap-10 max-md:flex-col max-md:gap-9 mt-[4rem]">
+            <PackageCard
+              packageName={`Basic Package`}
+              subHeading={``}
+              price={`49`}
+              list={[
+                "Direct-hit Search",
+                "Federal E-Filing with USPTO",
+                "Electronic Delivery",
+              ]}
+            />
+            <PackageCard
+              packageName={`Deluxe Package`}
+              subHeading={`Includes everything from the Basic Package Plus:`}
+              price={`149`}
+              list={[
+                "Cease & letter ($35 value)",
+                "Transfer/Assignment ($35 value)",
+                "Trademark Monitoring (1 Month)",
+              ]}
+            />
+            <PackageCard
+              packageName={`Premium Package`}
+              subHeading={`Includes everything from the Deluxe Package Plus:`}
+              price={`249`}
+              list={[
+                "Private Registration ($60 value)",
+                "24-hour Expedited Processing",
+              ]}
+            />
           </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pt-20 pb-8 pl-20 max-md:pl-5 max-md:px-5">
-          <TestimonialSection />
         </section>
 
         {/* footer section */}

@@ -171,7 +171,7 @@ We understand that your brand is one of your most valuable assets, and we treat 
         </section>
 
         {/* experience partners */}
-        <section className="pt-32 max-md:pt-20">
+        <section className="pt-32 max-md:pt-20 mb-[8rem]">
           <div className="flex-center gap-20 max-md:flex-col max-md:gap-10 max-md:px-5">
             <div className="">
               <Image
@@ -229,11 +229,6 @@ We understand that your brand is one of your most valuable assets, and we treat 
               <TMButton px="70px" py="30px" text={"Start Now"} />
             </div>
           </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pb-8 pt-32 max-md:pt-20 pl-20 max-md:px-5">
-          <TestimonialSection />
         </section>
 
         {/* footer section */}
