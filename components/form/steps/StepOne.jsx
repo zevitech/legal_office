@@ -4,10 +4,6 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveStepOne } from "@/features/formSlice";
-import FieldContainer from "../FieldContainer";
-import BoldLabel from "../BoldLabel";
-import SmallLabel from "../SmallLabel";
-import TinyWarning from "../TinyWarning";
 import {
   Radio,
   RadioGroup,
