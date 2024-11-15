@@ -1100,7 +1100,7 @@ const StepOne = () => {
               </p>
             )}
 
-            {/* SUBMIT BUTTON */}
+            {/* SUBMIT BUTTO */}
             <Button
               onClick={handleFormSubmit}
               className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
