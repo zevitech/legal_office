@@ -1,9 +1,26 @@
 "use client";
 
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
+import ReCAPTCHA from "react-google-recaptcha";
+import { auth } from "@/firebase";
+import OTPInput from "react-otp-input";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+
+import {
+  OrganizationType,
+  ServiceProvided,
+} from "@/constant/form2.0/system-step-one-data";
+
+import { GetGeographicalData } from "@/utils/get-geographical-data";
+
 import { saveStepOne } from "@/features/formSlice";
+
 import {
   Radio,
   RadioGroup,
@@ -11,37 +28,25 @@ import {
   Button,
   Tabs,
   Tab,
-  DatePicker,
   Select,
   SelectItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
-import InputCol from "../InputCol";
-import { stateList, organizationTypes } from "@/constant";
-import { useRouter } from "next/navigation";
-import validator from "email-validator";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { CldUploadWidget } from "next-cloudinary";
-import Image from "next/image";
+
 import { LuClock3, LuLoader } from "react-icons/lu";
 import { IoMdLock } from "react-icons/io";
-import ReCAPTCHA from "react-google-recaptcha";
 import { IoMail } from "react-icons/io5";
 import { RiHome5Fill } from "react-icons/ri";
-import {
-  OrganizationType,
-  ServiceProvided,
-} from "@/constant/form2.0/system-step-one-data";
-import { GetGeographicalData } from "@/utils/get-geographical-data";
-import {
-  now,
-  getLocalTimeZone,
-  parseZonedDateTime,
-} from "@internationalized/date";
 
 const StepOne = () => {
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [wantToProtect, setWantToProtect] = useState("name");
   const [selectedOwnerType, setSelectedOwnerType] = useState("individual");
@@ -86,16 +91,16 @@ const StepOne = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [contactTime, setContactTime] = useState("");
 
-  const router = useRouter();
+  // OTP VERIFICATION
+  const [otp, setOtp] = useState("");
+  const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
+  const [resendCountdown, setResendCountdown] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState(null);
+  const [otpError, setOtpError] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
 
-  // FETCH GEOGRAPHICAL DATA
-  useEffect(() => {
-    if (selectedFormationType === "us_based") {
-      setFormationGeographicalData(GetGeographicalData("state", "US"));
-    } else {
-      setFormationGeographicalData(GetGeographicalData("country"));
-    }
-  }, [selectedFormationType]);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   // Refs for error fields
   const protectNameRef = useRef(null);
@@ -121,13 +126,44 @@ const StepOne = () => {
   const emailRef = useRef(null);
   const reChaptchaRef = useRef(null);
 
-  // validate the phone number
+  // FETCH GEOGRAPHICAL DATA
+  useEffect(() => {
+    if (selectedFormationType === "us_based") {
+      setFormationGeographicalData(GetGeographicalData("state", "US"));
+    } else {
+      setFormationGeographicalData(GetGeographicalData("country"));
+    }
+  }, [selectedFormationType]);
+
+  // HANDLE FIREBASE RECAPTCHA VERIFIER
+  useEffect(() => {
+    const RV = new RecaptchaVerifier(auth, "recaptcha-container-2", {
+      size: "invisible",
+    });
+    setRecaptchaVerifier(RV);
+
+    return () => {
+      RV.clear();
+    };
+  }, [auth]);
+
+  // OTP RESEND COUNTDOWN
+  useEffect(() => {
+    let timer;
+    if (resendCountdown > 0) {
+      timer = setTimeout(() => {
+        setResendCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [resendCountdown]);
+
+  // VALIDATE PHONE NUMBER
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberObject = parsePhoneNumberFromString(phoneNumber, "US");
     return phoneNumberObject ? phoneNumberObject.isValid() : false;
   };
 
-  // -----------EMAIL VALIDATION----------------------
   // VALIDATE EMAIL ADRESS STRUCTURE
   const validateEmailFormat = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -170,9 +206,8 @@ const StepOne = () => {
       }
     }
   };
-  // --------------------------------------------------
 
-  // validate the form input
+  // VALIDATE FORM
   const validateForm = () => {
     let tempErrors = {};
 
@@ -241,21 +276,19 @@ const StepOne = () => {
     return Object.keys(tempErrors).length ? Object.keys(tempErrors)[0] : null;
   };
 
+  // HANDLE RECAPTCHA
   const ReCAPTCHAHandle = (value) => {
     setReChaptcha(value);
   };
 
-  // Handle form submission
-  const handleFormSubmit = async (e) => {
+  // OTP VERIFICATION
+  const OtpVerification = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    //return (stop) if there validation issue
     const firstErrorField = validateForm();
     if (firstErrorField) {
       setIsLoading(false);
-
-      // Scroll to the first error field
       const errorRefs = {
         name: protectNameRef,
         slogan: sloganNameRef,
@@ -281,33 +314,99 @@ const StepOne = () => {
         reChaptcha: reChaptchaRef,
       };
 
-      //   if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
-      //     errorRefs[firstErrorField].current.scrollIntoView({
-      //       behavior: "smooth",
-      //     });
-
-      //     // Wait for the scrolling to finish and then adjust by the offset
-      //     setTimeout(() => {
-      //       window.scrollBy({
-      //         top: -200,
-      //         behavior: "smooth",
-      //       });
-      //     }, 500);
-      //   }
-      //   return;
-      // }
-
       if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
         errorRefs[firstErrorField].current.scrollIntoView({
           behavior: "smooth",
         });
+
         setTimeout(() => {
-          window.scrollBy({ top: -200, behavior: "smooth" });
+          window.scrollBy({
+            top: -100,
+            behavior: "smooth",
+          });
         }, 500);
       }
       return;
     }
 
+    try {
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        `+1` + phoneNumber,
+        recaptchaVerifier
+      );
+      onOpen();
+      setResendCountdown(60);
+      setConfirmationResult(confirmationResult);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      console.log("Failed to send OTP:", err);
+
+      if (err.code === "auth/invalid-phone-number") {
+        setErrors((...prev) => ({
+          ...prev,
+          phoneNumber: "Invalid phone number, Please enter a valid number.",
+        }));
+      } else if (err.code === "auth/too-many-requests") {
+        alert("Too many requests. Please try again.");
+      } else {
+        alert("Failed to send OTP. Please try again.");
+      }
+    }
+  };
+
+  // VERIFY OTP
+  const verifyOtp = async () => {
+    setOtpError("");
+    setIsLoading(true);
+    try {
+      await confirmationResult?.confirm(otp);
+      handleFormSubmit();
+    } catch (error) {
+      console.log("Failed to verify OTP. Please check the OTP:", error);
+      setOtpError("Failed to verify OTP. Please check the OTP.");
+      setIsLoading(false);
+    }
+  };
+
+  // RESEND OTP
+  const requestOtp = async (e) => {
+    setResendCountdown(60);
+    setOtpError("");
+    setResendLoading(true);
+
+    if (!recaptchaVerifier) {
+      return setOtpError("Please verify that you are not a robot.");
+    }
+
+    try {
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        `+1` + phoneNumber,
+        recaptchaVerifier
+      );
+      setResendCountdown(60);
+      setConfirmationResult(confirmationResult);
+    } catch (err) {
+      console.log("Failed to resend OTP:", err);
+
+      if (err.code === "auth/invalid-phone-number") {
+        setErrors((...prev) => ({
+          ...prev,
+          phoneNumber: "Invalid phone number, Please enter a valid number.",
+        }));
+      } else if (err.code === "auth/too-many-requests") {
+        setOtpError("Too many requests. Please try again.");
+      } else {
+        setOtpError("Failed to send OTP. Please try again.");
+      }
+    }
+    setResendLoading(false);
+  };
+
+  // HANDLE FORM SUBMISSION
+  const handleFormSubmit = async (e) => {
     const stepOne = {
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
       wantToProtect,
@@ -341,16 +440,16 @@ const StepOne = () => {
       zoho_step: 1,
     };
 
-    // Filter out properties that are empty or undefined
+    // FILTER OUT EMPTY AND UNDEFINED PROPERTIES
     const stepOneWithValues = Object.fromEntries(
       Object.entries(stepOne).filter(([_, value]) => value !== "")
     );
 
-    // store data to state
     dispatch(saveStepOne(stepOneWithValues));
 
-    // send the data to mail and zoho
+    // SEND DATA TO MAIL AND ZOHO
     const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+
     axios
       .post(endPoint, stepOneWithValues)
       .then((res) => {
@@ -639,33 +738,6 @@ const StepOne = () => {
 
                 {trademarkCurrentlyBeingUsed === "yes" && (
                   <>
-                    {/* <DatePicker
-                      label="Select trademark first use anywhere date"
-                      variant="underlined"
-                      className="w-full"
-                      value={firstAnywhereDate}
-                      onChange={(date) =>
-                        setFirstAnywhereDate(formatDateString(date))
-                      }
-                      errorMessage={errors.firstAnywhereDate}
-                      isInvalid={!!errors.firstAnywhereDate}
-                      ref={firstAnywhereDateRef}
-                    />
-
-                    <DatePicker
-                      label="Select trademark first use commerce date"
-                      variant="underlined"
-                      className="w-full"
-                      value={firstCommenceDate}
-                      onChange={setFirstCommenceDate}
-                      defaultValue={parseZonedDateTime(
-                        "2022-11-07T00:45[America/Los_Angeles]"
-                      )}
-                      errorMessage={errors.firstCommenceDate}
-                      isInvalid={!!errors.firstCommenceDate}
-                      ref={firstCommenceDateRef}
-                    /> */}
-
                     <Input
                       type="text"
                       label="Select trademark first use anywhere date"
@@ -731,7 +803,7 @@ const StepOne = () => {
                 aria-label="owner-type"
                 radius="sm"
                 size="md"
-                color="primary" // TAG - 1001
+                color="primary"
                 fullWidth={true}
                 selectedKey={selectedOwnerType}
                 onSelectionChange={setSelectedOwnerType}
@@ -751,7 +823,7 @@ const StepOne = () => {
                       aria-label="formation-type"
                       size="md"
                       radius="sm"
-                      color="primary" // TAG - 1001
+                      color="primary"
                       fullWidth={true}
                       selectedKey={selectedFormationType}
                       onSelectionChange={setSelectedFormationType}
@@ -1042,22 +1114,6 @@ const StepOne = () => {
           </div>
 
           <div className="w-full">
-            {/* <DatePicker
-              fullWidth
-              label="Preferred Contact Date"
-              variant="bordered"
-              labelPlacement="outside"
-              description="Select your preferred date and time to call (must be business hours)"
-              radius="sm"
-              size="lg"
-              hideTimeZone
-              startContent={
-                <LuClock3 className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
-              }
-              value={contactTime}
-              onChange={setContactTime}
-            /> */}
-
             <Input
               type="text"
               label="Preferred Contact Date"
@@ -1100,9 +1156,9 @@ const StepOne = () => {
               </p>
             )}
 
-            {/* SUBMIT BUTTO */}
+            {/* SUBMIT BUTTON */}
             <Button
-              onClick={handleFormSubmit}
+              onClick={OtpVerification}
               className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
               isLoading={isLoading}
             >
@@ -1111,6 +1167,86 @@ const StepOne = () => {
           </div>
         </div>
       </div>
+
+      {/* OTP MODAL */}
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size="sm"
+        isDismissable={false}
+        backdrop={"blur"}
+        hideCloseButton={true}
+        className="py-4"
+        placement="center"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Phone OTP Verification
+              </ModalHeader>
+              <ModalBody>
+                <p className="text-xs mt-[-15px] mb-3">
+                  An OTP has been sent to your phone number. Please enter the
+                  OTP below to continue the process.
+                </p>
+                <OTPInput
+                  value={otp}
+                  onChange={setOtp}
+                  numInputs={6}
+                  renderSeparator={
+                    <span className="p-1 text-slate-300"> • </span>
+                  }
+                  renderInput={(props) => (
+                    <Input
+                      variant="bordered"
+                      onClick={() => setOtpError("")}
+                      {...props}
+                    />
+                  )}
+                />
+
+                {otpError && (
+                  <p className="text-[#f31260] text-sm mt-4 capitalize text-center">
+                    {otpError}
+                  </p>
+                )}
+              </ModalBody>
+              <ModalFooter className="mt-1 flex-between">
+                <Button
+                  color="danger"
+                  variant="light"
+                  size={`sm`}
+                  onPress={onClose}
+                >
+                  Edit Number
+                </Button>
+                <Button
+                  color="warning"
+                  variant="light"
+                  size={`sm`}
+                  onPress={requestOtp}
+                  isDisabled={resendCountdown > 0}
+                >
+                  {resendCountdown > 0
+                    ? `Resend in ${resendCountdown}s`
+                    : `Resend OTP`}
+                </Button>
+                <Button
+                  color="primary"
+                  size={`sm`}
+                  onPress={verifyOtp}
+                  isLoading={isLoading}
+                >
+                  Continue
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <div id="recaptcha-container-2" />
     </section>
   );
 };
