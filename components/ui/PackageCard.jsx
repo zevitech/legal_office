@@ -4,11 +4,11 @@ import TMButton from "./TMButton";
 
 const PackageCard = ({ packageName, subHeading, price, list }) => {
   return (
-    <div className="shadow-lg py-8 px-7 max-md:px-5 max-md:py-6 bg-white rounded-md w-[350px] max-md:w-full h-[450px] flex flex-col justify-between hover:shadow-none transition-all">
+    <div className="shadow-lg py-8 px-7 max-md:px-5 max-md:py-6 bg-white rounded-md w-[350px] h-[900px] max-md:w-full flex flex-col justify-between hover:shadow-none transition-all">
       <div className=" text-center">
         <h1 className="text-2xl text-slate-700 font-semibold">{packageName}</h1>
         {subHeading && (
-          <p className="text-xs text-slate-500 mt-2">{subHeading}</p>
+          <p className="text-xs text-slate-500 mt-2 hidden">{subHeading}</p>
         )}
       </div>
       <div className="flex justify-center items-end">
@@ -18,9 +18,9 @@ const PackageCard = ({ packageName, subHeading, price, list }) => {
           +USPTO Fee $350/Class
         </p>
       </div>
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-3 my-8">
         {list.map((item, index) => (
-          <li className="flex items-center gap-3 text-sm" key={index}>
+          <li className="flex items-start gap-3 text-sm" key={index}>
             <Image
               width={20}
               height={20}

@@ -4,14 +4,14 @@ import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const TMButton = ({ px, py, text, color, full }) => {
+const TMButton = ({ px, py, text, color, full, blackText = false }) => {
   const [isLoading, setLoading] = useState(false);
 
   return (
     <Button
       as={Link}
       href="/trademark-register"
-      className={`px-14 font-semibold bg-color-primary text-white w-fit capitalize max-md:w-full ${
+      className={`px-14 font-semibold ${blackText ? "text-primary" : "text-white"} bg-color-primary w-fit capitalize max-md:w-full ${
         full && `w-full`
       }`}
       radius="sm"
