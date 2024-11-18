@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import GlobalProvider from "./GlobalProvider";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -50,19 +51,22 @@ export default function RootLayout({ children }) {
         }}
       />
 
+      {/* _________________ */}
+      {/* COMMENTED TAG */}
       {/* Google Tag Manager */}
-      <Script
+      {/* <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-KJGHNHGM');`,
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KJGHNHGM');`,
         }}
-      />
+      /> */}
+      {/* _________________ */}
 
       <head>
         <meta
@@ -71,17 +75,23 @@ export default function RootLayout({ children }) {
         />
         <meta name="author" content="Legal Trademark Office" />
       </head>
+
+      <GoogleTagManager gtmId="GTM-KJGHNHGM" />
       <body className={`${poppins.className} bg-color-secondary`}>
+        {/* _________________ */}
+        {/* COMMENTED TAG */}
         {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
+        {/* <noscript>
+          <iframe 
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJGHNHGM"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript>
+        </noscript> */}
         {/* End Google Tag Manager (noscript) */}
+        {/* _________________ */}
+
         <GlobalProvider>
           {children}
           <Script id="clarity-script" strategy="afterInteractive">
