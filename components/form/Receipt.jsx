@@ -8,7 +8,6 @@ import { FaRegCopyright } from "react-icons/fa6";
 
 const Receipt = () => {
   const nestedLeadData = useSelector((state) => state.form);
-
   const {
     isRushProcessing,
     isGovermentFeesProcessing,
@@ -16,26 +15,10 @@ const Receipt = () => {
     govermentFeesAmount,
   } = nestedLeadData.stepFour;
   const basePrice = nestedLeadData.stepThree.price;
-
   const totalPrice =
     basePrice +
     (isRushProcessing ? rushAmount : 0) +
     (isGovermentFeesProcessing ? govermentFeesAmount : 0);
-
-  // const totalPrice =
-  //   nestedLeadData.stepFour.isRushProcessing === true &&
-  //   nestedLeadData.stepFour.isGovermentFeesProcessing === false
-  //     ? nestedLeadData.stepThree.price + nestedLeadData.stepFour.rushAmount
-  //     : nestedLeadData.stepFour.isRushProcessing === false &&
-  //       nestedLeadData.stepFour.isGovermentFeesProcessing === true
-  //     ? nestedLeadData.stepThree.price +
-  //       nestedLeadData.stepFour.govermentFeesAmount
-  //     : nestedLeadData.stepFour.isRushProcessing === true &&
-  //       nestedLeadData.stepFour.isGovermentFeesProcessing === true
-  //     ? nestedLeadData.stepThree.price +
-  //       nestedLeadData.stepFour.govermentFeesAmount +
-  //       nestedLeadData.stepFour.rushAmount
-  //     : nestedLeadData.stepThree.price;
 
   const today = new Date().toLocaleDateString(undefined, {
     year: "numeric",
@@ -55,7 +38,7 @@ const Receipt = () => {
     axios.post(endPoint, receiptData).catch((err) => {
       console.log("Failed to send receipt in mail:", err);
     });
-  }, [receiptData]);
+  }, []);
 
   return (
     <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono ">

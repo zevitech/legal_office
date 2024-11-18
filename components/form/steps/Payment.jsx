@@ -102,7 +102,6 @@ const Payment = () => {
       .then((res) => {
         // payment successful. now make a request to send the data to mail and zoho
         if (res?.data?.result?.status == "COMPLETED") {
-          // setLoader(true);
           setPaymentError("");
           leadDataWithValues.is_paid = true;
           leadDataWithValues.zoho_step = 3;
@@ -114,7 +113,6 @@ const Payment = () => {
               }
             })
             .catch((err) => {
-              // setIsLoading(false);
               console.log(
                 "Error sending data to save-data endpoint in payment page: ",
                 err
@@ -137,11 +135,11 @@ const Payment = () => {
   const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
   useEffect(() => {
     const sendData = async () => {
-      if (isDataSent) return; // Prevent multiple sends
+      if (isDataSent) return;
 
       try {
         await axios.post(endPoint, leadDataWithValues);
-        setIsDataSent(true); // Mark as sent
+        setIsDataSent(true);
       } catch (err) {
         console.log("Error sending mail in payment page: ", err);
         alert("Something went wrong, Check your network or Please try again.");
@@ -149,7 +147,7 @@ const Payment = () => {
     };
 
     sendData();
-  }, [isDataSent, leadDataWithValues, endPoint]);
+  }, [isDataSent]);
 
   // initialize the payment
   // useEffect(() => {
