@@ -105,7 +105,7 @@ const Receipt = () => {
             </div>
           )}
 
-          {nestedLeadData.stepFour.isGovermentFeesProcessing === true && (
+          {nestedLeadData.stepFour.govermentFeesAmount > 0 && (
             <div className="flex flex-1 items-center gap-3 py-1">
               <p className="text-slate-500 font-thin flex-none text-sm">
                 Goverment Fees
@@ -130,7 +130,9 @@ const Receipt = () => {
           <div className="flex flex-1 text-slate-700 items-center gap-3 py-1">
             <b className="flex-none text-sm">Total Amount</b>
             <p className="w-full bg-slate-400 h-[1px]"></p>
-            <p className="text-sm font-semibold">${totalPrice}</p>
+            <p className="text-sm font-semibold">
+              ${totalPrice + govermentFeesAmount}
+            </p>
           </div>
         </div>
 
