@@ -35,6 +35,7 @@ const StepFour = () => {
 
     const data = {
       isRushProcessing,
+      // if ever error come on calculation and receipt then I didnt add is isgovernmentfee in here
       rushAmount: isRushProcessing ? rushAmount : 0,
       govermentFeesAmount: isGovermentFeesProcessing ? govermentFeesAmount : 0,
       previous: true,
