@@ -3,6 +3,7 @@ import ScrollToTop from "@/utils/scroll-to-top";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { BsHouse, BsHouseAdd, BsMap } from "react-icons/bs";
 import { IoCallSharp } from "react-icons/io5";
 
 const FooterSection = () => {
@@ -43,7 +44,7 @@ const FooterSection = () => {
           </ul>
         </div>
 
-        <div className="text-slate-100">
+        <div className="text-slate-100 flex flex-col gap-4">
           <h4 className="text-xl font-normal mb-7">
             Call Now for a Free Consultation:
           </h4>
@@ -58,9 +59,20 @@ const FooterSection = () => {
                   +1 (209) 813 5108
                 </h4>
               </Link>
-              <div className="text-slate-200 md:text-sm text-xs md:translate-x-[3.3rem]">
-                <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
-              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 mt-[2rem]">
+            <div className="flex-center md:flex-col gap-4 -m-5">
+              <Link
+                href="tel:+1(209)8135108"
+                className="flex-center !items-start gap-3 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
+              >
+                <BsMap className="text-[20px] translate-y-1" />
+                <h4 className="text-sm font-bold w-[90%]">
+                  2121 Crystal Dr, VA , Arlington, VA, United States, Virginia
+                </h4>
+              </Link>
             </div>
           </div>
         </div>
