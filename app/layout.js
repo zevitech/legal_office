@@ -1,8 +1,9 @@
-import "./globals.css";
 import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
+
 import GlobalProvider from "./GlobalProvider";
-import { GoogleTagManager } from "@next/third-parties/google";
+
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -73,7 +74,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <meta name="author" content="Legal Trademark Office" />
       </head>
 
-      {/* <GoogleTagManager gtmId="GTM-KJGHNHGM" /> */}
       <body className={`${poppins.className} bg-color-secondary`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
