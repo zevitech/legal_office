@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
       /> */}
 
       {/* Live Chat */}
-      <Script
+      {/* <Script
         id="livechat-script"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
@@ -78,10 +78,10 @@ export default function RootLayout({ children }) {
       })(window, document, [].slice);
     `,
         }}
-      />
+      /> */}
 
       {/* Google Tag Manager */}
-      <Script
+      {/* <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -92,10 +92,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-KJGHNHGM');`,
         }}
-      />
+      /> */}
 
       {/* MouseFlow Tracking */}
-      <Script
+      {/* <Script
         id="mfq"
         type="text/javascript"
         strategy="afterInteractive"
@@ -109,22 +109,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               })();
             `,
         }}
-      />
+      /> */}
 
       <body className={`${inter.className}`}>
         {/* Google Tag Manager (noscript) */}
-        <noscript>
+        {/* <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJGHNHGM"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript>
+        </noscript> */}
         {/* End Google Tag Manager (noscript) */}
 
         {/* Starts Live Chat (noscript) */}
-        <noscript>
+        {/* <noscript>
           <a href="https://www.livechat.com/chat-with/19098393/" rel="nofollow">
             Chat with us
           </a>
@@ -136,13 +136,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           >
             LiveChat
           </a>
-        </noscript>
+        </noscript> */}
         {/* Ends Live Chat (noscript) */}
 
         <div className={`bg-form-bod`}></div>
         <GlobalProvider>
           {children}
-          <Script id="clarity-script" strategy="afterInteractive">
+          {/* <Script id="clarity-script" strategy="afterInteractive">
             {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -150,7 +150,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
             })(window, document, "clarity", "script", "ouge10k1z4");
           `}
-          </Script>
+          </Script> */}
         </GlobalProvider>
       </body>
     </html>
