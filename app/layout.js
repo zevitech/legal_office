@@ -58,7 +58,7 @@ export default function RootLayout({ children }) {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-      window._lc = window._lc || {};
+       window._lc = window._lc || {};
     window.__lc.license = 19098393;
     window.__lc.integration_name = "manual_onboarding";
     window.__lc.product_name = "livechat";
