@@ -29,9 +29,21 @@ const LandingPage = () => {
   };
 
   // Function to open Tawk.to chat
+  // const handleOpenChat = () => {
+  //   if (window.Tawk_API && window.Tawk_API.maximize) {
+  //     window.Tawk_API.maximize();
+  //   }
+  // };
+
+  // Function to open Live Chat
   const handleOpenChat = () => {
-    if (window.Tawk_API && window.Tawk_API.maximize) {
-      window.Tawk_API.maximize();
+    if (
+      window.LiveChatWidget &&
+      typeof window.LiveChatWidget.call === "function"
+    ) {
+      window.LiveChatWidget.call("maximize");
+    } else {
+      console.warn("LiveChat not ready yet.");
     }
   };
 
