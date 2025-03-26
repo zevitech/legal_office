@@ -59,12 +59,12 @@ const Payment = () => {
       });
     }
 
-    if (stepFourData.govermentFeesAmount !== 0) {
-      baseDetails.push({
-        title: "Goverment Fee",
-        amount: stepFourData.govermentFeesAmount,
-      });
-    }
+    // if (stepFourData.govermentFeesAmount !== 0) {
+    //   baseDetails.push({
+    //     title: "Goverment Fee",
+    //     amount: stepFourData.govermentFeesAmount,
+    //   });
+    // }
 
     return baseDetails;
   }, [nestedLeadData, stepFourData]);

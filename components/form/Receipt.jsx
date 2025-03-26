@@ -10,15 +10,18 @@ const Receipt = () => {
   const nestedLeadData = useSelector((state) => state.form);
   const {
     isRushProcessing,
-    isGovermentFeesProcessing,
+    // isGovermentFeesProcessing,
     rushAmount,
-    govermentFeesAmount,
+    // govermentFeesAmount,
   } = nestedLeadData.stepFour;
   const basePrice = nestedLeadData.stepThree.price;
-  const totalPrice =
-    basePrice +
-    (isRushProcessing ? rushAmount : 0) +
-    (isGovermentFeesProcessing ? govermentFeesAmount : 0);
+
+  // const totalPrice =
+  //   basePrice +
+  //   (isRushProcessing ? rushAmount : 0) +
+  //   (isGovermentFeesProcessing ? govermentFeesAmount : 0);
+
+  const totalPrice = basePrice + (isRushProcessing ? rushAmount : 0);
 
   const today = new Date().toLocaleDateString(undefined, {
     year: "numeric",
@@ -105,7 +108,7 @@ const Receipt = () => {
             </div>
           )}
 
-          {nestedLeadData.stepFour.govermentFeesAmount > 0 && (
+          {/* {nestedLeadData.stepFour.govermentFeesAmount > 0 && (
             <div className="flex flex-1 items-center gap-3 py-1">
               <p className="text-slate-500 font-thin flex-none text-sm">
                 Goverment Fees
@@ -115,7 +118,7 @@ const Receipt = () => {
                 ${nestedLeadData.stepFour.govermentFeesAmount}
               </p>
             </div>
-          )}
+          )} */}
 
           <div className="flex flex-1 text-slate-700 items-center gap-3 border-t-2 border-dotted border-slate-600 py-1 mt-4 pt-3">
             <b className="flex-none text-sm">Sub Total</b>
@@ -130,8 +133,11 @@ const Receipt = () => {
           <div className="flex flex-1 text-slate-700 items-center gap-3 py-1">
             <b className="flex-none text-sm">Total Amount</b>
             <p className="w-full bg-slate-400 h-[1px]"></p>
-            <p className="text-sm font-semibold">
+            {/* <p className="text-sm font-semibold">
               ${totalPrice + govermentFeesAmount}
+            </p> */}
+            <p className="text-sm font-semibold">
+              ${totalPrice}
             </p>
           </div>
         </div>

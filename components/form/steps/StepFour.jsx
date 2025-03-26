@@ -10,17 +10,17 @@ import { useRouter } from "next/navigation";
 import { IoTimerOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { saveStepFour } from "@/features/formSlice";
-import { FaCreditCard } from "react-icons/fa6";
+// import { FaCreditCard } from "react-icons/fa6";
 
 const StepFour = () => {
   const rushAmount = 29;
-  const govermentFeesAmount = 350;
+  // const govermentFeesAmount = 350;
   const router = useRouter();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isRushProcessing, setIsRushProcessing] = useState(false);
-  const [isGovermentFeesProcessing, setIsGovermentFeesProcessing] =
-    useState(false);
+  // const [isGovermentFeesProcessing, setIsGovermentFeesProcessing] =
+  //   useState(false);
   const stepThreeData = useSelector((state) => state.form.stepThree);
 
   // page authorization | redirect if previous step has no data
@@ -37,7 +37,7 @@ const StepFour = () => {
       isRushProcessing,
       // if ever error come on calculation and receipt then I didnt add is isgovernmentfee in here
       rushAmount: isRushProcessing ? rushAmount : 0,
-      govermentFeesAmount: isGovermentFeesProcessing ? govermentFeesAmount : 0,
+      // govermentFeesAmount: isGovermentFeesProcessing ? govermentFeesAmount : 0,
       previous: true,
       receipt_ID: Math.floor(Math.random() * 900000 + 100000),
     };
@@ -55,10 +55,10 @@ const StepFour = () => {
         encType="multipart/form-data"
       >
         <h1 className="text-slate-700 font-semibold text-2xl mb-5">
-          Add Rush Processing and Additional Government Fees
+          Add Rush Processing Fee
         </h1>
 
-        <div className="relative mt-4">
+        {/* <div className="relative mt-4">
           <Image
             src={`/images/optional-bagde.png`}
             alt="optional badge"
@@ -92,7 +92,7 @@ const StepFour = () => {
               </span>
             </Checkbox>
           </FieldContainer>
-        </div>
+        </div> */}
 
         <div className="relative">
           <Image
