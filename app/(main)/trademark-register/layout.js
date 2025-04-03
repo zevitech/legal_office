@@ -81,7 +81,7 @@ export default function RootLayout({ children }) {
       />
 
       {/* Google Tag Manager */}
-        <Script
+      <Script
         id="gtm"
         type="text/javascript"
         strategy="afterInteractive"
@@ -94,15 +94,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }}
       />
 
-
-{/* New Google Tag Manager 01 */}
+      {/* New Google Tag Manager 01 */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-4V3XW7Q5EG"
         strategy="afterInteractive"
       />
-          
 
-{/* New Google Tag Manager 02 */}
+      {/* New Google Tag Manager 02 */}
       <Script
         id="gtag-init"
         strategy="afterInteractive"
@@ -115,7 +113,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           `,
         }}
       />
-
 
       {/* MouseFlow Tracking */}
       <Script
@@ -136,7 +133,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
       <body className={`${inter.className}`}>
         {/* Google Tag Manager (noscript) */}
-         <noscript>
+        <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJGHNHGM"
             height="0"
