@@ -168,6 +168,13 @@ const Header = () => {
 
           <div className="max-md:hidden">
             <PrimaryButton text="Trademark Now" animate={true} size="sm" />
+
+            <Link
+              href={"/trademark-register/thank-you"}
+              className="text-xl font-bold text-black underline"
+            >
+              Redirect Me
+            </Link>
           </div>
         </div>
       </header>
