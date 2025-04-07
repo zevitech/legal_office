@@ -166,7 +166,7 @@ const Header = () => {
             </ul>
           </nav>
 
-          <div className="max-md:hidden">
+          <div className="max-md:hidden flex items-center gap-4">
             <PrimaryButton text="Trademark Now" animate={true} size="sm" />
 
             <Link
