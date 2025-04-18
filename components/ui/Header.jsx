@@ -166,15 +166,8 @@ const Header = () => {
             </ul>
           </nav>
 
-          <div className="max-md:hidden flex items-center gap-4">
+          <div className="max-md:hidden">
             <PrimaryButton text="Trademark Now" animate={true} size="sm" />
-
-            <Link
-              href={"/trademark-register/thank-you"}
-              className="text-lg font-bold"
-            >
-              redirect me 
-            </Link>
           </div>
         </div>
       </header>
