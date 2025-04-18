@@ -19,7 +19,7 @@ const FooterSection = () => {
             className="object-contain"
           />
           <p className="text-slate-100 max-md:text-xs">
-            Secure Your Mark helps brands protect their identity and image
+            Legal Trademark Office helps brands protect their identity and image
             through a simple steps trademark registration process.
           </p>
         </div>
