@@ -14,7 +14,7 @@ export default function AttorneyCard({ name, details, imageName }) {
       </CardBody>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         <div className="flex items-center gap-4">
-          <h4 className="font-semibold text-large mb-2">{name}</h4>
+          <h4 className="font-semibold text-base mb-2">{name}</h4>
           <Image
             alt="Rating"
             src={`/images/5-star-rating.png`}
