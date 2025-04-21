@@ -68,7 +68,7 @@ const LandingPage = () => {
               <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
                 Start by filling out our simple trademark questionnaire,
                 Affordable Rates, Expert Legal Support, Get your serial number
-                of trade mark registration once your trademark application is
+                of trademark registration once your trademark application is
                 filed with us!
               </p>
             </div>
@@ -291,15 +291,11 @@ finish, so you can focus on growing your business.`}
                 Call Now for a Free Consultation:
               </p>
               <Link
-                href={"tel:+14083876783"}
+                href={"tel:+13104244909"}
                 className="text-blue-700 font-semibold text-3xl"
               >
-                +1 (408) 387-6783
+                +1 (310) 424 4909
               </Link>
-              <div className="mt-3 mb-5 text-sm max-md:text-base">
-                <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
-                <p>Weekends: 7 a.m.-4 p.m. PT</p>
-              </div>
               <p className="text-slate-800">
                 All of our experts are based in the U.S.
               </p>
@@ -464,10 +460,10 @@ finish, so you can focus on growing your business.`}
                   <h1 className="text-slate-800 font-semibold text-lg ">
                     Call us at:
                     <Link
-                      href="tel:+14083876783"
+                      href="tel:+13104244909"
                       className="text-blue-600 font-semibold"
                     >
-                      +1 (408) 387-6783
+                      +1 (310) 424 4909
                     </Link>
                   </h1>
                   <p className="text-xs text-slate-700">

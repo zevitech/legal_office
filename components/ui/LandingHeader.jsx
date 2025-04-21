@@ -29,8 +29,8 @@ const LandingHeader = () => {
       />
       <ul className="flex gap-4">
         <li>
-          <Link href="tel:+14083876783">
-            <Tooltip content="+1 (408) 387-6783">
+          <Link href="tel:+13104244909">
+            <Tooltip content="+1 (310) 424 4909">
               <Button
                 isIconOnly
                 color="primary"

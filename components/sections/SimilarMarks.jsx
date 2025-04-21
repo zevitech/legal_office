@@ -13,11 +13,6 @@ const SimilarMarks = () => {
           <p>
             {`Ensure your trademark is unique and available by performing a thorough search before starting the registration process.`}
           </p>
-          <p>
-            {`At `}
-            <b>Legal Trademark Office,</b>{" "}
-            {`we provide access to Trademarkia, the world's largest trademark search engine, covering:`}
-          </p>
         </div>
         <TMButton px="100px" py="30px" text={"Start searching trademarks"} />
       </div>

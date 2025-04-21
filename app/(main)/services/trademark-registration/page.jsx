@@ -158,7 +158,7 @@ const page = () => {
         {/* packages section */}
         <section className="pt-32 max-md:pt-20 max-md:px-5">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto mb-14 max-md:mb-9">
-            <HeaderText text1="Registration" text2="Packages" />
+            <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center">
               Simplify your budgeting with our transparent and straightforward
               business pricing plan, designed to support your growth.

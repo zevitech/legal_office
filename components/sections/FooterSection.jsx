@@ -19,8 +19,10 @@ const FooterSection = () => {
             className="object-contain"
           />
           <p className="text-slate-100 max-md:text-xs">
-            Legal Trademark Office helps brands protect their identity and image
-            through a simple steps trademark registration process.
+            Secure your brand's future with Legal Trademark Office® tailored
+            protection packages. Choose our DIY assisted service for a hands-on
+            approach, or enlist our expert attorneys to handle your trademark
+            filing with precision and care. Protect your uniqueness.
           </p>
         </div>
         <div className="text-slate-100">
@@ -51,12 +53,12 @@ const FooterSection = () => {
           <div className="flex items-center gap-2">
             <div className="flex-center md:flex-col gap-4 -m-5">
               <Link
-                href="tel:+1(209)8135108"
+                href="tel:+13104244909"
                 className="flex-center gap-2 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
               >
                 <IoCallSharp className="text-[20px]" />
                 <h4 className="text-lg font-bold max-md:text-[16px]">
-                  +1 (209) 813 5108
+                  +1 (310) 424 4909
                 </h4>
               </Link>
             </div>
@@ -65,7 +67,7 @@ const FooterSection = () => {
           <div className="flex items-center gap-2 mt-[2rem]">
             <div className="flex-center md:flex-col gap-4 -m-5">
               <Link
-                href="tel:+1(209)8135108"
+                href="#"
                 className="flex-center !items-start gap-3 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
               >
                 <BsMap className="text-[20px] translate-y-1" />
@@ -79,7 +81,7 @@ const FooterSection = () => {
           <div className="flex items-center gap-2 mt-[2rem]">
             <div className="flex-center md:flex-col gap-4 -m-5">
               <Link
-                href="tel:+1(209)8135108"
+                href="#"
                 className="flex-center !items-start gap-3 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
               >
                 <BsMap className="text-[20px] translate-y-1" />
@@ -99,7 +101,7 @@ const FooterSection = () => {
           <Link className="text-blue-500 hover:underline" href={`#`}>
             Legal Trademark Office
           </Link>{" "}
-          2024
+          2025
         </p>
       </div>
     </footer>

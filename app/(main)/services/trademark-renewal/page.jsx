@@ -156,29 +156,6 @@ const page = () => {
           </div>
         </section>
 
-        {/* how it works */}
-        <section className="py-28 max-md:py-16 max-md:px-5">
-          <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto mb-10">
-            <HeaderText text1="How It" text2="Works" />
-            <p className="text-slate-500 text-base text-center max-md:text-start">
-              {`Start with a quick consultation, provide essential details, and our experts handle the filing process, ensuring smooth and secure setup.`}
-            </p>
-          </div>
-          <div className="col-flex gap-5">
-            <HowItWorkLine
-              step={`1`}
-              details={`Choose Your Business Structure`}
-            />
-            <HowItWorkLine step={`2`} details={`Register Your Business Name`} />
-            <HowItWorkLine step={`3`} details={`File Formation Documents`} />
-            <HowItWorkLine
-              step={`4`}
-              details={`Obtain EIN (Employer Identification Number)`}
-            />
-            <HowItWorkLine step={`5`} details={`State Filing and Compliance`} />
-          </div>
-        </section>
-
         {/* attorney section */}
         <section className="relative pb-28">
           <div className="bg-[#DFEAF1] h-[530px] absolute w-full top-0"></div>
@@ -235,9 +212,8 @@ const page = () => {
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
             <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center max-md:text-start">
-              Legal Trademark Office® attorneys have provided representation for
-              a diverse range of businesses, including Amazon sellers, clothing
-              designers, professional service providers, and more.
+              Simplify your budgeting with our transparent and straightforward
+              business pricing plan, designed to support your growth.
             </p>
           </div>
           <PackageCard2 />

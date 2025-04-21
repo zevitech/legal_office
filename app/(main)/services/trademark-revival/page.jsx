@@ -10,6 +10,7 @@ import BusinessStructure from "@/components/sections/BusinessStructure";
 import RebonCard from "@/components/sections/RebonCard";
 import PackageCard from "@/components/ui/PackageCard";
 import RevivalPriceSection from "@/components/sections/RevivalPriceSection";
+import PackageCard2 from "@/components/ui/PackageCard2";
 
 export const metadata = {
   title: "International Trademark | US Based trademark register website",
@@ -127,11 +128,6 @@ const page = () => {
           </div>
         </section>
 
-        {/* business structure */}
-        <section className="pb-32 max-md:pb-20 max-md:px-5">
-          <BusinessStructure />
-        </section>
-
         {/* rebon card section */}
         <section className="pb-28 max-md:pb-0">
           <RebonCard header={`Ready to Revive and Secure Your Trademark?`} />
@@ -191,15 +187,13 @@ const page = () => {
         {/* packages section */}
         <section className="py-16 max-md:py-8 max-md:px-5">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto mb-14 max-md:mb-9">
-            <HeaderText text1="Registration" text2="Packages" />
+            <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center">
               Simplify your budgeting with our transparent and straightforward
               business pricing plan, designed to support your growth.
             </p>
           </div>
-          <div>
-            <RevivalPriceSection />
-          </div>
+          <PackageCard2 />
         </section>
 
         {/* footer section */}

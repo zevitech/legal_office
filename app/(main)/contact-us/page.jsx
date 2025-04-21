@@ -148,7 +148,7 @@ const page = () => {
                 </h4>
                 <div className="flex items-center gap-2">
                   <div className="flex-center gap-10 -m-5 max-md:flex-col max-md:gap-3 max-md:-mt-0">
-                    <Link href="tel:+1(209)8135108" className="flex-center">
+                    <Link href="tel:+13104244909" className="flex-center">
                       <Image
                         width={70}
                         height={70}
@@ -157,13 +157,9 @@ const page = () => {
                         className="object-contain"
                       />
                       <h4 className="text-lg font-bold text-color-primary">
-                        +1 (209) 813 5108
+                        +1 (310) 424 4909
                       </h4>
                     </Link>
-                    <div className="text-slate-500 text-xs max-md:mb-4">
-                      <p>Mon-Fri: 5 a.m.-7 p.m. PT</p>
-                      <p>Weekends: 7 a.m.-4 p.m. PT</p>
-                    </div>
                   </div>
                 </div>
                 <p className="mt-5">All of our experts are based in the U.S.</p>

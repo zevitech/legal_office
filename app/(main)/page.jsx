@@ -405,12 +405,10 @@ const page = () => {
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
             <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center max-md:text-start">
-              Legal Trademark Office® attorneys have provided representation for
-              a diverse range of businesses, including Amazon sellers, clothing
-              designers, professional service providers, and more.
+              Simplify your budgeting with our transparent and straightforward
+              business pricing plan, designed to support your growth.
             </p>
           </div>
-
           <PackageCard2 />
         </section>
 

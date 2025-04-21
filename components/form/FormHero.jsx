@@ -17,10 +17,10 @@ const FormHero = ({ step }) => {
         <div className="text-base max-md:text-sm text-slate-100 flex max-md:flex-col gap-2 max-md:block max-md:px-2 max-md:text-center">
           Still have questions?
           <Link
-            href="tel:+14083876783"
+            href="tel:+13104244909"
             className="font-bold text-color-primary uppercase max-md:px-1"
           >
-            Call +1 (408) 387-6783
+            Call +1 (310) 424 4909
           </Link>
           or
           <button
