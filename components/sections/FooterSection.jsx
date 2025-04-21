@@ -19,7 +19,7 @@ const FooterSection = () => {
             className="object-contain"
           />
           <p className="text-slate-100 max-md:text-xs">
-            Secure your brand's future with Legal Trademark Office® tailored
+            Secure your brand&apos;s future with Legal Trademark Office® tailored
             protection packages. Choose our DIY assisted service for a hands-on
             approach, or enlist our expert attorneys to handle your trademark
             filing with precision and care. Protect your uniqueness.
