@@ -167,13 +167,13 @@ const page = () => {
           </div>
           <div className="flex-center gap-10 max-md:flex-col">
             <AttorneyCard
-              name={`Luez. kafe`}
-              details={`Luez has extensive experience in trademark law and is committed to helping businesses protect their intellectual property, With over 7 years of legal experience.`}
+              name={`Ksean Williams`}
+              details={`Ksean is a seasoned intellectual property attorney who has represented a diverse range of clients, from small businesses to international corporations. His strategic approach ensures your trademark is secure and fully compliant.`}
               imageName={`attorney-1.png`}
             />
             <AttorneyCard
               name={`James Clarke`}
-              details={`James is a seasoned intellectual property attorney who has represented a diverse range of clients, from small businesses to international corporations. His strategic approach ensures your trademark is secure and fully compliant.`}
+              details={`James has extensive experience in trademark law and is committed to helping businesses protect their intellectual property, With over 7 years of legal experience.`}
               imageName={`attorney-2.png`}
             />
             <AttorneyCard
