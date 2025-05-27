@@ -4,7 +4,7 @@ export const SystemStepThreeData = [
     planName: "Basic",
     planPrice: "$49",
     price: 49,
-    planSubtext: "+USPTO Fee $350/Class",
+    planSubtext: "+USPTO Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Search",
@@ -50,7 +50,7 @@ export const SystemStepThreeData = [
     planName: "Premium",
     planPrice: "$249",
     price: 249,
-    planSubtext: "+USPTO Fee $350/Class",
+    planSubtext: "+USPTO Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Trademark Search",
@@ -94,7 +94,7 @@ export const SystemStepThreeData = [
     planName: "Standard",
     planPrice: "$149",
     price: 149,
-    planSubtext: "+USPTO Fee $350/Class",
+    planSubtext: "+USPTO Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Trademark Search",
@@ -146,7 +146,7 @@ export const PackagesUpdatedData = [
     planName: "Basic",
     planPrice: "$49",
     price: 49,
-    planSubtext: "+USPTO Fee $350/Class",
+    planSubtext: "+USPTO Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Search",
@@ -192,7 +192,7 @@ export const PackagesUpdatedData = [
     planName: "Standard",
     planPrice: "$149",
     price: 149,
-    planSubtext: "+USPTO Fee $350/Class",
+    planSubtext: "+USPTO Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Trademark Search",
@@ -242,7 +242,7 @@ export const PackagesUpdatedData = [
     planName: "Premium",
     planPrice: "$249",
     price: 249,
-    planSubtext: "+USPTO Fee $350/Class",
+    planSubtext: "+USPTO Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Trademark Search",
