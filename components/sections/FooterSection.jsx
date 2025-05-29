@@ -78,19 +78,7 @@ const FooterSection = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mt-[2rem]">
-            <div className="flex-center md:flex-col gap-4 -m-5">
-              <Link
-                href="#"
-                className="flex-center !items-start gap-3 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
-              >
-                <BsMap className="text-[20px] translate-y-1" />
-                <h4 className="text-sm font-bold w-[90%]">
-                  1060 Lincoln Ave, Suite 20 #1071, San Jose, CA 95125, USA
-                </h4>
-              </Link>
-            </div>
-          </div>
+          
         </div>
 
         <ScrollToTop />
