@@ -30,7 +30,7 @@ const PackageCard2 = () => {
            
 
             <div
-              className={`w-[128px] h-[42px] border-2  rounded-[10px] font-semibold  flex items-center justify-center ${
+              className={`w-[152px] h-[42px] border-2  rounded-[10px] font-semibold  flex items-center justify-center ${
                 data.id == 1 || data.id == 3
                   ? "border-primary-theme text-primary-theme"
                   : " border-white text-white"
