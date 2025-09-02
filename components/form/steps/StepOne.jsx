@@ -10,11 +10,7 @@ import Image from "next/image";
 import ReCAPTCHA from "react-google-recaptcha";
 import { auth } from "@/firebase";
 import OTPInput from "react-otp-input";
-import {
-  signInWithPhoneNumber,
-  RecaptchaVerifier,
-  getAuth,
-} from "firebase/auth";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 
 import {
   OrganizationType,
@@ -129,23 +125,6 @@ const StepOne = () => {
   const phoneRef = useRef(null);
   const emailRef = useRef(null);
   const reChaptchaRef = useRef(null);
-
-  const authOTP = getAuth();
-
-  useEffect(() => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container", // 👈 ID of the <div> where widget will render
-        {
-          size: "invisible", // or "normal" if you want a visible checkbox
-          callback: (response) => {
-            console.log("reCAPTCHA solved:", response);
-          },
-        },
-        authOTP
-      );
-    }
-  }, []);
 
   // FETCH GEOGRAPHICAL DATA
   useEffect(() => {
@@ -351,22 +330,21 @@ const StepOne = () => {
     }
 
     try {
-      const appVerifier = window.recaptchaVerifier;
       const confirmationResult = await signInWithPhoneNumber(
         auth,
-        `+1${phoneNumber}`,
-        appVerifier
+        `+1` + phoneNumber,
+        recaptchaVerifier
       );
-
       onOpen();
       setResendCountdown(60);
       setConfirmationResult(confirmationResult);
-    } catch (err) {
-      console.error("Failed to send OTP:", err);
       setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      console.log("Failed to send OTP:", err);
 
       if (err.code === "auth/invalid-phone-number") {
-        setErrors((prev) => ({
+        setErrors((...prev) => ({
           ...prev,
           phoneNumber: "Invalid phone number, Please enter a valid number.",
         }));
@@ -1267,7 +1245,7 @@ const StepOne = () => {
           )}
         </ModalContent>
       </Modal>
-      <div id="recaptcha-container"></div>
+
       <div id="recaptcha-container-2" />
     </section>
   );
