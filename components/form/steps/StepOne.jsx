@@ -8,9 +8,9 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import ReCAPTCHA from "react-google-recaptcha";
-import { auth } from "@/firebase";
-import OTPInput from "react-otp-input";
-import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+// import { auth } from "@/firebase";
+// import OTPInput from "react-otp-input";
+// import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 
 import {
   OrganizationType,
@@ -92,12 +92,12 @@ const StepOne = () => {
   const [contactTime, setContactTime] = useState("");
 
   // OTP VERIFICATION
-  const [otp, setOtp] = useState("");
-  const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
-  const [resendCountdown, setResendCountdown] = useState(0);
-  const [confirmationResult, setConfirmationResult] = useState(null);
-  const [otpError, setOtpError] = useState("");
-  const [resendLoading, setResendLoading] = useState(false);
+  // const [otp, setOtp] = useState("");
+  // const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
+  // const [resendCountdown, setResendCountdown] = useState(0);
+  // const [confirmationResult, setConfirmationResult] = useState(null);
+  // const [otpError, setOtpError] = useState("");
+  // const [resendLoading, setResendLoading] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -136,27 +136,27 @@ const StepOne = () => {
   }, [selectedFormationType]);
 
   // HANDLE FIREBASE RECAPTCHA VERIFIER
-  useEffect(() => {
-    const RV = new RecaptchaVerifier(auth, "recaptcha-container-2", {
-      size: "invisible",
-    });
-    setRecaptchaVerifier(RV);
+  // useEffect(() => {
+  //   const RV = new RecaptchaVerifier(auth, "recaptcha-container-2", {
+  //     size: "invisible",
+  //   });
+  //   setRecaptchaVerifier(RV);
 
-    return () => {
-      RV.clear();
-    };
-  }, [auth]);
+  //   return () => {
+  //     RV.clear();
+  //   };
+  // }, [auth]);
 
   // OTP RESEND COUNTDOWN
-  useEffect(() => {
-    let timer;
-    if (resendCountdown > 0) {
-      timer = setTimeout(() => {
-        setResendCountdown((prevCountdown) => prevCountdown - 1);
-      }, 1000);
-    }
-    return () => clearTimeout(timer);
-  }, [resendCountdown]);
+  // useEffect(() => {
+  //   let timer;
+  //   if (resendCountdown > 0) {
+  //     timer = setTimeout(() => {
+  //       setResendCountdown((prevCountdown) => prevCountdown - 1);
+  //     }, 1000);
+  //   }
+  //   return () => clearTimeout(timer);
+  // }, [resendCountdown]);
 
   // VALIDATE PHONE NUMBER
   const validatePhoneNumber = (phoneNumber) => {
@@ -282,11 +282,136 @@ const StepOne = () => {
   };
 
   // OTP VERIFICATION
-  const OtpVerification = async (e) => {
+  // const OtpVerification = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+
+  //   const firstErrorField = validateForm();
+  //   if (firstErrorField) {
+  //     setIsLoading(false);
+  //     const errorRefs = {
+  //       name: protectNameRef,
+  //       slogan: sloganNameRef,
+  //       logo: logoRef,
+  //       logoColors: logoColorsRef,
+  //       logoProtectionDescription: logoProtectionDescriptionRef,
+  //       trademarkCurrentlyBeingUsed: trademarkCurrentlyBeingUsedRef,
+  //       firstAnywhereDate: firstAnywhereDateRef,
+  //       firstCommenceDate: firstCommenceDateRef,
+  //       organizationName: organizationNameRef,
+  //       organizationType: organizationTypeRef,
+  //       countryFormation: countryOfFormationRef,
+  //       stateFormation: stateOfFormationRef,
+  //       organizationPosition: positionRef,
+  //       firstName: firstNameRef,
+  //       lastName: lastNameRef,
+  //       address: addressRef,
+  //       city: cityRef,
+  //       state: stateRef,
+  //       zipCode: zipRef,
+  //       phoneNumber: phoneRef,
+  //       emailAddress: emailRef,
+  //       reChaptcha: reChaptchaRef,
+  //     };
+
+  //     if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
+  //       errorRefs[firstErrorField].current.scrollIntoView({
+  //         behavior: "smooth",
+  //       });
+
+  //       setTimeout(() => {
+  //         window.scrollBy({
+  //           top: -100,
+  //           behavior: "smooth",
+  //         });
+  //       }, 500);
+  //     }
+  //     return;
+  //   }
+
+  //   try {
+  //     const confirmationResult = await signInWithPhoneNumber(
+  //       auth,
+  //       `+1` + phoneNumber,
+  //       recaptchaVerifier
+  //     );
+  //     onOpen();
+  //     setResendCountdown(60);
+  //     setConfirmationResult(confirmationResult);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     setIsLoading(false);
+  //     console.log("Failed to send OTP:", err);
+
+  //     if (err.code === "auth/invalid-phone-number") {
+  //       setErrors((...prev) => ({
+  //         ...prev,
+  //         phoneNumber: "Invalid phone number, Please enter a valid number.",
+  //       }));
+  //     } else if (err.code === "auth/too-many-requests") {
+  //       alert("Too many requests. Please try again.");
+  //     } else {
+  //       alert("Failed to send OTP. Please try again.");
+  //     }
+  //   }
+  // };
+
+  // VERIFY OTP
+  // const verifyOtp = async () => {
+  //   setOtpError("");
+  //   setIsLoading(true);
+  //   try {
+  //     await confirmationResult?.confirm(otp);
+  //     handleFormSubmit();
+  //   } catch (error) {
+  //     console.log("Failed to verify OTP. Please check the OTP:", error);
+  //     setOtpError("Failed to verify OTP. Please check the OTP.");
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // RESEND OTP
+  // const requestOtp = async (e) => {
+  //   setResendCountdown(60);
+  //   setOtpError("");
+  //   setResendLoading(true);
+
+  //   if (!recaptchaVerifier) {
+  //     return setOtpError("Please verify that you are not a robot.");
+  //   }
+
+  //   try {
+  //     const confirmationResult = await signInWithPhoneNumber(
+  //       auth,
+  //       `+1` + phoneNumber,
+  //       recaptchaVerifier
+  //     );
+  //     setResendCountdown(60);
+  //     setConfirmationResult(confirmationResult);
+  //   } catch (err) {
+  //     console.log("Failed to resend OTP:", err);
+
+  //     if (err.code === "auth/invalid-phone-number") {
+  //       setErrors((...prev) => ({
+  //         ...prev,
+  //         phoneNumber: "Invalid phone number, Please enter a valid number.",
+  //       }));
+  //     } else if (err.code === "auth/too-many-requests") {
+  //       setOtpError("Too many requests. Please try again.");
+  //     } else {
+  //       setOtpError("Failed to send OTP. Please try again.");
+  //     }
+  //   }
+  //   setResendLoading(false);
+  // };
+
+  // HANDLE FORM SUBMISSION
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     const firstErrorField = validateForm();
+
     if (firstErrorField) {
       setIsLoading(false);
       const errorRefs = {
@@ -329,84 +454,6 @@ const StepOne = () => {
       return;
     }
 
-    try {
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        `+1` + phoneNumber,
-        recaptchaVerifier
-      );
-      onOpen();
-      setResendCountdown(60);
-      setConfirmationResult(confirmationResult);
-      setIsLoading(false);
-    } catch (err) {
-      setIsLoading(false);
-      console.log("Failed to send OTP:", err);
-
-      if (err.code === "auth/invalid-phone-number") {
-        setErrors((...prev) => ({
-          ...prev,
-          phoneNumber: "Invalid phone number, Please enter a valid number.",
-        }));
-      } else if (err.code === "auth/too-many-requests") {
-        alert("Too many requests. Please try again.");
-      } else {
-        alert("Failed to send OTP. Please try again.");
-      }
-    }
-  };
-
-  // VERIFY OTP
-  const verifyOtp = async () => {
-    setOtpError("");
-    setIsLoading(true);
-    try {
-      await confirmationResult?.confirm(otp);
-      handleFormSubmit();
-    } catch (error) {
-      console.log("Failed to verify OTP. Please check the OTP:", error);
-      setOtpError("Failed to verify OTP. Please check the OTP.");
-      setIsLoading(false);
-    }
-  };
-
-  // RESEND OTP
-  const requestOtp = async (e) => {
-    setResendCountdown(60);
-    setOtpError("");
-    setResendLoading(true);
-
-    if (!recaptchaVerifier) {
-      return setOtpError("Please verify that you are not a robot.");
-    }
-
-    try {
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        `+1` + phoneNumber,
-        recaptchaVerifier
-      );
-      setResendCountdown(60);
-      setConfirmationResult(confirmationResult);
-    } catch (err) {
-      console.log("Failed to resend OTP:", err);
-
-      if (err.code === "auth/invalid-phone-number") {
-        setErrors((...prev) => ({
-          ...prev,
-          phoneNumber: "Invalid phone number, Please enter a valid number.",
-        }));
-      } else if (err.code === "auth/too-many-requests") {
-        setOtpError("Too many requests. Please try again.");
-      } else {
-        setOtpError("Failed to send OTP. Please try again.");
-      }
-    }
-    setResendLoading(false);
-  };
-
-  // HANDLE FORM SUBMISSION
-  const handleFormSubmit = async (e) => {
     const stepOne = {
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
       wantToProtect,
@@ -1158,7 +1205,7 @@ const StepOne = () => {
 
             {/* SUBMIT BUTTON */}
             <Button
-              onClick={OtpVerification}
+              onClick={handleFormSubmit}
               className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
               isLoading={isLoading}
             >
@@ -1169,7 +1216,7 @@ const StepOne = () => {
       </div>
 
       {/* OTP MODAL */}
-      <Modal
+      {/* <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="sm"
@@ -1244,7 +1291,7 @@ const StepOne = () => {
             </>
           )}
         </ModalContent>
-      </Modal>
+      </Modal> */}
 
       <div id="recaptcha-container-2" />
     </section>
