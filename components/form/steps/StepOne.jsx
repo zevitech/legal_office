@@ -137,15 +137,37 @@ const StepOne = () => {
 
   // HANDLE FIREBASE RECAPTCHA VERIFIER
   useEffect(() => {
-    const RV = new RecaptchaVerifier(auth, "recaptcha-container-2", {
-      size: "invisible",
-    });
+    if (window.recaptchaVerifier) {
+      window.recaptchaVerifier.clear();
+      window.recaptchaVerifier = null;
+    }
+
+    const RV = new RecaptchaVerifier(
+      "recaptcha-container-2",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log("reCAPTCHA solved");
+        },
+        "expired-callback": () => {
+          console.log("reCAPTCHA expired");
+        },
+      },
+      auth
+    );
+
     setRecaptchaVerifier(RV);
+    window.recaptchaVerifier = RV;
 
     return () => {
-      RV.clear();
+      if (RV) {
+        RV.clear();
+      }
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier = null;
+      }
     };
-  }, [auth]);
+  }, []);
 
   // OTP RESEND COUNTDOWN
   useEffect(() => {
@@ -344,7 +366,7 @@ const StepOne = () => {
       console.log("Failed to send OTP:", err);
 
       if (err.code === "auth/invalid-phone-number") {
-        setErrors((...prev) => ({
+        setErrors((prev) => ({
           ...prev,
           phoneNumber: "Invalid phone number, Please enter a valid number.",
         }));
@@ -392,7 +414,7 @@ const StepOne = () => {
       console.log("Failed to resend OTP:", err);
 
       if (err.code === "auth/invalid-phone-number") {
-        setErrors((...prev) => ({
+        setErrors((prev) => ({
           ...prev,
           phoneNumber: "Invalid phone number, Please enter a valid number.",
         }));
