@@ -37,32 +37,38 @@ const page = () => {
       <Header />
       <main className="bg-slate-100">
         {/* Hero Section */}
-        <section className="bg-homeBanner w-full h-[88vh] max-md:h-auto max-md:py-28 max-md:px-5 bg-no-repeat bg-cover bg-bottom flex-center">
-          <div className="w-[800px] max-md:w-full col-flex gap-10 -mt-20 max-md:mt-0">
-            <div className="flex gap-3 max-md:gap-1">
-              <div className="flex items-start">
-                <Image
-                  width={130}
-                  height={130}
-                  alt="'"
-                  src={`/images/header-left.png`}
-                  className="object-contain"
-                />
-              </div>
-              <h1 className="text-4xl max-md:text-3xl font-bold text-white text-center leading-normal">
+        <section className="relative bg-homeBanner w-full h-[80vh] max-md:h-auto max-md:py-28 max-md:px-5 bg-no-repeat bg-cover bg-bottom flex items-center justify-center">
+          {/* Black overlay */}
+          <div className="absolute inset-0 bg-black/60"></div>
+
+          {/* Content */}
+          <div className="relative z-10 w-[800px] max-md:w-full flex flex-col gap-10 -mt-20 max-md:mt-0 text-center px-6">
+            <div className="relative">
+              {/* Top Left Quote */}
+              <Image
+                width={40}
+                height={40}
+                alt="quote"
+                src="/images/header-left.png"
+                className="absolute -top-6 -left-6 object-contain"
+              />
+
+              {/* Heading */}
+              <h1 className="text-4xl max-md:text-3xl font-bold text-white leading-normal">
                 {`Secure Your Brand's Identity - Name, Logo, Slogan & More! Starting at
                 Just $49 + USPTO Filing Fee`}
               </h1>
-              <div className="flex items-end">
-                <Image
-                  width={130}
-                  height={130}
-                  alt="'"
-                  src={`/images/header-right.png`}
-                  className="object-contain"
-                />
-              </div>
+
+              {/* Bottom Right Quote */}
+              <Image
+                width={40}
+                height={40}
+                alt="quote"
+                src="/images/header-right.png"
+                className="absolute -bottom-6 -right-6 object-contain"
+              />
             </div>
+
             <Searchbar />
           </div>
         </section>

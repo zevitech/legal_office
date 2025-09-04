@@ -16,7 +16,7 @@ module.exports = {
         formHero: "url('/images/form-banner.jpg')",
         footer: "url('/images/Hero-Section-Background-05.jpg')",
         heroBanner: "url('/images/hero-banner.jpg')",
-        homeBanner: "url('/images/ltm-home-hero.png')",
+        homeBanner: "url('/images/hero-banner.jpg')",
         itBanner: "url('/images/international-trademark.png')",
         strBanner: "url('/images/hero-image-trademark-registration.png')",
         aboutBg: "url('/images/about-bg.png')",
