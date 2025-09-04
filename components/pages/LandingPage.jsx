@@ -17,6 +17,8 @@ import WhyChooseCard from "../ui/WhyChooseCard";
 import WhyChooseInfo from "../ui/WhyChooseInfo";
 import { FaAnglesDown } from "react-icons/fa6";
 import { IoChatbubblesOutline } from "react-icons/io5";
+import HeaderText from "../ui/HeaderText";
+import PackageCard2 from "../ui/PackageCard2";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -194,6 +196,17 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+
+        <section className="py-10 max-md:px-2 mb-[5rem]">
+          <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
+            <HeaderText text1="Trademark" text2="Registration Packages" />
+            <p className="text-slate-500 text-base text-center max-md:text-start">
+              Simplify your budgeting with our transparent and straightforward
+              business pricing plan, designed to support your growth.
+            </p>
+          </div>
+          <PackageCard2 />
+        </section>
 
       {/* benefit section */}
       <section className="mt-24 max-md:mt-20">
