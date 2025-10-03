@@ -19,10 +19,10 @@ const FooterSection = () => {
             className="object-contain"
           />
           <p className="text-slate-100 max-md:text-xs">
-            Secure your brand&apos;s future with Legal Trademark Office® tailored
-            protection packages. Choose our DIY assisted service for a hands-on
-            approach, or enlist our expert attorneys to handle your trademark
-            filing with precision and care. Protect your uniqueness.
+            Secure your brand&apos;s future with Legal Trademark Office®
+            tailored protection packages. Choose our DIY assisted service for a
+            hands-on approach, or enlist our expert attorneys to handle your
+            trademark filing with precision and care. Protect your uniqueness.
           </p>
         </div>
         <div className="text-slate-100">
@@ -65,7 +65,7 @@ const FooterSection = () => {
           </div>
 
           <div className="flex items-center gap-2 mt-[2rem]">
-            <div className="flex-center md:flex-col gap-4 -m-5">
+            <div className="flex-center md:flex-col gap-6 -m-5">
               <Link
                 href="#"
                 className="flex-center !items-start gap-3 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
@@ -75,10 +75,9 @@ const FooterSection = () => {
                   2121 Crystal Dr, Arlington, VA 22202, USA
                 </h4>
               </Link>
+              <p>Working Hours: <span class="font-semibold">9:00 AM – 6:00 PM</span></p>
             </div>
           </div>
-
-          
         </div>
 
         <ScrollToTop />
@@ -97,3 +96,6 @@ const FooterSection = () => {
 };
 
 export default FooterSection;
+
+
+
