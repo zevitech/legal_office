@@ -16,7 +16,6 @@ import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
 const Payment = () => {
   const router = useRouter();
-  const [isDataSent, setIsDataSent] = useState(false);
   // const [isLoading, setIsLoading] = useState(false);
   const [paymentError, setPaymentError] = useState("");
 
@@ -133,21 +132,8 @@ const Payment = () => {
 
   // send the data to mail and zoho
   const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
-  useEffect(() => {
-    const sendData = async () => {
-      if (isDataSent) return;
-
-      try {
-        await axios.post(endPoint, leadDataWithValues);
-        setIsDataSent(true);
-      } catch (err) {
-        console.log("Error sending mail in payment page: ", err);
-        alert("Something went wrong, Check your network or Please try again.");
-      }
-    };
-
-    sendData();
-  }, [isDataSent]);
+  // Removed problematic useEffect that was sending data before payment completion
+  // Data is now only sent after successful payment in onApprove function
 
   // initialize the payment
   // useEffect(() => {

@@ -6,15 +6,15 @@ export async function POST(req) {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
-  const credentialEnvConfig = new paypal.core.LiveEnvironment(
-    clientId,
-    clientSecret
-  );
-
-  // const credentialEnvConfig = new paypal.core.SandboxEnvironment(
+  // const credentialEnvConfig = new paypal.core.LiveEnvironment(
   //   clientId,
   //   clientSecret
   // );
+
+  const credentialEnvConfig = new paypal.core.SandboxEnvironment(
+    clientId,
+    clientSecret
+  );
 
   const client = new paypal.core.PayPalHttpClient(credentialEnvConfig);
 

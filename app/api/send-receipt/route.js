@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
-  const data = await req.json();
-  const admin_email = "legaltrademarkoffice@gmail.com";
-  const receiptHtml = `
+  try {
+    const data = await req.json();
+
+    const receiptHtml = `
                         <!DOCTYPE html>
                         <html lang="en">
 
@@ -22,13 +23,13 @@ export async function POST(req) {
                                 <td style="color: #005ea2; font-weight: 800; font-size: 24px;">Legal Trademark</td>
                                 <td align="right">
                                   <h2 style="color: #334155; font-weight: 700; font-size: 20px; text-transform: uppercase; margin: 0;">Receipt #${data?.nestedLeadData?.stepFour?.receipt_ID
-    }</h2>
+      }</h2>
                                   <p style="font-size: 14px; color: #64748b; margin: 0;">${data.today
-    }</p>
+      }</p>
                                   <p style="font-size: 14px; color: #64748b; margin: 0;">${data?.nestedLeadData?.stepOne?.firstName +
-    " " +
-    data?.nestedLeadData?.stepOne?.lastName
-    }</p>
+      " " +
+      data?.nestedLeadData?.stepOne?.lastName
+      }</p>
                                 </td>
                               </tr>
                             </table>
@@ -45,7 +46,7 @@ export async function POST(req) {
                               <tr>
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Trademark registration</td>
                                 <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$${data?.nestedLeadData?.stepThree.price
-    }</td>
+      }</td>
                               </tr>
                               <tr>
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Comprehensive Trademark Search</td>
@@ -60,8 +61,8 @@ export async function POST(req) {
                                 <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$0.00</td>
                               </tr>
                               ${data.nestedLeadData?.stepFour
-      ?.isRushProcessing === true &&
-    `<tr>
+        ?.isRushProcessing === true &&
+      `<tr>
                                     <td style="color: #475569; font-weight: 500; font-size: 14px;">
                                       Rush processing
                                     </td>
@@ -72,14 +73,14 @@ export async function POST(req) {
                                       $${data.nestedLeadData.stepFour?.rushAmount}
                                     </td>
                                   </tr>`
-    }
+      }
                             </table>
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px dotted #0f172a; margin-top: 20px; padding-top: 10px;">
                               <tr>
                                 <td style="font-weight: bold; font-size: 14px;">Sub Total</td>
                                 <td style="font-weight: bold; font-size: 14px;" align="right">$${data?.totalPrice
-    }</td>
+      }</td>
                               </tr>
                               <tr>
                                 <td style="font-weight: bold; font-size: 14px;">Tax</td>
@@ -88,7 +89,7 @@ export async function POST(req) {
                               <tr>
                                 <td style="font-weight: bold; font-size: 14px;">Total Amount</td>
                                 <td style="font-weight: bold; font-size: 14px;" align="right">$${data?.totalPrice
-    }</td>
+      }</td>
                               </tr>
                             </table>
 
@@ -114,37 +115,54 @@ export async function POST(req) {
                         </html>
                       `;
 
-  // Billing email transporter using Gmail SMTP
-  const billingTransporter = nodemailer.createTransporter({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-    auth: {
-      user: process.env.BILLING_EMAIL,
-      pass: process.env.BILLING_EMAIL_PASSWORD,
-    },
-  });
+    // Billing email transporter using Gmail SMTP
+    const billingTransporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT),
+      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      requireTLS: true, // Force TLS for Google Workspace
+      auth: {
+        user: process.env.BILLING_EMAIL,
+        pass: process.env.BILLING_EMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false // Allow self-signed certificates
+      }
+    });
 
-  const mailOptions = {
-    from: process.env.BILLING_EMAIL,
-    to: data?.nestedLeadData?.stepOne?.emailAddress,
-    subject: "Your Order Receipt | Legal Trademark Office",
-    html: receiptHtml,
-  };
- 
-  // Support email transporter using Gmail SMTP for onboarding
-  const supportTransporter = nodemailer.createTransporter({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-    auth: {
-      user: process.env.SUPPORT_EMAIL,
-      pass: process.env.SUPPORT_EMAIL_PASSWORD,
-    },
-  });
+    const mailOptions = {
+      from: process.env.BILLING_EMAIL,
+      to: data?.nestedLeadData?.stepOne?.emailAddress,
+      subject: "Your Order Receipt | Legal Trademark Office",
+      html: receiptHtml,
+    };
 
-  // Onboarding email HTML template
-  const onboardingHtml = `
+    // Support email transporter using Gmail SMTP for onboarding
+    const supportTransporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT),
+      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      requireTLS: true, // Force TLS for Google Workspace
+      auth: {
+        user: process.env.SUPPORT_EMAIL,
+        pass: process.env.SUPPORT_EMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false // Allow self-signed certificates
+      }
+    });
+
+    // Business Gmail transporter for receiving receipt copies
+    const businessGmailTransporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.MAILER_EMAIL,
+        pass: process.env.MAILER_PASSWORD,
+      },
+    });
+
+    // Onboarding email HTML template
+    const onboardingHtml = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -156,7 +174,7 @@ export async function POST(req) {
       <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         
         <div style="padding: 20px 0;">
-          <h2 style="color: #334155; font-size: 22px; text-align: center;">Welcome to Legal Trademark Office – Order Confirmation</h2>
+          
           
           <p style="color: #475569; font-size: 16px; line-height: 1.6;">
             Dear ${data?.nestedLeadData?.stepOne?.firstName} ${data?.nestedLeadData?.stepOne?.lastName},
@@ -195,23 +213,44 @@ export async function POST(req) {
     </html>
   `;
 
-  const onboardingMailOptions = {
-    from: process.env.SUPPORT_EMAIL,
-    to: data?.nestedLeadData?.stepOne?.emailAddress,
-    subject: "Welcome to Legal Trademark Office - Your Journey Begins!",
-    html: onboardingHtml,
-  };
+    const onboardingMailOptions = {
+      from: process.env.SUPPORT_EMAIL,
+      to: data?.nestedLeadData?.stepOne?.emailAddress,
+      subject: "Welcome to Legal Trademark Office - Your Journey Begins!",
+      html: onboardingHtml,
+    };
 
-  try {
-    // Send receipt email first
-    await billingTransporter.sendMail(mailOptions);
+    // Business copy mail options (copy of receipt for business records)
+    const businessCopyMailOptions = {
+      from: process.env.MAILER_EMAIL,
+      to: process.env.MAILER_EMAIL,
+      subject: `[BUSINESS COPY] Order Receipt - ${data?.nestedLeadData?.stepOne?.firstName} ${data?.nestedLeadData?.stepOne?.lastName}`,
+      html: receiptHtml,
+    };
+
+    // Send receipt email to customer first
+    const receiptResult = await billingTransporter.sendMail(mailOptions);
+
+    // Send copy of receipt to business Gmail
+    const businessCopyResult = await businessGmailTransporter.sendMail(businessCopyMailOptions);
 
     // Send onboarding email after receipt
-    await supportTransporter.sendMail(onboardingMailOptions);
+    const onboardingResult = await supportTransporter.sendMail(onboardingMailOptions);
 
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error) {
-    console.log("Error while sending emails: " + error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+    return NextResponse.json({
+      success: true,
+      receiptMessageId: receiptResult.messageId,
+      businessCopyMessageId: businessCopyResult.messageId,
+      onboardingMessageId: onboardingResult.messageId
+    }, { status: 200 });
+
+} catch (error) {
+  console.error("Error in send-receipt endpoint:", error.message);
+  return NextResponse.json({
+    error: "Failed to send receipt email",
+    details: "Please contact support if the issue persists"
+  }, { status: 500 });
 }
+}
+
+
