@@ -114,11 +114,11 @@ export async function POST(req) {
                         </html>
                       `;
 
-  // Billing email transporter using Hostinger SMTP
-  const billingTransporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465,
-    secure: true, // true for 465, false for other ports
+  // Billing email transporter using Gmail SMTP
+  const billingTransporter = nodemailer.createTransporter({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
     auth: {
       user: process.env.BILLING_EMAIL,
       pass: process.env.BILLING_EMAIL_PASSWORD,
@@ -131,12 +131,12 @@ export async function POST(req) {
     subject: "Your Order Receipt | Legal Trademark Office",
     html: receiptHtml,
   };
-
-  // Support email transporter using Hostinger SMTP for onboarding
-  const supportTransporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465,
-    secure: true, // true for 465, false for other ports
+ 
+  // Support email transporter using Gmail SMTP for onboarding
+  const supportTransporter = nodemailer.createTransporter({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
     auth: {
       user: process.env.SUPPORT_EMAIL,
       pass: process.env.SUPPORT_EMAIL_PASSWORD,
