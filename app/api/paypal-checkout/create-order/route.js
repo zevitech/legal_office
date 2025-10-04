@@ -6,20 +6,17 @@ export async function POST(req) {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
-  // const credentialEnvConfig = new paypal.core.LiveEnvironment(
-  //   clientId,
-  //   clientSecret
-  // );
-
-  const credentialEnvConfig = new paypal.core.SandboxEnvironment(
+  const credentialEnvConfig = new paypal.core.LiveEnvironment(
     clientId,
     clientSecret
   );
 
-  const client = new paypal.core.PayPalHttpClient(credentialEnvConfig);
+  // const credentialEnvConfig = new paypal.core.SandboxEnvironment(
+  //   clientId,
+  //   clientSecret
+  // );
 
-  // console.log("credentialEnvConfig===============", credentialEnvConfig);
-  // console.log("client============", client);
+  const client = new paypal.core.PayPalHttpClient(credentialEnvConfig);
 
   try {
     const request = new paypal.orders.OrdersCreateRequest();
@@ -30,13 +27,11 @@ export async function POST(req) {
           amount: {
             currency_code: "USD",
             value: body.totalAmount,
-            // value: 5,
           },
         },
       ],
     });
     const response = await client.execute(request);
-    console.log("Orders created response: ", response);
 
     return NextResponse.json({ order: response.result }, { status: 200 });
   } catch (error) {
