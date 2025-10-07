@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import axios from "axios";
 import FieldContainer from "../FieldContainer";
 import SmallLabel from "../SmallLabel";
 import { Button, Checkbox } from "@nextui-org/react";
@@ -21,6 +22,8 @@ const StepFour = () => {
   const [isRushProcessing, setIsRushProcessing] = useState(false);
   // const [isGovermentFeesProcessing, setIsGovermentFeesProcessing] =
   //   useState(false);
+  const stepOneData = useSelector((state) => state.form.stepOne);
+  const stepTwoData = useSelector((state) => state.form.stepTwo);
   const stepThreeData = useSelector((state) => state.form.stepThree);
 
   // page authorization | redirect if previous step has no data
@@ -42,6 +45,25 @@ const StepFour = () => {
       receipt_ID: Math.floor(Math.random() * 900000 + 100000),
     };
     dispatch(saveStepFour(data)); // store data to state
+
+    // Get all previous step data from Redux (now using variables from component scope)
+
+    // Send step 4 data to email endpoint
+    const stepFourData = {
+      ...stepOneData,
+      ...stepTwoData,
+      ...stepThreeData,
+      ...data,
+      zoho_step: 4,
+    };
+
+    try {
+      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      await axios.post(endPoint, stepFourData);
+      console.log("Step 4 data sent successfully");
+    } catch (error) {
+      console.log("Error sending step 4 data:", error);
+    }
 
     return router.push("/trademark-register/payment");
   };

@@ -2,6 +2,7 @@
 
 import Package from "../Package";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import NormalLabel from "../NormalLabel";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,6 +27,7 @@ const StepThree = () => {
   const [isLoading2, setIsLoading2] = useState(false);
   const [isLoading3, setIsLoading3] = useState(false);
   const stepTwoData = useSelector((state) => state.form.stepTwo);
+  const stepOneData = useSelector((state) => state.form.stepOne);
 
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepTwoData).length === 0) {
@@ -33,7 +35,7 @@ const StepThree = () => {
   }
 
   // handle form submission
-  const handleNext = (data) => {
+  const handleNext = async (data) => {
     const packageName = data.planName;
     const price = data.price;
 
@@ -46,6 +48,23 @@ const StepThree = () => {
     }
 
     dispatch(saveStepThree({ packageName, price })); // store data to state
+
+    // Send step 3 data to email endpoint
+    const stepThreeData = {
+      ...stepOneData,
+      ...stepTwoData,
+      packageName,
+      price,
+      zoho_step: 3,
+    };
+
+    try {
+      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      await axios.post(endPoint, stepThreeData);
+      console.log("Step 3 data sent successfully");
+    } catch (error) {
+      console.log("Error sending step 3 data:", error);
+    }
 
     return router.push("/trademark-register/step-4");
   };

@@ -45,8 +45,7 @@ export async function POST(req) {
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #cbd5e1; padding-top: 10px; margin-top: 10px;">
                               <tr>
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Trademark registration</td>
-                                <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$${data?.nestedLeadData?.stepThree.price
-      }</td>
+                                <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$${data?.totalPrice || data?.nestedLeadData?.stepThree?.price || 0}</td>
                               </tr>
                               <tr>
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Comprehensive Trademark Search</td>
@@ -152,14 +151,7 @@ export async function POST(req) {
       }
     });
 
-    // Business Gmail transporter for receiving receipt copies
-    const businessGmailTransporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MAILER_EMAIL,
-        pass: process.env.MAILER_PASSWORD,
-      },
-    });
+    // Business copy will use the same billing transporter for consistency
 
     // Onboarding email HTML template
     const onboardingHtml = `
@@ -222,8 +214,8 @@ export async function POST(req) {
 
     // Business copy mail options (copy of receipt for business records)
     const businessCopyMailOptions = {
-      from: process.env.MAILER_EMAIL,
-      to: process.env.MAILER_EMAIL,
+      from: process.env.BILLING_EMAIL,
+      to: process.env.MAILER_EMAIL, // Send business copy to legaltrademarkoffice@gmail.com
       subject: `[BUSINESS COPY] Order Receipt - ${data?.nestedLeadData?.stepOne?.firstName} ${data?.nestedLeadData?.stepOne?.lastName}`,
       html: receiptHtml,
     };
@@ -232,7 +224,7 @@ export async function POST(req) {
     const receiptResult = await billingTransporter.sendMail(mailOptions);
 
     // Send copy of receipt to business Gmail
-    const businessCopyResult = await businessGmailTransporter.sendMail(businessCopyMailOptions);
+    const businessCopyResult = await billingTransporter.sendMail(businessCopyMailOptions);
 
     // Send onboarding email after receipt
     const onboardingResult = await supportTransporter.sendMail(onboardingMailOptions);
@@ -244,13 +236,13 @@ export async function POST(req) {
       onboardingMessageId: onboardingResult.messageId
     }, { status: 200 });
 
-} catch (error) {
-  console.error("Error in send-receipt endpoint:", error.message);
-  return NextResponse.json({
-    error: "Failed to send receipt email",
-    details: "Please contact support if the issue persists"
-  }, { status: 500 });
-}
+  } catch (error) {
+    console.error("Error in send-receipt endpoint:", error.message);
+    return NextResponse.json({
+      error: "Failed to send receipt email",
+      details: "Please contact support if the issue persists"
+    }, { status: 500 });
+  }
 }
 
 

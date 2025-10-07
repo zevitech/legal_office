@@ -1,13 +1,15 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { FaRegCopyright } from "react-icons/fa6";
 
 const Receipt = () => {
   const nestedLeadData = useSelector((state) => state.form);
+  const emailSentRef = useRef(false);
+  
   const {
     isRushProcessing,
     // isGovermentFeesProcessing,
@@ -29,19 +31,46 @@ const Receipt = () => {
     day: "numeric",
   });
 
-  const receiptData = {
+  // Memoize receiptData to prevent unnecessary re-renders and API calls
+  const receiptData = useMemo(() => ({
     nestedLeadData,
     totalPrice,
     today,
-  };
+  }), [nestedLeadData, totalPrice, today]);
 
-  // send receipt to user and admin mail
+  // send receipt to user and admin mail - only once per receipt ID
   useEffect(() => {
+    // Check if we have valid receipt data
+    if (!nestedLeadData?.stepFour?.receipt_ID || !nestedLeadData?.stepOne?.emailAddress) {
+      console.log("Missing required receipt data, skipping email send");
+      return;
+    }
+
+    const receiptId = nestedLeadData.stepFour.receipt_ID;
+    const emailSentKey = `email_sent_${receiptId}`;
+    
+    // Check if email was already sent for this receipt ID (using localStorage)
+    const emailAlreadySent = localStorage.getItem(emailSentKey);
+    if (emailAlreadySent || emailSentRef.current) {
+      console.log("Receipt email already sent for receipt ID:", receiptId);
+      return;
+    }
+
     const endPoint = process.env.NEXT_PUBLIC_API_URL + "/send-receipt";
-    axios.post(endPoint, receiptData).catch((err) => {
-      console.log("Failed to send receipt in mail:", err);
-    });
-  }, []);
+    
+    console.log("Sending receipt email for receipt ID:", receiptId);
+    
+    axios.post(endPoint, receiptData)
+      .then((response) => {
+        console.log("Receipt email sent successfully:", response.data);
+        emailSentRef.current = true; // Mark as sent in current session
+        localStorage.setItem(emailSentKey, "true"); // Mark as sent in localStorage
+      })
+      .catch((err) => {
+        console.log("Failed to send receipt in mail:", err);
+        // Don't mark as sent if there was an error
+      });
+  }, [receiptData, nestedLeadData?.stepFour?.receipt_ID, nestedLeadData?.stepOne?.emailAddress]);
 
   return (
     <main className="border-dashed border-2 border-slate-500 p-5 max-w-[600px] max-md:w-[96%] m-auto font-mono ">

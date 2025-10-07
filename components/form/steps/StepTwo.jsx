@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import FieldContainer from "../FieldContainer";
 import BoldLabel from "../BoldLabel";
 import SmallLabel from "../SmallLabel";
@@ -41,8 +42,24 @@ const StepTwo = () => {
       return;
     }
 
-    // store the data to state and foreword to next step
+    // store the data to state
     dispatch(saveStepTwo({ trademarkClassification }));
+
+    // Send step 2 data to email endpoint
+    const stepTwoData = {
+      ...stepOneData,
+      trademarkClassification,
+      zoho_step: 2,
+    };
+
+    try {
+      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      await axios.post(endPoint, stepTwoData);
+      console.log("Step 2 data sent successfully");
+    } catch (error) {
+      console.log("Error sending step 2 data:", error);
+    }
+
     return router.push("/trademark-register/step-3");
   };
 
