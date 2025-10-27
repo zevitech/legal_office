@@ -79,7 +79,6 @@ const StepOne = () => {
   const [organizationPosition, setOrganizationPosition] = useState("");
   const [reChaptcha, setReChaptcha] = useState("");
   const [errors, setErrors] = useState({});
-  const [isEmailAuthentic, setIsEmailAuthentic] = useState(false);
 
   // PERSONAL INFORMATION
   const [firstName, setFirstName] = useState("");
@@ -172,40 +171,30 @@ const StepOne = () => {
     return emailRegex.test(email);
   };
 
-  // VALIDATE EMAIL ADRESS AUTHENTICITY
-  const verifyEmailWithZeroBounce = async (email) => {
-    const API_KEY = "a19ffe28ca9f474aae800e31900febbd";
+  // VALIDATE EMAIL ADRESS AUTHENTICITY - COMMENTED OUT ZEROBOUNCE VALIDATION
+  // const verifyEmailWithZeroBounce = async (email) => {
+  //   const API_KEY = "a19ffe28ca9f474aae800e31900febbd";
 
-    try {
-      const response = await axios.get(
-        `https://api.zerobounce.net/v2/validate?api_key=${API_KEY}&email=${email}`
-      );
-      return response.data.status === "valid";
-    } catch (error) {
-      console.error("Error verifying email:", error);
-      return false;
-    }
-  };
+  //   try {
+  //     const response = await axios.get(
+  //       `https://api.zerobounce.net/v2/validate?api_key=${API_KEY}&email=${email}`
+  //     );
+  //     return response.data.status === "valid";
+  //   } catch (error) {
+  //     console.error("Error verifying email:", error);
+  //     return false;
+  //   }
+  // };
 
-  // EMAIL VALIDATOR ON CHANGE
-  const handleEmailChange = async (e) => {
+  // EMAIL VALIDATOR ON CHANGE - SIMPLIFIED WITHOUT ZEROBOUNCE
+  const handleEmailChange = (e) => {
     const email = e.target.value;
     setEmailAddress(email);
 
     if (!validateEmailFormat(email)) {
       setErrors({ emailAddress: "Please enter a valid email address." });
-      setIsEmailAuthentic(false);
     } else {
-      setErrors({ emailAddress: "Checking email authenticity..." });
-
-      const isAuthentic = await verifyEmailWithZeroBounce(email);
-      setIsEmailAuthentic(isAuthentic);
-
-      if (isAuthentic) {
-        setErrors({});
-      } else {
-        setErrors({ emailAddress: "The email address is not authentic." });
-      }
+      setErrors({});
     }
   };
 
@@ -267,8 +256,6 @@ const StepOne = () => {
       tempErrors.emailAddress = "Email address is required";
     } else if (!validateEmailFormat(emailAddress)) {
       tempErrors.emailAddress = "Invalid email address";
-    } else if (!isEmailAuthentic) {
-      tempErrors.emailAddress = "The email address is not authentic.";
     }
     // Only validate reCAPTCHA if site key is available (skip for testing)
     if (process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && !reChaptcha) {
