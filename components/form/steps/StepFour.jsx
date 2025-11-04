@@ -65,6 +65,31 @@ const StepFour = () => {
       console.log("Error sending step 4 data:", error);
     }
 
+    // Check if payment bypass mode is enabled for testing
+    if (process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true") {
+      console.log(
+        "Payment bypass mode enabled - skipping payment and going directly to thank you page"
+      );
+      // Mark as paid for testing purposes
+      const bypassData = {
+        ...stepFourData,
+        is_paid: true,
+        zoho_step: 3,
+        payment_bypass: true,
+        payment_method: "TESTING_BYPASS",
+      };
+
+      try {
+        const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+        await axios.post(endPoint, bypassData);
+        console.log("Bypass payment data sent successfully");
+      } catch (error) {
+        console.log("Error sending bypass payment data:", error);
+      }
+
+      return router.push("/trademark-register/thank-you");
+    }
+
     return router.push("/trademark-register/payment");
   };
 

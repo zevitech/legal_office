@@ -23,12 +23,9 @@ const formSlice = createSlice({
     saveStepFour(state, action) {
       state.stepFour = action.payload;
     },
-    resetForm(state) {
-      return initialState;
-    },
   },
 });
 
-export const { saveStepOne, saveStepTwo, saveStepThree, saveStepFour, resetForm } =
+export const { saveStepOne, saveStepTwo, saveStepThree, saveStepFour } =
   formSlice.actions;
 export default formSlice.reducer;
