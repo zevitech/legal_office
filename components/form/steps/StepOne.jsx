@@ -108,6 +108,10 @@ const StepOne = () => {
     !!process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY &&
     process.env.NEXT_PUBLIC_DISABLE_CAPTCHA !== "true";
 
+  // Global validation bypass (development/production toggle)
+  const isValidationDisabled =
+    process.env.NEXT_PUBLIC_DISABLE_VALIDATION === "true";
+
   // Refs for error fields
   const protectNameRef = useRef(null);
   const sloganNameRef = useRef(null);
@@ -280,6 +284,11 @@ const StepOne = () => {
   const handleFormValidationAndSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // If validation is disabled, submit immediately
+    if (isValidationDisabled) {
+      return handleFormSubmit();
+    }
 
     const firstErrorField = validateForm();
     if (firstErrorField) {

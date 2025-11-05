@@ -61,22 +61,28 @@ export async function POST(req) {
 
 
 
-    // sending data to ZOHO -start
-    try {
-      const zohoEndPoint =
-        "https://www.zohoapis.com/crm/v2/functions/get_lead_data_from_website/actions/execute?auth_type=apikey&zapikey=1003.eb4ba5dd90c3427d79be3ee781077455.953a892dc19d9aed59d99419e60d368b";
-      await axios
-        .post(zohoEndPoint, data)
-        .then((res) => {
-          console.log("zoho response: ", res?.data?.message);
-        })
-        .catch((err) => {
-          console.log("zoho error", err);
-        });
-    } catch (error) {
-      console.log("Error while saving zoho lead: " + error);
+    // sending data to ZOHO - disabled via env or default off
+    const disableZoho =
+      process.env.DISABLE_ZOHO === "true" ||
+      process.env.NEXT_PUBLIC_DISABLE_ZOHO === "true";
+    if (!disableZoho) {
+      try {
+        const zohoEndPoint =
+          "https://www.zohoapis.com/crm/v2/functions/get_lead_data_from_website/actions/execute?auth_type=apikey&zapikey=1003.eb4ba5dd90c3427d79be3ee781077455.953a892dc19d9aed59d99419e60d368b";
+        await axios
+          .post(zohoEndPoint, data)
+          .then((res) => {
+            console.log("zoho response: ", res?.data?.message);
+          })
+          .catch((err) => {
+            console.log("zoho error", err);
+          });
+      } catch (error) {
+        console.log("Error while saving zoho lead: " + error);
+      }
+    } else {
+      console.log("ZOHO lead forwarding disabled. Only SMTP email sent.");
     }
-    // sending data to ZOHO -end
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

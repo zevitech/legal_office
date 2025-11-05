@@ -111,22 +111,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }}
       />
 
-      {/* New Google Tag Manager 01 */}
+      {/* Google tag (gtag.js) for Google Ads */}
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-4V3XW7Q5EG"
+        src="https://www.googletagmanager.com/gtag/js?id=AW-16565473053"
         strategy="afterInteractive"
       />
 
-      {/* New Google Tag Manager 02 */}
       <Script
         id="gtag-init"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
+            function gtag(){dataLayer.push(arguments);} 
             gtag('js', new Date());
-            gtag('config', 'G-4V3XW7Q5EG');
+            gtag('config', 'AW-16565473053');
           `,
         }}
       />
