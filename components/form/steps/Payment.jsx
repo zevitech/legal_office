@@ -27,6 +27,13 @@ const Payment = () => {
   // Check if payment bypass mode is enabled
   const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === 'true';
 
+  // If bypass mode is enabled, redirect to Thank You immediately
+  useEffect(() => {
+    if (isBypassMode) {
+      router.push("/trademark-register/thank-you");
+    }
+  }, [isBypassMode, router]);
+
   // from the nested object, merge them into one object
   const leadData = useMemo(
     () => Object.assign({}, ...Object.values(nestedLeadData)),
@@ -164,52 +171,9 @@ const Payment = () => {
     return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
   }
 
-  // If bypass mode is enabled, show testing message and redirect
+  // If bypass mode is enabled, component will redirect; render nothing here
   if (isBypassMode) {
-    return (
-      <main className="system-page-standard-layout flex flex-col gap-4">
-        <div className="w-full flex flex-col gap-1 mb-10">
-          <h1 className="font-inria text-heading-color md:text-[24px] text-[20px] w-full">
-            PAYMENT BYPASS MODE ACTIVE
-          </h1>
-          <p className="md:text-[16px] text-[12px] md:leading-[18px] leading-[14px] text-orange-600 font-semibold">
-            ⚠️ Testing mode enabled - Payment processing is bypassed for development purposes
-          </p>
-        </div>
-
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-yellow-800 mb-2">Testing Information</h3>
-          <p className="text-yellow-700 mb-4">
-            Payment bypass mode is currently active. This allows you to test the complete form flow 
-            without making actual payments. In production, this should be disabled.
-          </p>
-          <div className="bg-white p-4 rounded border">
-            <h4 className="font-semibold text-gray-800 mb-2">Order Summary:</h4>
-            {orderDetails.map(({ title, amount }, index) => (
-              <div key={index} className="flex justify-between py-1">
-                <span className="text-gray-600">{title}:</span>
-                <span className="font-medium">${amount}</span>
-              </div>
-            ))}
-            <div className="flex justify-between py-2 border-t mt-2">
-              <span className="font-bold text-gray-800">Total Amount:</span>
-              <span className="font-bold text-primary-theme">${totalAmount}.00</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center">
-          <Button
-            color="primary"
-            size="lg"
-            onClick={() => router.push("/trademark-register/thank-you")}
-            className="h-[50px] px-8"
-          >
-            Continue to Thank You Page (Testing)
-          </Button>
-        </div>
-      </main>
-    );
+    return null;
   }
 
   return (

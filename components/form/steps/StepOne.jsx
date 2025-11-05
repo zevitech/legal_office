@@ -103,6 +103,11 @@ const StepOne = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  // Explicit flag to enable/disable captcha independent of site key
+  const isCaptchaEnabled =
+    !!process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY &&
+    process.env.NEXT_PUBLIC_DISABLE_CAPTCHA !== "true";
+
   // Refs for error fields
   const protectNameRef = useRef(null);
   const sloganNameRef = useRef(null);
@@ -257,8 +262,8 @@ const StepOne = () => {
     } else if (!validateEmailFormat(emailAddress)) {
       tempErrors.emailAddress = "Invalid email address";
     }
-    // Only validate reCAPTCHA if site key is available (skip for testing)
-    if (process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && !reChaptcha) {
+    // Only validate reCAPTCHA if enabled
+    if (isCaptchaEnabled && !reChaptcha) {
       tempErrors.reChaptcha = "Please verify that you are not a robot";
     }
 
@@ -1184,7 +1189,7 @@ const StepOne = () => {
 
           <div className="w-full flex max-md:flex-col max-md:gap-4 md:justify-between">
             {/* Google ReCAPTCHA - Only show if site key is available */}
-            {process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && (
+            {/* {process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && (
               <>
                 <ReCAPTCHA
                   sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}
@@ -1200,14 +1205,14 @@ const StepOne = () => {
                   </p>
                 )}
               </>
-            )}
+            )} */}
             
             {/* Show message when reCAPTCHA is disabled for testing */}
-            {!process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && (
+            {/* {!process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && (
               <div className="text-sm text-gray-600 italic">
                 reCAPTCHA disabled for testing
               </div>
-            )}
+            )} */}
 
             {/* SUBMIT BUTTON */}
             <Button
