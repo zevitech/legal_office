@@ -12,8 +12,8 @@ export async function POST(req) {
     const shouldVerifyCaptcha =
       process.env.NEXT_PUBLIC_DISABLE_CAPTCHA !== "true" &&
       !!process.env.RECAPTCHA_SECRET_KEY &&
-      // Only verify for Step 1 (first form) or when a token is present
-      (data?.zoho_step === 1 || !!data?.reChaptcha);
+      // Only verify for Step 1 (first form)
+      data?.zoho_step === 1;
 
     if (shouldVerifyCaptcha) {
       const token = data?.reChaptcha || "";

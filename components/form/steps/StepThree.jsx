@@ -59,7 +59,7 @@ const StepThree = () => {
     };
 
     try {
-      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      const endPoint = "/api/save-data";
       await axios.post(endPoint, stepThreeData);
       console.log("Step 3 data sent successfully");
     } catch (error) {

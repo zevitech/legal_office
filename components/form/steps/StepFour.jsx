@@ -58,7 +58,7 @@ const StepFour = () => {
     };
 
     try {
-      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      const endPoint = "/api/save-data";
       await axios.post(endPoint, stepFourData);
       console.log("Step 4 data sent successfully");
     } catch (error) {
