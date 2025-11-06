@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { MdOutlineCall } from "react-icons/md";
 import { FaDownload } from "react-icons/fa6";
@@ -24,14 +24,27 @@ const ThankYou = () => {
   const stepFourData = useSelector((state) => state.form.stepFour);
   const nestedLeadData = useSelector((state) => state.form);
 
+  // Compute totals for analytics
+  const basePrice = nestedLeadData?.stepThree?.price || 0;
+  const isRushProcessing = nestedLeadData?.stepFour?.isRushProcessing || false;
+  const rushAmount = nestedLeadData?.stepFour?.rushAmount || 0;
+  const totalPrice = basePrice + (isRushProcessing ? rushAmount : 0);
+
   // Check if payment bypass mode is enabled
   const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
   const paymentBypass = nestedLeadData.stepFour?.payment_bypass;
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepFourData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
+  // Move redirect into an effect to avoid conditional hook ordering
+  useEffect(() => {
+    try {
+      if (!stepFourData || Object.keys(stepFourData).length === 0) {
+        router.replace(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+      }
+    } catch (err) {
+      console.log("Redirect failed:", err);
+    }
+  }, [router, stepFourData]);
 
   // make image and the download the receipt as image
   const handleDownload = async () => {
@@ -48,10 +61,76 @@ const ThankYou = () => {
     setIsLoading(false);
   };
 
+  // Push purchase event to Google Tag Manager on real payment
+  useEffect(() => {
+    try {
+      // Skip analytics when bypass mode or explicit payment bypass is enabled
+      if (isBypassMode || paymentBypass) return;
+
+      const receiptId = nestedLeadData?.stepFour?.receipt_ID;
+      const email = nestedLeadData?.stepOne?.emailAddress;
+      const packageName = nestedLeadData?.stepThree?.packageName || "Trademark registration";
+
+      if (!receiptId || !email || !basePrice) return;
+
+      const key = `gtm_purchase_${receiptId}`;
+      if (typeof window !== "undefined") {
+        // Prevent duplicate pushes for the same receipt
+        if (localStorage.getItem(key)) return;
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "purchase",
+          transaction_id: receiptId,
+          value: totalPrice,
+          currency: "USD",
+          email,
+          package_name: packageName,
+          items: [
+            {
+              item_name: packageName,
+              item_id: "trademark_registration",
+              price: basePrice,
+              quantity: 1,
+            },
+            ...(isRushProcessing
+              ? [
+                  {
+                    item_name: "Rush processing",
+                    item_id: "rush_processing",
+                    price: rushAmount,
+                    quantity: 1,
+                  },
+                ]
+              : []),
+          ],
+        });
+
+        // Optional: also emit gtag event if available
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "purchase", {
+            transaction_id: receiptId,
+            value: totalPrice,
+            currency: "USD",
+          });
+        }
+
+        localStorage.setItem(key, "true");
+      }
+    } catch (err) {
+      console.log("GTM purchase event failed:", err);
+    }
+  }, [isBypassMode, paymentBypass, nestedLeadData, basePrice, rushAmount, totalPrice, isRushProcessing]);
+
   const redirectToHome = () => {
     setHomeIsLoading(true);
     return router.push(process.env.NEXT_PUBLIC_APP_URL);
   };
+
+  // Guard render when redirecting (hooks above still run consistently)
+  if (!stepFourData || Object.keys(stepFourData).length === 0) {
+    return null;
+  }
 
   return (
     <main className="section-standard-layout flex flex-col items-center gap-4 py-10">

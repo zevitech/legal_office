@@ -8,6 +8,50 @@ export async function POST(req) {
   console.log("client already paid: ", data?.is_paid_log);
 
   try {
+    // Verify reCAPTCHA v2 token (if enabled)
+    const shouldVerifyCaptcha =
+      process.env.NEXT_PUBLIC_DISABLE_CAPTCHA !== "true" &&
+      !!process.env.RECAPTCHA_SECRET_KEY &&
+      // Only verify for Step 1 (first form) or when a token is present
+      (data?.zoho_step === 1 || !!data?.reChaptcha);
+
+    if (shouldVerifyCaptcha) {
+      const token = data?.reChaptcha || "";
+      if (!token) {
+        return NextResponse.json(
+          { error: "Missing reCAPTCHA token" },
+          { status: 400 }
+        );
+      }
+
+      const params = new URLSearchParams();
+      params.append("secret", process.env.RECAPTCHA_SECRET_KEY);
+      params.append("response", token);
+
+      const verifyRes = await fetch(
+        "https://www.google.com/recaptcha/api/siteverify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: params.toString(),
+        }
+      );
+      const verifyJson = await verifyRes.json();
+
+      if (!verifyJson?.success) {
+        console.log("reCAPTCHA verification failed:", verifyJson);
+        return NextResponse.json(
+          {
+            error: "reCAPTCHA verification failed",
+            details: verifyJson?.["error-codes"],
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // sending data to gmail account -start
     const transporter = createTransport({
       service: "gmail",

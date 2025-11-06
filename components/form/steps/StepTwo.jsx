@@ -53,7 +53,7 @@ const StepTwo = () => {
     };
 
     try {
-      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      const endPoint = "/api/save-data";
       await axios.post(endPoint, stepTwoData);
       console.log("Step 2 data sent successfully");
     } catch (error) {
@@ -86,7 +86,10 @@ const StepTwo = () => {
           maxRows={12}
           minRows={12}
           value={trademarkClassification}
-          onChange={(e) => setTrademarkClassification(e.target.value)}
+          onChange={(e) => {
+            setTrademarkClassification(e.target.value);
+            if (e.target.value) setValidation(false);
+          }}
           errorMessage={`Please provide a description of your goods or services.`}
           isInvalid={validation}
         />
@@ -113,6 +116,7 @@ const StepTwo = () => {
               onClick={handleFormSubmit}
               className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
               isLoading={isLoading}
+              isDisabled={!trademarkClassification}
             >
               Next
             </Button>

@@ -56,7 +56,7 @@ const Receipt = () => {
       return;
     }
 
-    const endPoint = process.env.NEXT_PUBLIC_API_URL + "/send-receipt";
+    const endPoint = "/api/send-receipt";
     
     console.log("Sending receipt email for receipt ID:", receiptId);
     

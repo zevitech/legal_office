@@ -180,6 +180,28 @@ const StepOne = () => {
     return emailRegex.test(email);
   };
 
+  // Helper functions to clear field-specific errors as user types/selects
+  const clearError = (field) => {
+    setErrors((prev) => {
+      if (!prev || !prev[field]) return prev || {};
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
+  const setValueAndClearError = (setter, field) => (e) => {
+    setter(e.target.value);
+    clearError(field);
+  };
+
+  const setSelectionAndClearError = (setter, field) => (value) => {
+    const selectedValue =
+      Array.isArray(value) || value instanceof Set ? [...value][0] : value;
+    setter(selectedValue);
+    clearError(field);
+  };
+
   // VALIDATE EMAIL ADRESS AUTHENTICITY - COMMENTED OUT ZEROBOUNCE VALIDATION
   // const verifyEmailWithZeroBounce = async (email) => {
   //   const API_KEY = "a19ffe28ca9f474aae800e31900febbd";
@@ -201,9 +223,12 @@ const StepOne = () => {
     setEmailAddress(email);
 
     if (!validateEmailFormat(email)) {
-      setErrors({ emailAddress: "Please enter a valid email address." });
+      setErrors((prev) => ({
+        ...(prev || {}),
+        emailAddress: "Please enter a valid email address.",
+      }));
     } else {
-      setErrors({});
+      clearError("emailAddress");
     }
   };
 
@@ -493,6 +518,8 @@ const StepOne = () => {
       landLineNumber,
       emailAddress,
       contactTime,
+      // Include reCAPTCHA token for server-side verification
+      reChaptcha,
       zoho_step: 1,
     };
 
@@ -504,7 +531,7 @@ const StepOne = () => {
     dispatch(saveStepOne(stepOneWithValues));
 
     // SEND DATA TO MAIL AND ZOHO
-    const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+    const endPoint = "/api/save-data";
 
     axios
       .post(endPoint, stepOneWithValues)
@@ -564,6 +591,7 @@ const StepOne = () => {
                       value={logoColors}
                       onChange={(e) => {
                         setLogoColors(e.target.value);
+                        clearError("logoColors");
                       }}
                       errorMessage={errors.logoColors}
                       isInvalid={!!errors.logoColors}
@@ -579,6 +607,7 @@ const StepOne = () => {
                       value={logoProtectionDescription}
                       onChange={(e) => {
                         setLogoProtectionDescription(e.target.value);
+                        clearError("logoProtectionDescription");
                       }}
                       errorMessage={errors.logoProtectionDescription}
                       isInvalid={!!errors.logoProtectionDescription}
@@ -590,6 +619,7 @@ const StepOne = () => {
                       onSuccess={(results) => {
                         const public_url = results?.info?.url;
                         setLogo(public_url);
+                        clearError("logo");
                       }}
                       onOpen={() => setIsUploading(true)}
                       onClose={() => setIsUploading(false)}
@@ -640,9 +670,7 @@ const StepOne = () => {
                     label={`Enter the name you wish to protect`}
                     className="w-full"
                     value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
+                    onChange={setValueAndClearError(setName, "name")}
                     errorMessage={errors.name}
                     isInvalid={!!errors.name}
                     ref={protectNameRef}
@@ -656,9 +684,7 @@ const StepOne = () => {
                     label={`Enter the slogan you wish to protect`}
                     className="w-full"
                     value={slogan}
-                    onChange={(e) => {
-                      setSlogan(e.target.value);
-                    }}
+                    onChange={setValueAndClearError(setSlogan, "slogan")}
                     errorMessage={errors.slogan}
                     isInvalid={!!errors.slogan}
                     ref={sloganNameRef}
@@ -673,7 +699,7 @@ const StepOne = () => {
                       label="Enter the name you wish to protect"
                       className="w-full"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={setValueAndClearError(setName, "name")}
                       errorMessage={errors.name}
                       isInvalid={!!errors.name}
                       ref={protectNameRef}
@@ -685,7 +711,7 @@ const StepOne = () => {
                       label="Enter the slogan you wish to protect"
                       className="w-full"
                       value={slogan}
-                      onChange={(e) => setSlogan(e.target.value)}
+                      onChange={setValueAndClearError(setSlogan, "slogan")}
                       errorMessage={errors.slogan}
                       isInvalid={!!errors.slogan}
                       ref={sloganNameRef}
@@ -700,6 +726,7 @@ const StepOne = () => {
                       value={logoColors}
                       onChange={(e) => {
                         setLogoColors(e.target.value);
+                        clearError("logoColors");
                       }}
                       errorMessage={errors.logoColors}
                       isInvalid={!!errors.logoColors}
@@ -770,13 +797,10 @@ const StepOne = () => {
                 )}
 
                 <Select
-                  onSelectionChange={(value) => {
-                    const selectedValue =
-                      Array.isArray(value) || value instanceof Set
-                        ? [...value][0]
-                        : value;
-                    setTrademarkCurrentlyBeingUsed(selectedValue);
-                  }}
+                  onSelectionChange={setSelectionAndClearError(
+                    setTrademarkCurrentlyBeingUsed,
+                    "trademarkCurrentlyBeingUsed"
+                  )}
                   label="Are you currently using this trademark anywhere?"
                   radius="none"
                   variant="underlined"
@@ -801,7 +825,10 @@ const StepOne = () => {
                       className="w-full"
                       placeholder="Ex. 10-208-2024"
                       value={firstAnywhereDate}
-                      onChange={(e) => setFirstAnywhereDate(e.target.value)}
+                      onChange={setValueAndClearError(
+                        setFirstAnywhereDate,
+                        "firstAnywhereDate"
+                      )}
                       errorMessage={errors.firstAnywhereDate}
                       isInvalid={!!errors.firstAnywhereDate}
                       ref={firstAnywhereDateRef}
@@ -814,7 +841,10 @@ const StepOne = () => {
                       className="w-full"
                       placeholder="Ex. 10-208-2024"
                       value={firstCommenceDate}
-                      onChange={(e) => setFirstCommenceDate(e.target.value)}
+                      onChange={setValueAndClearError(
+                        setFirstCommenceDate,
+                        "firstCommenceDate"
+                      )}
                       errorMessage={errors.firstCommenceDate}
                       isInvalid={!!errors.firstCommenceDate}
                       ref={firstCommenceDateRef}
@@ -909,7 +939,10 @@ const StepOne = () => {
                         radius="sm"
                         size="lg"
                         value={organizationName}
-                        onChange={(e) => setOrganizationName(e.target.value)}
+                        onChange={setValueAndClearError(
+                          setOrganizationName,
+                          "organizationName"
+                        )}
                         errorMessage={errors.organizationName}
                         isInvalid={!!errors.organizationName}
                         ref={organizationNameRef}
@@ -925,7 +958,10 @@ const StepOne = () => {
                         radius="sm"
                         size="lg"
                         value={organizationType}
-                        onChange={(e) => setOrganizationType(e.target.value)}
+                        onChange={(e) => {
+                          setOrganizationType(e.target.value);
+                          clearError("organizationType");
+                        }}
                         ref={organizationTypeRef}
                         errorMessage={errors.organizationType}
                         isInvalid={!!errors.organizationType}
@@ -964,8 +1000,10 @@ const StepOne = () => {
                         onChange={(e) => {
                           if (selectedFormationType === "us_based") {
                             setStateFormation(e.target.value);
+                            clearError("stateFormation");
                           } else if (selectedFormationType === "non_us_based") {
                             setCountryFormation(e.target.value);
+                            clearError("countryFormation");
                           }
                         }}
                       >
@@ -987,9 +1025,10 @@ const StepOne = () => {
                         radius="sm"
                         size="lg"
                         value={organizationPosition}
-                        onChange={(e) =>
-                          setOrganizationPosition(e.target.value)
-                        }
+                        onChange={setValueAndClearError(
+                          setOrganizationPosition,
+                          "organizationPosition"
+                        )}
                         ref={positionRef}
                         errorMessage={errors.organizationPosition}
                         isInvalid={!!errors.organizationPosition}
@@ -1019,7 +1058,7 @@ const StepOne = () => {
               radius="sm"
               size="lg"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={setValueAndClearError(setFirstName, "firstName")}
               ref={firstNameRef}
               errorMessage={errors.firstName}
               isInvalid={!!errors.firstName}
@@ -1035,7 +1074,7 @@ const StepOne = () => {
               radius="sm"
               size="lg"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={setValueAndClearError(setLastName, "lastName")}
               ref={lastNameRef}
               errorMessage={errors.lastName}
               isInvalid={!!errors.lastName}
@@ -1056,7 +1095,7 @@ const StepOne = () => {
                 <RiHome5Fill className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
               }
               value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              onChange={setValueAndClearError(setAddress, "address")}
               ref={addressRef}
               errorMessage={errors.address}
               isInvalid={!!errors.address}
@@ -1074,7 +1113,7 @@ const StepOne = () => {
               radius="sm"
               size="lg"
               value={city}
-              onChange={(e) => setCity(e.target.value)}
+              onChange={setValueAndClearError(setCity, "city")}
               ref={cityRef}
               errorMessage={errors.city}
               isInvalid={!!errors.city}
@@ -1089,7 +1128,10 @@ const StepOne = () => {
               radius="sm"
               size="lg"
               value={state}
-              onChange={(e) => setState(e.target.value)}
+              onChange={(e) => {
+                setState(e.target.value);
+                clearError("state");
+              }}
               ref={stateRef}
               errorMessage={errors.state}
               isInvalid={!!errors.state}
@@ -1113,7 +1155,10 @@ const StepOne = () => {
               radius="sm"
               size="lg"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+                clearError("phoneNumber");
+              }}
               ref={phoneRef}
               errorMessage={errors.phoneNumber}
               isInvalid={!!errors.phoneNumber}
@@ -1144,7 +1189,7 @@ const StepOne = () => {
               radius="sm"
               size="lg"
               value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
+              onChange={setValueAndClearError(setZipCode, "zipCode")}
               ref={zipRef}
               errorMessage={errors.zipCode}
               isInvalid={!!errors.zipCode}
@@ -1197,15 +1242,15 @@ const StepOne = () => {
           </div>
 
           <div className="w-full flex max-md:flex-col max-md:gap-4 md:justify-between">
-            {/* Google ReCAPTCHA - Only show if site key is available */}
-            {/* {process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && (
+            {/* Google reCAPTCHA - render when enabled */}
+            {isCaptchaEnabled && (
               <>
                 <ReCAPTCHA
                   sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}
                   onChange={ReCAPTCHAHandle}
                   ref={reChaptchaRef}
                 />
-                {!reChaptcha && (
+                {!reChaptcha && !!errors.reChaptcha && (
                   <p
                     ref={reChaptchaRef}
                     className="text-[#f31260] text-sm mt-3 mb-2 capitalize"
@@ -1214,14 +1259,14 @@ const StepOne = () => {
                   </p>
                 )}
               </>
-            )} */}
+            )}
             
-            {/* Show message when reCAPTCHA is disabled for testing */}
-            {/* {!process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY && (
+            {/* Optional: show message when reCAPTCHA is disabled */}
+            {!isCaptchaEnabled && (
               <div className="text-sm text-gray-600 italic">
-                reCAPTCHA disabled for testing
+                reCAPTCHA is disabled or missing site key
               </div>
-            )} */}
+            )}
 
             {/* SUBMIT BUTTON */}
             <Button

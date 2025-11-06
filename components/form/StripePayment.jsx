@@ -67,7 +67,7 @@ const StripePayment = ({ loading, em }) => {
     // Handle payment result
     if (result?.paymentIntent?.status === "succeeded") {
       // send the data to mail and zoho
-      const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+      const endPoint = "/api/save-data";
       leadDataWithValues.is_paid = true;
       leadDataWithValues.zoho_step = 3;
       leadDataWithValues.is_paid_log = "paid";

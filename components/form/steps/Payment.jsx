@@ -141,7 +141,7 @@ const Payment = () => {
   // --------------------------------------------------------
 
   // send the data to mail and zoho
-  const endPoint = process.env.NEXT_PUBLIC_API_URL + "/save-data";
+  const endPoint = "/api/save-data";
   // Removed problematic useEffect that was sending data before payment completion
   // Data is now only sent after successful payment in onApprove function
 
