@@ -115,8 +115,9 @@ const ThankYou = () => {
           });
           window.gtag("event", "conversion", {
             send_to: "AW-1617269450/7101776639",
-            // value: totalPrice,
-            // currency: "USD",
+            value: totalPrice,
+            currency: "USD",
+            transaction_id: receiptId,
           });
         }
 
