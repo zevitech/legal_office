@@ -126,7 +126,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             function gtag(){dataLayer.push(arguments);} 
             gtag('js', new Date());
             gtag('config', 'AW-16565473053');
-            gtag('config', 'AW-1617269450');
           `,
         }}
       />

@@ -106,18 +106,12 @@ const ThankYou = () => {
           ],
         });
 
-        // Optional: also emit gtag event if available
+        // Optional: also emit gtag purchase event if available (conversion is managed via GTM)
         if (typeof window.gtag === "function") {
           window.gtag("event", "purchase", {
             transaction_id: receiptId,
             value: totalPrice,
             currency: "USD",
-          });
-          window.gtag("event", "conversion", {
-            send_to: "AW-1617269450/7101776639",
-            value: totalPrice,
-            currency: "USD",
-            transaction_id: receiptId,
           });
         }
 
@@ -127,6 +121,7 @@ const ThankYou = () => {
       console.log("GTM purchase event failed:", err);
     }
   }, [isBypassMode, paymentBypass, nestedLeadData, basePrice, rushAmount, totalPrice, isRushProcessing]);
+
 
   const redirectToHome = () => {
     setHomeIsLoading(true);
@@ -171,14 +166,14 @@ const ThankYou = () => {
         </div>
         <div className="flex-center gap-10  mt-7 mb-11 max-md:w-full">
           {/* <Button
-              color="primary"
-              variant="shadow"
-              startContent={<BiHome />}
-              isLoading={homeIsLoading}
-              onClick={redirectToHome}
-            >
-              Home
-            </Button> */}
+               color="primary"
+               variant="shadow"
+               startContent={<BiHome />}
+               isLoading={homeIsLoading}
+               onClick={redirectToHome}
+             >
+               Home
+             </Button> */}
 
           {/* TAG - 1001 */}
           <Button
