@@ -71,7 +71,8 @@ const ThankYou = () => {
       const email = nestedLeadData?.stepOne?.emailAddress;
       const packageName = nestedLeadData?.stepThree?.packageName || "Trademark registration";
 
-      if (!receiptId || !email || !basePrice) return;
+      // Fire even if base price is missing (e.g., on reload or SPA hydration)
+      if (!receiptId || !email) return;
 
       const key = `gtm_purchase_${receiptId}`;
       if (typeof window !== "undefined") {
@@ -82,17 +83,21 @@ const ThankYou = () => {
         window.dataLayer.push({
           event: "purchase",
           transaction_id: receiptId,
-          value: totalPrice,
+          value: totalPrice || 0,
           currency: "USD",
           email,
           package_name: packageName,
           items: [
-            {
-              item_name: packageName,
-              item_id: "trademark_registration",
-              price: basePrice,
-              quantity: 1,
-            },
+            ...(basePrice > 0
+              ? [
+                  {
+                    item_name: packageName,
+                    item_id: "trademark_registration",
+                    price: basePrice,
+                    quantity: 1,
+                  },
+                ]
+              : []),
             ...(isRushProcessing
               ? [
                   {
@@ -113,6 +118,21 @@ const ThankYou = () => {
             value: totalPrice,
             currency: "USD",
           });
+        }
+
+        // Also emit a dedicated thank_you event for containers listening to a custom event
+        const thankyouKey = `gtm_thankyou_${receiptId}`;
+        if (!localStorage.getItem(thankyouKey)) {
+          window.dataLayer.push({
+            event: "thank_you",
+            transaction_id: receiptId,
+            value: totalPrice || 0,
+            currency: "USD",
+            email,
+            package_name: packageName,
+            page_path: "/trademark-register/thank-you",
+          });
+          localStorage.setItem(thankyouKey, "true");
         }
 
         localStorage.setItem(key, "true");
