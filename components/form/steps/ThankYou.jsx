@@ -113,6 +113,11 @@ const ThankYou = () => {
             value: totalPrice,
             currency: "USD",
           });
+          window.gtag("event", "conversion", {
+            send_to: "AW-1617269450/7101776639",
+            // value: totalPrice,
+            // currency: "USD",
+          });
         }
 
         localStorage.setItem(key, "true");
