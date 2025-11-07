@@ -69,7 +69,8 @@ const ThankYou = () => {
 
       const receiptId = nestedLeadData?.stepFour?.receipt_ID;
       const email = nestedLeadData?.stepOne?.emailAddress;
-      const packageName = nestedLeadData?.stepThree?.packageName || "Trademark registration";
+      const packageName =
+        nestedLeadData?.stepThree?.packageName || "Trademark registration";
 
       // Fire even if base price is missing (e.g., on reload or SPA hydration)
       if (!receiptId || !email) return;
@@ -120,6 +121,21 @@ const ThankYou = () => {
           });
         }
 
+        // Direct Google Ads conversion event (requested snippet)
+        const adsConversionKey = `ads_conv_${receiptId}`;
+        if (
+          !localStorage.getItem(adsConversionKey) &&
+          typeof window.gtag === "function"
+        ) {
+          window.gtag("event", "conversion", {
+            send_to: "AW-16565473053/RmqECOrQ97sbEJ2ehNs9",
+            value: totalPrice || 0,
+            currency: "USD",
+            transaction_id: receiptId || "",
+          });
+          localStorage.setItem(adsConversionKey, "true");
+        }
+
         // Also emit a dedicated thank_you event for containers listening to a custom event
         const thankyouKey = `gtm_thankyou_${receiptId}`;
         if (!localStorage.getItem(thankyouKey)) {
@@ -140,8 +156,15 @@ const ThankYou = () => {
     } catch (err) {
       console.log("GTM purchase event failed:", err);
     }
-  }, [isBypassMode, paymentBypass, nestedLeadData, basePrice, rushAmount, totalPrice, isRushProcessing]);
-
+  }, [
+    isBypassMode,
+    paymentBypass,
+    nestedLeadData,
+    basePrice,
+    rushAmount,
+    totalPrice,
+    isRushProcessing,
+  ]);
 
   const redirectToHome = () => {
     setHomeIsLoading(true);
@@ -164,15 +187,15 @@ const ThankYou = () => {
 
       <div className="w-full flex flex-col items-center gap-1">
         <h1 className="font-inria text-heading-color md:text-[24px] text-[20px] text-center">
-          {paymentBypass || isBypassMode ? "Thank You, Application Submitted!" : "Thank You, Payment Completed!"}
+          {paymentBypass || isBypassMode
+            ? "Thank You, Application Submitted!"
+            : "Thank You, Payment Completed!"}
         </h1>
         <p className="md:text-[16px] text-[12px] md:leading-[20px] leading-[16px] md:max-w-[800px] w-full text-center">
-          {paymentBypass || isBypassMode 
+          {paymentBypass || isBypassMode
             ? "Thank you for submitting your application. Your form has been received for review. Please schedule a call with one of our representative to discuss the next steps for trademark application."
-            : "Thank you for submitting your application. Please schedule a call with one of our representative to discuss the next steps for trademark application."
-          }
+            : "Thank you for submitting your application. Please schedule a call with one of our representative to discuss the next steps for trademark application."}
         </p>
-        
       </div>
 
       <div>
