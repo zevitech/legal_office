@@ -4,12 +4,12 @@ export const SystemStepThreeData = [
     planName: "Basic",
     planPrice: "$49",
     price: 49,
-    planSubtext: "+USPTO Fee $350 Per Class",
+    planSubtext: "+Federal Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Search",
         description:
-          "Basic search of the USPTO database for existing trademarks to minimize risk of rejection.",
+          "Basic search of the Federal database for existing trademarks to minimize risk of rejection.",
       },
       {
         title: "7-Day Processing",
@@ -30,7 +30,7 @@ export const SystemStepThreeData = [
       {
         title: "Office Action Support",
         description:
-          "In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
+          "In case of any Federal office actions, receive a Cease and Desist letter template to address infringing parties.",
       },
       {
         title: "6 Months of Trademark Monitoring",
@@ -50,7 +50,7 @@ export const SystemStepThreeData = [
     planName: "Premium",
     planPrice: "$249",
     price: 249,
-    planSubtext: "+USPTO Fee $350 Per Class",
+    planSubtext: "+Federal Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Trademark Search",
@@ -65,7 +65,7 @@ export const SystemStepThreeData = [
       {
         title: "Full Paralegal Support",
         description:
-          "A  team of U.S. licensed paralegals will guide you through the application process, from preparation to response to any USPTO inquiries.",
+          "A  team of U.S. licensed paralegals will guide you through the application process, from preparation to response to any Federal inquiries.",
       },
       {
         title: "100% Satisfaction Guarantee",
@@ -74,7 +74,7 @@ export const SystemStepThreeData = [
       {
         title: "Office Action Support",
         description:
-          "In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
+          "In case of any Federal office actions, receive a Cease and Desist letter template to address infringing parties.",
       },
       {
         title: "6 Months of Trademark Monitoring",
@@ -94,7 +94,7 @@ export const SystemStepThreeData = [
     planName: "Standard",
     planPrice: "$149",
     price: 149,
-    planSubtext: "+USPTO Fee $350 Per Class",
+    planSubtext: "+Federal Fee $350 Per Class",
     OfferedDetails: [
       {
         title: "Comprehensive Trademark Search",
@@ -122,7 +122,7 @@ export const SystemStepThreeData = [
       {
         title: "Office Action Support",
         description:
-          "In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
+          "In case of any Federal office actions, receive a Cease and Desist letter template to address infringing parties.",
       },
     ],
     NotOfferedDetails: [
@@ -148,14 +148,15 @@ export const PackagesUpdatedData = [
     price: 49,
     planSubtext: (
       <>
-        +USPTO Fee <strong className="font-bold text-lg">$350</strong> Per Class
+        +Federal Fee <strong className="font-bold text-lg">$350</strong> Per
+        Class
       </>
     ),
     OfferedDetails: [
       {
         title: "Comprehensive Search",
         description:
-          "Basic search of the USPTO database for existing trademarks to minimize risk of rejection.",
+          "Basic search of the Federal database for existing trademarks to minimize risk of rejection.",
       },
       {
         title: "7-Day Processing",
@@ -176,7 +177,7 @@ export const PackagesUpdatedData = [
       {
         title: "Office Action Support",
         description:
-          "In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
+          "In case of any Federal office actions, receive a Cease and Desist letter template to address infringing parties.",
       },
       {
         title: "6 Months of Trademark Monitoring",
@@ -198,7 +199,8 @@ export const PackagesUpdatedData = [
     price: 149,
     planSubtext: (
       <>
-        +USPTO Fee <strong className="font-bold text-lg">$350</strong> Per Class
+        +Federal Fee <strong className="font-bold text-lg">$350</strong> Per
+        Class
       </>
     ),
     OfferedDetails: [
@@ -228,7 +230,7 @@ export const PackagesUpdatedData = [
       {
         title: "Office Action Support",
         description:
-          "In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
+          "In case of any Federal office actions, receive a Cease and Desist letter template to address infringing parties.",
       },
     ],
     NotOfferedDetails: [
@@ -252,7 +254,8 @@ export const PackagesUpdatedData = [
     price: 249,
     planSubtext: (
       <>
-        +USPTO Fee <strong className="font-bold text-lg">$350</strong> Per Class
+        +Federal Fee <strong className="font-bold text-lg">$350</strong> Per
+        Class
       </>
     ),
     OfferedDetails: [
@@ -269,7 +272,7 @@ export const PackagesUpdatedData = [
       {
         title: "Full Paralegal Support",
         description:
-          "A  team of U.S. licensed paralegals will guide you through the application process, from preparation to response to any USPTO inquiries.",
+          "A  team of U.S. licensed paralegals will guide you through the application process, from preparation to response to any Federal inquiries.",
       },
       {
         title: "100% Satisfaction Guarantee",
@@ -278,7 +281,7 @@ export const PackagesUpdatedData = [
       {
         title: "Office Action Support",
         description:
-          "In case of any USPTO office actions, receive a Cease and Desist letter template to address infringing parties.",
+          "In case of any Federal office actions, receive a Cease and Desist letter template to address infringing parties.",
       },
       {
         title: "6 Months of Trademark Monitoring",

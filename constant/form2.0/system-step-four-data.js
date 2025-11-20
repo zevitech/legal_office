@@ -15,7 +15,7 @@ export const ImportantNotice = [
     id: 3,
     heading: "3. FEDERAL FEE REQUIREMENT",
     description:
-      "In addition to the service fee, a $350 federal fee per classification is required by the USPTO (United States Patent and Trademark Office) for filing your trademark. This fee will be collected after we have reviewed your application and prepared your trademark filing.",
+      "In addition to the service fee, a $350 federal fee per classification is required by the Federal (United States Patent and Trademark Office) for filing your trademark. This fee will be collected after we have reviewed your application and prepared your trademark filing.",
   },
   {
     id: 4,
@@ -23,7 +23,7 @@ export const ImportantNotice = [
     description: [
       "Agree to receive a follow-up call from your case analyst.",
       "Understand that without answering the call, the registration process cannot proceed.",
-      "Acknowledge there is an additional federal fee of $350 per classification that must be paid to the USPTO after the application is prepared.",
+      "Acknowledge there is an additional federal fee of $350 per classification that must be paid to the Federal after the application is prepared.",
     ],
   },
 ];

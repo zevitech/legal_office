@@ -64,7 +64,7 @@ const LandingPage = () => {
               </h1>
               <h1 className="text-slate-700 text-2xl font-bold text-center">
                 <span className="text-[44px]  max-md:text-2xl text-[#025da0]">
-                  $49 + USPTO Filing Fee
+                  $49 + Federal Office Filing Fee
                 </span>
               </h1>
               <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
@@ -172,14 +172,14 @@ const LandingPage = () => {
               <HowWorkCard
                 step={2}
                 title={` Prepare and File Your Application`}
-                description={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office (USPTO). We'll ensure your application meets all legal requirements.`}
+                description={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office. We'll ensure your application meets all legal requirements.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
                 title={`Monitor and Respond to Office Actions`}
-                description={`After filing, we'll keep track of your application's progress and respond to any office actions or requests for additional information from the USPTO. Our goal is to help secure your trademark efficiently and effectively.`}
+                description={`After filing, we'll keep track of your application's progress and respond to any office actions or requests for additional information from the Federal Office. Our goal is to help secure your trademark efficiently and effectively.`}
               />
             </div>
           </div>

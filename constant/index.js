@@ -80,7 +80,7 @@ export const serviceList = [
   { id: 3, text: "70% of Self Filers make a mistake, avoid that today" },
   {
     id: 4,
-    text: "Full Preparation and Filing of your Official Trademark with USPTO",
+    text: "Full Preparation and Filing of your Official Trademark with Federal",
   },
 ];
 

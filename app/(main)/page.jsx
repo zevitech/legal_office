@@ -56,7 +56,7 @@ const page = () => {
               {/* Heading */}
               <h1 className="text-4xl max-md:text-3xl font-bold text-white leading-normal">
                 {`Secure Your Brand's Identity - Name, Logo, Slogan & More! Starting at
-                Just $49 + USPTO Filing Fee`}
+                Just $49 + Federal Office Filing Fee`}
               </h1>
 
               {/* Bottom Right Quote */}
@@ -255,7 +255,7 @@ const page = () => {
             <StepCard
               icon={`form_fill.png`}
               header={`Prepare and File Your Application`}
-              details={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office (USPTO). We'll ensure your application meets all legal requirements.`}
+              details={`Our expert attorneys will guide you through preparing the necessary documentation and filing your trademark application with the U.S. Patent and Trademark Office (Federal Office). We'll ensure your application meets all legal requirements.`}
             />
             <div className="mt-20 max-md:mt-0 max-md:rotate-[130deg]">
               <Image
@@ -268,7 +268,7 @@ const page = () => {
             <StepCard
               icon={`user-group.png`}
               header={`Monitor and Respond to Office Actions`}
-              details={`After filing, we'll keep track of your application's progress and respond to any office actions or requests for additional information from the USPTO. Our goal is to help secure your trademark efficiently and effectively.`}
+              details={`After filing, we'll keep track of your application's progress and respond to any office actions or requests for additional information from the Federal Office. Our goal is to help secure your trademark efficiently and effectively.`}
             />
           </div>
           <div className="flex-center gap-10 max-md:gap-4 mt-10 max-md:mt-2">

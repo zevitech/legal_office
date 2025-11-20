@@ -24,7 +24,7 @@ const RevivalPriceSection = () => {
                 We will send you a confirmation receipt, saving you hours of
                 hassle
               </li>
-              <li>Service includes 1 USPTO class fees**</li>
+              <li>Service includes 1 Federal class fees**</li>
               <li className="pt-6">Delivery Time*</li>
               <li className="pt-4">Rush Service (need it quicker?)</li>
               <li className="pt-4">Conclusion</li>
@@ -41,13 +41,14 @@ const RevivalPriceSection = () => {
               <li>Yes</li>
               <li>Yes</li>
               <li>
-                No - if additional USPTO fees are required, we will inform you.
+                No - if additional Federal fees are required, we will inform
+                you.
               </li>
               <li>7 days</li>
               <li>Additional Fees Apply</li>
               <li>
-                Once completed, the USPTO Examiner will review the Office Action
-                Response and determine if objections have been overcome.
+                Once completed, the Federal Examiner will review the Office
+                Action Response and determine if objections have been overcome.
               </li>
             </ul>
             <div className="text-center mt-6">

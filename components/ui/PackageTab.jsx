@@ -17,7 +17,7 @@ const PackageTab = ({ packageName, services, details, amount }) => {
           <h1 className="text-8xl max-md:text-6xl font-bold text-[#273B4A]">
             ${amount}
           </h1>
-          <span className="mb-4">+ USPTO Fee $350 Per Class* </span>
+          <span className="mb-4">+ Federal Fee $350 Per Class* </span>
         </div>
       </div>
       <div className="py-10 px-7 flex-between max-md:flex-col-reverse max-md:gap-7">

@@ -15,7 +15,7 @@ const PackageCard = ({ packageName, subHeading, price, list }) => {
         <span className="text-base">$</span>
         <h1 className="text-6xl text-slate-800 font-bold">{price}</h1>
         <p className="text-black/40 text-[12px] font-bold">
-          +USPTO Fee $350 Per Class
+          +Federal Fee $350 Per Class
         </p>
       </div>
       <ul className="flex flex-col gap-3 my-8">

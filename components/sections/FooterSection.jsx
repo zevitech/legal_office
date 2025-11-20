@@ -3,7 +3,7 @@ import ScrollToTop from "@/utils/scroll-to-top";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BsHouse, BsHouseAdd, BsMap } from "react-icons/bs";
+import { BsMap } from "react-icons/bs";
 import { IoCallSharp } from "react-icons/io5";
 
 const FooterSection = () => {
@@ -75,27 +75,33 @@ const FooterSection = () => {
                   2121 Crystal Dr, Arlington, VA 22202, USA
                 </h4>
               </Link>
-              <p>Working Hours: <span class="font-semibold">9:00 AM – 6:00 PM</span></p>
+              <p>
+                Working Hours:{" "}
+                <span class="font-semibold">9:00 AM – 6:00 PM</span>
+              </p>
             </div>
           </div>
         </div>
 
         <ScrollToTop />
       </div>
-      <div className="bg-slate-800 text-slate-200 max-md:text-center flex-center py-6 px-4 max-md:text-sm">
-        <p>
-          © Copyright & all rights reserved by{" "}
-          <Link className="text-blue-500 hover:underline" href={`#`}>
-            Legal Trademark Office
-          </Link>{" "}
-          2025
+      <div className="bg-slate-800 text-slate-200 flex flex-col items-center py-8 px-6 gap-3">
+        <p className="text-slate-300 text-[14px] md:text-[15px] leading-relaxed max-w-5xl text-center mt-2 opacity-90">
+          Disclaimer: We are an independent trademark filing support service. We
+          are not a government agency and are not affiliated with the USPTO.
+          We assist business owners by preparing and submitting trademark
+          applications directly to the USPTO on their behalf.
         </p>
+
+        <p className="text-center text-sm md:text-base mt-2">
+          © 2025 <Link className="text-blue-400 hover:underline" href={`#`}>Legal Trademark Office</Link>. All rights reserved.
+          {" "}
+         
+        </p>
+
       </div>
     </footer>
   );
 };
 
 export default FooterSection;
-
-
-
