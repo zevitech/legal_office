@@ -103,13 +103,13 @@ const LandingPage = () => {
               height={40}
               className="w-24 h-16 max-md:w-14 max-md:h-auto"
             />
-            <Image
+            {/* <Image
               src={"/images/Seal_of_the_United_States_Patent.png"}
               alt="Seal of the United States patient"
               width={110}
               height={40}
               className="w-20 h-20 max-md:w-14 max-md:h-auto"
-            />
+            /> */}
             <Image
               src={"/images/accredited-business.jpg"}
               alt="trustpilot"

@@ -22,14 +22,17 @@ export async function POST(req) {
                               <tr>
                                 <td style="color: #005ea2; font-weight: 800; font-size: 24px;">Legal Trademark</td>
                                 <td align="right">
-                                  <h2 style="color: #334155; font-weight: 700; font-size: 20px; text-transform: uppercase; margin: 0;">Receipt #${data?.nestedLeadData?.stepFour?.receipt_ID
-      }</h2>
-                                  <p style="font-size: 14px; color: #64748b; margin: 0;">${data.today
-      }</p>
-                                  <p style="font-size: 14px; color: #64748b; margin: 0;">${data?.nestedLeadData?.stepOne?.firstName +
-      " " +
-      data?.nestedLeadData?.stepOne?.lastName
-      }</p>
+                                  <h2 style="color: #334155; font-weight: 700; font-size: 20px; text-transform: uppercase; margin: 0;">Receipt #${
+                                    data?.nestedLeadData?.stepFour?.receipt_ID
+                                  }</h2>
+                                  <p style="font-size: 14px; color: #64748b; margin: 0;">${
+                                    data.today
+                                  }</p>
+                                  <p style="font-size: 14px; color: #64748b; margin: 0;">${
+                                    data?.nestedLeadData?.stepOne?.firstName +
+                                    " " +
+                                    data?.nestedLeadData?.stepOne?.lastName
+                                  }</p>
                                 </td>
                               </tr>
                             </table>
@@ -59,9 +62,10 @@ export async function POST(req) {
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Office Action Response</td>
                                 <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$0.00</td>
                               </tr>
-                              ${data.nestedLeadData?.stepFour
-        ?.isRushProcessing === true &&
-      `<tr>
+                              ${
+                                data.nestedLeadData?.stepFour
+                                  ?.isRushProcessing === true &&
+                                `<tr>
                                     <td style="color: #475569; font-weight: 500; font-size: 14px;">
                                       Rush processing
                                     </td>
@@ -72,14 +76,15 @@ export async function POST(req) {
                                       $${data.nestedLeadData.stepFour?.rushAmount}
                                     </td>
                                   </tr>`
-      }
+                              }
                             </table>
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 2px dotted #0f172a; margin-top: 20px; padding-top: 10px;">
                               <tr>
                                 <td style="font-weight: bold; font-size: 14px;">Sub Total</td>
-                                <td style="font-weight: bold; font-size: 14px;" align="right">$${data?.totalPrice
-      }</td>
+                                <td style="font-weight: bold; font-size: 14px;" align="right">$${
+                                  data?.totalPrice
+                                }</td>
                               </tr>
                               <tr>
                                 <td style="font-weight: bold; font-size: 14px;">Tax</td>
@@ -87,8 +92,9 @@ export async function POST(req) {
                               </tr>
                               <tr>
                                 <td style="font-weight: bold; font-size: 14px;">Total Amount</td>
-                                <td style="font-weight: bold; font-size: 14px;" align="right">$${data?.totalPrice
-      }</td>
+                                <td style="font-weight: bold; font-size: 14px;" align="right">$${
+                                  data?.totalPrice
+                                }</td>
                               </tr>
                             </table>
 
@@ -118,15 +124,15 @@ export async function POST(req) {
     const billingTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      secure: process.env.SMTP_SECURE === "true", // true for 465, false for other ports
       requireTLS: true, // Force TLS for Google Workspace
       auth: {
         user: process.env.BILLING_EMAIL,
         pass: process.env.BILLING_EMAIL_PASSWORD,
       },
       tls: {
-        rejectUnauthorized: false // Allow self-signed certificates
-      }
+        rejectUnauthorized: false, // Allow self-signed certificates
+      },
     });
 
     const mailOptions = {
@@ -140,15 +146,15 @@ export async function POST(req) {
     const supportTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      secure: process.env.SMTP_SECURE === "true", // true for 465, false for other ports
       requireTLS: true, // Force TLS for Google Workspace
       auth: {
         user: process.env.SUPPORT_EMAIL,
         pass: process.env.SUPPORT_EMAIL_PASSWORD,
       },
       tls: {
-        rejectUnauthorized: false // Allow self-signed certificates
-      }
+        rejectUnauthorized: false, // Allow self-signed certificates
+      },
     });
 
     // Business copy will use the same billing transporter for consistency
@@ -224,25 +230,32 @@ export async function POST(req) {
     const receiptResult = await billingTransporter.sendMail(mailOptions);
 
     // Send copy of receipt to business Gmail
-    const businessCopyResult = await billingTransporter.sendMail(businessCopyMailOptions);
+    const businessCopyResult = await billingTransporter.sendMail(
+      businessCopyMailOptions,
+    );
 
     // Send onboarding email after receipt
-    const onboardingResult = await supportTransporter.sendMail(onboardingMailOptions);
+    const onboardingResult = await supportTransporter.sendMail(
+      onboardingMailOptions,
+    );
 
-    return NextResponse.json({
-      success: true,
-      receiptMessageId: receiptResult.messageId,
-      businessCopyMessageId: businessCopyResult.messageId,
-      onboardingMessageId: onboardingResult.messageId
-    }, { status: 200 });
-
+    return NextResponse.json(
+      {
+        success: true,
+        receiptMessageId: receiptResult.messageId,
+        businessCopyMessageId: businessCopyResult.messageId,
+        onboardingMessageId: onboardingResult.messageId,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Error in send-receipt endpoint:", error.message);
-    return NextResponse.json({
-      error: "Failed to send receipt email",
-      details: "Please contact support if the issue persists"
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to send receipt email",
+        details: "Please contact support if the issue persists",
+      },
+      { status: 500 },
+    );
   }
 }
-
-
