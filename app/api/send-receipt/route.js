@@ -120,18 +120,14 @@ export async function POST(req) {
                         </html>
                       `;
 
-    // Billing email transporter using Gmail SMTP
+    // Billing email transporter using GoDaddy SMTP
     const billingTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === "true", // true for 465, false for other ports
-      requireTLS: true, // Force TLS for Google Workspace
+      secure: process.env.SMTP_SECURE === "true", // true for 465 (SSL)
       auth: {
         user: process.env.BILLING_EMAIL,
         pass: process.env.BILLING_EMAIL_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false, // Allow self-signed certificates
       },
     });
 
@@ -142,18 +138,14 @@ export async function POST(req) {
       html: receiptHtml,
     };
 
-    // Support email transporter using Gmail SMTP for onboarding
+    // Support email transporter using GoDaddy SMTP for onboarding
     const supportTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === "true", // true for 465, false for other ports
-      requireTLS: true, // Force TLS for Google Workspace
+      secure: process.env.SMTP_SECURE === "true", // true for 465 (SSL)
       auth: {
         user: process.env.SUPPORT_EMAIL,
         pass: process.env.SUPPORT_EMAIL_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false, // Allow self-signed certificates
       },
     });
 
