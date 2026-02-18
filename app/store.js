@@ -6,7 +6,6 @@ import formReducer from "@/features/formSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["form"], 
 };
 
 const persistedReducer = persistReducer(persistConfig, formReducer);
