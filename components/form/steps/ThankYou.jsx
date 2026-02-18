@@ -21,6 +21,7 @@ const ThankYou = () => {
   const receiptRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [homeIsLoading, setHomeIsLoading] = useState(false);
+  const isRehydrated = useSelector((state) => state.form._persist?.rehydrated);
   const stepFourData = useSelector((state) => state.form.stepFour);
   const nestedLeadData = useSelector((state) => state.form);
 
@@ -35,9 +36,9 @@ const ThankYou = () => {
   const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
   const paymentBypass = nestedLeadData.stepFour?.payment_bypass;
 
-  // page authorization | redirect if previous step has no data
-  // Move redirect into an effect to avoid conditional hook ordering
+  // page authorization | redirect only after Redux Persist has rehydrated
   useEffect(() => {
+    if (!isRehydrated) return;
     try {
       if (!stepFourData || Object.keys(stepFourData).length === 0) {
         router.replace(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
@@ -45,7 +46,7 @@ const ThankYou = () => {
     } catch (err) {
       console.log("Redirect failed:", err);
     }
-  }, [router, stepFourData]);
+  }, [isRehydrated, router, stepFourData]);
 
   // make image and the download the receipt as image
   const handleDownload = async () => {
@@ -79,6 +80,9 @@ const ThankYou = () => {
     setHomeIsLoading(true);
     return router.push(process.env.NEXT_PUBLIC_APP_URL);
   };
+
+  // Wait for Redux Persist to rehydrate before rendering or redirecting
+  if (!isRehydrated) return null;
 
   // Guard render when redirecting (hooks above still run consistently)
   if (!stepFourData || Object.keys(stepFourData).length === 0) {
