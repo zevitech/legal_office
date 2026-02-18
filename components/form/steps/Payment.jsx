@@ -25,28 +25,28 @@ const Payment = () => {
   const stepFourData = nestedLeadData.stepFour;
 
   // Check if payment bypass mode is enabled
-  const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === 'true';
+  const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
 
   // If bypass mode is enabled, redirect to Thank You immediately
   useEffect(() => {
     if (isBypassMode) {
-      router.push("/trademark-register/thank-you");
+      window.location.href = "/trademark-register/thank-you";
     }
   }, [isBypassMode, router]);
 
   // from the nested object, merge them into one object
   const leadData = useMemo(
     () => Object.assign({}, ...Object.values(nestedLeadData)),
-    [nestedLeadData]
+    [nestedLeadData],
   );
 
   // Filter out properties that are empty or undefined
   const leadDataWithValues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(leadData).filter(([_, value]) => value !== "")
+        Object.entries(leadData).filter(([_, value]) => value !== ""),
       ),
-    [leadData]
+    [leadData],
   );
 
   // adjust the order items details
@@ -81,7 +81,7 @@ const Payment = () => {
   //count the total and add to total amount into data object
   const totalAmount = orderDetails.reduce(
     (accumulator, current) => accumulator + current.amount,
-    0
+    0,
   );
   leadDataWithValues.totalAmount = totalAmount;
   leadDataWithValues.zoho_step = 2;
@@ -124,10 +124,10 @@ const Payment = () => {
             .catch((err) => {
               console.log(
                 "Error sending data to save-data endpoint in payment page: ",
-                err
+                err,
               );
               alert(
-                "Payment Successful. But something went wrong, please check your network or contact for support."
+                "Payment Successful. But something went wrong, please check your network or contact for support.",
               );
             });
         }
@@ -168,7 +168,8 @@ const Payment = () => {
 
   // page authorization | redirect if previous step has no data
   if (Object.keys(stepFourData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+    window.location.href =
+      process.env.NEXT_PUBLIC_APP_URL + "/trademark-register";
   }
 
   // If bypass mode is enabled, component will redirect; render nothing here
