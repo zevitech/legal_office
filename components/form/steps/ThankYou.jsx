@@ -24,11 +24,12 @@ const ThankYou = () => {
   const stepFourData = useSelector((state) => state.form.stepFour);
   const nestedLeadData = useSelector((state) => state.form);
 
-  // Compute totals for analytics
+  // Compute total for conversion tracking
   const basePrice = nestedLeadData?.stepThree?.price || 0;
-  const isRushProcessing = nestedLeadData?.stepFour?.isRushProcessing || false;
-  const rushAmount = nestedLeadData?.stepFour?.rushAmount || 0;
-  const totalPrice = basePrice + (isRushProcessing ? rushAmount : 0);
+  const rushAmount = nestedLeadData?.stepFour?.isRushProcessing
+    ? nestedLeadData?.stepFour?.rushAmount || 0
+    : 0;
+  const totalPrice = basePrice + rushAmount;
 
   // Check if payment bypass mode is enabled
   const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
@@ -61,110 +62,18 @@ const ThankYou = () => {
     setIsLoading(false);
   };
 
-  // Push purchase event to Google Tag Manager on real payment
+  // Fire Google Ads conversion on real payment only (not bypass)
   useEffect(() => {
-    try {
-      // Skip analytics when bypass mode or explicit payment bypass is enabled
-      if (isBypassMode || paymentBypass) return;
+    if (isBypassMode || paymentBypass) return;
+    if (typeof window.gtag !== "function") return;
 
-      const receiptId = nestedLeadData?.stepFour?.receipt_ID;
-      const email = nestedLeadData?.stepOne?.emailAddress;
-      const packageName =
-        nestedLeadData?.stepThree?.packageName || "Trademark registration";
-
-      // Fire even if base price is missing (e.g., on reload or SPA hydration)
-      if (!receiptId || !email) return;
-
-      const key = `gtm_purchase_${receiptId}`;
-      if (typeof window !== "undefined") {
-        // Prevent duplicate pushes for the same receipt
-        if (localStorage.getItem(key)) return;
-
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "purchase",
-          transaction_id: receiptId,
-          value: totalPrice || 0,
-          currency: "USD",
-          email,
-          package_name: packageName,
-          items: [
-            ...(basePrice > 0
-              ? [
-                  {
-                    item_name: packageName,
-                    item_id: "trademark_registration",
-                    price: basePrice,
-                    quantity: 1,
-                  },
-                ]
-              : []),
-            ...(isRushProcessing
-              ? [
-                  {
-                    item_name: "Rush processing",
-                    item_id: "rush_processing",
-                    price: rushAmount,
-                    quantity: 1,
-                  },
-                ]
-              : []),
-          ],
-        });
-
-        // Optional: also emit gtag purchase event if available (conversion is managed via GTM)
-        if (typeof window.gtag === "function") {
-          window.gtag("event", "purchase", {
-            transaction_id: receiptId,
-            value: totalPrice,
-            currency: "USD",
-          });
-        }
-
-        // Direct Google Ads conversion event (requested snippet)
-        const adsConversionKey = `ads_conv_${receiptId}`;
-        if (
-          !localStorage.getItem(adsConversionKey) &&
-          typeof window.gtag === "function"
-        ) {
-          window.gtag("event", "conversion", {
-            send_to: "AW-16565473053/RmqECOrQ97sbEJ2ehNs9",
-            value: totalPrice || 0,
-            currency: "USD",
-            transaction_id: receiptId || "",
-          });
-          localStorage.setItem(adsConversionKey, "true");
-        }
-
-        // Also emit a dedicated thank_you event for containers listening to a custom event
-        const thankyouKey = `gtm_thankyou_${receiptId}`;
-        if (!localStorage.getItem(thankyouKey)) {
-          window.dataLayer.push({
-            event: "thank_you",
-            transaction_id: receiptId,
-            value: totalPrice || 0,
-            currency: "USD",
-            email,
-            package_name: packageName,
-            page_path: "/trademark-register/thank-you",
-          });
-          localStorage.setItem(thankyouKey, "true");
-        }
-
-        localStorage.setItem(key, "true");
-      }
-    } catch (err) {
-      console.log("GTM purchase event failed:", err);
-    }
-  }, [
-    isBypassMode,
-    paymentBypass,
-    nestedLeadData,
-    basePrice,
-    rushAmount,
-    totalPrice,
-    isRushProcessing,
-  ]);
+    window.gtag("event", "conversion", {
+      send_to: "AW-16565473053/RmqECOrQ97sbEJ2ehNs9",
+      value: totalPrice || 0,
+      currency: "USD",
+      transaction_id: nestedLeadData?.stepFour?.receipt_ID || "",
+    });
+  }, []);
 
   const redirectToHome = () => {
     setHomeIsLoading(true);

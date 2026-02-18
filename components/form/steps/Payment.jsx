@@ -118,7 +118,7 @@ const Payment = () => {
             .post(endPoint, leadDataWithValues)
             .then((res) => {
               if (res.data.success) {
-                return router.push("/trademark-register/thank-you");
+                window.location.href = "/trademark-register/thank-you";
               }
             })
             .catch((err) => {
