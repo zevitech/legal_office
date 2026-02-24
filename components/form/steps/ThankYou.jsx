@@ -74,7 +74,7 @@ const ThankYou = () => {
       currency: "USD",
       transaction_id: nestedLeadData?.stepFour?.receipt_ID || "",
     });
-  }, []);
+  }, [isBypassMode, paymentBypass, totalPrice, nestedLeadData?.stepFour?.receipt_ID]);
 
   const redirectToHome = () => {
     setHomeIsLoading(true);

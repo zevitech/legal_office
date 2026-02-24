@@ -29,20 +29,21 @@ const StepThree = () => {
   const stepTwoData = useSelector((state) => state.form.stepTwo);
   const stepOneData = useSelector((state) => state.form.stepOne);
 
-  // page authorization | redirect if previous step has no data
-  if (Object.keys(stepTwoData).length === 0) {
-    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
-  }
-
   // Fire Google Ads conversion when user reaches packages page
   useEffect(() => {
+    if (Object.keys(stepTwoData).length === 0) return;
     if (typeof window.gtag !== "function") return;
     window.gtag("event", "conversion", {
       send_to: "AW-16565473053/xoiwCNrIn_4bEJ2ehNs9",
       value: 1.0,
       currency: "USD",
     });
-  }, []);
+  }, [stepTwoData]);
+
+  // page authorization | redirect if previous step has no data
+  if (Object.keys(stepTwoData).length === 0) {
+    return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
+  }
 
   // handle form submission
   const handleNext = async (data) => {
