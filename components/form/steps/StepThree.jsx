@@ -34,6 +34,16 @@ const StepThree = () => {
     return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
   }
 
+  // Fire Google Ads conversion when user reaches packages page
+  useEffect(() => {
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", "conversion", {
+      send_to: "AW-16565473053/xoiwCNrIn_4bEJ2ehNs9",
+      value: 1.0,
+      currency: "USD",
+    });
+  }, []);
+
   // handle form submission
   const handleNext = async (data) => {
     const packageName = data.planName;
