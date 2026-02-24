@@ -486,6 +486,16 @@ const StepOne = () => {
   //   setResendLoading(false);
   // };
 
+  // Fire Google Ads lead conversion on Step 1 submit
+  const fireLeadConversion = () => {
+    if (typeof window.gtag !== "function") return;
+    window.gtag("event", "conversion", {
+      send_to: "AW-16565473053/xoiwCNrIn_4bEJ2ehNs9",
+      value: 1.0,
+      currency: "USD",
+    });
+  };
+
   // HANDLE FORM SUBMISSION
   const handleFormSubmit = async (e) => {
     const stepOne = {
@@ -537,6 +547,7 @@ const StepOne = () => {
       .post(endPoint, stepOneWithValues)
       .then((res) => {
         if (res.data.success) {
+          fireLeadConversion();
           return router.push("/trademark-register/step-2");
         }
       })

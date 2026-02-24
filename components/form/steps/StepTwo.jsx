@@ -60,6 +60,14 @@ const StepTwo = () => {
       console.log("Error sending step 2 data:", error);
     }
 
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion", {
+        send_to: "AW-16565473053/xoiwCNrIn_4bEJ2ehNs9",
+        value: 1.0,
+        currency: "USD",
+      });
+    }
+
     return router.push("/trademark-register/step-3");
   };
 
