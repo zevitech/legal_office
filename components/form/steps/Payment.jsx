@@ -3,14 +3,9 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { FaSpinner } from "react-icons/fa6";
-import StripePayment from "../StripePayment";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import NormalLabel from "@/components/form/NormalLabel";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import NmiPayment from "@/components/form/NmiPayment";
 import React, { useEffect, useMemo, useState } from "react";
-import { Card, CardBody, CardHeader, Divider, Button } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY); -- STRIPE
 
@@ -18,6 +13,7 @@ const Payment = () => {
   const router = useRouter();
   // const [isLoading, setIsLoading] = useState(false);
   const [paymentError, setPaymentError] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // const [clientSecret, setClientSecret] = useState(""); -- STRIPE
 
@@ -88,54 +84,63 @@ const Payment = () => {
 
   // -------------------CHANGES--------------------------------
 
-  const createOrder = async () => {
-    return await axios
-      .post("/api/paypal-checkout/create-order", { totalAmount })
-      .then((res) => {
-        return res?.data?.order.id;
-      })
-      .catch((err) => {
-        console.log("Error creating order:", err);
-        setPaymentError("Something went wrong, please try again.");
+  // Collect.js returns a one-time payment token; the server charges it and
+  // recalculates the amount from the selected package (never trusts the client).
+  const handleToken = async (paymentToken, billing) => {
+    setIsProcessing(true);
+    setPaymentError("");
+
+    try {
+      const description = `Trademark order for ${billing.firstName} ${billing.lastName}. Receipt ID: ${stepFourData?.receipt_ID || "N/A"}`;
+
+      const { data: charge } = await axios.post("/api/nmi/charge", {
+        paymentToken,
+        packageName: nestedLeadData.stepThree.packageName,
+        isRushProcessing: stepFourData.rushAmount > 0,
+        firstName: billing.firstName,
+        lastName: billing.lastName,
+        email: billing.email || leadDataWithValues.emailAddress,
+        zip: billing.zip,
+        description,
       });
-  };
 
-  // handle capture order and passing some order data
-  const onApprove = async (data) => {
-    const orderData = {
-      orderId: data.orderID,
-    };
+      if (!charge?.success) {
+        setPaymentError(charge?.message || "Payment declined, please try again.");
+        setIsProcessing(false);
+        return;
+      }
 
-    return await axios
-      .post("/api/paypal-checkout/capture-order", orderData)
-      .then((res) => {
-        // payment successful. now make a request to send the data to mail and zoho
-        if (res?.data?.result?.status == "COMPLETED") {
-          setPaymentError("");
-          leadDataWithValues.is_paid = true;
-          leadDataWithValues.zoho_step = 3;
-          axios
-            .post(endPoint, leadDataWithValues)
-            .then((res) => {
-              if (res.data.success) {
-                window.location.href = "/trademark-register/thank-you";
-              }
-            })
-            .catch((err) => {
-              console.log(
-                "Error sending data to save-data endpoint in payment page: ",
-                err,
-              );
-              alert(
-                "Payment Successful. But something went wrong, please check your network or contact for support.",
-              );
-            });
+      // Payment captured — now persist the lead to mail/CRM.
+      const paidLeadData = {
+        ...leadDataWithValues,
+        is_paid: true,
+        zoho_step: 3,
+        payment_method: "NMI",
+        transaction_id: charge.transactionId,
+      };
+
+      try {
+        const res = await axios.post(endPoint, paidLeadData);
+        if (res.data.success) {
+          window.location.href = "/trademark-register/thank-you";
+          return;
         }
-      })
-      .catch((err) => {
-        console.log("Error capturing order:", err);
-        setPaymentError("Checkout Failed, Please try again.");
-      });
+        throw new Error("save-data returned an unsuccessful response");
+      } catch (err) {
+        console.log("Error sending data to save-data endpoint: ", err);
+        // The card was charged — never make the user pay again.
+        alert(
+          "Payment Successful. But something went wrong saving your details, please contact support.",
+        );
+        window.location.href = "/trademark-register/thank-you";
+      }
+    } catch (err) {
+      console.log("Error processing NMI payment:", err);
+      setPaymentError(
+        err?.response?.data?.message || "Checkout failed, please try again.",
+      );
+      setIsProcessing(false);
+    }
   };
 
   // --------------------------------------------------------
@@ -212,28 +217,14 @@ const Payment = () => {
           )}
         </div> */}
 
-        {/* PAYPAL */}
+        {/* NMI — CARD PAYMENT */}
         <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
-          <PayPalScriptProvider
-            options={{
-              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-              components: "buttons",
-              currency: "USD",
-              disableFunding: "paylater",
-            }}
-          >
-            <PayPalButtons
-              style={{ layout: "vertical" }}
-              disabled={false}
-              createOrder={createOrder}
-              onApprove={onApprove}
-            />
-          </PayPalScriptProvider>
-          {paymentError && (
-            <p className="text-[#f31260] text-sm text-center mt-4 mb-1 capitalize">
-              {paymentError}
-            </p>
-          )}
+          <NmiPayment
+            onToken={handleToken}
+            totalAmount={totalAmount}
+            isProcessing={isProcessing}
+            errorMessage={paymentError}
+          />
         </div>
 
         <div className="w-full flex items-start justify-center">
