@@ -5,7 +5,10 @@
 
 const FUNNEL_ID_KEY = "lto_funnel_id";
 const CLICK_IDS_KEY = "lto_click_ids";
-const FIRED_EVENTS_KEY = "lto_fired_events";
+// Separate keys per storage so the two guards can never collide, and so any
+// stale pre-fix data under the old key is ignored.
+const SESSION_FIRED_KEY = "lto_fired_events_session";
+const PURCHASES_FIRED_KEY = "lto_fired_purchases";
 
 const CLICK_ID_PARAMS = ["gclid", "wbraid", "gbraid"];
 
@@ -77,16 +80,36 @@ export function getClickIds() {
 }
 
 /**
- * Guards against duplicate pushes (e.g. a thank-you page refresh, or React
- * effects running twice in dev). Returns true only the first time per key.
+ * Guards against duplicate pushes within a single funnel session (a page
+ * refresh, or React effects running twice). Uses sessionStorage so a NEW
+ * visit — or a repeat test in the same browser — can fire these events again.
+ * Do NOT use this for purchases; see markFiredForever.
  */
-function markFired(key) {
+function markFiredThisSession(key) {
   if (!isBrowser()) return false;
   try {
-    const fired = JSON.parse(localStorage.getItem(FIRED_EVENTS_KEY) || "{}");
+    const fired = JSON.parse(sessionStorage.getItem(SESSION_FIRED_KEY) || "{}");
     if (fired[key]) return false;
     fired[key] = Date.now();
-    localStorage.setItem(FIRED_EVENTS_KEY, JSON.stringify(fired));
+    sessionStorage.setItem(SESSION_FIRED_KEY, JSON.stringify(fired));
+    return true;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Permanent, per-order guard for purchases. Keyed by transaction id, so a
+ * genuine second order still fires while the SAME order can never be counted
+ * twice — including after closing and reopening the thank-you page.
+ */
+function markFiredForever(key) {
+  if (!isBrowser()) return false;
+  try {
+    const fired = JSON.parse(localStorage.getItem(PURCHASES_FIRED_KEY) || "{}");
+    if (fired[key]) return false;
+    fired[key] = Date.now();
+    localStorage.setItem(PURCHASES_FIRED_KEY, JSON.stringify(fired));
     return true;
   } catch {
     return true;
@@ -95,7 +118,7 @@ function markFired(key) {
 
 // 2. First meaningful interaction with the registration form.
 export function trackFormStart() {
-  if (!markFired("lto_form_start")) return;
+  if (!markFiredThisSession("lto_form_start")) return;
   push({
     event: "lto_form_start",
     funnel_id: getFunnelId(),
@@ -105,7 +128,7 @@ export function trackFormStart() {
 
 // 3. Lead validated AND successfully created by the backend.
 export function trackQualifiedLead(leadId) {
-  if (!markFired("lto_qualified_lead")) return;
+  if (!markFiredThisSession("lto_qualified_lead")) return;
   push({
     event: "lto_qualified_lead",
     funnel_id: getFunnelId(),
@@ -115,7 +138,7 @@ export function trackQualifiedLead(leadId) {
 
 // 4. Checkout/payment session started.
 export function trackBeginCheckout(value) {
-  if (!markFired("lto_begin_checkout")) return;
+  if (!markFiredThisSession("lto_begin_checkout")) return;
   push({
     event: "lto_begin_checkout",
     funnel_id: getFunnelId(),
@@ -128,7 +151,7 @@ export function trackBeginCheckout(value) {
 // thank-you page refresh can never count a second purchase.
 export function trackPurchase({ transactionId, value }) {
   if (!transactionId) return;
-  if (!markFired(`lto_purchase_${transactionId}`)) return;
+  if (!markFiredForever(`lto_purchase_${transactionId}`)) return;
   push({
     event: "lto_purchase",
     funnel_id: getFunnelId(),
