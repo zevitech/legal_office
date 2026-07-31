@@ -105,6 +105,23 @@ export async function POST(req) {
 
 
 
+    // sending data to ZevitechCRM leads system (server-to-server, API-key guarded)
+    const crmIngestUrl = process.env.CRM_INGEST_URL;
+    const crmIngestKey = process.env.CRM_INGEST_API_KEY;
+    if (crmIngestUrl && crmIngestKey) {
+      try {
+        await axios.post(
+          crmIngestUrl,
+          { ...data, brand: "legal_trademark_office" },
+          { headers: { "x-api-key": crmIngestKey }, timeout: 8000 }
+        );
+        console.log("CRM lead ingest: ok");
+      } catch (err) {
+        // Never block the form flow on CRM failure — email already sent.
+        console.log("CRM lead ingest error:", err?.response?.data || err?.message);
+      }
+    }
+
     // sending data to ZOHO - disabled via env or default off
     const disableZoho =
       process.env.DISABLE_ZOHO === "true" ||
