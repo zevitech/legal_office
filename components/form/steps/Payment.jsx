@@ -100,17 +100,10 @@ const Payment = () => {
     try {
       const description = `Trademark order for ${billing.firstName} ${billing.lastName}. Receipt ID: ${stepFourData?.receipt_ID || "N/A"}`;
 
-      // Optional ?test_key=... for a $1 live-gateway test. The server checks it
-      // against NMI_TEST_KEY; a wrong or absent value always charges full price.
-      const testKey = new URLSearchParams(window.location.search).get(
-        "test_key",
-      );
-
       const { data: charge } = await axios.post("/api/nmi/charge", {
         paymentToken,
         packageName: nestedLeadData.stepThree.packageName,
         isRushProcessing: stepFourData.rushAmount > 0,
-        ...(testKey ? { testKey } : {}),
         firstName: billing.firstName,
         lastName: billing.lastName,
         email: billing.email || leadDataWithValues.emailAddress,

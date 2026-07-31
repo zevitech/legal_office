@@ -12,7 +12,6 @@ export async function POST(req) {
       email,
       zip,
       description,
-      testKey,
     } = await req.json();
 
     if (!paymentToken) {
@@ -31,29 +30,11 @@ export async function POST(req) {
     }
 
     // Never trust an amount sent by the browser — recalculate it here.
-    const realAmount = calculateOrderTotal({ packageName, isRushProcessing });
-    if (realAmount === null || realAmount <= 0) {
+    const amount = calculateOrderTotal({ packageName, isRushProcessing });
+    if (amount === null || amount <= 0) {
       return NextResponse.json(
         { success: false, message: "Invalid package selection" },
         { status: 400 }
-      );
-    }
-
-    // TEST CHARGE — lets us exercise the live gateway for $1 without changing
-    // the price for real customers. Requires NMI_TEST_KEY to be set in the
-    // environment AND the caller to present the exact matching secret.
-    // The secret never leaves the server, so it cannot be guessed from the
-    // client bundle. Unset NMI_TEST_KEY to disable testing entirely.
-    const expectedTestKey = process.env.NMI_TEST_KEY;
-    const isTestCharge =
-      !!expectedTestKey && !!testKey && testKey === expectedTestKey;
-
-    const testAmount = Number(process.env.NMI_TEST_AMOUNT || 1);
-    const amount = isTestCharge ? testAmount : realAmount;
-
-    if (isTestCharge) {
-      console.log(
-        `NMI TEST CHARGE: $${amount.toFixed(2)} (real price $${realAmount.toFixed(2)})`
       );
     }
 
@@ -77,13 +58,7 @@ export async function POST(req) {
       ...(lastName ? { last_name: lastName } : {}),
       ...(email ? { email } : {}),
       ...(zip ? { zip } : {}),
-      ...(description
-        ? {
-            order_description: isTestCharge
-              ? `[TEST] ${description}`
-              : description,
-          }
-        : {}),
+      ...(description ? { order_description: description } : {}),
     });
 
     const gatewayRes = await fetch(`${gatewayUrl}/api/transact.php`, {
