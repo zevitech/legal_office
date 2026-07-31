@@ -23,6 +23,12 @@ import { GetGeographicalData } from "@/utils/get-geographical-data";
 import { saveStepOne } from "@/features/formSlice";
 
 import {
+  trackFormStart,
+  trackQualifiedLead,
+  getClickIds,
+} from "@/utils/tracking";
+
+import {
   Radio,
   RadioGroup,
   Input,
@@ -191,11 +197,13 @@ const StepOne = () => {
   };
 
   const setValueAndClearError = (setter, field) => (e) => {
+    trackFormStart(); // fires once per visitor
     setter(e.target.value);
     clearError(field);
   };
 
   const setSelectionAndClearError = (setter, field) => (value) => {
+    trackFormStart(); // fires once per visitor
     const selectedValue =
       Array.isArray(value) || value instanceof Set ? [...value][0] : value;
     setter(selectedValue);
@@ -521,6 +529,8 @@ const StepOne = () => {
       // Include reCAPTCHA token for server-side verification
       reChaptcha,
       zoho_step: 1,
+      // Ad click ids so this lead can be attributed back to the click
+      ...getClickIds(),
     };
 
     // FILTER OUT EMPTY AND UNDEFINED PROPERTIES
@@ -537,6 +547,8 @@ const StepOne = () => {
       .post(endPoint, stepOneWithValues)
       .then((res) => {
         if (res.data.success) {
+          // Backend confirmed the lead was created — safe to count it.
+          trackQualifiedLead(String(stepOne.customer_ID));
           return router.push("/trademark-register/step-2");
         }
       })

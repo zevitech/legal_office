@@ -98,6 +98,20 @@ const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
       return;
     }
 
+    // The gateway rejects transactions without a zip, so catch it here first.
+    const form = formRef.current;
+    const required = [
+      ["first_name", "Please enter your first name."],
+      ["last_name", "Please enter your last name."],
+      ["zip", "Please enter your billing zip / postal code."],
+    ];
+    for (const [name, message] of required) {
+      if (!form?.querySelector(`[name=${name}]`)?.value?.trim()) {
+        setFieldError(message);
+        return;
+      }
+    }
+
     // Triggers tokenization; the configured callback fires on success.
     window.CollectJS.startPaymentRequest();
   };

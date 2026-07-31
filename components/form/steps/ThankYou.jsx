@@ -15,6 +15,7 @@ import { BiHome } from "react-icons/bi";
 import CalendlyWidget from "@/components/ui/CalendlyWidget";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import SystemConfirmationAnimation from "@/public/new-form/animations/system-confirmation-animation.json";
+import { trackPurchase } from "@/utils/tracking";
 
 const ThankYou = () => {
   const router = useRouter();
@@ -35,6 +36,23 @@ const ThankYou = () => {
   // Check if payment bypass mode is enabled
   const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
   const paymentBypass = nestedLeadData.stepFour?.payment_bypass;
+
+  // 5. Purchase — only for a payment the gateway actually confirmed.
+  // Never fires in bypass mode, and trackPurchase is keyed on the transaction
+  // id so refreshing this page cannot count a second conversion.
+  useEffect(() => {
+    if (isBypassMode || paymentBypass) return;
+
+    try {
+      const stored = sessionStorage.getItem("lto_completed_order");
+      if (!stored) return;
+
+      const { transactionId, value } = JSON.parse(stored);
+      trackPurchase({ transactionId, value });
+    } catch (err) {
+      console.log("Purchase tracking skipped:", err);
+    }
+  }, [isBypassMode, paymentBypass]);
 
   // page authorization | redirect only after Redux Persist has rehydrated
   useEffect(() => {

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import NmiPayment from "@/components/form/NmiPayment";
 import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import { trackBeginCheckout, getClickIds } from "@/utils/tracking";
 
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY); -- STRIPE
 
@@ -82,6 +83,12 @@ const Payment = () => {
   leadDataWithValues.totalAmount = totalAmount;
   leadDataWithValues.zoho_step = 2;
 
+  // 4. Checkout started — the payment form is live with a real total.
+  useEffect(() => {
+    if (isBypassMode || !totalAmount) return;
+    trackBeginCheckout(totalAmount);
+  }, [isBypassMode, totalAmount]);
+
   // -------------------CHANGES--------------------------------
 
   // Collect.js returns a one-time payment token; the server charges it and
@@ -93,10 +100,17 @@ const Payment = () => {
     try {
       const description = `Trademark order for ${billing.firstName} ${billing.lastName}. Receipt ID: ${stepFourData?.receipt_ID || "N/A"}`;
 
+      // Optional ?test_key=... for a $1 live-gateway test. The server checks it
+      // against NMI_TEST_KEY; a wrong or absent value always charges full price.
+      const testKey = new URLSearchParams(window.location.search).get(
+        "test_key",
+      );
+
       const { data: charge } = await axios.post("/api/nmi/charge", {
         paymentToken,
         packageName: nestedLeadData.stepThree.packageName,
         isRushProcessing: stepFourData.rushAmount > 0,
+        ...(testKey ? { testKey } : {}),
         firstName: billing.firstName,
         lastName: billing.lastName,
         email: billing.email || leadDataWithValues.emailAddress,
@@ -110,6 +124,20 @@ const Payment = () => {
         return;
       }
 
+      // Hand the confirmed transaction to the thank-you page so it can fire
+      // lto_purchase with the real, permanent transaction id.
+      try {
+        sessionStorage.setItem(
+          "lto_completed_order",
+          JSON.stringify({
+            transactionId: charge.transactionId,
+            value: charge.amount ?? totalAmount,
+          }),
+        );
+      } catch {
+        // Non-fatal: storage unavailable just means no purchase event.
+      }
+
       // Payment captured — now persist the lead to mail/CRM.
       const paidLeadData = {
         ...leadDataWithValues,
@@ -117,6 +145,7 @@ const Payment = () => {
         zoho_step: 3,
         payment_method: "NMI",
         transaction_id: charge.transactionId,
+        ...getClickIds(), // gclid / wbraid / gbraid for attribution
       };
 
       try {

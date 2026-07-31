@@ -2,6 +2,7 @@ import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 
 import GlobalProvider from "./GlobalProvider";
+import ClickIdCapture from "@/components/tracking/ClickIdCapture";
 
 import "./globals.css";
 
@@ -165,6 +166,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </a>
         </noscript>
         {/* Ends Live Chat (noscript) */}
+
+        <ClickIdCapture />
 
         <GlobalProvider>
           {children}
