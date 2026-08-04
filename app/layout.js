@@ -124,9 +124,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);} 
+            function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+            // Legacy Ads account — still referenced by the hardcoded
+            // send_to conversions in StepThree.jsx and ThankYou.jsx.
             gtag('config', 'AW-16565473053');
+            // Current Ads account. One gtag.js load serves both.
+            gtag('config', 'AW-18263994803');
           `,
         }}
       />
