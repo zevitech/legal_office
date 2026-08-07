@@ -75,6 +75,26 @@ const GoogleAddressAutocomplete = ({
       return;
     }
 
+    // With loading=async the script's "load" event fires BEFORE the places
+    // library is available, and on client-side navigation an already-present
+    // script never fires "load" again. Poll for readiness instead.
+    let cancelled = false;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 40; // ~10s at 250ms
+
+    const waitForPlaces = () => {
+      if (cancelled) return;
+      if (window.google?.maps?.places) {
+        initialize();
+        return;
+      }
+      if (++attempts >= MAX_ATTEMPTS) {
+        setLoadError(true);
+        return;
+      }
+      setTimeout(waitForPlaces, 250);
+    };
+
     let script = document.getElementById(SCRIPT_ID);
     if (!script) {
       script = document.createElement("script");
@@ -85,8 +105,11 @@ const GoogleAddressAutocomplete = ({
       script.onerror = () => setLoadError(true);
       document.head.appendChild(script);
     }
-    script.addEventListener("load", initialize);
-    return () => script?.removeEventListener("load", initialize);
+
+    waitForPlaces();
+    return () => {
+      cancelled = true;
+    };
   }, [onAddressSelect]);
 
   return (
