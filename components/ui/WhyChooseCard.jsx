@@ -2,11 +2,11 @@ import React from "react";
 
 const WhyChooseCard = ({ number, title }) => {
   return (
-    <div className="w-[330px] flex flex-col gap-5 max-md:gap-1 text-center my-10 max-md:my-0 max-md:py-10 border-l-1 max-md:border-b-1">
-      <h1 className="text-[#025da0] font-semibold text-4xl max-md:text-3xl">
+    <div className="flex w-full min-w-0 flex-col gap-2 border-b-1 px-3 py-8 text-center last:border-b-0 sm:border-b-0 sm:border-l-1 sm:first:border-l-0 sm:py-10">
+      <p className="text-[#025da0] font-semibold text-4xl max-md:text-3xl">
         {number}
-      </h1>
-      <h1 className="text-slate-700 font-semibold text-lg">{title}</h1>
+      </p>
+      <h3 className="text-slate-700 font-semibold text-lg">{title}</h3>
     </div>
   );
 };

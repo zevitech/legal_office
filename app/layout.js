@@ -1,4 +1,4 @@
-import { Inter, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 import Script from "next/script";
 
 import GlobalProvider from "./GlobalProvider";
@@ -6,7 +6,6 @@ import ClickIdCapture from "@/components/tracking/ClickIdCapture";
 
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -56,7 +55,7 @@ export default function RootLayout({ children }) {
       {/* Live Chat */}
       <Script
         id="livechat-script"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
       window._lc = window._lc || {};
@@ -112,9 +111,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }}
       />
 
-      {/* Google tag (gtag.js) for Google Ads */}
+      {/* Google tag (gtag.js) for Google Ads. One gtag.js load serves both
+          accounts. Kept as a direct base tag so conversions keep recording
+          even before the GTM container's triggers are fully configured. */}
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=AW-16565473053"
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18263994803"
         strategy="afterInteractive"
       />
 
@@ -126,10 +127,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            // Legacy Ads account — still referenced by the hardcoded
-            // send_to conversions in StepThree.jsx and ThankYou.jsx.
             gtag('config', 'AW-16565473053');
-            // Current Ads account. One gtag.js load serves both.
             gtag('config', 'AW-18263994803');
           `,
         }}
@@ -175,7 +173,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <GlobalProvider>
           {children}
-          <Script id="clarity-script" strategy="afterInteractive">
+          <Script id="clarity-script" strategy="lazyOnload">
             {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

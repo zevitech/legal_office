@@ -1,7 +1,5 @@
-import FormHero from "@/components/form/FormHero";
 import ThankYou from "@/components/form/steps/ThankYou";
-import FooterSection from "@/components/sections/FooterSection";
-import Header from "@/components/ui/Header";
+import FunnelShell from "@/components/form/FunnelShell";
 
 export const metadata = {
   title: "Thank You - Register Trademark | Legal Trademark Office",
@@ -11,11 +9,9 @@ export const metadata = {
 
 const page = () => {
   return (
-    <main className="mb-10">
-      <Header />
+    <FunnelShell>
       <ThankYou />
-      <FooterSection />
-    </main>
+    </FunnelShell>
   );
 };
 

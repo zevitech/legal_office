@@ -1,8 +1,9 @@
 "use client";
 
 import Package from "../Package";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import FormLoader from "@/components/form/FormLoader";
 import NormalLabel from "../NormalLabel";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,35 +14,24 @@ import {
   CardHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { saveStepThree } from "@/features/formSlice";
+import { saveStepFour, saveStepThree } from "@/features/formSlice";
 import { _35_USD, _135_USD, _235_USD } from "@/constant/packages";
 import PageLoader from "@/components/pages/PageLoader";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FaCircleCheck } from "react-icons/fa6";
 import { SystemStepThreeData } from "@/constant/form2.0/system-step-three-data";
+import { trackPackageSelected } from "@/utils/tracking";
 
 const StepThree = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isLoading1, setIsLoading1] = useState(false);
-  const [isLoading2, setIsLoading2] = useState(false);
-  const [isLoading3, setIsLoading3] = useState(false);
+  const [loadingPlanId, setLoadingPlanId] = useState(null);
+  const [selectedPlanId, setSelectedPlanId] = useState(4);
   const stepTwoData = useSelector((state) => state.form.stepTwo);
   const stepOneData = useSelector((state) => state.form.stepOne);
 
-  // Fire Google Ads conversion when user reaches packages page
-  useEffect(() => {
-    if (Object.keys(stepTwoData).length === 0) return;
-    if (typeof window.gtag !== "function") return;
-    window.gtag("event", "conversion", {
-      send_to: "AW-16565473053/xoiwCNrIn_4bEJ2ehNs9",
-      value: 1.0,
-      currency: "USD",
-    });
-  }, [stepTwoData]);
-
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepTwoData).length === 0) {
+  if (process.env.NODE_ENV === "production" && Object.keys(stepTwoData).length === 0) {
     return router.push(process.env.NEXT_PUBLIC_APP_URL + "/trademark-register");
   }
 
@@ -50,15 +40,17 @@ const StepThree = () => {
     const packageName = data.planName;
     const price = data.price;
 
-    if (data.id === 1) {
-      setIsLoading1(true);
-    } else if (data.id === 2) {
-      setIsLoading2(true);
-    } else if (data.id === 3) {
-      setIsLoading3(true);
-    }
+    setLoadingPlanId(data.id);
 
     dispatch(saveStepThree({ packageName, price })); // store data to state
+    dispatch(
+      saveStepFour({
+        isRushProcessing: false,
+        rushAmount: 0,
+        previous: true,
+        receipt_ID: Math.floor(Math.random() * 900000 + 100000),
+      }),
+    );
 
     // Send step 3 data to email endpoint
     const stepThreeData = {
@@ -70,138 +62,68 @@ const StepThree = () => {
     };
 
     try {
+      if (process.env.NODE_ENV !== "production") {
+        return router.push("/trademark-register/payment");
+      }
       const endPoint = "/api/save-data";
       await axios.post(endPoint, stepThreeData);
+      trackPackageSelected({
+        packageName,
+        value: price,
+        classCount: stepTwoData.estimatedClassCount,
+      });
       console.log("Step 3 data sent successfully");
     } catch (error) {
       console.log("Error sending step 3 data:", error);
     }
 
-    return router.push("/trademark-register/step-4");
+    return router.push("/trademark-register/payment");
   };
 
-  return (
-    <main className="system-page-standard-layout flex flex-col gap-8">
-      <div className="flex flex-col">
-        <h1 className="font-inria md:text-[48px] text-[30px] text-heading-color font-bold w-full text-center">
-          Choose Your Plan
-        </h1>
+  const selectedPlan = SystemStepThreeData.find((plan) => plan.id === selectedPlanId);
 
-        <p className="text-paragraph-color md:text-[26px] text-[26px] w-full text-center">
-          Best Plans For{" "}
-          <span className="text-primary-theme-color">
-            Trademark Registration
-          </span>
-        </p>
+  return (
+    <main className="system-page-standard-layout flex flex-col gap-7">
+      <FormLoader isVisible={!!loadingPlanId} />
+      <div className="text-center">
+        <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Service package</p>
+        <h1 className="mt-2 font-inria text-3xl font-bold text-heading-color sm:text-4xl">Choose your preparation plan</h1>
+        <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">The $649 Premium plan is preselected for customers who want the broadest search, priority preparation and ongoing monitoring. You can choose any plan.</p>
       </div>
 
-      <div className="w-full flex max-lg:flex-col justify-center lg:items-end items-center gap-8 py-12">
-        {SystemStepThreeData.map((data) => (
-          <Card
-            key={data.id}
-            className={`p-4 lg:w-[400px] md:w-[600px] w-full h-full flex flex-col gap-4 items-center ${
-              data.id == 1 || data.id == 3
-                ? "lg:h-[1100px]"
-                : "bg-primary-theme lg:h-[1150px]"
-            }`}
-          >
-            <CardHeader className="w-full flex flex-col items-center">
-              <div
-                className={`w-[128px] h-[42px] border-2  rounded-[10px] font-semibold  flex items-center justify-center ${
-                  data.id == 1 || data.id == 3
-                    ? "border-primary-theme text-primary-theme"
-                    : " border-white text-white"
-                }`}
-              >
-                {data.planName}
-              </div>
-              <h1
-                className={`font-semibold text-[60px]  ${
-                  data.id == 1 || data.id == 3
-                    ? "text-heading-color"
-                    : " text-white"
-                }`}
-              >
-                {data.planPrice}
-              </h1>
-              <p
-                className={`text-[15px] ${
-                  data.id == 1 || data.id == 3
-                    ? "text-paragraph-color"
-                    : "text-white/70"
-                }`}
-              >
-                {data.planSubtext}
-              </p>
-            </CardHeader>
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+        <strong>USPTO government filing fees are separate from every service plan.</strong> The current estimate is $350 per class. Your final class count will be reviewed and confirmed before filing.
+      </div>
 
-            <CardBody className="w-full flex items-center justify-center flex-col gap-8">
-              {data.OfferedDetails.map((detail, index) => (
-                <div className="w-full flex gap-2" key={index}>
-                  <FaCircleCheck
-                    className={`text-[20px] translate-y-1 text-[#2DC937]`}
-                  />
+      <div className="grid w-full grid-cols-1 items-stretch gap-5 lg:grid-cols-2">
+        {[...SystemStepThreeData].sort((a, b) => [1, 3, 2, 4].indexOf(a.id) - [1, 3, 2, 4].indexOf(b.id)).map((data) => {
+          const selected = selectedPlanId === data.id;
+          const premium = data.id === 4;
+          return (
+            <Card key={data.id} className={`relative flex h-full w-full flex-col overflow-visible rounded-2xl border-2 p-3 transition ${selected ? "border-blue-600 shadow-xl shadow-blue-100" : "border-slate-200 shadow-sm"}`}>
+              {premium && <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">Recommended</div>}
+              <CardHeader className="flex w-full flex-col items-center pt-7 text-center">
+                <h2 className="text-xl font-bold text-slate-900">{data.planName}</h2>
+                <p className="mt-3 text-5xl font-bold text-slate-950">{data.planPrice}</p>
+                <p className="mt-1 text-sm text-slate-500">Service fee charged today</p>
+                <div className="mt-4 w-full rounded-xl bg-amber-50 p-3 text-sm font-semibold text-amber-950">+ $350 USPTO fee per class</div>
+              </CardHeader>
+              <CardBody className="flex w-full flex-1 flex-col gap-5">
+                {data.OfferedDetails.map((detail) => <div className="flex gap-3" key={detail.title}><FaCircleCheck className="mt-1 shrink-0 text-lg text-emerald-600" /><div><h3 className="text-sm font-bold text-slate-900">{detail.title}</h3><p className="mt-1 text-xs leading-5 text-slate-500">{detail.description}</p></div></div>)}
+                {data.NotOfferedDetails?.map((detail) => <div className="flex gap-3 opacity-55" key={detail.title}><IoMdCloseCircle className="mt-1 shrink-0 text-lg text-slate-500" /><div><h3 className="text-sm font-semibold text-slate-700">{detail.title}</h3></div></div>)}
+              </CardBody>
+              <CardFooter>
+                <Button onClick={() => setSelectedPlanId(data.id)} className={`h-12 w-full rounded-xl font-bold ${selected ? "bg-blue-600 text-white" : "border-2 border-blue-600 bg-white text-blue-700"}`}>{selected ? `✓ ${data.planName} selected` : `Select ${data.planName}`}</Button>
+              </CardFooter>
+            </Card>
+          );
+        })}
+      </div>
 
-                  <div className="flex w-full gap-2 flex-col">
-                    <h1
-                      className={`text-[16px] ${
-                        data.id == 1 || data.id == 3 ? "" : " text-white"
-                      }`}
-                    >
-                      {detail.title}
-                    </h1>
-                    <p
-                      className={`text-[12px] ${
-                        data.id == 1 || data.id == 3 ? "" : " text-white/70"
-                      }`}
-                    >
-                      {detail.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              {data.NotOfferedDetails &&
-                data.NotOfferedDetails.length > 0 &&
-                data.NotOfferedDetails.map((detail, index) => (
-                  <div className="w-full flex gap-2" key={index}>
-                    <IoMdCloseCircle
-                      className={`text-[20px] translate-y-1 text-black/50`}
-                    />
-
-                    <div className="flex w-full gap-2 flex-col">
-                      <h1 className="text-[16px] text-black/50">
-                        {detail.title}
-                      </h1>
-                      <p className="text-[12px] text-black/50">
-                        {detail.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-            </CardBody>
-
-            <CardFooter>
-              <Button
-                className={`w-full h-[50px] rounded-lg font-inria ${
-                  data.id == 1 || data.id == 3
-                    ? "bg-primary-theme text-white"
-                    : "bg-white text-heading-color"
-                }`}
-                isLoading={
-                  data.id === 1
-                    ? isLoading1
-                    : data.id === 2
-                    ? isLoading2
-                    : isLoading3
-                }
-                onClick={() => handleNext(data)}
-              >
-                SELECT
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+      <div className="sticky bottom-3 z-20 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:grid-cols-[auto_1fr_auto] sm:items-center">
+        <Button onClick={() => router.back()} className="h-14 w-full border-2 border-primary-theme bg-white px-7 font-bold text-primary-theme sm:w-auto">Previous</Button>
+        <p className="text-center text-sm text-slate-600"><strong className="text-slate-900">{selectedPlan?.planName}</strong> · {selectedPlan?.planPrice} today · USPTO fees separate</p>
+        <Button onClick={() => handleNext(selectedPlan)} className="h-14 w-full bg-primary-theme px-7 font-bold text-white sm:w-auto" isLoading={loadingPlanId === selectedPlanId}>Continue with {selectedPlan?.planName}</Button>
       </div>
     </main>
   );

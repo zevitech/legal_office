@@ -1,4 +1,27 @@
-this is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Legal Trademark Office
+
+Next.js trademark-registration funnel with staged lead capture, Google Ads/GTM
+events, Google Places address suggestions, package selection, NMI checkout, and
+payment receipts.
+
+## Deployment configuration
+
+Copy `.env.example` into the deployment platform's environment settings and
+provide the production secrets. Do not commit a populated `.env` file.
+
+For address suggestions:
+
+1. In Google Cloud, enable **Maps JavaScript API** and **Places API**.
+2. Create a browser API key.
+3. Restrict website access to `https://www.legaltrademarkoffice.com/*` and any
+   approved preview domain.
+4. Restrict the key to Maps JavaScript API and Places API.
+5. Set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in the deployment environment.
+
+The address form remains usable manually if Google suggestions fail to load.
+
+Before going live, keep `NEXT_PUBLIC_PAYMENT_BYPASS_MODE=false`, configure the
+NMI keys, and follow `docs/google-ads-gtm-funnel.md` for the GTM mapping.
 
 ## Getting Started
 

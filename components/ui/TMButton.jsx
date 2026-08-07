@@ -15,7 +15,7 @@ const TMButton = ({ px, py, text, color, full, blackText = false }) => {
         full && `w-full`
       }`}
       radius="sm"
-      style={{ padding: `${py} ${px}`, background: `${color}` }}
+      style={{ padding: `${py} ${px}`, ...(color ? { background: color } : {}) }}
       isLoading={isLoading}
       onClick={() => setLoading(true)}
     >

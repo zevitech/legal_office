@@ -1,7 +1,6 @@
-import FormHero from "@/components/form/FormHero";
 import Payment from "@/components/form/steps/Payment";
-import FooterSection from "@/components/sections/FooterSection";
-import Header from "@/components/ui/Header";
+import FunnelShell from "@/components/form/FunnelShell";
+import SystemStepProgressTracker from "@/components/form/form2.0/system-step-progress-tracker";
 
 export const metadata = {
   title: "Payment - Register Trademark | Legal Trademark Office",
@@ -11,11 +10,10 @@ export const metadata = {
 
 const page = () => {
   return (
-    <main>
-      <Header />
+    <FunnelShell>
+      <SystemStepProgressTracker p_value={100} />
       <Payment />
-      <FooterSection />
-    </main>
+    </FunnelShell>
   );
 };
 

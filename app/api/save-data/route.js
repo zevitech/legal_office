@@ -2,6 +2,66 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 import { createTransport } from "nodemailer";
 
+const escapeHtml = (value = "") =>
+  String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+const labelFor = (key) =>
+  key
+    .replaceAll("_", " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+const displayValue = (value) => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) =>
+        typeof item === "object"
+          ? item.label || item.title || JSON.stringify(item)
+          : item,
+      )
+      .join(", ");
+  }
+  if (value && typeof value === "object") return JSON.stringify(value);
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  return value ?? "";
+};
+
+const EMAIL_SECTIONS = [
+  { title: "Trademark", keys: ["protectionTypes", "wantToProtect", "name", "slogan", "logo", "logoColors", "logoProtectionDescription", "soundDescription", "soundFileName", "trademarkCurrentlyBeingUsed", "firstAnywhereDate", "firstCommenceDate"] },
+  { title: "Owner", keys: ["selectedOwnerType", "organizationName", "organizationType", "selectedFormationType", "stateFormation", "countryFormation", "organizationPosition"] },
+  { title: "Contact", keys: ["firstName", "lastName", "emailAddress", "phoneNumber", "address", "city", "state", "zipCode"] },
+  { title: "Business activities & classification", keys: ["selectedActivities", "trademarkClassification", "estimatedClassCount", "reviewPreference"] },
+  { title: "Package", keys: ["packageName", "price"] },
+  { title: "Payment", keys: ["is_paid", "payment_method", "transaction_id", "addons", "totalAmount"] },
+];
+
+const stageDetails = (data) => {
+  if (data.is_paid) return { number: 4, title: "Payment completed", color: "#047857" };
+  if (data.zoho_step === 3) return { number: 3, title: "Package selected", color: "#7c3aed" };
+  if (data.zoho_step === 2) return { number: 2, title: "Business activities completed", color: "#0369a1" };
+  return { number: 1, title: "Trademark and contact details completed", color: "#1d4ed8" };
+};
+
+const buildProgressEmail = (data) => {
+  const stage = stageDetails(data);
+  const customerName = [data.firstName, data.lastName].filter(Boolean).join(" ") || "New customer";
+  const sections = EMAIL_SECTIONS.map((section) => {
+    const rows = section.keys
+      .filter((key) => data[key] !== undefined && data[key] !== "" && data[key] !== null)
+      .map((key) => `<tr><td style="padding:10px 12px;color:#64748b;font-size:13px;width:38%;border-bottom:1px solid #eef2f7;vertical-align:top">${escapeHtml(labelFor(key))}</td><td style="padding:10px 12px;color:#0f172a;font-size:13px;font-weight:600;border-bottom:1px solid #eef2f7;word-break:break-word">${escapeHtml(displayValue(data[key]))}</td></tr>`)
+      .join("");
+    if (!rows) return "";
+    return `<div style="margin-top:22px"><h2 style="margin:0 0 8px;font-size:15px;color:#0f172a">${section.title}</h2><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:10px;border-collapse:separate;overflow:hidden">${rows}</table></div>`;
+  }).join("");
+
+  return `<!doctype html><html><body style="margin:0;background:#f1f5f9;font-family:Arial,sans-serif;color:#0f172a"><div style="display:none">${escapeHtml(stage.title)} for ${escapeHtml(customerName)}</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:28px 12px"><div style="max-width:680px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px rgba(15,23,42,.08)"><div style="background:#0f172a;padding:24px 28px"><div style="font-size:20px;font-weight:800;color:#fff">Legal Trademark Office</div><div style="margin-top:6px;color:#cbd5e1;font-size:13px">Application progress notification</div></div><div style="padding:26px 28px"><div style="display:inline-block;border-radius:999px;background:${stage.color};color:#fff;padding:7px 12px;font-size:12px;font-weight:700">STEP ${stage.number} OF 4</div><h1 style="margin:16px 0 6px;font-size:24px;color:#0f172a">${escapeHtml(stage.title)}</h1><p style="margin:0;color:#64748b;font-size:14px">${escapeHtml(customerName)} · ${escapeHtml(data.emailAddress || "Email pending")}</p>${sections}<div style="margin-top:24px;padding:14px 16px;border-radius:10px;background:#eff6ff;color:#1e3a8a;font-size:13px">This email reflects the customer’s latest completed funnel step. Later emails include all information collected up to that point.</div></div><div style="padding:18px 28px;background:#f8fafc;color:#64748b;font-size:12px">Received ${escapeHtml(new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }))} Pacific Time</div></div></td></tr></table></body></html>`;
+};
+
 export async function POST(req) {
   const data = await req.json();
 
@@ -61,32 +121,15 @@ export async function POST(req) {
       },
     });
 
-    // Constructing the form body as an HTML table
-    const formBody = `
-      <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-        <tr><th colspan="2" style="background-color: #f2f2f2;">Form Submission Details</th></tr>
-        ${Object.entries(data)
-        .map(
-          ([key, value]) => `
-            <tr>
-              <td style="font-weight: bold;">${key
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase())}</td>
-              <td>${value}</td>
-            </tr>`
-        )
-        .join("")}
-      </table>
-    `;
-
-    const subject =
-      "previous" in data
-        ? `Previous form data of ${data.emailAddress}.`
-        : `Another new form submission from ${data.emailAddress}.`;
+    const stage = stageDetails(data);
+    const formBody = buildProgressEmail(data);
+    const customerName = [data.firstName, data.lastName].filter(Boolean).join(" ") || data.emailAddress || "New lead";
+    const subject = `[LTO] Step ${stage.number}/4: ${stage.title} — ${customerName}`;
 
     await transporter.sendMail({
-      from: data.emailAddress,
+      from: `Legal Trademark Office <${process.env.MAILER_EMAIL}>`,
       to: process.env.MAILER_EMAIL,
+      replyTo: data.emailAddress || process.env.MAILER_EMAIL,
       subject: subject,
       html: formBody,
     });
@@ -128,8 +171,8 @@ export async function POST(req) {
       process.env.NEXT_PUBLIC_DISABLE_ZOHO === "true";
     if (!disableZoho) {
       try {
-        const zohoEndPoint =
-          "https://www.zohoapis.com/crm/v2/functions/get_lead_data_from_website/actions/execute?auth_type=apikey&zapikey=1003.eb4ba5dd90c3427d79be3ee781077455.953a892dc19d9aed59d99419e60d368b";
+        const zohoEndPoint = process.env.ZOHO_LEAD_ENDPOINT;
+        if (!zohoEndPoint) throw new Error("ZOHO_LEAD_ENDPOINT is not configured");
         await axios
           .post(zohoEndPoint, data)
           .then((res) => {

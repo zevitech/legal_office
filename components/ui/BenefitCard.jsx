@@ -9,10 +9,10 @@ import { TbHandStop } from "react-icons/tb";
 
 const BenefitCard = ({ title, description, icon }) => {
   return (
-    <div className="w-[320px] p-8 bg-slate-50 hover:bg-white benefit-card hover:shadow-medium">
-      <h1 className="text-[20px] font-medium text-slate-600">{title}</h1>
+    <div className="benefit-card flex h-full min-w-0 w-full flex-col bg-slate-50 p-6 hover:bg-white hover:shadow-medium sm:p-8">
+      <h3 className="text-[20px] font-medium text-slate-600">{title}</h3>
       <p className="text-[14px] mt-2 mb-7 text-slate-500">{description}</p>
-      <div className="flex-between">
+      <div className="mt-auto flex-between gap-3">
         <div>
           {icon === "hand" && (
             <div className="bg-orange-500 p-3 rounded-md">
@@ -35,8 +35,8 @@ const BenefitCard = ({ title, description, icon }) => {
             </div>
           )}
         </div>
-        <div className="flex-center gap-2">
-          <Link href={`trademark-register`}>Trademark Now</Link>
+        <div className="flex-center min-w-0 gap-1 text-sm sm:gap-2 sm:text-base">
+          <Link className="whitespace-nowrap" href={`trademark-register`}>Trademark Now</Link>
           <BiChevronRight />
         </div>
       </div>

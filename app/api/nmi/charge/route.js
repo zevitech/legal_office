@@ -7,6 +7,7 @@ export async function POST(req) {
       paymentToken,
       packageName,
       isRushProcessing,
+      addons,
       firstName,
       lastName,
       email,
@@ -30,7 +31,7 @@ export async function POST(req) {
     }
 
     // Never trust an amount sent by the browser — recalculate it here.
-    const amount = calculateOrderTotal({ packageName, isRushProcessing });
+    const amount = calculateOrderTotal({ packageName, isRushProcessing, addons });
     if (amount === null || amount <= 0) {
       return NextResponse.json(
         { success: false, message: "Invalid package selection" },

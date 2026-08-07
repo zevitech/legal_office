@@ -1,6 +1,10 @@
 import nodemailer from "nodemailer";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   try {
     const { email } = await request.json();
 

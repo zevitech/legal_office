@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { FaSpinner } from "react-icons/fa6";
+import Link from "next/link";
 
 const COLLECT_JS_ID = "collect-js-script";
 
@@ -10,11 +11,18 @@ const COLLECT_JS_ID = "collect-js-script";
  * The card fields are iframes hosted by NMI — card data never touches this app.
  * onToken(token, billing) is called once Collect.js returns a payment token.
  */
-const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
+const NmiPayment = ({
+  onToken,
+  totalAmount,
+  isProcessing,
+  errorMessage,
+  initialBilling = {},
+}) => {
   const formRef = useRef(null);
   const onTokenRef = useRef(onToken);
   const [collectJsReady, setCollectJsReady] = useState(false);
   const [fieldError, setFieldError] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Keep the latest callback without re-running the Collect.js setup effect.
   useEffect(() => {
@@ -92,6 +100,11 @@ const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
     e.preventDefault();
     if (!collectJsReady || isProcessing) return;
 
+    if (!acceptedTerms) {
+      setFieldError("Please accept the terms and fee disclosure to continue.");
+      return;
+    }
+
     setFieldError("");
     if (!window.CollectJS) {
       setFieldError("Payment form not ready. Please refresh the page.");
@@ -130,13 +143,15 @@ const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
         <p className="text-[11px] font-semibold text-neutral-400 uppercase tracking-widest">
           Billing Details
         </p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <label className={labelClass}>First Name</label>
             <input
               type="text"
               name="first_name"
               placeholder="John"
+              defaultValue={initialBilling.firstName || ""}
+              autoComplete="given-name"
               className={inputClass}
             />
           </div>
@@ -146,17 +161,21 @@ const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
               type="text"
               name="last_name"
               placeholder="Doe"
+              defaultValue={initialBilling.lastName || ""}
+              autoComplete="family-name"
               className={inputClass}
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <label className={labelClass}>Email</label>
             <input
               type="email"
               name="email"
               placeholder="john@example.com"
+              defaultValue={initialBilling.email || ""}
+              autoComplete="email"
               className={inputClass}
             />
           </div>
@@ -166,6 +185,8 @@ const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
               type="text"
               name="zip"
               placeholder="10001"
+              defaultValue={initialBilling.zip || ""}
+              autoComplete="postal-code"
               className={inputClass}
             />
           </div>
@@ -196,9 +217,26 @@ const NmiPayment = ({ onToken, totalAmount, isProcessing, errorMessage }) => {
         <p className="text-[#f31260] text-sm text-center">{displayError}</p>
       )}
 
+      <label className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-700">
+        <input
+          type="checkbox"
+          checked={acceptedTerms}
+          onChange={(event) => {
+            setAcceptedTerms(event.target.checked);
+            if (event.target.checked) setFieldError("");
+          }}
+          className="mt-0.5 h-4 w-4"
+        />
+        <span>
+          I agree to the <Link className="underline" href="/legal/terms" target="_blank">Terms</Link>,{" "}
+          <Link className="underline" href="/legal/privacy" target="_blank">Privacy Policy</Link> and{" "}
+          <Link className="underline" href="/legal/refund-policy" target="_blank">Refund Policy</Link>. I understand that the USPTO fee is separate and will not be collected without the authorization described at checkout.
+        </span>
+      </label>
+
       <button
         type="submit"
-        disabled={!collectJsReady || isProcessing}
+        disabled={!collectJsReady || isProcessing || !acceptedTerms}
         className="w-full bg-indigo-700 hover:bg-indigo-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3.5 px-4 rounded-[4px] transition-colors text-[14px] flex items-center justify-center gap-2"
       >
         {isProcessing ? (

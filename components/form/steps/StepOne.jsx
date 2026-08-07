@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import FormLoader from "@/components/form/FormLoader";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -25,6 +26,7 @@ import { saveStepOne } from "@/features/formSlice";
 import {
   trackFormStart,
   trackQualifiedLead,
+  prepareEnhancedConversionData,
   getClickIds,
 } from "@/utils/tracking";
 
@@ -49,14 +51,60 @@ import { LuClock3, LuLoader } from "react-icons/lu";
 import { IoMdLock } from "react-icons/io";
 import { IoMail } from "react-icons/io5";
 import { RiHome5Fill } from "react-icons/ri";
+import { HiOutlinePhotograph, HiOutlineSparkles, HiOutlineLightBulb, HiOutlineCloudUpload, HiOutlineTrash } from "react-icons/hi";
+import { MdOutlineBusinessCenter } from "react-icons/md";
+import { LuMusic2, LuShieldCheck } from "react-icons/lu";
+import GoogleAddressAutocomplete from "../GoogleAddressAutocomplete";
+
+const protectionOptions = [
+  {
+    value: "name",
+    title: "Business or product name",
+    description: "Protect the words customers use to find and recognize you.",
+    icon: MdOutlineBusinessCenter,
+    badge: "Most popular",
+  },
+  {
+    value: "logo",
+    title: "Logo or design",
+    description: "Protect a visual mark, symbol, icon or stylized design.",
+    icon: HiOutlinePhotograph,
+  },
+  {
+    value: "slogan",
+    title: "Slogan or tagline",
+    description: "Protect a memorable phrase associated with your brand.",
+    icon: HiOutlineSparkles,
+  },
+  {
+    value: "sound",
+    title: "Sound mark",
+    description: "Protect a distinctive jingle, tone or audio signature.",
+    icon: LuMusic2,
+    badge: "Specialty",
+  },
+];
 
 const StepOne = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [intakeSection, setIntakeSection] = useState(0);
   // OTP DISABLED - Uncomment below line to re-enable OTP modal
   // const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [wantToProtect, setWantToProtect] = useState("name");
+  const [wantToProtect, setWantToProtect] = useState(["name"]);
+
+  useEffect(() => {
+    try {
+      const preselectedMark = sessionStorage.getItem("lto_preselected_mark");
+      if (["name", "logo", "slogan", "sound"].includes(preselectedMark)) {
+        setWantToProtect([preselectedMark]);
+        sessionStorage.removeItem("lto_preselected_mark");
+      }
+    } catch {
+      // Storage can be unavailable in privacy-restricted browser contexts.
+    }
+  }, []);
   const [selectedOwnerType, setSelectedOwnerType] = useState("individual");
   const [selectedFormationType, setSelectedFormationType] =
     useState("us_based");
@@ -75,6 +123,9 @@ const StepOne = () => {
   const [ownershipDetail, setOwnershipDetail] = useState("");
 
   const [slogan, setSlogan] = useState("");
+  const [soundDescription, setSoundDescription] = useState("");
+  const [soundFile, setSoundFile] = useState("");
+  const [soundFileName, setSoundFileName] = useState("");
   const [organizationName, setOrganizationName] = useState("");
   const [organizationType, setOrganizationType] = useState("");
   const [formationGeographicalData, setFormationGeographicalData] = useState(
@@ -98,6 +149,14 @@ const StepOne = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [contactTime, setContactTime] = useState("");
 
+  const handleAddressSelect = React.useCallback((selection) => {
+    setAddress(selection.address);
+    setCity(selection.city);
+    setState(selection.state);
+    setZipCode(selection.zipCode);
+    ["address", "city", "state", "zipCode"].forEach(clearError);
+  }, []);
+
   // OTP DISABLED - Uncomment below state variables to re-enable OTP functionality
   // const [otp, setOtp] = useState("");
   // const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
@@ -111,6 +170,7 @@ const StepOne = () => {
 
   // Explicit flag to enable/disable captcha independent of site key
   const isCaptchaEnabled =
+    process.env.NODE_ENV === "production" &&
     !!process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY &&
     process.env.NEXT_PUBLIC_DISABLE_CAPTCHA !== "true";
 
@@ -244,24 +304,19 @@ const StepOne = () => {
   const validateForm = () => {
     let tempErrors = {};
 
-    if (wantToProtect === "name" && !name) tempErrors.name = "Name is required";
-    if (wantToProtect === "slogan" && !slogan)
+    if (wantToProtect.includes("name") && !name) tempErrors.name = "Name is required";
+    if (wantToProtect.includes("slogan") && !slogan)
       tempErrors.slogan = "Slogan is required";
-    if (wantToProtect === "logo" && !logo) tempErrors.logo = "Logo is required";
-    if (wantToProtect === "logo" && !logo && !logoColors)
+    if (wantToProtect.includes("sound") && !soundDescription)
+      tempErrors.soundDescription = "Please describe the sound mark";
+    if (wantToProtect.includes("sound") && !soundFile)
+      tempErrors.soundFile = "Please upload the sound you want to protect";
+    if (wantToProtect.includes("logo") && !logo) tempErrors.logo = "Logo is required";
+    if (wantToProtect.includes("logo") && !logo && !logoColors)
       tempErrors.logoColors = "Logo colors is required";
-    if (wantToProtect === "logo" && !logo && !logoProtectionDescription)
+    if (wantToProtect.includes("logo") && !logo && !logoProtectionDescription)
       tempErrors.logoProtectionDescription =
         "Logo protection description is required";
-    if (wantToProtect === "all-of-them") {
-      if (!name) tempErrors.name = "Name is required";
-      if (!slogan) tempErrors.slogan = "Slogan is required";
-      if (!logo) tempErrors.logo = "Logo is required";
-      if (!logoColors) tempErrors.logoColors = "Logo colors is required";
-      if (!logoProtectionDescription)
-        tempErrors.logoProtectionDescription =
-          "Logo protection description is required";
-    }
     if (!trademarkCurrentlyBeingUsed)
       tempErrors.trademarkCurrentlyBeingUsed =
         "Please select trademarke using anywhere";
@@ -291,7 +346,10 @@ const StepOne = () => {
     if (!city) tempErrors.city = "City is required";
     if (!phoneNumber) {
       tempErrors.phoneNumber = "Phone number is required";
-    } else if (!validatePhoneNumber(phoneNumber)) {
+    } else if (
+      process.env.NODE_ENV === "production" &&
+      !validatePhoneNumber(phoneNumber)
+    ) {
       tempErrors.phoneNumber = "Invalid phone number";
     }
     if (!emailAddress) {
@@ -311,6 +369,60 @@ const StepOne = () => {
   // HANDLE RECAPTCHA
   const ReCAPTCHAHandle = (value) => {
     setReChaptcha(value);
+  };
+
+  // Validates ONLY the mark-details fields shown in section 0, so the user
+  // cannot skip ahead to owner details with an empty application.
+  const handleContinueToOwnerDetails = () => {
+    if (isValidationDisabled) {
+      setIntakeSection(1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const tempErrors = {};
+
+    if (!wantToProtect || wantToProtect.length === 0) {
+      tempErrors.wantToProtect = "Select what you want to protect";
+    }
+    if (wantToProtect.includes("name") && !name)
+      tempErrors.name = "Name is required";
+    if (wantToProtect.includes("slogan") && !slogan)
+      tempErrors.slogan = "Slogan is required";
+    if (wantToProtect.includes("sound") && !soundDescription)
+      tempErrors.soundDescription = "Please describe the sound mark";
+    if (wantToProtect.includes("sound") && !soundFile)
+      tempErrors.soundFile = "Please upload the sound you want to protect";
+    if (wantToProtect.includes("logo") && !logo)
+      tempErrors.logo = "Logo is required";
+    if (!trademarkCurrentlyBeingUsed)
+      tempErrors.trademarkCurrentlyBeingUsed = "Please select an option";
+    if (trademarkCurrentlyBeingUsed === "yes" && !firstAnywhereDate)
+      tempErrors.firstAnywhereDate = "Please select first use anywhere date";
+    if (trademarkCurrentlyBeingUsed === "yes" && !firstCommenceDate)
+      tempErrors.firstCommenceDate = "Please select first use commerce date";
+
+    setErrors(tempErrors);
+
+    const firstErrorField = Object.keys(tempErrors)[0];
+    if (firstErrorField) {
+      const errorRefs = {
+        name: protectNameRef,
+        slogan: sloganNameRef,
+        logo: logoRef,
+        trademarkCurrentlyBeingUsed: trademarkCurrentlyBeingUsedRef,
+        firstAnywhereDate: firstAnywhereDateRef,
+        firstCommenceDate: firstCommenceDateRef,
+      };
+      errorRefs[firstErrorField]?.current?.scrollIntoView?.({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+
+    setIntakeSection(1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // OTP DISABLED - Direct form submission without OTP verification
@@ -351,7 +463,10 @@ const StepOne = () => {
         reChaptcha: reChaptchaRef,
       };
 
-      if (errorRefs[firstErrorField] && errorRefs[firstErrorField].current) {
+      if (
+        errorRefs[firstErrorField] &&
+        typeof errorRefs[firstErrorField].current?.scrollIntoView === "function"
+      ) {
         errorRefs[firstErrorField].current.scrollIntoView({
           behavior: "smooth",
         });
@@ -498,9 +613,13 @@ const StepOne = () => {
   const handleFormSubmit = async (e) => {
     const stepOne = {
       customer_ID: Math.floor(Math.random() * 90000 + 10000),
-      wantToProtect,
+      wantToProtect: wantToProtect.join(", "),
+      protectionTypes: wantToProtect,
       name,
       slogan,
+      soundDescription,
+      soundFile,
+      soundFileName,
       logo,
       logoColors,
       logoProtectionDescription,
@@ -540,15 +659,25 @@ const StepOne = () => {
 
     dispatch(saveStepOne(stepOneWithValues));
 
+    // Local preview mode must not create CRM records or ad conversions.
+    if (process.env.NODE_ENV !== "production") {
+      setIsLoading(false);
+      return router.push("/trademark-register/step-2");
+    }
+
     // SEND DATA TO MAIL AND ZOHO
     const endPoint = "/api/save-data";
 
     axios
       .post(endPoint, stepOneWithValues)
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.success) {
+          await prepareEnhancedConversionData({ email: emailAddress, phone: phoneNumber });
           // Backend confirmed the lead was created — safe to count it.
-          trackQualifiedLead(String(stepOne.customer_ID));
+          trackQualifiedLead(String(stepOne.customer_ID), {
+            protectionCount: wantToProtect.length,
+            protectionTypes: wantToProtect,
+          });
           return router.push("/trademark-register/step-2");
         }
       })
@@ -563,41 +692,134 @@ const StepOne = () => {
 
   return (
     <section className="system-page-standard-layout">
+      <FormLoader isVisible={isLoading} />
       <div className="w-full h-full flex flex-col gap-8">
         {/* SERVICE INFORMATION FIELDS 1 */}
         <div className="w-full h-full grid grid-cols-1 gap-12">
-          <div className="flex flex-col gap-4">
-            <h1 className="font-inria text-heading-color text-[24px] w-full">
-              Register Your Brand
-            </h1>
+          {intakeSection === 0 && <div className="flex flex-col gap-5">
+            <div>
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Your trademark</p>
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">About 3 minutes</span>
+              </div>
+              <h1 className="font-inria text-heading-color text-3xl font-bold sm:text-4xl">
+                What would you like to protect?
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+                Select one or more. Each selected type will open its own short set of questions.
+              </p>
+            </div>
 
             {/* FIELD 1.1 */}
             <div className={`w-full flex flex-col`}>
-              <div className="bg-primary-theme text-white font-inria lg:text-[24px] text-[20px] max-lg:leading-[20px] p-4 w-full text-center rounded-[8px_8px_0px_0px]">
-                Select what you are trying to protect
-              </div>
-              <div className="w-full h-full rounded-[0px_0px_8px_8px] flex flex-col justify-between p-8 border border-border-color gap-8">
-                <RadioGroup
-                  label="Select what you are trying to protect"
-                  orientation="horizontal"
-                  color="primary" // TAG - 1001
-                  value={wantToProtect}
-                  onChange={(e) => setWantToProtect(e.target.value)}
-                  size="md"
-                >
-                  {ServiceProvided.map((service, index) => (
-                    <Radio key={index} value={service.value}>
-                      {service.name}
-                    </Radio>
-                  ))}
-                </RadioGroup>
+              <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-7">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {protectionOptions.map((option) => {
+                    const Icon = option.icon;
+                    const selected = wantToProtect.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => {
+                          setWantToProtect((current) =>
+                            selected
+                              ? current.length === 1
+                                ? current
+                                : current.filter((value) => value !== option.value)
+                              : [...current, option.value],
+                          );
+                          trackFormStart();
+                        }}
+                        className={`relative flex min-h-[142px] w-full flex-col items-start rounded-2xl border-2 p-5 text-left transition duration-200 hover:-translate-y-0.5 hover:border-blue-400 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 ${selected ? "border-blue-600 bg-blue-50/70 shadow-sm" : "border-slate-200 bg-white"}`}
+                      >
+                        {option.badge && (
+                          <span className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${selected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"}`}>
+                            {option.badge}
+                          </span>
+                        )}
+                        <span className={`mb-3 grid h-11 w-11 place-items-center rounded-xl text-2xl ${selected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"}`}>
+                          <Icon />
+                        </span>
+                        <span className="pr-16 text-base font-bold text-slate-900">{option.title}</span>
+                        <span className="mt-1 text-sm leading-5 text-slate-600">{option.description}</span>
+                        <span className={`absolute bottom-4 right-4 grid h-6 w-6 place-items-center rounded-full border-2 ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300 bg-white"}`}>
+                          {selected && "✓"}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
 
-                {wantToProtect === "logo" && (
-                  <>
+                <div className="mt-5 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+                  <HiOutlineLightBulb className="mt-0.5 shrink-0 text-xl" />
+                  <p><strong>Not sure?</strong> Choose the version customers see most often. A name and a logo are usually filed as separate applications because they protect different things.</p>
+                </div>
+
+                <div className="mt-7 flex flex-col gap-6 border-t border-slate-100 pt-7">
+
+                {wantToProtect.includes("logo") && (
+                  <div className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-900">Upload your logo or design</h2>
+                      <p className="mt-1 text-sm text-slate-600">Use the clearest version available. You can replace it before checkout.</p>
+                    </div>
+                    <CldUploadWidget
+                      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                      options={{ multiple: false, resourceType: "image", clientAllowedFormats: ["png", "jpg", "jpeg", "webp", "svg"], maxFileSize: 10000000 }}
+                      onSuccess={(results) => {
+                        const public_url = results?.info?.secure_url || results?.info?.url;
+                        setLogo(public_url);
+                        clearError("logo");
+                      }}
+                      onOpen={() => setIsUploading(true)}
+                      onClose={() => setIsUploading(false)}
+                    >
+                      {({ open }) => (
+                        <div className="w-full" ref={logoRef}>
+                          {!logo ? (
+                            <button
+                              type="button"
+                              onClick={() => open()}
+                              disabled={isUploading}
+                              className="group flex min-h-[190px] w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-300 bg-white px-6 py-8 text-center transition hover:border-blue-600 hover:bg-blue-50/60 focus:outline-none focus:ring-4 focus:ring-blue-100 disabled:cursor-wait disabled:opacity-70"
+                            >
+                              <span className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-blue-100 text-3xl text-blue-700 transition group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white">
+                                {isUploading ? <LuLoader className="animate-spin" /> : <HiOutlineCloudUpload />}
+                              </span>
+                              <span className="text-base font-bold text-slate-900">Click to upload your logo</span>
+                              <span className="mt-1 text-sm text-slate-500">or drag and drop in the upload window</span>
+                              <span className="mt-4 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">PNG, JPG, WEBP or SVG · Max 10 MB</span>
+                            </button>
+                          ) : (
+                            <div className="flex flex-col gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 sm:flex-row sm:items-center">
+                              <div className="grid h-24 w-full place-items-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3 sm:w-32">
+                                <Image src={logo} alt="Uploaded trademark logo" width={160} height={96} className="max-h-20 w-auto object-contain" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="font-bold text-emerald-900">Logo uploaded successfully</p>
+                                <p className="mt-1 text-sm text-emerald-800">This image will be included with your application details.</p>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  <button type="button" onClick={() => open()} className="rounded-lg bg-white px-3 py-2 text-xs font-bold text-blue-700 shadow-sm ring-1 ring-slate-200">Replace image</button>
+                                  <button type="button" onClick={() => setLogo("")} className="flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-50"><HiOutlineTrash /> Remove</button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          {!!errors.logo && <p className="mt-2 text-xs text-rose-600">Please upload a logo or design.</p>}
+                        </div>
+                      )}
+                    </CldUploadWidget>
+
                     {/* TAG 1001 */}
                     <Input
                       type="text"
-                      variant="underlined"
+                      variant="bordered"
+                      labelPlacement="outside"
+                      radius="lg"
+                      size="lg"
+                      placeholder="Example: blue, gold and white"
                       label={`List of colors that appears in the logo`}
                       className="w-full"
                       value={logoColors}
@@ -613,7 +835,11 @@ const StepOne = () => {
                     {/* TAG 1001 */}
                     <Input
                       type="text"
-                      variant="underlined"
+                      variant="bordered"
+                      labelPlacement="outside"
+                      radius="lg"
+                      size="lg"
+                      placeholder="Example: ACME with a mountain symbol"
                       label={`Any literal element that appears in the logo`}
                       className="w-full"
                       value={logoProtectionDescription}
@@ -626,60 +852,20 @@ const StepOne = () => {
                       ref={logoProtectionDescriptionRef}
                     />
 
-                    <CldUploadWidget
-                      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
-                      onSuccess={(results) => {
-                        const public_url = results?.info?.url;
-                        setLogo(public_url);
-                        clearError("logo");
-                      }}
-                      onOpen={() => setIsUploading(true)}
-                      onClose={() => setIsUploading(false)}
-                    >
-                      {({ open }) => {
-                        return (
-                          <div className="w-full">
-                            <div className="flex gap-3">
-                              <div
-                                onClick={() => open()}
-                                className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
-                                  isUploading && `cursor-not-allowed opacity-75`
-                                }`}
-                                ref={logoRef}
-                              >
-                                {isUploading ? (
-                                  <LuLoader className=" animate-spin text-2xl" />
-                                ) : (
-                                  "Select Image"
-                                )}
-                              </div>
-                              {logo && (
-                                <Image
-                                  src={logo}
-                                  alt="Logo"
-                                  width={100}
-                                  height={44}
-                                  className="h-[44px] w-auto"
-                                />
-                              )}
-                            </div>
-                            {!!errors.logo && (
-                              <p className="text-[#f31260] text-xs pt-2">
-                                Please select an image
-                              </p>
-                            )}
-                          </div>
-                        );
-                      }}
-                    </CldUploadWidget>
-                  </>
+                  </div>
                 )}
 
-                {wantToProtect === "name" && (
+                {wantToProtect.includes("name") && (
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
                   <Input
                     type="text"
-                    variant="underlined"
-                    label={`Enter the name you wish to protect`}
+                    variant="bordered"
+                    labelPlacement="outside"
+                    radius="lg"
+                    size="lg"
+                    label="Business or product name"
+                    placeholder="Enter the exact spelling of your mark"
+                    description="Include punctuation and spacing exactly as you use it."
                     className="w-full"
                     value={name}
                     onChange={setValueAndClearError(setName, "name")}
@@ -687,13 +873,20 @@ const StepOne = () => {
                     isInvalid={!!errors.name}
                     ref={protectNameRef}
                   />
+                  </div>
                 )}
 
-                {wantToProtect === "slogan" && (
+                {wantToProtect.includes("slogan") && (
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
                   <Input
                     type="text"
-                    variant="underlined"
-                    label={`Enter the slogan you wish to protect`}
+                    variant="bordered"
+                    labelPlacement="outside"
+                    radius="lg"
+                    size="lg"
+                    label="Slogan or tagline"
+                    placeholder="Enter the complete phrase"
+                    description="Use the exact words and punctuation customers see."
                     className="w-full"
                     value={slogan}
                     onChange={setValueAndClearError(setSlogan, "slogan")}
@@ -701,141 +894,119 @@ const StepOne = () => {
                     isInvalid={!!errors.slogan}
                     ref={sloganNameRef}
                   />
+                  </div>
                 )}
 
-                {wantToProtect === "all-of-them" && (
-                  <div className="flex flex-col gap-4 w-full">
-                    <Input
-                      type="text"
-                      variant="underlined"
-                      label="Enter the name you wish to protect"
-                      className="w-full"
-                      value={name}
-                      onChange={setValueAndClearError(setName, "name")}
-                      errorMessage={errors.name}
-                      isInvalid={!!errors.name}
-                      ref={protectNameRef}
-                    />
-
-                    <Input
-                      type="text"
-                      variant="underlined"
-                      label="Enter the slogan you wish to protect"
-                      className="w-full"
-                      value={slogan}
-                      onChange={setValueAndClearError(setSlogan, "slogan")}
-                      errorMessage={errors.slogan}
-                      isInvalid={!!errors.slogan}
-                      ref={sloganNameRef}
-                    />
-
-                    {/* TAG 1001 */}
-                    <Input
-                      type="text"
-                      variant="underlined"
-                      label={`List of colors that appears in the logo`}
-                      className="w-full"
-                      value={logoColors}
-                      onChange={(e) => {
-                        setLogoColors(e.target.value);
-                        clearError("logoColors");
-                      }}
-                      errorMessage={errors.logoColors}
-                      isInvalid={!!errors.logoColors}
-                      ref={logoColorsRef}
-                    />
-
-                    {/* TAG 1001 */}
-                    <Input
-                      type="text"
-                      variant="underlined"
-                      label={`Any literal element that appears in the logo`}
-                      className="w-full"
-                      value={logoProtectionDescription}
-                      onChange={(e) => {
-                        setLogoProtectionDescription(e.target.value);
-                      }}
-                      errorMessage={errors.logoProtectionDescription}
-                      isInvalid={!!errors.logoProtectionDescription}
-                      ref={logoProtectionDescriptionRef}
-                    />
+                {wantToProtect.includes("sound") && (
+                  <div className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-900">Upload your sound mark</h2>
+                      <p className="mt-1 text-sm text-slate-600">Provide the clearest audio-only version of the sound customers recognize.</p>
+                    </div>
 
                     <CldUploadWidget
                       uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}
+                      options={{ multiple: false, resourceType: "video", clientAllowedFormats: ["mp3", "wav", "m4a", "ogg"], maxFileSize: 20000000 }}
                       onSuccess={(results) => {
-                        const public_url = results?.info?.url;
-                        setLogo(public_url);
+                        const uploadedUrl = results?.info?.secure_url || results?.info?.url;
+                        setSoundFile(uploadedUrl || "");
+                        setSoundFileName(results?.info?.original_filename || "Uploaded sound mark");
+                        clearError("soundFile");
                       }}
                       onOpen={() => setIsUploading(true)}
                       onClose={() => setIsUploading(false)}
                     >
-                      {({ open }) => {
-                        return (
-                          <div className="w-full mt-8">
-                            <div className="flex gap-3">
-                              <div
-                                onClick={() => open()}
-                                className={`bg-gradient-to-tr to-slate-100 from-slate-200 rounded-md text-center p-3 text-sm cursor-pointer shadow-sm w-full flex-center ${
-                                  isUploading && `cursor-not-allowed opacity-75`
-                                }`}
-                                ref={logoRef}
-                              >
-                                {isUploading ? (
-                                  <LuLoader className=" animate-spin text-2xl" />
-                                ) : (
-                                  "Select Image"
-                                )}
+                      {({ open }) => (
+                        <div>
+                          {!soundFile ? (
+                            <button
+                              type="button"
+                              onClick={() => open()}
+                              disabled={isUploading}
+                              className="group flex min-h-[175px] w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-violet-300 bg-white px-6 py-8 text-center transition hover:border-violet-600 hover:bg-violet-50/60 focus:outline-none focus:ring-4 focus:ring-violet-100 disabled:cursor-wait disabled:opacity-70"
+                            >
+                              <span className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-violet-100 text-3xl text-violet-700 transition group-hover:scale-105 group-hover:bg-violet-600 group-hover:text-white">
+                                {isUploading ? <LuLoader className="animate-spin" /> : <LuMusic2 />}
+                              </span>
+                              <span className="text-base font-bold text-slate-900">Click to upload your sound</span>
+                              <span className="mt-1 text-sm text-slate-500">Choose a clean recording without extra speech</span>
+                              <span className="mt-4 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">MP3, WAV, M4A or OGG · Max 20 MB</span>
+                            </button>
+                          ) : (
+                            <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
+                              <div className="flex items-center gap-3">
+                                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-600 text-xl text-white"><LuMusic2 /></span>
+                                <div className="min-w-0 flex-1"><p className="truncate font-bold text-violet-950">{soundFileName}</p><p className="text-xs text-violet-700">Audio uploaded successfully</p></div>
                               </div>
-                              {logo && (
-                                <Image
-                                  src={logo}
-                                  alt="Logo"
-                                  width={100}
-                                  height={44}
-                                  className="h-[44px] w-auto"
-                                />
-                              )}
+                              <audio controls src={soundFile} className="mt-4 h-10 w-full" preload="metadata">Your browser does not support audio playback.</audio>
+                              <div className="mt-4 flex flex-wrap gap-2">
+                                <button type="button" onClick={() => open()} className="rounded-lg bg-white px-3 py-2 text-xs font-bold text-violet-700 shadow-sm ring-1 ring-slate-200">Replace audio</button>
+                                <button type="button" onClick={() => { setSoundFile(""); setSoundFileName(""); }} className="flex items-center gap-1 rounded-lg px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-50"><HiOutlineTrash /> Remove</button>
+                              </div>
                             </div>
-                            {!!errors.logo && (
-                              <p className="text-[#f31260] text-xs pt-2">
-                                Please select an image
-                              </p>
-                            )}
-                          </div>
-                        );
-                      }}
+                          )}
+                          {errors.soundFile && <p className="mt-2 text-xs text-rose-600">{errors.soundFile}</p>}
+                        </div>
+                      )}
                     </CldUploadWidget>
+
+                    <div>
+                    <label className="mb-2 block text-sm font-bold text-slate-900">Describe the sound you want to protect</label>
+                    <textarea
+                      value={soundDescription}
+                      onChange={(event) => {
+                        setSoundDescription(event.target.value);
+                        clearError("soundDescription");
+                      }}
+                      placeholder="Example: a three-note ascending chime used at the end of our advertisements"
+                      rows={4}
+                      className={`w-full resize-y rounded-xl border bg-white p-4 text-base outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${errors.soundDescription ? "border-rose-500" : "border-slate-300"}`}
+                    />
+                    {errors.soundDescription && <p className="mt-1 text-xs text-rose-600">{errors.soundDescription}</p>}
+                    <p className="mt-2 text-xs leading-5 text-slate-600">Sound marks require an audio specimen. Our team will explain the accepted file requirements before filing.</p>
+                    </div>
                   </div>
                 )}
 
-                <Select
-                  onSelectionChange={setSelectionAndClearError(
-                    setTrademarkCurrentlyBeingUsed,
-                    "trademarkCurrentlyBeingUsed",
-                  )}
-                  label="Are you currently using this trademark anywhere?"
-                  radius="none"
-                  variant="underlined"
-                  errorMessage={errors.trademarkCurrentlyBeingUsed}
-                  isInvalid={!!errors.trademarkCurrentlyBeingUsed}
-                  ref={trademarkCurrentlyBeingUsedRef}
-                >
-                  <SelectItem key="yes" value="yes">
-                    Yes, It is being used
-                  </SelectItem>
-                  <SelectItem key="no" value="no">
-                    No, It&apos;s not being used anywhere
-                  </SelectItem>
-                </Select>
+                <fieldset ref={trademarkCurrentlyBeingUsedRef}>
+                  <legend className="mb-3 text-base font-bold text-slate-900">Are you currently using this trademark in business?</legend>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {[
+                      { value: "yes", title: "Yes, I’m using it", copy: "Customers can already encounter this mark." },
+                      { value: "no", title: "Not yet", copy: "I plan to use this mark in the future." },
+                    ].map((option) => {
+                      const selected = trademarkCurrentlyBeingUsed === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => {
+                            setTrademarkCurrentlyBeingUsed(option.value);
+                            clearError("trademarkCurrentlyBeingUsed");
+                          }}
+                          className={`rounded-xl border-2 p-4 text-left transition hover:border-blue-400 ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 bg-white"}`}
+                        >
+                          <span className="flex items-center justify-between font-bold text-slate-900">
+                            {option.title}
+                            <span className={`grid h-5 w-5 place-items-center rounded-full border text-xs ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"}`}>{selected ? "✓" : ""}</span>
+                          </span>
+                          <span className="mt-1 block text-sm text-slate-600">{option.copy}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {errors.trademarkCurrentlyBeingUsed && <p className="mt-2 text-xs text-rose-600">{errors.trademarkCurrentlyBeingUsed}</p>}
+                </fieldset>
 
                 {trademarkCurrentlyBeingUsed === "yes" && (
                   <>
                     <Input
-                      type="text"
-                      label="Select trademark first use anywhere date"
-                      variant="underlined"
+                      type="date"
+                      label="First used anywhere"
+                      variant="bordered"
+                      labelPlacement="outside"
                       className="w-full"
-                      placeholder="Ex. 10-208-2024"
                       value={firstAnywhereDate}
                       onChange={setValueAndClearError(
                         setFirstAnywhereDate,
@@ -847,11 +1018,11 @@ const StepOne = () => {
                     />
 
                     <Input
-                      type="text"
-                      label="Select trademark first use commerce date"
-                      variant="underlined"
+                      type="date"
+                      label="First used in interstate commerce"
+                      variant="bordered"
+                      labelPlacement="outside"
                       className="w-full"
-                      placeholder="Ex. 10-208-2024"
                       value={firstCommenceDate}
                       onChange={setValueAndClearError(
                         setFirstCommenceDate,
@@ -864,7 +1035,10 @@ const StepOne = () => {
 
                     <Input
                       type="text"
-                      variant="underlined"
+                      variant="bordered"
+                      labelPlacement="outside"
+                      radius="lg"
+                      size="lg"
                       label="Enter ownership details affilated with your trademark"
                       className="w-full"
                       value={ownershipDetail}
@@ -872,18 +1046,29 @@ const StepOne = () => {
                     />
                   </>
                 )}
+                </div>
               </div>
             </div>
-          </div>
+            <div className="sticky bottom-3 z-20 mt-2 flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+              <div className="hidden items-center gap-2 text-sm text-slate-600 sm:flex"><LuShieldCheck className="text-xl text-emerald-600" /> Saved securely as you continue</div>
+              <Button
+                className="h-[56px] w-full bg-primary-theme px-8 text-lg font-bold text-white sm:w-auto"
+                onClick={handleContinueToOwnerDetails}
+              >
+                Continue to owner details
+              </Button>
+            </div>
+          </div>}
 
           {/* FIELD 1.2 */}
+          {intakeSection === 1 && <>
           <div className="flex flex-col gap-4">
             <h1 className="font-inria text-heading-color text-[24px] w-full">
               Formation Information
             </h1>
 
             <div
-              className={`w-full flex flex-col border border-border-color rounded-[8px] justify-start p-8 gap-4`}
+              className={`w-full flex flex-col border border-slate-200 bg-white shadow-sm rounded-2xl justify-start p-4 sm:p-7 gap-4`}
             >
               <h1 className="font-inria font-bold lg:text-[24px] text-[20px] lg:leading-[26px] leading-[22px] text-heading-color">
                 Will the trademark be owned by an individual or an entity such
@@ -969,9 +1154,13 @@ const StepOne = () => {
                         description="Select the type of your organization"
                         radius="sm"
                         size="lg"
-                        value={organizationType}
-                        onChange={(e) => {
-                          setOrganizationType(e.target.value);
+                        selectedKeys={
+                          organizationType
+                            ? new Set([organizationType])
+                            : new Set()
+                        }
+                        onSelectionChange={(keys) => {
+                          setOrganizationType([...keys][0] || "");
                           clearError("organizationType");
                         }}
                         ref={organizationTypeRef}
@@ -1004,17 +1193,18 @@ const StepOne = () => {
                         } of Formation `}
                         radius="sm"
                         size="lg"
-                        value={
-                          selectedFormationType === "us_based"
+                        selectedKeys={new Set(
+                          [selectedFormationType === "us_based"
                             ? stateFormation
-                            : countryFormation
-                        }
-                        onChange={(e) => {
+                            : countryFormation].filter(Boolean),
+                        )}
+                        onSelectionChange={(keys) => {
+                          const selectedValue = [...keys][0] || "";
                           if (selectedFormationType === "us_based") {
-                            setStateFormation(e.target.value);
+                            setStateFormation(selectedValue);
                             clearError("stateFormation");
                           } else if (selectedFormationType === "non_us_based") {
-                            setCountryFormation(e.target.value);
+                            setCountryFormation(selectedValue);
                             clearError("countryFormation");
                           }
                         }}
@@ -1051,13 +1241,18 @@ const StepOne = () => {
               )}
             </div>
           </div>
+          </>}
         </div>
 
         {/* PERSONAL INFORMATION FIELDS 2 */}
-        <div className="w-full flex flex-col gap-4">
-          <h1 className="font-inria text-heading-color text-[24px] w-full">
-            Personal Information
-          </h1>
+        {intakeSection === 1 && <>
+          <div className="w-full flex flex-col gap-4">
+          <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 sm:flex sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <LuShieldCheck className="mt-0.5 shrink-0 text-2xl text-emerald-700" />
+              <div><h1 className="font-inria text-xl font-bold text-slate-900">Your private contact information</h1><p className="mt-1 text-sm leading-5 text-slate-600">Used only for your application, filing questions and status updates. We do not sell your details.</p></div>
+            </div>
+          </div>
 
           <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
             <Input
@@ -1093,26 +1288,13 @@ const StepOne = () => {
             />
           </div>
 
-          <div className="w-full">
-            <Input
-              type="text"
-              label="Address"
-              variant="bordered"
-              labelPlacement="outside"
-              placeholder="Ex. 342 Jeffery Mills"
-              description="Enter your full residential address"
-              radius="sm"
-              size="lg"
-              startContent={
-                <RiHome5Fill className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
-              }
-              value={address}
-              onChange={setValueAndClearError(setAddress, "address")}
-              ref={addressRef}
-              errorMessage={errors.address}
-              isInvalid={!!errors.address}
-            />
-          </div>
+          <GoogleAddressAutocomplete
+            value={address}
+            onChange={setValueAndClearError(setAddress, "address")}
+            onAddressSelect={handleAddressSelect}
+            inputRef={addressRef}
+            errorMessage={errors.address}
+          />
 
           <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
             <Input
@@ -1139,9 +1321,9 @@ const StepOne = () => {
               description="Select your current state"
               radius="sm"
               size="lg"
-              value={state}
-              onChange={(e) => {
-                setState(e.target.value);
+              selectedKeys={state ? new Set([state]) : new Set()}
+              onSelectionChange={(keys) => {
+                setState([...keys][0] || "");
                 clearError("state");
               }}
               ref={stateRef}
@@ -1156,9 +1338,9 @@ const StepOne = () => {
             </Select>
           </div>
 
-          <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
+          <div className="w-full">
             <Input
-              type="number"
+              type="tel"
               label="Phone Number"
               variant="bordered"
               labelPlacement="outside"
@@ -1176,23 +1358,11 @@ const StepOne = () => {
               isInvalid={!!errors.phoneNumber}
             />
 
-            <Input
-              type="number"
-              label="Landline Number"
-              variant="bordered"
-              labelPlacement="outside"
-              placeholder="Ex. 916-555-2284"
-              description="Enter your landline number"
-              radius="sm"
-              size="lg"
-              value={landLineNumber}
-              onChange={(e) => setLandLineNumber(e.target.value)}
-            />
           </div>
 
           <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
             <Input
-              type="number"
+              type="text"
               label="Zip Code"
               variant="bordered"
               labelPlacement="outside"
@@ -1226,22 +1396,9 @@ const StepOne = () => {
             />
           </div>
 
-          <div className="w-full">
-            <Input
-              type="text"
-              label="Preferred Contact Date"
-              variant="bordered"
-              labelPlacement="outside"
-              placeholder="Ex. 10-208-2024, 8:00 AM to 9:30 Am"
-              description="Enter your preferred date and time to call (must be business hours)"
-              radius="sm"
-              size="lg"
-              startContent={
-                <LuClock3 className="text-[20px] text-default-400 pointer-events-none flex-shrink-0" />
-              }
-              value={contactTime}
-              onChange={(e) => setContactTime(e.target.value)}
-            />
+          <div className="flex items-start gap-3 rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-sm leading-6 text-slate-700">
+            <LuShieldCheck className="mt-0.5 shrink-0 text-xl text-emerald-700" />
+            <p><strong className="text-slate-900">Your information is securely saved.</strong> Contact and application details are encrypted in transit and used to prepare and manage your trademark request.</p>
           </div>
         </div>
 
@@ -1253,7 +1410,7 @@ const StepOne = () => {
             <p className="text-[14px] font-semibold">{`Click on "Next" to save your application`}</p>
           </div>
 
-          <div className="w-full flex max-md:flex-col max-md:gap-4 md:justify-between">
+          <div className="sticky bottom-3 z-20 grid w-full grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:static sm:grid-cols-[auto_1fr_auto] sm:items-center sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
             {/* Google reCAPTCHA - render when enabled */}
             {isCaptchaEnabled && (
               <>
@@ -1273,23 +1430,24 @@ const StepOne = () => {
               </>
             )}
 
-            {/* Optional: show message when reCAPTCHA is disabled */}
-            {!isCaptchaEnabled && (
-              <div className="text-sm text-gray-600 italic">
-                reCAPTCHA is disabled or missing site key
-              </div>
-            )}
+            <Button
+              onClick={() => setIntakeSection(0)}
+              className="h-14 w-full border-2 border-primary-theme bg-white px-7 text-base font-bold text-primary-theme sm:w-auto"
+            >
+              Back
+            </Button>
 
             {/* SUBMIT BUTTON */}
             <Button
               onClick={handleFormValidationAndSubmit}
-              className="h-[60px] w-full md:w-[165px] bg-primary-theme rounded-[5px] text-white font-inria font-bold text-[20px]"
+              className="h-14 w-full bg-primary-theme px-7 text-base font-bold text-white sm:w-auto"
               isLoading={isLoading}
             >
-              Next
+              Save and continue
             </Button>
           </div>
         </div>
+        </>}
       </div>
 
       {/* OTP DISABLED - Uncomment below modal to re-enable OTP verification */}

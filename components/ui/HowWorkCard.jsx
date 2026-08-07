@@ -6,9 +6,9 @@ const HowWorkCard = ({ step, title, description }) => {
       <div className="bg-shield flex-center text-center text-slate-100 text-2xl font-semibold">
         {step}
       </div>
-      <h1 className="text-slate-700 text-lg font-semibold mt-4 mb-2">
+      <h3 className="text-slate-700 text-lg font-semibold mt-4 mb-2">
         {title}
-      </h1>
+      </h3>
       <p className="text-sm">{description}</p>
     </div>
   );

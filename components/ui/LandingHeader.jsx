@@ -19,7 +19,7 @@ const LandingHeader = () => {
   };
 
   return (
-    <header className="flex-between gap-4 px-10 py-5 max-md:pt-8">
+    <header className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-5 sm:px-8 lg:px-10">
       <Image
         src={`/images/legal-trademark-office.png`}
         alt="Legal Trademark"
@@ -27,7 +27,7 @@ const LandingHeader = () => {
         height={120}
         className="max-md:w-28 max-md:h-auto"
       />
-      <ul className="flex gap-4">
+      <ul className="flex shrink-0 gap-2 sm:gap-4">
         <li>
           <Link href="tel:+13104244909">
             <Tooltip content="+1 (310) 424 4909">
@@ -35,7 +35,7 @@ const LandingHeader = () => {
                 isIconOnly
                 color="primary"
                 variant="shadow"
-                aria-label="Like"
+                aria-label="Call Legal Trademark Office"
               >
                 <IoMdCall />
               </Button>
@@ -49,7 +49,7 @@ const LandingHeader = () => {
                 isIconOnly
                 color="primary"
                 variant="shadow"
-                aria-label="Like"
+                aria-label="Email Legal Trademark Office"
               >
                 <HiOutlineMail />
               </Button>
@@ -63,6 +63,7 @@ const LandingHeader = () => {
             radius="sm"
             onClick={handleRegisterClick}
             isLoading={isLoading}
+            className="bg-primary-theme text-white hover:bg-primary-hovered"
           >
             Trademark Now
           </Button>

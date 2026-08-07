@@ -1,28 +1,31 @@
 export const SystemStepProgressTrackerStepsData = [
   {
     path: "/trademark-register", // TAG - 1001
-    title: "Personal Information",
-    subtext: "Let's get started with your basic details.",
+    title: "Trademark & owner details",
+    subtext: "Tell us what you want to protect. Your answers are saved securely.",
+    shortTitle: "Details",
   },
   {
     path: "/trademark-register/step-2", // TAG - 1001
-    title: "Trademark Description",
-    subtext:
-      "Describe your trademark or logo to help us understand your brand better.",
+    title: "Products and services",
+    subtext: "Describe how customers will encounter your trademark.",
+    shortTitle: "Classification",
   },
   {
     path: "/trademark-register/step-3", // TAG - 1001 
-    title: "Choose Subscription Plan",
-    subtext: "Select a package that best fits your registration needs.",
+    title: "Choose your service package",
+    subtext: "Compare what is included before you continue.",
+    shortTitle: "Package",
   },
   {
-    path: "/trademark-register/step-4", // TAG - 1001
-    title: "Priority Processing",
-    subtext: "Want faster service? Opt for expedited processing.",
+    path: "/trademark-register/payment",
+    title: "Review and pay",
+    subtext: "Review today's charge and the separate government fee.",
+    shortTitle: "Payment",
   },
 ];
 
 export const SystemStepProgressTrackerStepsDefaultSloganData =
-  "Register Your Trademark in 5 Easy Steps";
+  "Register your trademark";
 export const SystemStepProgressTrackerStepsDefaultSubTextData =
   "Follow the process to protect your brand's identity.";

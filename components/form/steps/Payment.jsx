@@ -4,9 +4,17 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import NmiPayment from "@/components/form/NmiPayment";
+import FormLoader from "@/components/form/FormLoader";
 import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
-import { trackBeginCheckout, getClickIds } from "@/utils/tracking";
+import { trackAddonChange, trackBeginCheckout, getClickIds } from "@/utils/tracking";
+import { ADD_ON_PRICES } from "@/constant/pricing";
+
+const CHECKOUT_ADDONS = [
+  { key: "rush", title: "Rush preparation", price: ADD_ON_PRICES.rush, description: "Next-business-day preparation. This does not expedite USPTO examination." },
+  { key: "monitoring", title: "12-month trademark monitoring", price: ADD_ON_PRICES.monitoring, description: "Automated monitoring alerts for potentially similar new trademark filings." },
+  { key: "specimenReview", title: "Specimen readiness review", price: ADD_ON_PRICES.specimenReview, description: "Review of one proof-of-use specimen for common formatting and presentation issues." },
+];
 
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY); -- STRIPE
 
@@ -15,11 +23,17 @@ const Payment = () => {
   // const [isLoading, setIsLoading] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedAddons, setSelectedAddons] = useState([]);
+  const isRushProcessing = selectedAddons.includes("rush");
+  const governmentFee = 350;
 
   // const [clientSecret, setClientSecret] = useState(""); -- STRIPE
 
   const nestedLeadData = useSelector((state) => state.form);
   const stepFourData = nestedLeadData.stepFour;
+  const isLocalPreview = process.env.NODE_ENV !== "production";
+  const selectedPackageName = nestedLeadData.stepThree.packageName || "Premium";
+  const selectedPackagePrice = nestedLeadData.stepThree.price || 649;
 
   // Check if payment bypass mode is enabled
   const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
@@ -50,20 +64,15 @@ const Payment = () => {
   const orderDetails = useMemo(() => {
     const baseDetails = [
       {
-        title: "Trademark registration",
-        amount: nestedLeadData.stepThree.price,
+        title: `${selectedPackageName} service package`,
+        amount: selectedPackagePrice,
       },
-      { title: "Comprehensive Trademark Search", amount: 0 },
-      { title: "Trademark monitoring", amount: 0 },
-      { title: "Office Action Response", amount: 0 },
     ];
 
-    if (stepFourData.rushAmount !== 0) {
-      baseDetails.push({
-        title: "Rush processing",
-        amount: stepFourData.rushAmount,
-      });
-    }
+    selectedAddons.forEach((key) => {
+      const addon = CHECKOUT_ADDONS.find((item) => item.key === key);
+      if (addon) baseDetails.push({ title: addon.title, amount: addon.price });
+    });
 
     // if (stepFourData.govermentFeesAmount !== 0) {
     //   baseDetails.push({
@@ -73,7 +82,7 @@ const Payment = () => {
     // }
 
     return baseDetails;
-  }, [nestedLeadData, stepFourData]);
+  }, [selectedAddons, selectedPackageName, selectedPackagePrice]);
 
   //count the total and add to total amount into data object
   const totalAmount = orderDetails.reduce(
@@ -86,8 +95,13 @@ const Payment = () => {
   // 4. Checkout started — the payment form is live with a real total.
   useEffect(() => {
     if (isBypassMode || !totalAmount) return;
-    trackBeginCheckout(totalAmount);
-  }, [isBypassMode, totalAmount]);
+    trackBeginCheckout({
+      value: totalAmount,
+      packageName: selectedPackageName,
+      classCount: nestedLeadData.stepTwo.estimatedClassCount,
+      addonCount: selectedAddons.length,
+    });
+  }, [isBypassMode, nestedLeadData.stepTwo.estimatedClassCount, selectedAddons.length, selectedPackageName, totalAmount]);
 
   // -------------------CHANGES--------------------------------
 
@@ -102,8 +116,9 @@ const Payment = () => {
 
       const { data: charge } = await axios.post("/api/nmi/charge", {
         paymentToken,
-        packageName: nestedLeadData.stepThree.packageName,
-        isRushProcessing: stepFourData.rushAmount > 0,
+        packageName: selectedPackageName,
+        isRushProcessing,
+        addons: selectedAddons,
         firstName: billing.firstName,
         lastName: billing.lastName,
         email: billing.email || leadDataWithValues.emailAddress,
@@ -125,6 +140,9 @@ const Payment = () => {
           JSON.stringify({
             transactionId: charge.transactionId,
             value: charge.amount ?? totalAmount,
+            packageName: selectedPackageName,
+            addons: selectedAddons,
+            classCount: nestedLeadData.stepTwo.estimatedClassCount || 0,
           }),
         );
       } catch {
@@ -135,9 +153,12 @@ const Payment = () => {
       const paidLeadData = {
         ...leadDataWithValues,
         is_paid: true,
-        zoho_step: 3,
+        zoho_step: 4,
         payment_method: "NMI",
         transaction_id: charge.transactionId,
+        isRushProcessing,
+        rushAmount: isRushProcessing ? ADD_ON_PRICES.rush : 0,
+        addons: selectedAddons,
         ...getClickIds(), // gclid / wbraid / gbraid for attribution
       };
 
@@ -194,7 +215,7 @@ const Payment = () => {
   // }, [totalAmount, nestedLeadData]);  -- STRIPE
 
   // page authorization | redirect if previous step has no data
-  if (Object.keys(stepFourData).length === 0) {
+  if (!isLocalPreview && Object.keys(stepFourData).length === 0) {
     window.location.href =
       process.env.NEXT_PUBLIC_APP_URL + "/trademark-register";
   }
@@ -206,18 +227,22 @@ const Payment = () => {
 
   return (
     <main className="system-page-standard-layout flex flex-col gap-4">
-      <div className="w-full flex flex-col gap-1 mb-10">
-        <h1 className="font-inria text-heading-color md:text-[24px] text-[20px] w-full">
-          CONFIRM, ORDER & PAY
+      <FormLoader
+        isVisible={isProcessing}
+        message="Processing your payment..."
+        subMessage="Do not close or refresh this page. This can take a few seconds."
+      />
+      <div className="mb-8 w-full">
+        <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Secure checkout</p>
+        <h1 className="mt-2 w-full font-inria text-3xl font-bold text-heading-color sm:text-4xl">
+          Review and complete your order
         </h1>
-        <p className="md:text-[16px] text-[12px] md:leading-[18px] leading-[14px]">
-          Please enter your payment details below to complete your Trademark
-          order. Once completed, our experts will immediately begin reviewing
-          and processing your submission.
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">
+          Confirm your services and payment details. Only the service total shown below is charged today.
         </p>
       </div>
 
-      <section className="w-full h-full grid md:grid-cols-2 grid-cols-1 gap-4">
+      <section className="grid h-full w-full grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
         {/* PAYMENT GATEWAY INTEGRATION WILL COME HERE */}
 
         {/* STRIPE */}
@@ -240,17 +265,31 @@ const Payment = () => {
         </div> */}
 
         {/* NMI — CARD PAYMENT */}
-        <div className="bg-white p-8 max-md:px-5 max-md:py-7 border-t-2 border-t-indigo-700 flex flex-col gap-3 mb-6">
+        <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-slate-200 border-t-4 border-t-indigo-700 bg-white p-4 shadow-sm sm:p-8">
+          {isLocalPreview && (
+            <div className="mb-4 rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div><p className="font-bold">Local checkout testing</p><p className="mt-1 text-xs leading-5">Test Visa: <strong>4111 1111 1111 1111</strong> · Exp: <strong>12/30</strong> · CVV: <strong>123</strong> · ZIP: <strong>10001</strong>. Gateway submission works only when the NMI account is in test mode.</p></div>
+                <button type="button" onClick={() => { sessionStorage.setItem("lto_demo_order", JSON.stringify({ transactionId: "DEMO-649-2026", value: totalAmount, packageName: selectedPackageName, addons: selectedAddons, classCount: nestedLeadData.stepTwo.estimatedClassCount || 0 })); window.location.href = "/trademark-register/thank-you"; }} className="shrink-0 rounded-xl bg-violet-700 px-4 py-3 text-xs font-bold text-white">Preview successful order</button>
+              </div>
+            </div>
+          )}
           <NmiPayment
             onToken={handleToken}
             totalAmount={totalAmount}
             isProcessing={isProcessing}
             errorMessage={paymentError}
+            initialBilling={{
+              firstName: nestedLeadData.stepOne.firstName || "",
+              lastName: nestedLeadData.stepOne.lastName || "",
+              email: nestedLeadData.stepOne.emailAddress || "",
+              zip: nestedLeadData.stepOne.zipCode || "",
+            }}
           />
         </div>
 
         <div className="w-full flex items-start justify-center">
-          <Card className="w-[400px] py-4 rounded-[4px] max-md:shadow-none max-md:border">
+          <Card className="w-full max-w-[480px] rounded-2xl border border-slate-200 py-4 shadow-sm lg:sticky lg:top-24">
             <CardHeader className="w-full flex items-center justify-center">
               <h1 className="md:text-[24px] text-[20px] font-inria font-bold text-heading-color">
                 My Order Details
@@ -258,19 +297,40 @@ const Payment = () => {
             </CardHeader>
             <Divider />
             <CardBody className="w-full flex flex-col gap-6 p-8">
+              <div>
+                <div className="mb-3 flex items-center justify-between"><h2 className="font-bold text-slate-900">Optional services</h2><span className="text-xs text-slate-500">Add or remove</span></div>
+                <div className="flex flex-col gap-3">
+                  {CHECKOUT_ADDONS.map((addon) => {
+                    const selected = selectedAddons.includes(addon.key);
+                    return <label key={addon.key} className={`cursor-pointer rounded-xl border-2 p-4 transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 bg-white hover:border-blue-300"}`}>
+                      <div className="flex items-start gap-3"><input type="checkbox" checked={selected} onChange={() => { trackAddonChange({ addonKey: addon.key, addonValue: addon.price, selected: !selected }); setSelectedAddons((current) => selected ? current.filter((key) => key !== addon.key) : [...current, addon.key]); }} className="mt-1 h-4 w-4" /><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><span className="font-semibold text-slate-900">{addon.title}</span><span className="whitespace-nowrap font-bold text-slate-900">+${addon.price}</span></div><p className="mt-1 text-xs leading-5 text-slate-600">{addon.description}</p></div></div>
+                    </label>;
+                  })}
+                </div>
+              </div>
               {orderDetails.map(({ title, amount }, index) => (
-                <>
+                <React.Fragment key={`${title}-${index}`}>
                   <div className="w-full flex items-center justify-between md:text-[16px] text-[14px]">
                     <h1 className="text-heading-color">{title}:</h1>
                     <p>${amount}</p>
                   </div>
                   <Divider />
-                </>
+                </React.Fragment>
               ))}
 
               <div className="w-full flex items-center justify-between md:text-[20px] text-[16px]">
-                <h1 className="font-bold text-heading-color">Total Amount:</h1>
+                <h1 className="font-bold text-heading-color">Charged today:</h1>
                 <p className="font-bold">${totalAmount}.00</p>
+              </div>
+              <Divider />
+              <div className="rounded-lg bg-amber-50 p-4 text-sm text-amber-950">
+                <div className="flex justify-between font-semibold">
+                  <span>USPTO government fee</span>
+                  <span>${governmentFee} per class</span>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed">
+                  Separate from all service plans and not charged today. Your attorney will confirm the appropriate classes and obtain authorization before filing.
+                </p>
               </div>
             </CardBody>
           </Card>
