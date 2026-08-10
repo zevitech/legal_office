@@ -5,6 +5,11 @@ import { getPortalUser } from "@/lib/portalAuth";
 import { getAdminFirestore } from "@/lib/firebaseAdmin";
 import { PAYMENT_AGREEMENT_TEXT, PAYMENT_AGREEMENT_VERSION, STATEMENT_DESCRIPTOR, requestEvidence, savePaymentEvidence } from "@/lib/paymentEvidence";
 
+// The charge itself is fast, but portal provisioning afterwards sends two
+// transactional emails at ~10s each. Never let the timeout cut off a request
+// that has already taken a payment.
+export const maxDuration = 60;
+
 export async function POST(req) {
   try {
     const portalUser = await getPortalUser();

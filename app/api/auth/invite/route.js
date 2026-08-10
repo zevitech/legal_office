@@ -4,6 +4,11 @@ import { provisionPortalClient } from "@/lib/portalProvisioning";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Provisioning creates the account, writes the case records and sends two
+// transactional emails. The SMTP host alone takes ~10s per message, which
+// exceeds the default serverless limit.
+export const maxDuration = 60;
+
 export async function POST(request) {
   if (!isTrustedPortalOrigin(request)) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
   const staff = await getPortalUser();
