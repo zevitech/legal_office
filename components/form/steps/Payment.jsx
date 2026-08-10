@@ -1,10 +1,10 @@
 "use client";
 
 import axios from "axios";
+import FormLoader from "@/components/form/FormLoader";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import NmiPayment from "@/components/form/NmiPayment";
-import FormLoader from "@/components/form/FormLoader";
 import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import { trackAddonChange, trackBeginCheckout, getClickIds } from "@/utils/tracking";
@@ -124,6 +124,42 @@ const Payment = () => {
         email: billing.email || leadDataWithValues.emailAddress,
         zip: billing.zip,
         description,
+        company: leadDataWithValues.organizationName || leadDataWithValues.companyName || "",
+        markName: leadDataWithValues.name || leadDataWithValues.slogan || "Trademark application",
+        markType: Array.isArray(leadDataWithValues.protectionTypes) ? leadDataWithValues.protectionTypes.join(", ") : (leadDataWithValues.wantToProtect || "Word mark"),
+        applicationDetails: {
+          protectionTypes: leadDataWithValues.protectionTypes,
+          slogan: leadDataWithValues.slogan,
+          logoColors: leadDataWithValues.logoColors,
+          logoProtectionDescription: leadDataWithValues.logoProtectionDescription,
+          soundDescription: leadDataWithValues.soundDescription,
+          soundFileName: leadDataWithValues.soundFileName,
+          trademarkCurrentlyBeingUsed: leadDataWithValues.trademarkCurrentlyBeingUsed,
+          firstAnywhereDate: leadDataWithValues.firstAnywhereDate,
+          firstCommenceDate: leadDataWithValues.firstCommenceDate,
+          ownerType: leadDataWithValues.selectedOwnerType,
+          organizationType: leadDataWithValues.organizationType || leadDataWithValues.selectedFormationType,
+          stateFormation: leadDataWithValues.stateFormation,
+          countryFormation: leadDataWithValues.countryFormation,
+          organizationPosition: leadDataWithValues.organizationPosition,
+          selectedActivities: leadDataWithValues.selectedActivities,
+          trademarkClassification: leadDataWithValues.trademarkClassification,
+          estimatedClassCount: nestedLeadData.stepTwo.estimatedClassCount,
+          reviewPreference: leadDataWithValues.reviewPreference,
+        },
+        billingProfile: {
+          name: `${billing.firstName || leadDataWithValues.firstName || ""} ${billing.lastName || leadDataWithValues.lastName || ""}`.trim(),
+          email: billing.email || leadDataWithValues.emailAddress || "",
+          phone: leadDataWithValues.phoneNumber || "",
+          address1: leadDataWithValues.address || "",
+          city: leadDataWithValues.city || "",
+          state: leadDataWithValues.state || "",
+          zip: billing.zip || leadDataWithValues.zipCode || "",
+          country: "United States",
+        },
+        acceptedTerms: billing.acceptedTerms,
+        savePaymentMethod: billing.savePaymentMethod,
+        attorneyChargeConsent: billing.attorneyChargeConsent,
       });
 
       if (!charge?.success) {
@@ -143,6 +179,9 @@ const Payment = () => {
             packageName: selectedPackageName,
             addons: selectedAddons,
             classCount: nestedLeadData.stepTwo.estimatedClassCount || 0,
+            portalProvisioned: Boolean(charge.portalProvisioned),
+            portalNewlyCreated: Boolean(charge.portalNewlyCreated),
+            portalEmail: billing.email || leadDataWithValues.emailAddress || "",
           }),
         );
       } catch {
@@ -269,7 +308,7 @@ const Payment = () => {
           {isLocalPreview && (
             <div className="mb-4 rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div><p className="font-bold">Local checkout testing</p><p className="mt-1 text-xs leading-5">Test Visa: <strong>4111 1111 1111 1111</strong> · Exp: <strong>12/30</strong> · CVV: <strong>123</strong> · ZIP: <strong>10001</strong>. Gateway submission works only when the NMI account is in test mode.</p></div>
+                <div><p className="font-bold">Local checkout testing</p><p className="mt-1 text-xs leading-5">Test Visa: <strong>4111 1111 1111 1111</strong> · Exp: <strong>12/30</strong> · CVV: <strong>123</strong> · ZIP: <strong>10001</strong>. Submission works only when the secure payment account is in test mode.</p></div>
                 <button type="button" onClick={() => { sessionStorage.setItem("lto_demo_order", JSON.stringify({ transactionId: "DEMO-649-2026", value: totalAmount, packageName: selectedPackageName, addons: selectedAddons, classCount: nestedLeadData.stepTwo.estimatedClassCount || 0 })); window.location.href = "/trademark-register/thank-you"; }} className="shrink-0 rounded-xl bg-violet-700 px-4 py-3 text-xs font-bold text-white">Preview successful order</button>
               </div>
             </div>
@@ -279,6 +318,7 @@ const Payment = () => {
             totalAmount={totalAmount}
             isProcessing={isProcessing}
             errorMessage={paymentError}
+            allowSavePaymentMethod
             initialBilling={{
               firstName: nestedLeadData.stepOne.firstName || "",
               lastName: nestedLeadData.stepOne.lastName || "",

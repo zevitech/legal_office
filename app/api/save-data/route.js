@@ -135,18 +135,8 @@ export async function POST(req) {
     });
     // sending data to gmail account -end
 
-    // Receipt emails are handled by the dedicated /send-receipt route
-    // This prevents duplicate emails from being sent
-    console.log("=== PAYMENT STATUS DEBUG ===");
-    console.log("data.is_paid value:", data.is_paid);
-    console.log("data.is_paid type:", typeof data.is_paid);
-    console.log("Customer email:", data.emailAddress);
-    console.log("🔍 DEBUG - zoho_step:", data.zoho_step);
-    console.log("🔍 DEBUG - Call timestamp:", new Date().toISOString());
-    console.log("Note: Receipt emails will be sent by /send-receipt route");
-    console.log("================================");
-
-
+    // Receipt emails are handled by the dedicated /send-receipt route. Avoid
+    // logging customer contact or application data in production server logs.
 
     // sending data to ZevitechCRM leads system (server-to-server, API-key guarded)
     const crmIngestUrl = process.env.CRM_INGEST_URL;

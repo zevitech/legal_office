@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .input {
+    @apply mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -32,6 +38,16 @@ body {
 
 a {
   text-decoration: none;
+}
+
+:where(a, button, input, select, textarea, [role="button"]):focus-visible {
+  outline: 3px solid rgba(2, 125, 214, 0.48);
+  outline-offset: 3px;
+}
+
+button,
+[role="button"] {
+  touch-action: manipulation;
 }
 
 .text-color-primary {

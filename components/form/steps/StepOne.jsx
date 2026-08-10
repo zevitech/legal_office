@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import FormLoader from "@/components/form/FormLoader";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -371,6 +371,7 @@ const StepOne = () => {
     setReChaptcha(value);
   };
 
+  // OTP DISABLED - Direct form submission without OTP verification
   // Validates ONLY the mark-details fields shown in section 0, so the user
   // cannot skip ahead to owner details with an empty application.
   const handleContinueToOwnerDetails = () => {
@@ -425,7 +426,6 @@ const StepOne = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // OTP DISABLED - Direct form submission without OTP verification
   const handleFormValidationAndSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);

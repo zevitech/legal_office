@@ -17,17 +17,41 @@ const NmiPayment = ({
   isProcessing,
   errorMessage,
   initialBilling = {},
+  allowSavePaymentMethod = true,
+  statementDescriptor = "XTARLABS LLC",
 }) => {
   const formRef = useRef(null);
   const onTokenRef = useRef(onToken);
+  const savePaymentMethodRef = useRef(false);
+  const statementDescriptorRef = useRef(statementDescriptor);
   const [collectJsReady, setCollectJsReady] = useState(false);
   const [fieldError, setFieldError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [savePaymentMethod, setSavePaymentMethod] = useState(false);
+  const [savedMethods, setSavedMethods] = useState([]);
 
   // Keep the latest callback without re-running the Collect.js setup effect.
   useEffect(() => {
     onTokenRef.current = onToken;
   }, [onToken]);
+
+  useEffect(() => {
+    savePaymentMethodRef.current = savePaymentMethod;
+  }, [savePaymentMethod]);
+
+  useEffect(() => {
+    statementDescriptorRef.current = statementDescriptor;
+  }, [statementDescriptor]);
+
+  useEffect(() => {
+    if (!window.location.pathname.startsWith("/client-portal")) return;
+    let active = true;
+    fetch("/api/portal/billing-methods", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : { methods: [] })
+      .then((data) => { if (active) setSavedMethods(data.methods || []); })
+      .catch(() => { if (active) setSavedMethods([]); });
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     const tokenizationKey = process.env.NEXT_PUBLIC_NMI_TOKENIZATION_KEY;
@@ -72,6 +96,11 @@ const NmiPayment = ({
             lastName: valueOf("last_name"),
             email: valueOf("email"),
             zip: valueOf("zip"),
+            acceptedTerms: true,
+            agreementVersion: "2026-08-07",
+            statementDescriptor: statementDescriptorRef.current,
+            savePaymentMethod: savePaymentMethodRef.current,
+            attorneyChargeConsent: false,
           });
         },
       });
@@ -127,6 +156,23 @@ const NmiPayment = ({
 
     // Triggers tokenization; the configured callback fires on success.
     window.CollectJS.startPaymentRequest();
+  };
+
+  const payWithSavedMethod = (method) => {
+    if (isProcessing) return;
+    if (!acceptedTerms) {
+      setFieldError("Please accept the terms and fee disclosure to continue.");
+      return;
+    }
+    setFieldError("");
+    onTokenRef.current?.("", {
+      acceptedTerms: true,
+      agreementVersion: "2026-08-07",
+      statementDescriptor: statementDescriptorRef.current,
+      billingMethodId: method.id,
+      useSavedPaymentMethod: true,
+      savePaymentMethod: false,
+    });
   };
 
   const inputClass =
@@ -230,9 +276,20 @@ const NmiPayment = ({
         <span>
           I agree to the <Link className="underline" href="/legal/terms" target="_blank">Terms</Link>,{" "}
           <Link className="underline" href="/legal/privacy" target="_blank">Privacy Policy</Link> and{" "}
-          <Link className="underline" href="/legal/refund-policy" target="_blank">Refund Policy</Link>. I understand that the USPTO fee is separate and will not be collected without the authorization described at checkout.
+          <Link className="underline" href="/legal/refund-policy" target="_blank">Refund Policy</Link>. I authorize the amount shown today. I understand service fees become non-refundable after the application is submitted to the USPTO, subject to applicable law, and USPTO fees are generally non-refundable. The charge will appear as <strong>{statementDescriptor}</strong>.
         </span>
       </label>
+
+      {allowSavePaymentMethod && <label className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-xs leading-relaxed text-slate-700">
+        <input type="checkbox" checked={savePaymentMethod} onChange={(event)=>setSavePaymentMethod(event.target.checked)} className="mt-0.5 h-4 w-4" />
+        <span><strong>Optional:</strong> Save this payment method securely for faster future payments. Legal Trademark Office stores only a secure vault reference—not your full card number or CVV. Saving a method does not authorize a new charge; you must separately approve each future fee.</span>
+      </label>}
+
+      {savedMethods.length > 0 && <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+        <p className="text-xs font-bold uppercase tracking-wider text-emerald-800">Saved payment method</p>
+        {savedMethods.map((method) => <button key={method.id} type="button" disabled={isProcessing} onClick={()=>payWithSavedMethod(method)} className="mt-3 w-full rounded-lg bg-emerald-700 px-4 py-3 text-sm font-bold text-white disabled:opacity-50">Pay this invoice with saved card{method.lastFour ? ` ending ${method.lastFour}` : ""}</button>)}
+        <p className="mt-2 text-[11px] leading-5 text-emerald-900">This button authorizes only the invoice amount shown above. It does not permit unrelated or automatic future charges.</p>
+      </div>}
 
       <button
         type="submit"
@@ -252,8 +309,7 @@ const NmiPayment = ({
       </button>
 
       <p className="text-[11px] text-gray-400 text-center leading-relaxed">
-        Your card details are encrypted and processed securely. We never store
-        your card information.
+        Card details are encrypted and handled by our secure payment provider. Your statement will show <strong>{statementDescriptor}</strong>.
       </p>
     </form>
   );

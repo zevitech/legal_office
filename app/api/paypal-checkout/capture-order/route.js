@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import paypal from "@paypal/checkout-server-sdk";
 
 export async function POST(req) {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   const body = await req.json();
 
   const clientId = process.env.PAYPAL_CLIENT_ID;

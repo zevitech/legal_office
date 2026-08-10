@@ -1,6 +1,6 @@
 import React from "react";
 
-import SpecificBlogPage from "@/pages/specific-blog-page";
+import SpecificBlogPage from "@/components/pages/blogs/SpecificBlogPage";
 
 const page = () => {
   return <SpecificBlogPage />;

@@ -1,5 +1,7 @@
 "use client";
 
+// Client-side blog listing used by the App Router blog page.
+
 import React, { useState, useEffect } from "react";
 import FooterSection from "@/components/sections/FooterSection";
 import Header from "@/components/ui/Header";

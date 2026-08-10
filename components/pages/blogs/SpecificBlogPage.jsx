@@ -1,5 +1,7 @@
 "use client";
 
+// Client-side article view used by the App Router dynamic blog page.
+
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import FooterSection from "@/components/sections/FooterSection";

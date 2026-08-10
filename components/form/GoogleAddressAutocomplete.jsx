@@ -32,12 +32,7 @@ const GoogleAddressAutocomplete = ({
     }
 
     const initialize = () => {
-      if (
-        !window.google?.maps?.places ||
-        !localRef.current ||
-        autocompleteRef.current
-      )
-        return;
+      if (!window.google?.maps?.places || !localRef.current || autocompleteRef.current) return;
 
       const autocomplete = new window.google.maps.places.Autocomplete(
         localRef.current,
@@ -119,15 +114,10 @@ const GoogleAddressAutocomplete = ({
 
   return (
     <div className="w-full">
-      <label
-        htmlFor="street-address"
-        className="mb-2 block text-sm font-semibold text-slate-800"
-      >
+      <label htmlFor="street-address" className="mb-2 block text-sm font-semibold text-slate-800">
         Street address
       </label>
-      <div
-        className={`flex min-h-14 items-center gap-3 rounded-xl border bg-white px-4 transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100 ${errorMessage ? "border-rose-500" : "border-slate-300"}`}
-      >
+      <div className={`flex min-h-14 items-center gap-3 rounded-xl border bg-white px-4 transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100 ${errorMessage ? "border-rose-500" : "border-slate-300"}`}>
         <RiHome5Fill className="shrink-0 text-xl text-slate-400" />
         <input
           ref={setRefs}
@@ -148,9 +138,7 @@ const GoogleAddressAutocomplete = ({
       {errorMessage ? (
         <p className="mt-1 text-xs text-rose-600">{errorMessage}</p>
       ) : (
-        <p
-          className={`mt-1.5 text-xs ${loadError ? "text-amber-700" : "text-slate-500"}`}
-        >
+        <p className={`mt-1.5 text-xs ${loadError ? "text-amber-700" : "text-slate-500"}`}>
           {loadError
             ? "Address suggestions are unavailable. You can still enter the address manually."
             : "Choose a suggestion to fill city, state and ZIP automatically."}

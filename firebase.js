@@ -1,6 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,8 +10,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
-auth.useDeviceLanguage();
-
-export { auth };
+export function getFirebaseAuth() {
+  if (typeof window === "undefined") {
+    throw new Error("Firebase Authentication is only available in the browser.");
+  }
+  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+    throw new Error("Portal authentication is not configured.");
+  }
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  const auth = getAuth(app);
+  auth.useDeviceLanguage();
+  return auth;
+}

@@ -12,6 +12,11 @@ export const PACKAGE_PRICES = {
   Corporates: 249,
 };
 
+// Canonical package choices used by staff tools. Keep this list aligned with
+// the public application form while leaving legacy package aliases available
+// in PACKAGE_PRICES for older orders.
+export const PORTAL_PACKAGE_OPTIONS = ["Basic", "Standard", "Advanced", "Premium"];
+
 export const RUSH_PROCESSING_FEE = 29;
 export const ADD_ON_PRICES = {
   rush: 29,

@@ -35,3 +35,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Firebase service account keys — never commit
+*firebase-adminsdk*.json
+serviceAccountKey*.json
+
+# Environment files and generated credential exports — never commit
+.env
+vercel-env-production.txt
+firebase-admin-private-key.txt

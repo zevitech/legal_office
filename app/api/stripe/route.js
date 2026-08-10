@@ -2,6 +2,9 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   const { amount, description } = await req.json();
   const finalAmount = Math.round(amount * 100);
   console.log("finalAmount", finalAmount);
