@@ -1,0 +1,415 @@
+================================================================================
+LEGAL TRADEMARK OFFICE - SESSION 1 HANDOFF
+Date: 2026-08-10
+Repo: D:\zevitech\LTO   (github.com/zevitech/legal_office, branch main)
+Stack: Next.js 14.2.35 (App Router, JS not TS) / Firebase / NMI / Vercel
+================================================================================
+
+--------------------------------------------------------------------------------
+0. READ THIS FIRST - CURRENT STATE
+--------------------------------------------------------------------------------
+Production is LIVE at legaltrademarkoffice.com and PPC ads are running.
+Last pushed commit: 38116fb ("made changes")
+
+UNCOMMITTED work in progress (2 files, lint passes, NOT pushed):
+  - components/portal/PortalInviteForm.jsx
+  - components/portal/PortalCaseWorkspace.jsx
+Both are the same one-line class of fix, described in section 5 (ACTIVE BUG).
+
+IMMEDIATE NEXT STEP: commit + push those 2 files, redeploy, re-test the
+attorney "Invite a client" flow. Expect a SUCCESS message instead of
+"The invitation service is unavailable."
+
+
+--------------------------------------------------------------------------------
+1. WHAT THIS SESSION DID
+--------------------------------------------------------------------------------
+
+A) MERGED A NEWER PORTAL RELEASE
+   Source: "D:\zevitech\LTO reference\Legal_Trademark_Office_Developer_Release_2026-08-08"
+   The reference was a newer dev release. Split was clean:
+     - reference was AHEAD on the portal
+     - main was AHEAD on the public funnel
+   Adopted ~40 portal files. Deliberately KEPT main's funnel work:
+     - app/layout.js (AW-18263994803 Google Ads base tag)
+     - components/form/FormLoader.jsx + its usages
+     - GoogleAddressAutocomplete.jsx (readiness-polling fix)
+     - StepOne.jsx (handleContinueToOwnerDetails validation)
+     - ThankYou.jsx ("order unavailable" path, no fake receipt)
+     - utils/tracking.js (markPurchaseFired localStorage purchase dedupe)
+   Added dep: jspdf@^4.2.1. Kept react-loader-spinner (FormLoader needs it).
+
+   Notable things the merge brought in:
+     - Server-enforced 7-stage trademark roadmap (actions/route.js rewritten)
+     - lib/portalInvoicePaymentLock.js (atomic duplicate-charge protection)
+     - lib/portalFileValidation.js (upload file-signature validation)
+     - Secure two-way messaging + AI drafting assistant
+     - PortalSessionGuard (inactivity logout)
+     - middleware.js security headers + portal route matcher
+
+B) SET UP FIREBASE FROM SCRATCH (project: lto-project-99ecb)
+   - Firestore created, region nam5/us-central, PRODUCTION mode (deny-all rules)
+   - Cloud Storage created, US-CENTRAL1, deny-all rules, Blaze plan
+   - Email/Password auth enabled
+   - Authorized domains added (this was initially MISSED - see section 6)
+   - Service account generated; all 10 env vars set locally and in Vercel
+
+C) FIXED THIS SESSION (all pushed except section 5)
+   1. Timestamp serialization crash on /client-portal
+      Firestore Timestamps are class instances; Server Components can only pass
+      plain values to Client Components. Added serializePortalDoc() in
+      lib/portalData.js; applied in client-portal/page.jsx and
+      client-portal/amendment/page.jsx.
+   2. Duplicate message-send in ClientPortalDashboard
+      A global click-delegation handler matched label "Send securely",
+      preventDefault'd the form submit so setDraft("") never ran, and the text
+      reappeared. Removed the delegated branch.
+   3. Toast never auto-dismissed -> added 5s timer.
+   4. AI completely broken (all 3 routes). See section 4.
+   5. LiveChat widget appeared over portal UI -> new components/LiveChatLoader.jsx
+      gates it by pathname; marketing pages unaffected.
+   6. Guided tour button overlapped the sidebar Sign out -> moved to bottom-right.
+   7. Dashboard layout: removed max-w caps (client 1600->full/1720 inner,
+      admin 1500->1800), sidebar 264/288px, Overview right rail sticky.
+   8. Team & profile page showed 2 HARDCODED FAKE attorneys (Danish Khan /
+      Jordan Mitchell @legaltrademarkoffice.example) and never fetched the real
+      list. Rewrote PortalTeamManager to fetch GET /api/portal/admin/attorneys,
+      show the signed-in user when they have no profile doc, keep the sample
+      only in preview mode.
+   9. firebaseAdmin.js hardening: tolerate escaped \n and wrapping quotes,
+      try/catch around initializeApp so a bad credential returns null instead of
+      throwing out of every server component (was causing a blank
+      "Application error / Digest" page across the whole portal).
+  10. Serverless timeout protection: emails now sent concurrently in
+      portalProvisioning; maxDuration=60 on /api/auth/invite and /api/nmi/charge.
+
+D) DATA RESET
+   Firebase now contains ONLY:
+     admin@legaltrademarkoffice.com  role=admin  (password: set by user)
+     portalAttorneys: 1 (the admin's profile doc)
+     portalClients: 0, notifications: 0, paymentEvidence: 0
+   All test clients deleted. Ready for a clean end-to-end test.
+
+
+--------------------------------------------------------------------------------
+2. HELPER SCRIPTS CREATED (committed, in scripts/)
+--------------------------------------------------------------------------------
+  node --env-file=.env.local scripts/verify-firebase.mjs
+      Tests Auth + Firestore write/read/delete + Storage bucket. Use this first
+      whenever the portal 503s.
+
+  node --env-file=.env.local scripts/bootstrap-admin.mjs you@domain.com
+      Grants the "admin" custom claim. There is NO in-app route to create the
+      first admin.
+
+Gitignored local files (NOT in repo, contain live secrets):
+  .env                              (untracked as of this session)
+  .env.local                        (local dev overrides)
+  vercel-env-production.txt         (full production env for Vercel bulk import)
+  firebase-admin-private-key.txt    (PEM, lines 4-31, 28 lines)
+  lto-project-99ecb-firebase-adminsdk-*.json  (service account)
+
+
+--------------------------------------------------------------------------------
+3. CRITICAL UNRESOLVED - SECURITY
+--------------------------------------------------------------------------------
+*** github.com/zevitech/legal_office IS A PUBLIC REPO ***
+*** .env was committed across 54 commits and is still readable at the old ***
+*** commit URLs even though it is now untracked.                          ***
+
+Verified during the session:
+  GET raw.githubusercontent.com/zevitech/legal_office/main/.env -> 200 OK
+
+Exposed and STILL NOT ROTATED:
+  NMI_SECURITY_KEY           <- can charge/refund on the live gateway
+  PAYPAL_CLIENT_SECRET
+  RECAPTCHA_SECRET_KEY
+  CRM_INGEST_API_KEY
+  CONTENTFUL_ACCESS_TOKEN
+  SUPPORT_EMAIL_PASSWORD / BILLING_EMAIL_PASSWORD (GoDaddy)
+  MAILER_PASSWORD (Gmail app password)
+  OPENAI_API_KEY
+
+Also: utils/contentful.js HARDCODES a different Contentful space + token
+directly in source (not env) - also public.
+
+The user cannot make the repo private (no admin rights on the zevitech org).
+Rotation is the only real fix and is entirely in their control.
+Vercel already flags SUPPORT_EMAIL_PASSWORD, BILLING_EMAIL_PASSWORD and
+RECAPTCHA_SECRET_KEY as "Needs Attention" (its own leak scanner).
+
+Also outstanding: Vercel org shows "Overdue / payment failed - pay open
+invoices before your account is shut down."
+
+
+--------------------------------------------------------------------------------
+4. KEY GOTCHAS DISCOVERED (do not re-debug these)
+--------------------------------------------------------------------------------
+
+GOTCHA 1 - AI: max_output_tokens includes REASONING tokens
+  Model is gpt-5-nano (a reasoning model). With effort "low" and a 180 cap, all
+  128 output tokens were consumed by reasoning and ZERO text was produced ->
+  route threw -> 502 "The drafting assistant is temporarily unavailable."
+  Measured:  low/180 = fail, minimal/300 = works (0 reasoning tokens).
+  FIXED: all 3 routes now use reasoning:{effort:"minimal"} and higher caps.
+  OPENAI_PORTAL_MAX_OUTPUT_TOKENS must be 400, NOT 180. .env still says 180;
+  .env.local and Vercel say 400.
+  All three AI routes were broken, not just the visible one:
+    /api/portal/admin/ai-assist   (attorney draft reply / summarize)
+    /api/portal/recommendations   (silently fell back to rule text)
+    /api/portal/ai-suggestions    (cap was hardcoded 100 - never worked)
+
+GOTCHA 2 - SMTP is slow (~10s per email)
+  Measured GoDaddy smtpout.secureserver.net: connect+auth ~4s, sendMail ~6s.
+  Provisioning sends 2 emails; they were sequential (~20s+) which exceeded the
+  serverless limit. Now concurrent + maxDuration=60.
+
+GOTCHA 3 - Local ISP blocks outbound port 587
+  Ports tested from the dev machine: 587 BLOCKED, 465 OPEN, 25 BLOCKED.
+  .env.local overrides SMTP_PORT=465 / SMTP_SECURE=true for local dev only.
+  PRODUCTION MUST STAY ON 587 (Vercel is not blocked).
+
+GOTCHA 4 - Never run `npm run build` while `next dev` is running
+  Both write to .next. Doing so corrupted the route tree and produced a
+  site-wide 404 (twice). Correct order: Ctrl+C the dev server, then
+  Remove-Item -Recurse -Force .next, then npm run dev.
+
+GOTCHA 5 - .env uses "KEY = value" with SPACES around =
+  A grep for '^KEY=' misses them. dotenv trims whitespace so they load fine.
+  An early audit wrongly reported MAILER_*/SMTP_*/SUPPORT_* as missing.
+
+GOTCHA 6 - Firebase Admin private key formatting
+  In a .env file: ONE line, double-quoted, literal \n.
+  In Vercel: real line breaks, NO quotes, and the -----BEGIN/-----END PEM armor
+  lines MUST be included (the user initially pasted only the base64 body, which
+  crashed every portal page).
+
+GOTCHA 7 - Preview mode
+  Many portal pages accept ?preview=1 (dev only) and fake an admin session.
+  If the dashboard renders but a sub-page redirects to login, check for
+  ?preview=1 in the URL.
+
+
+--------------------------------------------------------------------------------
+5. ACTIVE BUG BEING FIXED RIGHT NOW (uncommitted)
+--------------------------------------------------------------------------------
+SYMPTOM: Attorney clicks "Create client and send invitation".
+         The client account IS created and the correct setup email IS delivered,
+         but the UI shows red: "The invitation service is unavailable. Please
+         try again."
+
+ROOT CAUSE: React nulls out event.currentTarget once an async handler yields.
+  PortalInviteForm.submit() did:
+      if (response.ok) { event.currentTarget.reset(); ... }
+  ...AFTER `await fetch` and `await response.json()`. So on SUCCESS it threw
+  TypeError (reading 'reset' of null), which the surrounding catch swallowed and
+  replaced with the generic network-failure message.
+  It only misfires on success, which is exactly why the email arrives.
+
+  NOTE: an earlier theory in this session blamed a serverless timeout. That was
+  WRONG for this symptom (the SMTP slowness is real and worth the fix, but it is
+  not what produces this error). Do not re-chase the timeout.
+
+FIX APPLIED (uncommitted, lint passes):
+  - PortalInviteForm.jsx: capture `const formElement = event.currentTarget`
+    BEFORE the first await; use formElement.reset(); log the real error in catch.
+  - PortalCaseWorkspace.jsx: same defect in its billing-consent submit handler,
+    same fix.
+
+Scanned the other portal forms - ExistingTrademarkRequestForm, PasswordActionForm,
+PortalTeamManager, ClientPortalDashboard, PortalLoginForm are all clean.
+
+TODO: commit + push these 2 files, redeploy, re-test the invite flow.
+
+
+--------------------------------------------------------------------------------
+6. BUGS FIXED EARLIER THAT LOOKED SIMILAR (context, already resolved)
+--------------------------------------------------------------------------------
+- "The invitation could not be sent. Check the portal configuration."
+  DIFFERENT error (server 500, not the network catch). Cause was
+  auth/unauthorized-continue-uri - the production domain was not in Firebase
+  Authorized domains, so generatePasswordResetLink threw. Adding
+  legaltrademarkoffice.com + www.legaltrademarkoffice.com fixed it.
+  Side effect: a failed first attempt left an orphaned Auth user with no
+  password, and the retry took the "existing client" branch and emailed
+  "your password remains unchanged" - wrong email, plus a duplicate case.
+
+- Production /portal-admin/login showed "Application error ... Digest".
+  Cause: FIREBASE_ADMIN_PRIVATE_KEY pasted without the BEGIN/END PEM lines.
+
+
+--------------------------------------------------------------------------------
+7. KNOWN ISSUES NOT YET ADDRESSED (from the deployment audit)
+--------------------------------------------------------------------------------
+Ordered by business impact.
+
+1. LEADS ARE NOT PERSISTED ANYWHERE.  <-- biggest PPC risk
+   app/api/save-data/route.js only sends a Gmail SMTP email + posts to a CRM
+   webhook. NO database write. If Gmail throttles (free tier ~500/day, flags
+   bulk sending), the paid click is lost with no record and no retry.
+   Recommended fix: write to Firestore BEFORE attempting the email.
+
+2. /trademark-register ships 2.64 MB First Load JS.
+   Cause: utils/get-geographical-data.jsx statically imports country-state-city
+   (a 17 MB package with every world city) into StepOne - the PPC landing page.
+   Fix: dynamic import, or a US-states-only constant (the funnel is US-only).
+   Hurts Quality Score -> raises CPC.
+
+3. No idempotency on the PUBLIC checkout charge (app/api/nmi/charge/route.js).
+   Only client-side isProcessing guards it. The portal invoice routes DO have
+   lib/portalInvoicePaymentLock.js; the public checkout does not. Double-click
+   or retry can double-charge. TEST THIS before scaling spend.
+
+4. Portal provisioning failure after a successful charge is swallowed
+   (nmi/charge/route.js ~line 127): logs to console, returns success. Customer
+   paid, no portal account, nothing retries.
+
+5. vercel.json still sets Access-Control-Allow-Origin: * with
+   Allow-Credentials: true on /api/*. Browsers reject that combination so it is
+   not an active hole, but it contradicts DEVELOPER_HANDOFF.md and should go.
+
+6. Scale ceilings: lib/portalData.js listPortalCaseRows() uses
+   collectionGroup(...).limit(2500/5000) with no pagination. Fine now, expensive
+   and wrong past a few hundred clients.
+
+7. Admin password is "Legal1234" - weak for an account that can read every
+   client's legal file and charge saved cards. No MFA on the portal.
+
+8. Local dev and production share the SAME Firebase project (lto-project-99ecb).
+   Any local reset wipes production data. Needs a separate dev project.
+
+9. app/api/portal/admin/clients/[uid]/service-requests/[id]/approve/route.js
+   writes status:"Attorney review", a stage the new roadmap no longer knows.
+   Pre-existing in the reference release, not introduced by the merge.
+
+10. All attorney notification emails go to one shared inbox
+    (ATTORNEY_NOTIFICATION_EMAIL is unset, so it falls back to SUPPORT_EMAIL),
+    not the attorney assigned to the case.
+
+
+--------------------------------------------------------------------------------
+8. ARCHITECTURE QUICK REFERENCE
+--------------------------------------------------------------------------------
+DATABASE: Google Firestore via firebase-admin (server only).
+  firebase.js exposes ONLY getAuth to the browser - there is NO client-side
+  Firestore. Every read/write goes through server routes with the Admin SDK,
+  which bypasses security rules. That is why deny-all rules are correct and
+  break nothing.
+
+Collections: portalClients (subcollections: cases, activity, tasks, invoices,
+  messages, documents, appointments, agreements, billingMethods, auditLog,
+  recommendationCache, aiUsage), portalAttorneys, portalAttorneyNotifications,
+  paymentEvidence, portalAiUsage
+
+AUTH: Firebase Auth email/password. Role lives in a custom claim
+  (client|admin|attorney). Server mints an httpOnly session cookie
+  "lto_portal_session", 5-day expiry. lib/portalAuth.js getPortalUser().
+
+PUBLIC FUNNEL:
+  /trademark-register -> step-2 -> step-3 -> payment -> thank-you
+  Form state lives in redux-persist -> localStorage until payment.
+  /api/nmi/charge recalculates the amount server-side from constant/pricing.js
+  (never trusts the browser), then calls provisionPortalClient().
+  Packages: Basic 49 / Standard 149 / Advanced 249 / Premium 649.
+
+CLIENT PORTAL: /client-portal - Overview, My trademarks, Tasks & documents,
+  Appointments & messages, Billing, Business services.
+
+ATTORNEY PORTAL: /portal-admin -> click a client -> slide-over workspace with
+  6 tabs: Client action, Messages, Case details, Tasks & files, Payments,
+  Records & evidence. AI drafting lives in the Messages tab.
+
+ENFORCED ROADMAP ORDER (server-side, returns 409 out of sequence):
+  1 application received -> 2 mandatory consultation -> 3 clearance report
+  (auto-completes the consultation) -> 4 exact class fees (invoice classes must
+  match report classes EXACTLY) -> 5 USPTO filing (blocked until fees paid;
+  needs 8-digit serial + date + PDF) -> 6 examination / office action (requires
+  the exact deadline date) / publication -> 7 registration certificate.
+  Client tasks and document requests are BLOCKED until class fees are paid.
+
+
+--------------------------------------------------------------------------------
+9. TEST SEQUENCE (two browsers: attorney normal, client incognito)
+--------------------------------------------------------------------------------
+ 1. /portal-admin/login as admin@legaltrademarkoffice.com
+ 2. Team & profile -> Edit profile (do NOT use "Add attorney" on your own email;
+    POST /api/portal/admin/attorneys sets role:"attorney" unconditionally and
+    would DEMOTE the admin)
+ 3. Invite a client (fresh email) -> expect SUCCESS message
+ 4. Setup email -> create password -> /portal-login
+ 5. Client: roadmap stage 1 done, rest locked with padlocks
+ 6. Attorney: try pushing a task -> expect 409 (fees not paid)
+ 7. Schedule consultation (Meet URL must start https://meet.google.com/)
+ 8. Messages tab -> "Draft friendly reply" (AI test)
+ 9. Upload clearance report + 3 classes -> auto-completes consultation
+10. Request class fees; first try a mismatched class name -> expect 409
+11. Pay as client OR mark paid with reference + date
+12. Retry step 6 -> now succeeds; client uploads a file (Storage test)
+13. Record filing: 8-digit serial + date + PDF
+14. Status -> examination -> office action (exact deadline) -> publication
+15. Registration certificate -> roadmap 100%
+16. Public funnel: real $49 Basic charge, then VOID same day in NMI.
+    Also deliberately double-click Pay to test issue #3 above.
+
+
+--------------------------------------------------------------------------------
+10. VERIFIED WORKING
+--------------------------------------------------------------------------------
+  npm run lint            clean
+  npm run build           compiles, 64 static pages
+  verify-firebase.mjs     Auth + Firestore + Storage all pass
+  Admin login             works on production
+  Client invite           account + email work (only the UI message is wrong)
+  Secure messaging        both directions send email
+  SMTP                    connects and authenticates (465 local / 587 prod)
+
+================================================================================
+END OF HANDOFF
+================================================================================
+
+--------------------------------------------------------------------------------
+11. ADDENDUM - NMI CUSTOMER VAULT REGRESSION (found and fixed after section 5)
+--------------------------------------------------------------------------------
+SYMPTOM: A real paying customer was declined at checkout.
+  NMI: response 3, code 300,
+       "Your account is not set up to use the Customer Vault. REFID:147090171"
+  response 3 = gateway error, NOT a card decline. No transaction was created,
+  so nobody was double charged - but the order was lost.
+
+CAUSE: A REGRESSION INTRODUCED BY THE PORTAL MERGE (commit 1c6725a).
+  Verified with: git log -S "customer_vault" -- app/api/nmi/charge/route.js
+  Before the merge (28c4a92) the charge route sent ONLY:
+    security_key, payment_token, type, amount, currency,
+    first_name, last_name, email, zip, order_description
+  No vault fields, and no "save my card" checkbox existed.
+  The merge brought in the reference release's saved-card billing. The NMI
+  merchant account does not have the Customer Vault add-on, and NMI rejects the
+  ENTIRE sale rather than just skipping the vault.
+  Only customers who TICKED "Save this payment method" were affected (the box
+  defaults to unchecked), so it was a silent partial conversion loss.
+
+FIX (this session):
+  - New flag NEXT_PUBLIC_NMI_CUSTOMER_VAULT_ENABLED, default "false".
+  - app/api/nmi/charge/route.js: vault params only sent when the flag is true;
+    plus an automatic retry WITHOUT vault params if the gateway still rejects
+    for a vault reason (safe - response 3 means no transaction existed).
+  - components/form/NmiPayment.jsx: the save-card checkbox is hidden unless the
+    flag is true, and savePaymentMethodRef is forced false regardless.
+  With the flag false, checkout behaves exactly as it did pre-merge.
+
+CONSEQUENCE: the portal "charge saved method" feature cannot work until NMI
+enables Customer Vault on the account. It will simply have no saved methods,
+which is correct behaviour rather than an error.
+
+TO ENABLE SAVED CARDS LATER: have NMI provision Customer Vault, then set
+NEXT_PUBLIC_NMI_CUSTOMER_VAULT_ENABLED=true in Vercel and redeploy. No code
+change needed.
+
+ACTION: check the NMI portal for other code 300 errors to count lost orders.
+
+ALSO PULLED THIS SESSION (from origin, authored elsewhere):
+  da45e8b - Firestore failures non-fatal on portal pages + app/(main)/error.jsx
+  a63a600 - deep recursive Firestore->plain serialization (toPlain). This
+            supersedes the shallow serialize() written earlier in the session
+            and correctly handles Timestamps nested inside applicationDetails,
+            billingProfile, arrays, DocumentReference, GeoPoint, Date, Buffer.

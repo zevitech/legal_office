@@ -20,6 +20,10 @@ const NmiPayment = ({
   allowSavePaymentMethod = true,
   statementDescriptor = "XTARLABS LLC",
 }) => {
+  // Saving a card requires the Customer Vault add-on on the NMI account. When
+  // it is absent the gateway rejects the entire sale, so the option is hidden
+  // unless the account is known to support it.
+  const vaultEnabled = process.env.NEXT_PUBLIC_NMI_CUSTOMER_VAULT_ENABLED === "true";
   const formRef = useRef(null);
   const onTokenRef = useRef(onToken);
   const savePaymentMethodRef = useRef(false);
@@ -36,8 +40,8 @@ const NmiPayment = ({
   }, [onToken]);
 
   useEffect(() => {
-    savePaymentMethodRef.current = savePaymentMethod;
-  }, [savePaymentMethod]);
+    savePaymentMethodRef.current = savePaymentMethod && vaultEnabled;
+  }, [savePaymentMethod, vaultEnabled]);
 
   useEffect(() => {
     statementDescriptorRef.current = statementDescriptor;
@@ -280,7 +284,7 @@ const NmiPayment = ({
         </span>
       </label>
 
-      {allowSavePaymentMethod && <label className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-xs leading-relaxed text-slate-700">
+      {allowSavePaymentMethod && vaultEnabled && <label className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-xs leading-relaxed text-slate-700">
         <input type="checkbox" checked={savePaymentMethod} onChange={(event)=>setSavePaymentMethod(event.target.checked)} className="mt-0.5 h-4 w-4" />
         <span><strong>Optional:</strong> Save this payment method securely for faster future payments. Legal Trademark Office stores only a secure vault reference—not your full card number or CVV. Saving a method does not authorize a new charge; you must separately approve each future fee.</span>
       </label>}

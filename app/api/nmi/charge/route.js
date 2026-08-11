@@ -75,7 +75,16 @@ export async function POST(req) {
 
     const gatewayUrl = process.env.NMI_GATEWAY_URL || "https://secure.nmi.com";
 
-    const params = new URLSearchParams({
+    // Storing a card needs the Customer Vault add-on on the merchant account.
+    // Where it is not provisioned the gateway rejects the WHOLE sale
+    // ("Your account is not set up to use the Customer Vault", response 3 /
+    // code 300) instead of just skipping the vault, which loses the order.
+    // Defaults to off so checkout behaves exactly as it did before saved cards
+    // were introduced.
+    const vaultEnabled = process.env.NEXT_PUBLIC_NMI_CUSTOMER_VAULT_ENABLED === "true";
+    const requestedVault = Boolean(savePaymentMethod) && vaultEnabled;
+
+    const baseParams = {
       security_key: securityKey,
       payment_token: paymentToken,
       type: "sale",
@@ -86,23 +95,31 @@ export async function POST(req) {
       ...(accountEmail ? { email: accountEmail } : {}),
       ...(zip ? { zip } : {}),
       ...(description ? { order_description: description } : {}),
-      ...(savePaymentMethod ? {
-        customer_vault: "add_customer",
-        billing_method: "recurring",
-        initiated_by: "customer",
-        stored_credential_indicator: "stored",
-      } : {}),
-    });
+    };
 
-    const gatewayRes = await fetch(`${gatewayUrl}/api/transact.php`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params.toString(),
-    });
+    const submitCharge = async (withVault) => {
+      const body = new URLSearchParams({
+        ...baseParams,
+        ...(withVault ? { customer_vault: "add_customer", billing_method: "recurring", initiated_by: "customer", stored_credential_indicator: "stored" } : {}),
+      });
+      const gatewayResponse = await fetch(`${gatewayUrl}/api/transact.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+      });
+      return Object.fromEntries(new URLSearchParams(await gatewayResponse.text()));
+    };
 
-    const parsed = Object.fromEntries(
-      new URLSearchParams(await gatewayRes.text())
-    );
+    let parsed = await submitCharge(requestedVault);
+
+    // A vault-provisioning rejection is a configuration error, not a card
+    // decline: response 3 means the gateway never created a transaction, so
+    // resubmitting without the vault fields cannot double charge. Take the
+    // payment rather than lose a paid-traffic order.
+    if (requestedVault && parsed.response !== "1" && /customer vault/i.test(parsed.responsetext || "")) {
+      console.error("NMI Customer Vault unavailable; retrying the sale without storing the card:", parsed.responsetext);
+      parsed = await submitCharge(false);
+    }
 
     // response=1 approved, 2 declined, 3 error
     if (parsed.response !== "1") {
