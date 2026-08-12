@@ -4,6 +4,8 @@ import { provisionPortalClient } from "@/lib/portalProvisioning";
 import { getPortalUser } from "@/lib/portalAuth";
 import { getAdminFirestore } from "@/lib/firebaseAdmin";
 import { PAYMENT_AGREEMENT_TEXT, PAYMENT_AGREEMENT_VERSION, STATEMENT_DESCRIPTOR, requestEvidence, savePaymentEvidence } from "@/lib/paymentEvidence";
+import { claimCheckoutCharge, completeCheckoutCharge, releaseCheckoutCharge } from "@/lib/checkoutChargeLock";
+import { recordProvisioningFailure, clearProvisioningFailure } from "@/lib/provisioningQueue";
 
 // The charge itself is fast, but portal provisioning afterwards sends two
 // transactional emails at ~10s each. Never let the timeout cut off a request
@@ -110,6 +112,37 @@ export async function POST(req) {
       return Object.fromEntries(new URLSearchParams(await gatewayResponse.text()));
     };
 
+    // Reserve this payment token before touching the gateway. A double-click or
+    // a client retry after a slow response would otherwise submit the same
+    // token twice and charge the customer twice. The token is single-use per
+    // tokenization, so it identifies exactly one intended purchase.
+    const lockDb = getAdminFirestore();
+    const claim = await claimCheckoutCharge(lockDb, paymentToken);
+
+    if (claim.duplicate) {
+      if (claim.completed) {
+        // Return the original result so the browser lands on thank-you instead
+        // of showing an error for a payment that actually succeeded.
+        return NextResponse.json(
+          {
+            success: true,
+            transactionId: claim.transactionId,
+            amount: claim.amount,
+            duplicate: true,
+          },
+          { status: 200 }
+        );
+      }
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "This payment is already being processed. Please wait — do not submit it again.",
+        },
+        { status: 409 }
+      );
+    }
+
     let parsed = await submitCharge(requestedVault);
 
     // A vault-provisioning rejection is a configuration error, not a card
@@ -128,6 +161,9 @@ export async function POST(req) {
         code: parsed.response_code,
         text: parsed.responsetext,
       });
+      // Release the reservation so a corrected card can be retried. No money
+      // moved, so re-charging this token later cannot double bill.
+      await releaseCheckoutCharge(lockDb, paymentToken, parsed.responsetext);
       return NextResponse.json(
         {
           success: false,
@@ -137,21 +173,64 @@ export async function POST(req) {
       );
     }
 
+    // The card was charged. Record that against the token immediately, before
+    // the slower provisioning/evidence work, so a retry arriving mid-flight
+    // gets the completed result instead of starting a second sale.
+    await completeCheckoutCharge(lockDb, paymentToken, {
+      transactionId: parsed.transactionid || "",
+      amount,
+    });
+
     let portalProvisioned = false;
     let portalNewlyCreated = false;
     let portalUid = portalUser?.role === "client" ? portalUser.uid : "";
     if (accountEmail && accountName) {
-      try {
-        const provisioned = await provisionPortalClient({ name: accountName, email: String(accountEmail).trim().toLowerCase(), company, phone:billingProfile?.phone||"", markName, markType, packageName, transactionId: parsed.transactionid || "", orderTotal: amount, source: "checkout", applicationDetails, billingProfile });
-        portalUid = provisioned.uid;
-        portalNewlyCreated = Boolean(provisioned.newlyCreated);
-        portalProvisioned = true;
-      } catch (portalError) {
-        console.error("Payment succeeded; portal provisioning needs retry:", portalError?.message);
+      const provisionArgs = {
+        name: accountName,
+        email: String(accountEmail).trim().toLowerCase(),
+        company,
+        phone: billingProfile?.phone || "",
+        markName,
+        markType,
+        packageName,
+        transactionId: parsed.transactionid || "",
+        orderTotal: amount,
+        source: "checkout",
+        applicationDetails,
+        billingProfile,
+      };
+
+      // One immediate retry absorbs a transient Firebase/SMTP blip. Provisioning
+      // is idempotent on the client email, so retrying cannot create duplicates.
+      let lastProvisionError = "";
+      for (let attempt = 1; attempt <= 2 && !portalProvisioned; attempt += 1) {
+        try {
+          const provisioned = await provisionPortalClient(provisionArgs);
+          portalUid = provisioned.uid;
+          portalNewlyCreated = Boolean(provisioned.newlyCreated);
+          portalProvisioned = true;
+        } catch (portalError) {
+          lastProvisionError = portalError?.message || "provisioning failed";
+          console.error(
+            `Portal provisioning attempt ${attempt} failed:`,
+            lastProvisionError,
+          );
+        }
+      }
+
+      // The customer has already paid. Persist the failure so the missing
+      // account shows up in a queryable backlog instead of only in the logs.
+      if (!portalProvisioned) {
+        await recordProvisioningFailure(lockDb, {
+          ...provisionArgs,
+          error: lastProvisionError,
+        });
+      } else {
+        await clearProvisioningFailure(lockDb, parsed.transactionid || "");
       }
     }
 
-    const db = getAdminFirestore();
+    const db = lockDb;
     const transactionId = parsed.transactionid || "";
     const customerVaultId = parsed.customer_vault_id || "";
     if (db && transactionId) {

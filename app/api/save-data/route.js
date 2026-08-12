@@ -1,4 +1,5 @@
 import axios from "axios";
+import { saveLead, recordLeadDelivery } from "@/lib/leadStore";
 import { NextResponse } from "next/server";
 import { createTransport } from "nodemailer";
 
@@ -112,6 +113,19 @@ export async function POST(req) {
       }
     }
 
+    // PERSIST FIRST. Email and CRM are best-effort notifications on top of a
+    // durable record — a Gmail throttle or webhook timeout must never lose a
+    // paid click.
+    const stored = await saveLead(data);
+    if (!stored.saved) {
+      console.error("Lead persistence failed:", stored.reason);
+    }
+
+    let emailSent = false;
+    let emailError = "";
+    let crmSent = false;
+    let crmError = "";
+
     // sending data to gmail account -start
     const transporter = createTransport({
       service: "gmail",
@@ -126,13 +140,21 @@ export async function POST(req) {
     const customerName = [data.firstName, data.lastName].filter(Boolean).join(" ") || data.emailAddress || "New lead";
     const subject = `[LTO] Step ${stage.number}/4: ${stage.title} — ${customerName}`;
 
-    await transporter.sendMail({
-      from: `Legal Trademark Office <${process.env.MAILER_EMAIL}>`,
-      to: process.env.MAILER_EMAIL,
-      replyTo: data.emailAddress || process.env.MAILER_EMAIL,
-      subject: subject,
-      html: formBody,
-    });
+    try {
+      await transporter.sendMail({
+        from: `Legal Trademark Office <${process.env.MAILER_EMAIL}>`,
+        to: process.env.MAILER_EMAIL,
+        replyTo: data.emailAddress || process.env.MAILER_EMAIL,
+        subject: subject,
+        html: formBody,
+      });
+      emailSent = true;
+    } catch (err) {
+      // Gmail throttling used to throw here and abort the whole handler, so the
+      // CRM never received the lead either. The record is already in Firestore.
+      emailError = err?.message || "sendMail failed";
+      console.error("Lead email failed:", emailError);
+    }
     // sending data to gmail account -end
 
     // Receipt emails are handled by the dedicated /send-receipt route. Avoid
@@ -148,11 +170,29 @@ export async function POST(req) {
           { ...data, brand: "legal_trademark_office" },
           { headers: { "x-api-key": crmIngestKey }, timeout: 8000 }
         );
+        crmSent = true;
         console.log("CRM lead ingest: ok");
       } catch (err) {
-        // Never block the form flow on CRM failure — email already sent.
-        console.log("CRM lead ingest error:", err?.response?.data || err?.message);
+        // Never block the form flow on CRM failure — the lead is in Firestore.
+        crmError = err?.response?.data
+          ? JSON.stringify(err.response.data)
+          : err?.message || "CRM post failed";
+        console.error("CRM lead ingest error:", crmError);
       }
+    } else {
+      // Not configured, so nothing to retry.
+      crmSent = true;
+    }
+
+    // Flag anything that did not reach email or the CRM so failed handoffs can
+    // be found later with a needsRetry query instead of grepping logs.
+    if (stored.saved) {
+      await recordLeadDelivery(stored.id, {
+        emailSent,
+        crmSent,
+        emailError,
+        crmError,
+      });
     }
 
     // sending data to ZOHO - disabled via env or default off
