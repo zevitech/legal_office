@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { saveStepTwo } from "@/features/formSlice";
 import { IoMdLock } from "react-icons/io";
-import { HiOutlineCheck, HiOutlineInformationCircle, HiOutlineSearch } from "react-icons/hi";
+import { HiOutlineCheck, HiOutlineSearch } from "react-icons/hi";
 import { trackClassificationComplete } from "@/utils/tracking";
 
 const INDUSTRIES = [
@@ -126,14 +126,6 @@ const StepTwo = () => {
       </section>
 
       <Textarea label="Anything else customers buy from you?" description="Use everyday language. Our filing specialist will confirm the final wording and classes." variant="bordered" labelPlacement="outside" placeholder="Example: custom printed packaging and an online store selling stationery" radius="lg" minRows={3} value={customActivity} onChange={(event) => { setCustomActivity(event.target.value); setValidation(false); }} isInvalid={validation} errorMessage="Select an activity or describe what your business offers." />
-
-      <section className="rounded-2xl border-2 border-blue-200 bg-blue-50 p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div><p className="text-sm font-semibold text-blue-700">Potential trademark coverage</p><p className="mt-1 text-2xl font-bold text-slate-900">{Math.max(uniqueClasses.length, customActivity ? 1 : 0)} potential USPTO {Math.max(uniqueClasses.length, customActivity ? 1 : 0) === 1 ? "class" : "classes"}</p><p className="mt-2 text-sm text-slate-600">Based only on the business activities selected above.</p></div>
-          <div className="rounded-xl bg-white px-5 py-3 text-left shadow-sm sm:text-right"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Government filing fee</p><p className="mt-1 text-xl font-bold text-slate-900">$350 per class</p><p className="text-xs text-slate-500">Paid separately before filing</p></div>
-        </div>
-        <div className="mt-4 flex items-start gap-2 border-t border-blue-200 pt-4 text-xs leading-5 text-blue-950"><HiOutlineInformationCircle className="mt-0.5 shrink-0 text-lg" /><p>Your attorney will confirm the final classes and filing strategy with you before the application is submitted.</p></div>
-      </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="text-lg font-bold text-slate-900">How would you like your classes finalized?</h2>
