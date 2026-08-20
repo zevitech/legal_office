@@ -170,7 +170,7 @@ const Header = () => {
           </nav>
 
           <div className="max-md:hidden">
-            <PrimaryButton text="Trademark Now" animate={true} size="sm" />
+            <PrimaryButton text="Trademark Now" animate={false} size="sm" />
           </div>
         </div>
       </header>
