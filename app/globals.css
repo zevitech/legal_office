@@ -200,7 +200,9 @@ button,
 
 .hero-cta {
   animation: hero-cta-glow 2.2s ease-in-out infinite;
-  transition: background-color 180ms ease, box-shadow 180ms ease;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 /* Pause the breathing on hover so it does not fight the hover state. */

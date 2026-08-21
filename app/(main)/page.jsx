@@ -75,9 +75,9 @@ const page = () => {
 
         {/* Statistic Section */}
         <section className="flex-center gap-16 max-md:gap-7 py-10 max-md:flex-wrap">
-          <StatisticCountBox text={`Trademarks since 2009`} number={200000} />
+          <StatisticCountBox text={`Trademarks since 2009`} number={2300} />
           <div className="block max-md:hidden">
-            <StatisticCountBox text={`Happy Customers`} number={120000} />
+            <StatisticCountBox text={`Happy Customers`} number={2300} />
           </div>
           <StatisticCountBox text={`Years in Service`} number={15} />
           <div className="hidden max-md:block">
