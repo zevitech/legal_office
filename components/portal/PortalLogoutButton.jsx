@@ -13,7 +13,11 @@ const styles = {
     "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-extrabold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-[#027dd6] sm:px-4",
 };
 
-export default function PortalLogoutButton({ variant = "sidebar", preview = false, redirectTo = "/portal-login" }) {
+export default function PortalLogoutButton({
+  variant = "sidebar",
+  preview = false,
+  redirectTo = "/portal-login",
+}) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -42,9 +46,15 @@ export default function PortalLogoutButton({ variant = "sidebar", preview = fals
       disabled={busy}
       onClick={handleLogout}
       className={`${styles[variant] || styles.sidebar} disabled:cursor-wait disabled:opacity-60`}
-      aria-label={preview ? "Exit attorney portal preview" : "Sign out of the secure portal"}
+      aria-label={
+        preview
+          ? "Exit attorney portal preview"
+          : "Sign out of the secure portal"
+      }
     >
-      {variant === "header" && <HiOutlineArrowRightOnRectangle className="text-base" />}
+      {variant === "header" && (
+        <HiOutlineArrowRightOnRectangle className="text-base" />
+      )}
       {busy ? "Signing out…" : preview ? "Exit preview" : "Sign out"}
     </button>
   );

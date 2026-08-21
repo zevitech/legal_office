@@ -3,26 +3,18 @@ import Header from "@/components/ui/Header";
 import StatisticCountBox from "@/components/ui/StatisticCountBox";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
-import { CiSearch } from "react-icons/ci";
 import HeaderText from "@/components/ui/HeaderText";
 import TMButton from "@/components/ui/TMButton";
 import AttorneyCard from "@/components/ui/AttorneyCard";
 import StepCard from "@/components/ui/StepCard";
 import Link from "next/link";
 import { FaArrowRightLong, FaShieldHeart } from "react-icons/fa6";
-import { TbWorld } from "react-icons/tb";
 import { IoMdTime } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
-import BrandCarousel from "@/components/ui/BrandCarousel";
-import PackagesSection from "@/components/sections/PackagesSection";
-import TestimonialSection from "@/components/sections/TestimonialSection";
-import LearningCard from "@/components/ui/LearningCard";
 import FooterSection from "@/components/sections/FooterSection";
 import SimilarMarks from "@/components/sections/SimilarMarks";
 import { BiSearch } from "react-icons/bi";
 import Searchbar from "@/components/pages/home/search-bar";
-import PackageCard from "@/components/ui/PackageCard";
-import { PackagesUpdatedData } from "@/constant/form2.0/system-step-three-data";
 import PackageCard2 from "@/components/ui/PackageCard2";
 
 export const metadata = {
