@@ -27,7 +27,7 @@ const Header = () => {
   // Handle scroll direction for showing/hiding header
   useEffect(() => {
     // Check if window is available (client-side only)
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;

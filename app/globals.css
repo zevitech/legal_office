@@ -183,19 +183,29 @@ button,
   animation: expand-in-out 1s ease-in-out infinite;
 }
 
+/* A visible but gentle pulse: 3.5% scale with a matching glow. Tailwind's
+   animate-pulse halves opacity every 2s, which reads as flashing on a large
+   primary CTA — this scales instead, so it draws the eye without strobing. */
 @keyframes hero-cta-glow {
   0%,
   100% {
+    transform: scale(1);
     box-shadow: 0 12px 28px rgba(2, 125, 214, 0.24);
   }
   50% {
-    box-shadow: 0 16px 36px rgba(2, 125, 214, 0.4);
+    transform: scale(1.035);
+    box-shadow: 0 20px 42px rgba(2, 125, 214, 0.45);
   }
 }
 
 .hero-cta {
-  animation: hero-cta-glow 3.2s ease-in-out infinite;
+  animation: hero-cta-glow 2.2s ease-in-out infinite;
   transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+/* Pause the breathing on hover so it does not fight the hover state. */
+.hero-cta:hover {
+  animation-play-state: paused;
 }
 
 html,
