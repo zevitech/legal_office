@@ -29,7 +29,7 @@ const AccordionBox = () => {
         aria-label="Definitions"
         startContent={<FiBookOpen className="text-primary" />}
         title={
-          <h3 className="text-slate-600 text-lg font-semibold">Definitions</h3>
+          <span className="text-slate-600 text-lg font-semibold">Definitions</span>
         }
       >
         <div className="w-[90%] m-auto">
@@ -47,9 +47,9 @@ const AccordionBox = () => {
         aria-label="The application process"
         startContent={<FcProcess className="text-warning" />}
         title={
-          <h3 className="text-slate-600 text-lg font-semibold">
+          <span className="text-slate-600 text-lg font-semibold">
             The application process
-          </h3>
+          </span>
         }
       >
         <div className="w-[90%] m-auto">
@@ -67,9 +67,9 @@ const AccordionBox = () => {
         aria-label="Basic Questions"
         startContent={<RiQuestionnaireLine className="text-danger" />}
         title={
-          <h3 className="text-slate-600 text-lg font-semibold">
+          <span className="text-slate-600 text-lg font-semibold">
             Basic Questions
-          </h3>
+          </span>
         }
       >
         <div className="w-[90%] m-auto">

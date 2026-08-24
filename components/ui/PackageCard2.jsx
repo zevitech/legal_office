@@ -53,7 +53,7 @@ const PackageCard2 = () => (
       {plans.map((plan) => (
         <article key={plan.name} className={`overflow-hidden rounded-2xl border-2 bg-white shadow-sm ${plan.name === "Premium" ? "border-primary-theme" : "border-slate-200"}`}>
           <div className={`flex items-center justify-between p-5 ${plan.name === "Premium" ? "bg-primary-theme text-white" : "bg-slate-50 text-slate-900"}`}>
-            <div><span className="text-xs font-bold uppercase tracking-wide opacity-75">{plan.badge}</span><h3 className="mt-1 text-xl font-bold">{plan.name}</h3></div>
+            <div><span className="text-xs font-bold uppercase tracking-wide opacity-75">{plan.badge}</span><p className="mt-1 text-xl font-bold">{plan.name}</p></div>
             <div className="text-right"><p className="text-3xl font-bold">{plan.price}</p><p className="text-[10px] opacity-75">service fee</p></div>
           </div>
           <div className="space-y-3 overflow-hidden p-5">

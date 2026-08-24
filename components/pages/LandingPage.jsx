@@ -106,9 +106,10 @@ const LandingPage = () => {
                 </span>
               </h2>
               <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
-                Complete our guided online questionnaire, review your filing
-                details before submission, and follow your application from one
-                secure customer account.
+                Use our guided questionnaire to prepare a business name, slogan
+                or logo trademark application, review the filing details before
+                submission, and follow your application from one secure customer
+                account.
               </p>
             </div>
           </div>
