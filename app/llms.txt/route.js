@@ -12,12 +12,21 @@ export function GET() {
 - [Frequently asked questions](${baseUrl}/faq): General service questions
 - [About](${baseUrl}/about-us): Company information
 - [Contact](${baseUrl}/contact-us): Customer contact options
+- [Editorial standards](${baseUrl}/editorial-policy): Source, review, update, and corrections policy for educational content
 
 ## Educational content
-- [U.S. trademark registration guides](${baseUrl}/guides): Official-source explanations of the registration process, costs, and clearance searching
+- [U.S. trademark registration guides](${baseUrl}/guides): Official-source explanations covering filing preparation, examination, registration, and maintenance
 - [Trademark registration process](${baseUrl}/guides/trademark-registration-process): Step-by-step federal process and maintenance overview
 - [Trademark application cost](${baseUrl}/guides/trademark-cost): USPTO fees, possible added costs, and service-fee distinctions
 - [Trademark search and likelihood of confusion](${baseUrl}/guides/trademark-search-likelihood-of-confusion): Federal searching and conflict-analysis fundamentals
+- [Trademark classes](${baseUrl}/guides/trademark-classes): Goods, services, international classes, and ID Manual basics
+- [Use in commerce vs. intent to use](${baseUrl}/guides/use-in-commerce-vs-intent-to-use): Filing-basis requirements and later steps
+- [Trademark specimens](${baseUrl}/guides/trademark-specimens): Evidence-of-use examples and common problems
+- [Trademark application checklist](${baseUrl}/guides/trademark-application-checklist): Pre-filing information and evidence checklist
+- [Trademark timeline and status](${baseUrl}/guides/trademark-timeline-status): Examination, publication, allowance, and registration stages
+- [Trademark office actions](${baseUrl}/guides/trademark-office-actions): Requirements, refusals, response periods, and official records
+- [Trademark renewal deadlines](${baseUrl}/guides/trademark-renewal-deadlines): Section 8, Section 9, and maintenance windows
+- [Trademark scams and misleading notices](${baseUrl}/guides/trademark-scams-misleading-notices): TSDR verification and warning signs
 - [Trademark articles](${baseUrl}/blogs): Published educational articles and updates
 
 ## Policies

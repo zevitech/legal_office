@@ -15,7 +15,7 @@ Every educational page must:
 
 Fees, deadlines, forms and processing-time statements require quarterly review. Stable fundamentals require annual review.
 
-## Pillar and spoke architecture
+## Pillar and spoke architecture — completed August 24, 2026
 
 | Priority | Planned URL | Primary intent | Required internal links |
 | --- | --- | --- | --- |
@@ -31,6 +31,8 @@ Fees, deadlines, forms and processing-time statements require quarterly review. 
 | 10 | `/guides/trademark-renewal-deadlines` | Registration maintenance | Renewal service, specimens, timeline |
 | 11 | `/guides/word-mark-vs-logo-trademark` | Mark-format education | Search, classes, checklist |
 | 12 | `/guides/trademark-vs-copyright-vs-patent` | IP right comparison | Process and mark-format guide |
+
+All twelve original roadmap priorities are now written. The release also includes distinct resources for ownership, common-law rights, distinctiveness, publication/opposition, intent-to-use Statements of Use, TSDR status, goods/services wording, and misleading notice verification, bringing the authority library to 20 pages.
 
 Every spoke links back to `/guides/trademark-registration-process`. The pillar links to every spoke in the relevant process section. Transaction-proximate pages may link to `/trademark-registration` using restrained anchors such as “guided filing support” or “compare filing-support plans.”
 

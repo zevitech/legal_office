@@ -82,6 +82,16 @@ function SearchGuide() {
   </>;
 }
 
+function StructuredGuide({ sections }) {
+  return sections.map((section) => (
+    <section key={section.heading}>
+      <h2>{section.heading}</h2>
+      {section.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      {section.list ? <ul>{section.list.map((item) => <li key={item}>{item}</li>)}</ul> : null}
+    </section>
+  ));
+}
+
 const guideContent = {
   "trademark-registration-process": <ProcessGuide />,
   "trademark-cost": <CostGuide />,
@@ -92,7 +102,9 @@ export default function TrademarkGuidePage({ params }) {
   const guide = getTrademarkGuide(params.slug);
   if (!guide) notFound();
   const canonical = `${guideBaseUrl}/${guide.slug}`;
-  const relatedGuides = trademarkGuides.filter(({ slug }) => slug !== guide.slug);
+  const sameCluster = trademarkGuides.filter((item) => item.slug !== guide.slug && item.cluster === guide.cluster);
+  const otherClusters = trademarkGuides.filter((item) => item.slug !== guide.slug && item.cluster !== guide.cluster);
+  const relatedGuides = [...sameCluster, ...otherClusters].slice(0, 5);
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -107,6 +119,7 @@ export default function TrademarkGuidePage({ params }) {
         author: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
         publisher: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
         citation: guide.sourceUrls,
+        isPartOf: { "@id": `${guideBaseUrl}#page` },
       },
       {
         "@type": "BreadcrumbList",
@@ -121,6 +134,8 @@ export default function TrademarkGuidePage({ params }) {
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
-    <GuideShell guide={guide} relatedGuides={relatedGuides}>{guideContent[guide.slug]}</GuideShell>
+    <GuideShell guide={guide} relatedGuides={relatedGuides}>
+      {guideContent[guide.slug] || <StructuredGuide sections={guide.sections} />}
+    </GuideShell>
   </>;
 }

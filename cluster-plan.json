@@ -1,45 +1,42 @@
 {
-  "version": "1.0",
+  "version": "1.9.6",
   "market": "United States",
   "seed_keyword": "trademark registration",
   "created_at": "2026-08-24",
-  "pillar": {
-    "title": "Trademark Registration Filing Support",
-    "keyword": "trademark registration",
-    "url": "https://www.legaltrademarkoffice.com/trademark-registration",
-    "template": "landing-page",
-    "status": "written"
-  },
-  "supporting_hub": {
-    "title": "U.S. Trademark Registration Guides",
-    "url": "https://www.legaltrademarkoffice.com/guides",
-    "status": "written"
-  },
-  "spokes": [
-    {
-      "keyword": "trademark registration process",
-      "url": "https://www.legaltrademarkoffice.com/guides/trademark-registration-process",
-      "status": "written"
-    },
-    {
-      "keyword": "trademark application cost",
-      "url": "https://www.legaltrademarkoffice.com/guides/trademark-cost",
-      "status": "written"
-    },
-    {
-      "keyword": "trademark search likelihood of confusion",
-      "url": "https://www.legaltrademarkoffice.com/guides/trademark-search-likelihood-of-confusion",
-      "status": "written"
-    }
+  "pillar": { "title": "Trademark Registration Filing Support", "keyword": "trademark registration", "url": "https://www.legaltrademarkoffice.com/trademark-registration", "template": "landing-page", "status": "written" },
+  "supporting_hub": { "title": "U.S. Trademark Registration Guides", "url": "https://www.legaltrademarkoffice.com/guides", "schema": ["CollectionPage", "ItemList", "BreadcrumbList"], "status": "written" },
+  "clusters": [
+    { "name": "Trademark fundamentals", "posts": [
+      { "keyword": "trademark registration process", "url": "/guides/trademark-registration-process", "status": "written" },
+      { "keyword": "trademark search likelihood of confusion", "url": "/guides/trademark-search-likelihood-of-confusion", "status": "written" },
+      { "keyword": "trademark vs copyright vs patent", "url": "/guides/trademark-vs-copyright-vs-patent", "status": "written" },
+      { "keyword": "common law vs federal trademark", "url": "/guides/common-law-vs-federal-trademark", "status": "written" },
+      { "keyword": "strong trademarks distinctiveness", "url": "/guides/strong-trademarks-distinctiveness", "status": "written" }
+    ]},
+    { "name": "Application preparation", "posts": [
+      { "keyword": "trademark application cost", "url": "/guides/trademark-cost", "status": "written" },
+      { "keyword": "trademark classes", "url": "/guides/trademark-classes", "status": "written" },
+      { "keyword": "use in commerce vs intent to use", "url": "/guides/use-in-commerce-vs-intent-to-use", "status": "written" },
+      { "keyword": "trademark specimens", "url": "/guides/trademark-specimens", "status": "written" },
+      { "keyword": "trademark application checklist", "url": "/guides/trademark-application-checklist", "status": "written" },
+      { "keyword": "word mark vs logo trademark", "url": "/guides/word-mark-vs-logo-trademark", "status": "written" },
+      { "keyword": "trademark owner applicant", "url": "/guides/trademark-owner-applicant", "status": "written" },
+      { "keyword": "trademark goods services identification", "url": "/guides/trademark-goods-services-identification", "status": "written" }
+    ]},
+    { "name": "Examination and status", "posts": [
+      { "keyword": "trademark application timeline", "url": "/guides/trademark-timeline-status", "status": "written" },
+      { "keyword": "trademark office actions", "url": "/guides/trademark-office-actions", "status": "written" },
+      { "keyword": "trademark publication opposition", "url": "/guides/trademark-publication-opposition", "status": "written" },
+      { "keyword": "intent to use statement of use", "url": "/guides/intent-to-use-statement-of-use", "status": "written" },
+      { "keyword": "check trademark status TSDR", "url": "/guides/trademark-status-tsdr", "status": "written" }
+    ]},
+    { "name": "Maintenance and safety", "posts": [
+      { "keyword": "trademark renewal deadlines", "url": "/guides/trademark-renewal-deadlines", "status": "written" },
+      { "keyword": "trademark scams misleading notices", "url": "/guides/trademark-scams-misleading-notices", "status": "written" }
+    ]}
   ],
-  "constraints": {
-    "primary_commercial_keyword_has_one_url": true,
-    "target_country": "US",
-    "official_source": "USPTO",
-    "international_pages": false
-  },
-  "limitations": [
-    "No paid keyword-volume source is connected.",
-    "Full top-10 SERP overlap matrix was not available."
-  ]
+  "linking": { "hub_links_to_every_spoke": true, "every_spoke_links_to_hub": true, "related_links_per_spoke": 5, "commercial_target": "/trademark-registration", "exact_match_external_anchor_required": false },
+  "scorecard": { "resources_written": 20, "resources_planned": 20, "coverage": 1, "orphanPages": 0, "cannibalization": 0, "contentGaps": 0 },
+  "constraints": { "primary_commercial_keyword_has_one_url": true, "target_country": "US", "official_source": "USPTO", "international_pages": false },
+  "limitations": ["No paid keyword-volume or DataForSEO source is connected.", "Intent separation uses current official-source and public SERP evidence; a complete paid top-10 overlap matrix remains unavailable.", "External authority and reputation require earned third-party mentions and cannot be manufactured in source code."]
 }

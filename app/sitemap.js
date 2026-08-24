@@ -1,6 +1,7 @@
 const baseUrl = "https://www.legaltrademarkoffice.com";
 
 import client from "@/utils/contentful";
+import { trademarkGuides } from "@/lib/trademarkGuides";
 
 export const revalidate = 3600;
 
@@ -9,11 +10,9 @@ const publicRoutes = [
   "/about-us",
   "/blogs",
   "/contact-us",
+  "/editorial-policy",
   "/faq",
   "/guides",
-  "/guides/trademark-registration-process",
-  "/guides/trademark-cost",
-  "/guides/trademark-search-likelihood-of-confusion",
   "/legal/privacy",
   "/legal/refund-policy",
   "/legal/terms",
@@ -24,7 +23,8 @@ const publicRoutes = [
 ];
 
 export default async function sitemap() {
-  const staticUrls = publicRoutes.map((route) => ({
+  const guideRoutes = trademarkGuides.map(({ slug }) => `/guides/${slug}`);
+  const staticUrls = [...publicRoutes, ...guideRoutes].map((route) => ({
     url: `${baseUrl}${route || "/"}`,
   }));
 

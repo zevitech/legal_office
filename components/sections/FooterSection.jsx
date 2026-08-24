@@ -97,6 +97,7 @@ const FooterSection = () => {
           <Link className="hover:text-white hover:underline" href="/legal/privacy">Privacy Policy</Link>
           <Link className="hover:text-white hover:underline" href="/legal/terms">Terms</Link>
           <Link className="hover:text-white hover:underline" href="/legal/refund-policy">Refund Policy</Link>
+          <Link className="hover:text-white hover:underline" href="/editorial-policy">Editorial Standards</Link>
         </nav>
 
         <p className="text-center text-sm md:text-base mt-2">

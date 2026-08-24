@@ -3,27 +3,35 @@
 Primary commercial keyword: **trademark registration**  
 Primary conversion URL: `https://www.legaltrademarkoffice.com/trademark-registration`
 
-The exact commercial intent belongs only to the landing page. Educational pages answer narrower questions and link back to the primary URL. They must not present themselves as alternate registration service pages.
+The commercial head term belongs only to the landing page. The `/guides` hub and 20 official-source resources answer distinct informational questions and link users toward the commercial page only when filing support is relevant.
 
-## Published in the first authority release
+## Completed authority library
 
-| Role | Primary informational intent | URL | Status |
-|---|---|---|---|
-| Hub | U.S. trademark registration guides | `/guides` | Written |
-| Spoke | trademark registration process | `/guides/trademark-registration-process` | Written |
-| Spoke | trademark application cost | `/guides/trademark-cost` | Written |
-| Spoke | trademark search and likelihood of confusion | `/guides/trademark-search-likelihood-of-confusion` | Written |
+| Cluster | Completed resources |
+|---|---:|
+| Trademark fundamentals | 5 |
+| Application preparation | 8 |
+| Examination and status | 5 |
+| Maintenance and safety | 2 |
+| **Total** | **20** |
 
-## Next supporting pages
+The library covers the federal process, searching, costs, classes, filing bases, specimens, pre-filing preparation, timelines, office actions, maintenance, ownership, mark format, distinctiveness, common-law rights, opposition, Statements of Use, TSDR, intellectual-property comparisons, goods/services wording, and scam verification.
 
-Trademark classes, filing basis, specimens, application checklist, timeline, office actions, renewal deadlines, and word-mark-versus-logo education remain planned. Each requires a unique informational intent and a contextual link to the primary landing page.
+## Indexation and schema
 
-## Linking rules
+- The hub uses `CollectionPage`, `ItemList`, and `BreadcrumbList` JSON-LD.
+- Every guide uses server-rendered `Article` and `BreadcrumbList` JSON-LD.
+- Every URL has a self-canonical, unique title, description, H1, answer-first summary, publication/review date, and official citations.
+- The sitemap and `/llms.txt` discover the complete guide library.
 
-- Every guide links to `/trademark-registration` with a natural trademark-registration-support anchor.
-- The hub links to every guide; every guide links to the hub and its siblings.
-- The landing page remains the only page optimized for the head commercial term.
-- Do not create state or city duplicates for a federal U.S. service.
-- Do not use repetitive exact-match anchors in external backlink outreach.
+## Internal linking rules
 
-Keyword-volume and full SERP-overlap metrics are not included because no paid SERP data source is connected. Architecture is based on distinct observed search intents and must be validated against Search Console query data after indexing.
+- The hub links to all 20 resources.
+- Every resource links back to the hub, five related resources, and the commercial page through a restrained filing-support call to action.
+- Related-resource selection prioritizes the same topical cluster.
+- The main landing page remains the only URL assigned the exact commercial head term.
+- State/city duplicates, repetitive external exact-match anchors, and thin keyword variants are prohibited.
+
+## Evidence limitation
+
+Real keyword volume and a complete top-ten overlap matrix require a connected paid SERP data source. The current architecture separates clearly different observed intents and should be refined with Search Console query data after the pages are deployed and indexed.

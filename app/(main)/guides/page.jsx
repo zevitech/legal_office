@@ -6,6 +6,13 @@ import FooterSection from "@/components/sections/FooterSection";
 
 const canonical = "https://www.legaltrademarkoffice.com/guides";
 
+const clusterLabels = {
+  fundamentals: "Trademark fundamentals",
+  preparation: "Prepare a trademark application",
+  examination: "USPTO examination and status",
+  maintenance: "Registration maintenance and safety",
+};
+
 export const metadata = {
   title: "U.S. Trademark Registration Guides | Legal Trademark Office",
   description: "Official-source educational guides covering the U.S. trademark registration process, USPTO fees, clearance searches, and filing preparation.",
@@ -24,6 +31,17 @@ export default function TrademarkGuidesPage() {
         description: metadata.description,
         publisher: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
         hasPart: trademarkGuides.map((guide) => ({ "@id": `${canonical}/${guide.slug}#article` })),
+      },
+      {
+        "@type": "ItemList",
+        name: "U.S. trademark registration guide library",
+        numberOfItems: trademarkGuides.length,
+        itemListElement: trademarkGuides.map((guide, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: guide.shortTitle,
+          url: `${canonical}/${guide.slug}`,
+        })),
       },
       {
         "@type": "BreadcrumbList",
@@ -47,15 +65,24 @@ export default function TrademarkGuidesPage() {
           <h1 className="mt-3 text-4xl font-bold leading-tight text-slate-950 md:text-6xl">U.S. trademark registration guides</h1>
           <p className="mt-6 text-lg leading-8 text-slate-700">Understand the federal filing process before making a decision. These independent educational guides use current USPTO sources and separate government requirements from optional filing-support services.</p>
         </header>
-        <section className="mt-12 grid gap-6 md:grid-cols-3" aria-label="Trademark guides">
-          {trademarkGuides.map((guide) => (
-            <article key={guide.slug} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-              <h2 className="text-2xl font-bold leading-snug text-slate-950">{guide.shortTitle}</h2>
-              <p className="mt-4 flex-1 leading-7 text-slate-700">{guide.description}</p>
-              <Link className="mt-6 font-semibold text-blue-800 underline" href={`/guides/${guide.slug}`}>Read the guide</Link>
-            </article>
-          ))}
-        </section>
+        <p className="mt-6 text-sm font-semibold text-blue-800">{trademarkGuides.length} official-source educational resources</p>
+        {Object.entries(clusterLabels).map(([cluster, label]) => {
+          const guides = trademarkGuides.filter((guide) => guide.cluster === cluster);
+          return (
+            <section className="mt-14" aria-labelledby={`cluster-${cluster}`} key={cluster}>
+              <h2 className="text-3xl font-bold text-slate-950" id={`cluster-${cluster}`}>{label}</h2>
+              <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {guides.map((guide) => (
+                  <article key={guide.slug} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                    <h3 className="text-2xl font-bold leading-snug text-slate-950">{guide.shortTitle}</h3>
+                    <p className="mt-4 flex-1 leading-7 text-slate-700">{guide.description}</p>
+                    <Link className="mt-6 font-semibold text-blue-800 underline" href={`/guides/${guide.slug}`}>Read the guide</Link>
+                  </article>
+                ))}
+              </div>
+            </section>
+          );
+        })}
         <p className="mt-12 max-w-3xl rounded-xl bg-slate-100 p-5 text-sm leading-6 text-slate-700">Legal Trademark Office is an independent trademark filing-support provider and is not affiliated with the USPTO. This resource center provides general education, not legal advice.</p>
         </div>
       </main>
