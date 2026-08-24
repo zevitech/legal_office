@@ -268,7 +268,6 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
-          <p className="mt-6 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">Careful preparation can reduce avoidable errors, but it does not guarantee USPTO approval.</p>
         </div>
       </section>
 
