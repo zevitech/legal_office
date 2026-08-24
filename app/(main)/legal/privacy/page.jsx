@@ -1,6 +1,9 @@
 import LegalPage from "@/components/legal/LegalPage";
 
-export const metadata = { title: "Privacy Policy | Legal Trademark Office" };
+export const metadata = {
+  title: "Privacy Policy | Legal Trademark Office",
+  alternates: { canonical: "/legal/privacy" },
+};
 
 export default function PrivacyPage() {
   return (

@@ -1,6 +1,9 @@
 import LegalPage from "@/components/legal/LegalPage";
 
-export const metadata = { title: "Terms of Service | Legal Trademark Office" };
+export const metadata = {
+  title: "Terms of Service | Legal Trademark Office",
+  alternates: { canonical: "/legal/terms" },
+};
 
 export default function TermsPage() {
   return (

@@ -28,6 +28,12 @@ export const metadata = {
 const page = () => {
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero-banner.jpg"
+        fetchPriority="high"
+      />
       <Header />
       <main className="bg-slate-100">
         {/* Hero Section */}

@@ -44,3 +44,6 @@ serviceAccountKey*.json
 .env
 vercel-env-production.txt
 firebase-admin-private-key.txt
+
+# Local SEO audit and drift baselines
+.seo-cache/

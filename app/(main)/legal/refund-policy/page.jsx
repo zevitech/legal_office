@@ -1,6 +1,9 @@
 import LegalPage from "@/components/legal/LegalPage";
 
-export const metadata = { title: "Refund Policy | Legal Trademark Office" };
+export const metadata = {
+  title: "Refund Policy | Legal Trademark Office",
+  alternates: { canonical: "/legal/refund-policy" },
+};
 
 export default function RefundPolicyPage() {
   return (
