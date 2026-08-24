@@ -378,7 +378,7 @@ const StepTwo = ({ previewMode = false }) => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if (!classificationSummary) {
+    if (!classificationSummary || (industry?.name === "Other business" && !customActivity.trim())) {
       setValidation(true);
       return;
     }
@@ -460,7 +460,10 @@ const StepTwo = ({ previewMode = false }) => {
                 <button
                   key={item.name}
                   type="button"
-                  onClick={() => setActiveIndustry(item.name)}
+                  onClick={() => {
+                    setActiveIndustry(item.name);
+                    setValidation(false);
+                  }}
                   className={`flex min-h-16 items-center gap-3 rounded-xl border-2 p-3 text-left text-sm font-semibold transition ${selected ? "border-blue-600 bg-blue-50 text-blue-900" : "border-slate-200 bg-white text-slate-700 hover:border-blue-300"}`}
                 >
                   <span className="text-xl" aria-hidden="true">{item.icon}</span>
@@ -475,7 +478,30 @@ const StepTwo = ({ previewMode = false }) => {
           <h2 className="text-xl font-bold text-slate-900">
             <span aria-hidden="true">{industry?.icon}</span> {industry?.name}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">Select all that apply.</p>
+          <p className="mt-1 text-sm text-slate-500">
+            {industry?.name === "Other business" ? "Describe what customers buy from you." : "Select all that apply."}
+          </p>
+          {industry?.name === "Other business" ? (
+            <div className="mt-5">
+              <Textarea
+                label="Describe your business"
+                description="Use everyday language. Include the main products you sell or services you provide."
+                variant="bordered"
+                labelPlacement="outside"
+                placeholder="Example: I provide mobile car detailing and sell vehicle cleaning products online"
+                radius="lg"
+                minRows={6}
+                value={customActivity}
+                onChange={(event) => {
+                  setCustomActivity(event.target.value);
+                  setValidation(false);
+                }}
+                isRequired
+                isInvalid={validation}
+                errorMessage="Describe what your business offers."
+              />
+            </div>
+          ) : (
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {industry?.activities.map((activity) => {
               const selected = selectedActivities.some(
@@ -502,9 +528,11 @@ const StepTwo = ({ previewMode = false }) => {
               );
             })}
           </div>
+          )}
         </div>
       </section>
 
+      {industry?.name !== "Other business" && (
       <Textarea
         label="Anything else customers buy from you?"
         description="Use everyday language. Our filing specialist will confirm the final wording and classes."
@@ -521,6 +549,7 @@ const StepTwo = ({ previewMode = false }) => {
         isInvalid={validation}
         errorMessage="Select an activity or describe what your business offers."
       />
+      )}
 
       <div className="sticky bottom-3 z-20 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:grid-cols-[auto_1fr_auto] sm:items-center">
         <Button
@@ -536,7 +565,7 @@ const StepTwo = ({ previewMode = false }) => {
           onClick={handleFormSubmit}
           className="h-14 w-full bg-primary-theme px-7 text-base font-bold text-white sm:w-auto"
           isLoading={isLoading}
-          isDisabled={!classificationSummary}
+          isDisabled={industry?.name === "Other business" ? !customActivity.trim() : !classificationSummary}
         >
           Continue to packages
         </Button>
