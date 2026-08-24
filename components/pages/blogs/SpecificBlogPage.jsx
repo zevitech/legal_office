@@ -1,88 +1,71 @@
-"use client";
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-// Client-side article view used by the App Router dynamic blog page.
-
-import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import FooterSection from "@/components/sections/FooterSection";
 import Header from "@/components/ui/Header";
-import client from "@/utils/contentful";
-import Image from "next/image";
 
-const SpecificBlogPage = () => {
-  const pathname = usePathname();
-  const id = pathname?.split("/blogs/")[1];
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
+const formatDate = (value) =>
+  new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(value));
 
-  useEffect(() => {
-    if (id) {
-      const fetchBlog = async () => {
-        try {
-          const response = await client.getEntry(id);
-          const blogData = {
-            id: response.sys.id,
-            title: response.fields.blogTitle,
-            img: `https:${response.fields.blogImage.fields.file.url}`,
-            desc: response.fields.blogDescription,
-          };
-          setBlog(blogData);
-        } catch (error) {
-          console.error("Error fetching blog:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchBlog();
-    }
-  }, [id]);
+const SpecificBlogPage = ({ blog }) => (
+  <>
+    <Header />
+    <main className="min-h-screen bg-white">
+      <article className="mx-auto w-[90%] max-w-5xl py-16 lg:px-4">
+        <nav aria-label="Breadcrumb" className="mt-8 text-sm text-slate-600">
+          <ol className="flex flex-wrap items-center gap-2">
+            <li>
+              <Link className="hover:text-primary hover:underline" href="/">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link className="hover:text-primary hover:underline" href="/blogs">
+                Blogs
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="text-slate-900">
+              {blog.title}
+            </li>
+          </ol>
+        </nav>
 
-  if (loading) {
-    return (
-      <div className="w-full h-full flex items-center justify-center py-16">
-        <p className="text-xl">Loading...</p>
-      </div>
-    );
-  }
+        <header className="mt-8">
+          <h1 className="text-[25px] font-semibold leading-tight text-slate-900 sm:text-[30px] lg:text-[40px]">
+            {blog.title}
+          </h1>
+          <p className="mt-4 text-sm text-slate-600">
+            Published {formatDate(blog.datePublished)}
+            {blog.dateModified !== blog.datePublished && (
+              <> · Updated {formatDate(blog.dateModified)}</>
+            )}
+          </p>
+        </header>
 
-  if (!blog) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <p className="text-xl">Blog not found</p>
-      </div>
-    );
-  }
+        <Image
+          src={blog.image}
+          alt={blog.title}
+          width={1200}
+          height={630}
+          priority
+          className="my-12 aspect-[1200/630] w-full rounded-lg object-cover"
+        />
 
-  return (
-    <>
-      <Header />
-      <div className="w-full h-full bg-white">
-        <div className="w-[90%] mx-auto py-16 lg:px-4">
-          <div className="flex flex-col gap-2">
-            <h1 className="lg:mb-12 mt-8 lg:text-[40px] sm:text-[30px] text-[25px] font-medium">
-              <span className="font-semibold text-primary">Discover:</span>{" "}
-              {blog.title} In-Depth Insights and Stories
-            </h1>
-            <div className="flex justify-center my-12">
-              <Image
-                src={blog.img}
-                alt={blog.title}
-                width={800}
-                height={400}
-                className="rounded-lg !object-cover w-full"
-              />
-            </div> 
-            <h1 className="lg:text-[34px] sm:text-[24px] text-[18px] font-medium lg:mt-12">{blog.title}</h1>
-            <p className="sm:text-[14px] text-[12px] text-gray-700 leading-relaxed text-justify">
-              {blog.desc}
-            </p>
-          </div>
+        <div className="whitespace-pre-line text-base leading-8 text-slate-700">
+          {blog.description}
         </div>
-      </div>
-
-      <FooterSection />
-    </>
-  );
-};
+      </article>
+    </main>
+    <FooterSection />
+  </>
+);
 
 export default SpecificBlogPage;

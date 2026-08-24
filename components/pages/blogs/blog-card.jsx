@@ -5,7 +5,6 @@ import { Button, Card, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import PropTypes from "prop-types";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const BlogCard = ({
   id,
@@ -16,8 +15,6 @@ const BlogCard = ({
   maxDescLength = 130,
   isLoading,
 }) => {
-  const router = useRouter();
-
   const highlightText = (text) => {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, "gi");
@@ -30,11 +27,6 @@ const BlogCard = ({
         part
       )
     );
-  };
-
-  const handleOpenBlog = (e) => {
-    e.preventDefault();
-    router.push(`/blogs/${id}`);
   };
 
   return (
@@ -72,7 +64,8 @@ const BlogCard = ({
         </Skeleton>
         <Skeleton isLoaded={!isLoading} className="rounded-lg">
           <Button
-            onClick={handleOpenBlog}
+            as={Link}
+            href={`/blogs/${id}`}
             className="h-[53px] w-full rounded-lg text-white bg-primary"
           >
             Read Blog

@@ -77,7 +77,7 @@ const FooterSection = () => {
               </Link>
               <p>
                 Working Hours:{" "}
-                <span class="font-semibold">9:00 AM – 6:00 PM</span>
+                <span className="font-semibold">9:00 AM – 6:00 PM</span>
               </p>
             </div>
           </div>
@@ -92,6 +92,12 @@ const FooterSection = () => {
           We assist business owners by preparing and submitting trademark
           applications directly to the USPTO on their behalf.
         </p>
+
+        <nav aria-label="Legal policies" className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+          <Link className="hover:text-white hover:underline" href="/legal/privacy">Privacy Policy</Link>
+          <Link className="hover:text-white hover:underline" href="/legal/terms">Terms</Link>
+          <Link className="hover:text-white hover:underline" href="/legal/refund-policy">Refund Policy</Link>
+        </nav>
 
         <p className="text-center text-sm md:text-base mt-2">
           © 2025 <Link className="text-blue-400 hover:underline" href={`#`}>Legal Trademark Office</Link>. All rights reserved.

@@ -98,7 +98,7 @@ export const navItems = [
       {
         id: 1,
         text: "Trademark Registration",
-        route: "/services/trademark-registration",
+        route: "/trademark-registration",
       },
 
       {
@@ -128,6 +128,11 @@ export const navItems = [
     text: "FAQ",
     route: "/faq",
   },
+  {
+    id: 6,
+    text: "Blog",
+    route: "/blogs",
+  },
 ];
 
 export const mobileNavItems = [
@@ -152,6 +157,11 @@ export const mobileNavItems = [
     route: "/faq",
   },
   {
+    id: 10,
+    text: "Blog",
+    route: "/blogs",
+  },
+  {
     id: 6,
     text: "Our Services",
     route: "/services",
@@ -159,7 +169,7 @@ export const mobileNavItems = [
   {
     id: 7,
     text: "Trademark Registration",
-    route: "/services/trademark-registration",
+    route: "/trademark-registration",
   },
 
   {
