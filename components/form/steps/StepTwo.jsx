@@ -419,7 +419,7 @@ const StepTwo = ({ previewMode = false }) => {
         </h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">
           Select everything your business currently offers or plans to offer.
-          Your attorney will use this information to prepare the classification
+          Our filing team will use this information to prepare the classification
           review.
         </p>
       </div>
