@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { trademarkGuides } from "@/lib/trademarkGuides";
+import Header from "@/components/ui/Header";
+import FooterSection from "@/components/sections/FooterSection";
 
 const canonical = "https://www.legaltrademarkoffice.com/guides";
 
@@ -34,9 +36,11 @@ export default function TrademarkGuidesPage() {
   };
 
   return (
-    <main className="bg-slate-50 py-14 md:py-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
+    <>
+      <Header />
+      <main className="bg-slate-50 py-14 md:py-20">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
         <nav aria-label="Breadcrumb" className="mb-8 text-sm text-slate-600"><Link className="hover:underline" href="/">Home</Link> <span aria-hidden="true">/</span> <span aria-current="page">Trademark guides</span></nav>
         <header className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.15em] text-blue-700">Educational resource center</p>
@@ -53,7 +57,9 @@ export default function TrademarkGuidesPage() {
           ))}
         </section>
         <p className="mt-12 max-w-3xl rounded-xl bg-slate-100 p-5 text-sm leading-6 text-slate-700">Legal Trademark Office is an independent trademark filing-support provider and is not affiliated with the USPTO. This resource center provides general education, not legal advice.</p>
-      </div>
-    </main>
+        </div>
+      </main>
+      <FooterSection />
+    </>
   );
 }

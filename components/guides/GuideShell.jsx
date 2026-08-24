@@ -1,11 +1,15 @@
 import Link from "next/link";
+import Header from "@/components/ui/Header";
+import FooterSection from "@/components/sections/FooterSection";
 
 const reviewedDate = "August 24, 2026";
 
 export default function GuideShell({ guide, children, relatedGuides }) {
   return (
-    <main className="bg-slate-50 py-12 md:py-16">
-      <article className="mx-auto max-w-4xl px-5 md:px-8">
+    <>
+      <Header />
+      <main className="bg-slate-50 py-12 md:py-16">
+        <article className="mx-auto max-w-4xl px-5 md:px-8">
         <nav aria-label="Breadcrumb" className="mb-7 text-sm text-slate-600">
           <ol className="flex flex-wrap items-center gap-2">
             <li><Link className="hover:underline" href="/">Home</Link></li>
@@ -68,7 +72,9 @@ export default function GuideShell({ guide, children, relatedGuides }) {
             This guide provides general educational information and is not legal advice. It does not predict or guarantee a USPTO outcome.
           </p>
         </div>
-      </article>
-    </main>
+        </article>
+      </main>
+      <FooterSection />
+    </>
   );
 }
