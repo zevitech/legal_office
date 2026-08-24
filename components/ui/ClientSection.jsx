@@ -24,8 +24,8 @@ const ClientSection = () => {
           <article className="grid min-h-24 grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-cyan-100 bg-white p-4 shadow-sm">
             <span className="text-xs font-bold uppercase tracking-wide text-slate-500">Logo or design</span>
             <div className="flex items-start justify-self-end text-slate-950" aria-label="Nike swoosh logo">
-              <svg viewBox="-6 -6 108 48" className="h-12 w-24 overflow-visible" role="img" aria-hidden="true">
-                <path fill="currentColor" d="M8 22.5c8.4 5 16.4 7.5 24 7.5 6.5 0 13.6-1.8 21.2-5.3L90 7 52.8 18.4c-9.9 3-17.5 4.5-22.8 4.5-7.2 0-12.2-2.3-15-6.9-1.5-2.5-2.2-5.3-2-8.4C8.2 12.9 6.6 17.9 8 22.5Z" />
+              <svg viewBox="0 0 100 42" className="h-12 w-28 overflow-visible" role="img" aria-hidden="true">
+                <path fill="currentColor" d="M6 28c9 7 21 8 35 2L94 6 44 20c-13 4-23 6-29 3-4-2-6-6-5-11-6 6-8 12-4 16Z" />
               </svg>
               <span className="text-[10px] font-bold">®</span>
             </div>
