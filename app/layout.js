@@ -13,27 +13,58 @@ const poppins = Poppins({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://www.legaltrademarkoffice.com"),
   title: "Register Trademark - Legal Trademark Office",
   description:
     "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.legaltrademarkoffice.com/#organization",
+      name: "Legal Trademark Office",
+      url: "https://www.legaltrademarkoffice.com/",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.legaltrademarkoffice.com/images/legal-trademark-office.png",
+      },
+      telephone: "+1-310-424-4909",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "2121 Crystal Dr",
+        addressLocality: "Arlington",
+        addressRegion: "VA",
+        postalCode: "22202",
+        addressCountry: "US",
+      },
+      description:
+        "Independent professional trademark filing support service that assists customers with trademark application preparation and submission.",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.legaltrademarkoffice.com/#website",
+      url: "https://www.legaltrademarkoffice.com/",
+      name: "Legal Trademark Office",
+      publisher: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.legaltrademarkoffice.com/services/trademark-registration/#service",
+      name: "Trademark Registration Filing Support",
+      url: "https://www.legaltrademarkoffice.com/services/trademark-registration",
+      serviceType: "Trademark application preparation and filing support",
+      areaServed: { "@type": "Country", name: "United States" },
+      provider: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
+    },
+  ],
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <meta
-        name="description"
-        content="At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!."
-      />
-      <meta
-        name="keywords"
-        content="Legal Trademark Office, brand identity, trademark registration, trademark,  protect business name"
-      />
-      <meta name="author" content="Legal Trademark Office" />
-      <meta name="developer" content="https://softenum.com/" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="canonical" href="https://legaltrademarkoffice.com/" />
-
       {/* Tawk.to */}
       {/* <Script
         id="tawkTo"
@@ -93,11 +124,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       />
 
       <head>
-        <meta
-          name="keywords"
-          content="where to register business name, trademark my name, trademark brand name, apply for trademark online, trademark a company name, file my trademark, brand name trademark registration, best trademark registration service, trademark filing company, cheap trademark registration, trademark registration, get a trademark, register my business, register my company name, trademark my logo, trademark my business name, apply for trademark, file trademark for business name, trademark registration, register my business name, register business name, trademark a name, file a trademark, get my brand trademarked, trademark and brand registration"
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema).replace(/</g, "\\u003c"),
+          }}
         />
-        <meta name="author" content="Legal Trademark Office" />
       </head>
 
       <body className={`${poppins.className} bg-color-secondary`}>
