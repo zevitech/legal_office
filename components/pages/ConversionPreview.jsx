@@ -29,7 +29,11 @@ const faqs = [
   { question: "How do I follow my application after checkout?", answer: "Your secure customer account keeps your documents, messages, status updates and required actions together in one place." },
 ];
 
-const primaryButton = "inline-flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition duration-200 hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none";
+const primaryButton = "group relative inline-flex min-h-14 cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition duration-200 hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none";
+
+function CtaArrow() {
+  return <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span>;
+}
 
 export default function ConversionPreview({ showPreviewNotice = true }) {
   const router = useRouter();
@@ -48,12 +52,12 @@ export default function ConversionPreview({ showPreviewNotice = true }) {
     <main className="min-h-screen overflow-x-hidden bg-white text-slate-900">
       {showPreviewNotice && <div data-customizer-section="preview-notice" className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-semibold text-amber-950">Private conversion preview · the current live landing page remains unchanged</div>}
 
-      <header data-customizer-section="header" className="border-b border-slate-100 bg-white">
-        <div className="mx-auto flex w-[92%] max-w-6xl items-center justify-between gap-4 py-4">
-          <Image src="/images/legal-trademark-logo.webp" alt="Legal Trademark Office" width={170} height={72} className="h-auto w-32 sm:w-40" priority />
-          <div className="flex items-center gap-3">
-            <a href="tel:+13104244909" className="hidden min-h-11 items-center text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:inline-flex">+1 (310) 424-4909</a>
-            <button type="button" onClick={() => startApplication()} className="min-h-11 cursor-pointer rounded-xl bg-[#087fd3] px-4 text-sm font-bold text-white transition hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200">Start Registration</button>
+      <header data-customizer-section="header" className="border-b border-slate-200 bg-white shadow-[0_1px_0_rgba(15,23,42,.04)]">
+        <div className="mx-auto flex w-[92%] max-w-6xl items-center justify-between gap-5 py-3 sm:py-4">
+          <Image src="/images/legal-trademark-logo.webp" alt="Legal Trademark Office" width={170} height={72} className="h-auto w-28 sm:w-36" priority />
+          <div className="flex items-center gap-2 sm:gap-4">
+            <a href="tel:+13104244909" className="hidden min-h-11 flex-col justify-center rounded-lg px-2 text-right focus:outline-none focus:ring-2 focus:ring-blue-500 md:inline-flex"><span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Questions?</span><span className="text-sm font-bold text-slate-800">+1 (310) 424-4909</span></a>
+            <button type="button" onClick={() => startApplication()} className="min-h-11 cursor-pointer rounded-xl bg-[#087fd3] px-4 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start Registration</button>
           </div>
         </div>
       </header>
@@ -65,9 +69,9 @@ export default function ConversionPreview({ showPreviewNotice = true }) {
           <p className="text-sm font-bold uppercase tracking-[.16em] text-[#026daf]">U.S. trademark filing support</p>
           <h1 data-customizer-text="hero-title" className="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-[1.08] text-slate-900 sm:text-5xl lg:text-6xl">Trademark Registration for Your Business Name, Logo or Slogan</h1>
           <p data-customizer-text="hero-copy" className="mx-auto mt-6 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">Complete a guided questionnaire and our filing team will prepare your application for review. Approve the details, then follow documents and updates from your secure customer account.</p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <button type="button" onClick={() => startApplication()} className={primaryButton}>Start My Trademark Registration <HiArrowRight aria-hidden="true" /></button>
-            <p className="text-sm font-semibold text-slate-600">Service plans from $49 + USPTO filing fee</p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3">
+            <button type="button" onClick={() => startApplication()} className={primaryButton}>Start My Trademark Registration <CtaArrow /></button>
+            <p className="text-sm font-semibold text-slate-600">Service plans from $49 <span aria-hidden="true">·</span> USPTO filing fee separate</p>
           </div>
           <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">
             {["Review before submission", "Secure customer account", "No automatic renewal"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}
@@ -86,7 +90,7 @@ export default function ConversionPreview({ showPreviewNotice = true }) {
         <div className="mt-9 grid gap-4 md:grid-cols-3">
           {marks.map(({id,title,copy,icon:Icon}) => <button key={id} type="button" onClick={() => setSelectedMark(id)} aria-pressed={selectedMark === id} className={`min-h-48 cursor-pointer rounded-2xl border-2 p-6 text-left transition duration-200 focus:outline-none focus:ring-4 focus:ring-blue-200 ${selectedMark === id ? "border-[#087fd3] bg-blue-50 shadow-lg shadow-blue-100" : "border-slate-200 bg-white hover:border-blue-300"}`}><span className={`grid h-12 w-12 place-items-center rounded-xl text-xl ${selectedMark === id ? "bg-[#087fd3] text-white" : "bg-slate-100 text-slate-600"}`}><Icon aria-hidden="true" /></span><h3 className="mt-6 text-xl font-bold">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{copy}</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#026daf]">{selectedMark === id ? <><HiCheck aria-hidden="true" /> Selected</> : "Select"}</span></button>)}
         </div>
-        <div className="mt-7 text-center"><button type="button" onClick={() => startApplication()} className={primaryButton}>Continue with {marks.find((mark) => mark.id === selectedMark)?.title} <HiArrowRight aria-hidden="true" /></button></div>
+        <div className="mt-7 text-center"><button type="button" onClick={() => startApplication()} className={primaryButton}>Continue with {marks.find((mark) => mark.id === selectedMark)?.title} <CtaArrow /></button></div>
       </section>
 
       <section data-customizer-section="process" className="bg-slate-50 px-4 py-16 sm:py-20">
@@ -122,7 +126,7 @@ export default function ConversionPreview({ showPreviewNotice = true }) {
       </section>
 
       <section data-customizer-section="final-cta" className="bg-gradient-to-r from-[#07395c] to-[#087fd3] px-4 py-14 text-white sm:py-16">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-7 text-center lg:flex-row lg:text-left"><div><p className="text-sm font-bold uppercase tracking-[.14em] text-cyan-200">Ready when you are</p><h2 className="mt-2 text-3xl font-black">Start your trademark registration questionnaire</h2><p className="mt-3 text-blue-50">Choose your mark, review the available plans and continue through the secure application.</p></div><button type="button" onClick={() => startApplication()} className="inline-flex min-h-14 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-7 font-bold text-[#026daf] shadow-lg transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-cyan-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Application <HiArrowRight aria-hidden="true" /></button></div>
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-7 text-center lg:flex-row lg:text-left"><div><p className="text-sm font-bold uppercase tracking-[.14em] text-cyan-200">Ready when you are</p><h2 className="mt-2 text-3xl font-black">Start your trademark registration questionnaire</h2><p className="mt-3 text-blue-50">Choose your mark, review the available plans and continue through the secure application.</p></div><button type="button" onClick={() => startApplication()} className="group inline-flex min-h-14 shrink-0 cursor-pointer items-center justify-center gap-3 rounded-xl bg-white px-7 font-bold text-[#026daf] shadow-lg transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-cyan-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Application <span className="grid h-7 w-7 place-items-center rounded-full bg-blue-100 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button></div>
       </section>
 
       <footer data-customizer-section="footer" className="border-t border-slate-200 bg-white px-4 py-8 text-slate-600"><div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm sm:flex-row sm:items-center sm:justify-between"><p>Legal Trademark Office</p><div className="flex flex-wrap gap-5"><a className="hover:text-[#026daf]" href="/legal/privacy">Privacy</a><a className="hover:text-[#026daf]" href="/legal/terms">Terms</a><a className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</a></div></div></footer>

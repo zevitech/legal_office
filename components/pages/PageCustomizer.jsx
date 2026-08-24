@@ -56,6 +56,7 @@ const REPLACEMENT_SECTION_MAP = {
 };
 
 const DEFAULT_CONFIG = {
+  workspace: { landingVersion: "replacement" },
   landing: {
     order: LANDING_SECTIONS.map(({ id }) => id),
     visible: Object.fromEntries(LANDING_SECTIONS.map(({ id }) => [id, true])),
@@ -102,7 +103,7 @@ export default function PageCustomizer() {
   const iframeRef = useRef(null);
   const replacementIframeRef = useRef(null);
   const [mode, setMode] = useState("landing");
-  const [landingVersion, setLandingVersion] = useState("current");
+  const [landingVersion, setLandingVersion] = useState("replacement");
   const [formScreen, setFormScreen] = useState("application");
   const [viewport, setViewport] = useState("desktop");
   const [config, setConfig] = useState(DEFAULT_CONFIG);
@@ -112,7 +113,11 @@ export default function PageCustomizer() {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setConfig((current) => ({ ...current, ...JSON.parse(stored) }));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setConfig((current) => ({ ...current, ...parsed }));
+        setLandingVersion(parsed.workspace?.landingVersion || "replacement");
+      }
     } catch {}
   }, []);
 
@@ -197,6 +202,15 @@ export default function PageCustomizer() {
     setConfig((current) => ({ ...current, currentLanding: { ...current.currentLanding, ...patch } }));
   };
 
+  const selectLandingVersion = (version) => {
+    setSaved(false);
+    setLandingVersion(version);
+    setConfig((current) => ({
+      ...current,
+      workspace: { ...current.workspace, landingVersion: version },
+    }));
+  };
+
   const moveSection = (index, direction) => {
     const nextIndex = index + direction;
     if (nextIndex < 0 || nextIndex >= config.landing.order.length) return;
@@ -226,6 +240,7 @@ export default function PageCustomizer() {
     const formLines = Object.entries(config.form).map(([id, visible]) => `- ${id}: ${visible ? "SHOW" : "HIDE"}`);
     const summary = [
       "LANDING PAGE CONFIGURATION",
+      `Active version: ${landingVersion === "replacement" ? "REPLACEMENT" : "CURRENT LP MIX"}`,
       ...sectionLines,
       `Hero title: ${config.landing.heroTitle}`,
       `Hero copy: ${config.landing.heroCopy}`,
@@ -282,7 +297,7 @@ export default function PageCustomizer() {
           {mode === "landing" ? (
             <div className="space-y-5 p-4">
               <div className="grid grid-cols-2 rounded-xl bg-slate-100 p-1" aria-label="Landing page version">
-                {[['current','Current LP'],['replacement','Replacement']].map(([id,label]) => <button key={id} type="button" onClick={() => setLandingVersion(id)} aria-pressed={landingVersion === id} className={`min-h-11 cursor-pointer rounded-lg px-3 text-sm font-bold transition ${landingVersion === id ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600 hover:text-slate-900"}`}>{label}</button>)}
+                {[['current','Current LP'],['replacement','Final replacement']].map(([id,label]) => <button key={id} type="button" onClick={() => selectLandingVersion(id)} aria-pressed={landingVersion === id} className={`min-h-11 cursor-pointer rounded-lg px-3 text-sm font-bold transition ${landingVersion === id ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600 hover:text-slate-900"}`}>{label}</button>)}
               </div>
               <div>
                 <h2 className="font-black">Sections</h2>
