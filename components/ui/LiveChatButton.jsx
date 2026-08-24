@@ -2,18 +2,35 @@
 
 import { FaRegMessage } from "react-icons/fa6";
 
+const DIRECT_CHAT_URL = "https://direct.lc.chat/19098393/";
+
 export default function LiveChatButton({ className = "", label = "Live Chat" }) {
-  const openChat = () => {
-    if (window.LiveChatWidget?.call) {
-      window.LiveChatWidget.call("maximize");
-      return;
+  const openChat = (event) => {
+    try {
+      const widget = window.LiveChatWidget;
+      if (!widget?.call || !widget?.get) return;
+
+      // `get` throws while LiveChat is only queued but not ready. In that case,
+      // allow the normal direct-chat link below to open instead.
+      widget.get("state");
+      event.preventDefault();
+      widget.call("maximize");
+    } catch {
+      // The direct chat URL is the reliable fallback when the widget is delayed
+      // or blocked by a browser extension.
     }
-    window.open("https://www.livechat.com/chat-with/19098393/", "_blank", "noopener,noreferrer");
   };
 
   return (
-    <button type="button" onClick={openChat} className={className} aria-label="Open customer support live chat">
+    <a
+      href={DIRECT_CHAT_URL}
+      target="_blank"
+      rel="noopener nofollow"
+      onClick={openChat}
+      className={className}
+      aria-label="Open customer support live chat"
+    >
       <FaRegMessage aria-hidden="true" /> {label}
-    </button>
+    </a>
   );
 }
