@@ -133,6 +133,11 @@ export const navItems = [
     text: "Blog",
     route: "/blogs",
   },
+  {
+    id: 7,
+    text: "Guides",
+    route: "/guides",
+  },
 ];
 
 export const mobileNavItems = [
@@ -160,6 +165,11 @@ export const mobileNavItems = [
     id: 10,
     text: "Blog",
     route: "/blogs",
+  },
+  {
+    id: 11,
+    text: "Guides",
+    route: "/guides",
   },
   {
     id: 6,

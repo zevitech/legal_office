@@ -14,6 +14,10 @@ export function GET() {
 - [Contact](${baseUrl}/contact-us): Customer contact options
 
 ## Educational content
+- [U.S. trademark registration guides](${baseUrl}/guides): Official-source explanations of the registration process, costs, and clearance searching
+- [Trademark registration process](${baseUrl}/guides/trademark-registration-process): Step-by-step federal process and maintenance overview
+- [Trademark application cost](${baseUrl}/guides/trademark-cost): USPTO fees, possible added costs, and service-fee distinctions
+- [Trademark search and likelihood of confusion](${baseUrl}/guides/trademark-search-likelihood-of-confusion): Federal searching and conflict-analysis fundamentals
 - [Trademark articles](${baseUrl}/blogs): Published educational articles and updates
 
 ## Policies

@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "market": "United States",
+  "seed_keyword": "trademark registration",
+  "created_at": "2026-08-24",
+  "pillar": {
+    "title": "Trademark Registration Filing Support",
+    "keyword": "trademark registration",
+    "url": "https://www.legaltrademarkoffice.com/trademark-registration",
+    "template": "landing-page",
+    "status": "written"
+  },
+  "supporting_hub": {
+    "title": "U.S. Trademark Registration Guides",
+    "url": "https://www.legaltrademarkoffice.com/guides",
+    "status": "written"
+  },
+  "spokes": [
+    {
+      "keyword": "trademark registration process",
+      "url": "https://www.legaltrademarkoffice.com/guides/trademark-registration-process",
+      "status": "written"
+    },
+    {
+      "keyword": "trademark application cost",
+      "url": "https://www.legaltrademarkoffice.com/guides/trademark-cost",
+      "status": "written"
+    },
+    {
+      "keyword": "trademark search likelihood of confusion",
+      "url": "https://www.legaltrademarkoffice.com/guides/trademark-search-likelihood-of-confusion",
+      "status": "written"
+    }
+  ],
+  "constraints": {
+    "primary_commercial_keyword_has_one_url": true,
+    "target_country": "US",
+    "official_source": "USPTO",
+    "international_pages": false
+  },
+  "limitations": [
+    "No paid keyword-volume source is connected.",
+    "Full top-10 SERP overlap matrix was not available."
+  ]
+}
