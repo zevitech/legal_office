@@ -50,15 +50,6 @@ const organizationSchema = {
       name: "Legal Trademark Office",
       publisher: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
     },
-    {
-      "@type": "Service",
-      "@id": "https://www.legaltrademarkoffice.com/services/trademark-registration/#service",
-      name: "Trademark Registration Filing Support",
-      url: "https://www.legaltrademarkoffice.com/services/trademark-registration",
-      serviceType: "Trademark application preparation and filing support",
-      areaServed: { "@type": "Country", name: "United States" },
-      provider: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
-    },
   ],
 };
 

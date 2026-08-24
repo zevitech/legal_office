@@ -10,6 +10,15 @@ const nextConfig = {
     domains: ["images.ctfassets.net"],
   },
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/services/trademark-registration",
+        destination: "/trademark-registration",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

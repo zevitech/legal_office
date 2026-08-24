@@ -313,14 +313,14 @@ const page = () => {
         {/* pricing section */}
         <section className="flex-center gap-7 max-md:gap-10 pt-10 max-md:pt-5 pb-24 max-md:flex-col max-md:px-5">
           <div className="w-[600px] max-md:w-full bg-[#E9EFF3] px-8 py-9 col-flex items-center gap-8 rounded-lg relative">
-            <h1 className="text-color-primary text-3xl font-bold">
+            <h2 className="text-color-primary text-3xl font-bold">
               Trademark registration start from
-            </h1>
+            </h2>
             <div className="flex-between max-md:items-start max-md:justify-start w-full max-md:flex-col">
               <div className="flex items-end max-md:items-start max-md:mb-5">
-                <h1 className="text-8xl max-md:text-6xl font-bold text-[#505050]">
+                <p className="text-8xl max-md:text-6xl font-bold text-[#505050]">
                   $49
-                </h1>
+                </p>
                 <span className="mb-4">+ Govt fee</span>
               </div>
               <TMButton
@@ -360,14 +360,14 @@ const page = () => {
           </div>
           <div className="w-[500px] max-md:w-full col-flex gap-8 max-md:gap-10">
             <div className="bg-[#D8EEFD] px-8 py-5 col-flex gap-3 rounded-lg">
-              <h1 className="text-color-primary text-2xl font-bold">
+              <h2 className="text-color-primary text-2xl font-bold">
                 Provisional Patent filing starts from
-              </h1>
+              </h2>
               <div className="col-flex w-full">
                 <div className="flex items-end mb-3 max-md:my-5">
-                  <h1 className="text-5xl font-bold text-[#505050]">
+                  <p className="text-5xl font-bold text-[#505050]">
                     $500 <span className="text-xl">to</span> $800
-                  </h1>
+                  </p>
                   <span className="mb-4">+ Govt fee</span>
                 </div>
                 <TMButton
@@ -379,12 +379,12 @@ const page = () => {
               </div>
             </div>
             <div className="bg-[#D8FDF2] px-8 py-5 col-flex gap-3 rounded-lg">
-              <h1 className="text-[#00A976] text-3xl font-bold">
+              <h2 className="text-[#00A976] text-3xl font-bold">
                 Copyright Filing Starts from
-              </h1>
+              </h2>
               <div className="col-flex w-full">
                 <div className="flex items-end mb-3 max-md:my-5">
-                  <h1 className="text-5xl font-bold text-[#505050]">$189</h1>
+                  <p className="text-5xl font-bold text-[#505050]">$189</p>
                   <span className="mb-4">+ Govt fee</span>
                 </div>
                 <TMButton
@@ -402,11 +402,11 @@ const page = () => {
         <section className="py-20 max-md:px-5">
           <div className="flex-center gap-16 max-md:flex-col-reverse max-md:gap-6">
             <div className="max-w-2xl max-md:w-full col-flex gap-7">
-              <h1 className="text-4xl max-md:text-3xl text-slate-700">
+              <h2 className="text-4xl max-md:text-3xl text-slate-700">
                 <span className="font-normal">{`Search Your `}</span>
                 <span className="font-bold text-color-primary">{`Brand Name `}</span>
                 <span className="font-normal">{`Availability`}</span>
-              </h1>
+              </h2>
               <div className="col-flex gap-3 text-lg text-slate-700">
                 <p>
                   Search to see if your business name, slogan, or logo is

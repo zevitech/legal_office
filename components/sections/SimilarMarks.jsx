@@ -29,9 +29,9 @@ const SimilarMarks = () => {
               src={`/images/${item.flag}`}
               className="object-contain"
             />
-            <h1 className="font-bold text-lg max-md:text-xl text-slate-700 my-2">
+            <h3 className="font-bold text-lg max-md:text-xl text-slate-700 my-2">
               {item.name}
-            </h1>
+            </h3>
             <p className="text-lg text-slate-700">{item.details}</p>
           </div>
         ))}
