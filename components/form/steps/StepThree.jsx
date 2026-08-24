@@ -71,22 +71,21 @@ const StepThree = () => {
       zoho_step: 3,
     };
 
-    try {
-      if (process.env.NODE_ENV !== "production") {
-        return router.push("/trademark-register/payment");
-      }
-      const endPoint = "/api/save-data";
-      await axios.post(endPoint, stepThreeData);
+    if (process.env.NODE_ENV !== "production") {
+      return router.push("/trademark-register/payment");
+    }
+    const endPoint = "/api/save-data";
+    void axios.post(endPoint, stepThreeData).then(() => {
       trackPackageSelected({
         packageName,
         value: price,
         classCount: stepTwoData.estimatedClassCount,
       });
       console.log("Step 3 data sent successfully");
-    } catch (error) {
+    }).catch((error) => {
       console.log("Error sending step 3 data:", error);
-    }
-
+    });
+    setLoadingPlanId(null);
     return router.push("/trademark-register/payment");
   };
 
@@ -99,10 +98,6 @@ const StepThree = () => {
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Service package</p>
         <h1 id="package-plan-heading" className="mt-2 font-inria text-3xl font-bold text-heading-color sm:text-4xl">Choose your preparation plan</h1>
         <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">Choose the service package that matches the preparation speed, search coverage and support you want. You can review every option before continuing.</p>
-      </div>
-
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-        <strong>USPTO government filing fees are separate from every service plan.</strong> The current estimate is $350 per class. Your final class count will be reviewed and confirmed before filing.
       </div>
 
       <div className="grid w-full grid-cols-1 items-stretch gap-5 lg:grid-cols-2">

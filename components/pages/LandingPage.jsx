@@ -87,7 +87,7 @@ const LandingPage = () => {
   return (
     <>
       {/* hero section */}
-      <section data-customizer-old-section="hero" className="relative overflow-hidden bg-gradient-to-br from-cyan-50 via-white to-blue-100">
+      <section data-customizer-old-section="hero" className="relative overflow-hidden bg-gradient-to-br from-[#eefbff] via-white to-[#e8f2ff]">
         <header className="border-b border-slate-200 bg-white shadow-[0_1px_0_rgba(15,23,42,.04)]">
           <div className="mx-auto flex w-[92%] max-w-6xl items-center justify-between gap-5 py-3 sm:py-4">
             <Image src="/images/legal-trademark-logo.webp" alt="Legal Trademark Office" width={170} height={72} className="h-auto w-28 sm:w-36" priority />
@@ -101,7 +101,7 @@ const LandingPage = () => {
         <div className="absolute -right-24 top-20 h-80 w-80 rounded-full bg-blue-200/45 blur-3xl" aria-hidden="true" />
         <div className="relative mx-auto max-w-5xl px-4 py-14 text-center sm:py-20 lg:py-24">
           <p className="text-sm font-bold uppercase tracking-[.16em] text-[#026daf]">U.S. trademark filing support</p>
-          <h1 data-customizer-old-text="hero-title" className="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-[1.08] text-slate-900 sm:text-5xl lg:text-6xl">Trademark Registration for Your Business Name, Logo or Slogan</h1>
+          <h1 data-customizer-old-text="hero-title" className="mx-auto mt-4 max-w-4xl text-balance text-4xl font-bold leading-[1.12] text-[#13233a] sm:text-5xl lg:text-[3.5rem]">Trademark Registration for Your Business Name, Logo or Slogan</h1>
           <p data-customizer-old-text="hero-copy" className="mx-auto mt-6 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">Complete our guided questionnaire and our filing team will prepare your trademark application. Review and approve the details, then track documents and updates in your secure account.</p>
           <div className="mt-8 flex flex-col items-center gap-3">
             <button type="button" onClick={handleRegisterClick} className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Trademark Registration <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button>
@@ -221,7 +221,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-        <section data-customizer-old-section="pricing" className="order-6 py-10 max-md:px-2 mb-[5rem]">
+        <section data-customizer-old-section="pricing" className="order-6 pt-10 pb-4 max-md:px-2">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
             <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center max-md:text-start">
@@ -236,7 +236,7 @@ const LandingPage = () => {
         </section>
 
       {/* after-payment timeline */}
-      <section data-customizer-old-section="after-checkout" className="order-7 mx-auto mt-24 w-full max-w-6xl px-4 max-md:mt-16">
+      <section data-customizer-old-section="after-checkout" className="order-7 mx-auto mt-10 w-full max-w-6xl px-4 max-md:mt-8">
         <div className="text-center"><p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">After checkout</p><h2 className="mt-2 text-4xl font-bold text-slate-800 max-md:text-3xl">Know what happens next.</h2><p className="mx-auto mt-3 max-w-2xl text-slate-600">Your receipt is immediate, and your account keeps every following step visible.</p></div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[
           ["1", "Payment confirmed", "Receive your receipt and account access."],

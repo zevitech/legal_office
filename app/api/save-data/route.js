@@ -129,6 +129,9 @@ export async function POST(req) {
     // sending data to gmail account -start
     const transporter = createTransport({
       service: "gmail",
+      connectionTimeout: 4000,
+      greetingTimeout: 4000,
+      socketTimeout: 6000,
       auth: {
         user: process.env.MAILER_EMAIL,
         pass: process.env.MAILER_PASSWORD,
@@ -168,7 +171,7 @@ export async function POST(req) {
         await axios.post(
           crmIngestUrl,
           { ...data, brand: "legal_trademark_office" },
-          { headers: { "x-api-key": crmIngestKey }, timeout: 8000 }
+          { headers: { "x-api-key": crmIngestKey }, timeout: 4000 }
         );
         crmSent = true;
         console.log("CRM lead ingest: ok");
@@ -204,7 +207,7 @@ export async function POST(req) {
         const zohoEndPoint = process.env.ZOHO_LEAD_ENDPOINT;
         if (!zohoEndPoint) throw new Error("ZOHO_LEAD_ENDPOINT is not configured");
         await axios
-          .post(zohoEndPoint, data)
+          .post(zohoEndPoint, data, { timeout: 4000 })
           .then((res) => {
             console.log("zoho response: ", res?.data?.message);
           })

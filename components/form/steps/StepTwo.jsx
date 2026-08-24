@@ -400,22 +400,23 @@ const StepTwo = ({ previewMode = false }) => {
       return;
     }
 
-    try {
-      if (process.env.NODE_ENV !== "production")
-        return router.push("/trademark-register/step-3");
-      await axios.post("/api/save-data", {
+    if (process.env.NODE_ENV !== "production")
+      return router.push("/trademark-register/step-3");
+
+    void axios.post("/api/save-data", {
         ...stepOneData,
         ...payload,
         zoho_step: 2,
-      });
+      }).then(() => {
       trackClassificationComplete({
         activityCount: selectedActivities.length + (customActivity ? 1 : 0),
         classCount: payload.estimatedClassCount,
         reviewPreference,
       });
-    } catch (error) {
+    }).catch((error) => {
       console.log("Error sending step 2 data:", error);
-    }
+    });
+    setIsLoading(false);
     return router.push("/trademark-register/step-3");
   };
 
