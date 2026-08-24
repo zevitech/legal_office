@@ -13,10 +13,10 @@ export default function GoodsServicesPreviewPage() {
   return (
     <GlobalProvider>
       <FunnelShell>
-        <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-semibold text-amber-950">
+        <div data-customizer-form="notice" className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-semibold text-amber-950">
           Private Step 2 preview · no customer record is submitted from this page
         </div>
-        <SystemStepProgressTracker p_value={50} />
+        <div data-customizer-form="progress"><SystemStepProgressTracker p_value={50} /></div>
         <StepTwo previewMode />
       </FunnelShell>
     </GlobalProvider>

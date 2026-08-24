@@ -36,6 +36,17 @@ const nextConfig = {
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
         ],
       },
+      ...[
+        "/conversion-preview",
+        "/form-conversion-preview",
+        "/goods-services-preview",
+      ].map((source) => ({
+        source,
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+        ],
+      })),
     ];
   },
 };

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const FunnelShell = ({ children }) => (
   <main className="min-h-screen bg-slate-50">
-    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+    <header data-customizer-form="header" className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur">
       <div className="mx-auto flex w-[92%] max-w-6xl items-center justify-between gap-4 py-3 sm:py-4">
         <Link href="/" className="font-inria text-base font-bold text-slate-900 sm:text-xl">
           Legal Trademark Office<span className="text-primary-theme">®</span>
@@ -16,7 +16,7 @@ const FunnelShell = ({ children }) => (
       </div>
     </header>
     {children}
-    <footer className="mt-10 border-t border-slate-200 bg-white sm:mt-16">
+    <footer data-customizer-form="footer" className="mt-10 border-t border-slate-200 bg-white sm:mt-16">
       <div className="mx-auto flex w-[92%] max-w-6xl flex-col gap-3 py-6 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
         <p>Independent filing support service. Not affiliated with the USPTO.</p>
         <nav className="flex flex-wrap gap-4">
