@@ -13,7 +13,7 @@ const ClientSection = () => {
           </h2>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-3">
           <article className="grid min-h-24 grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-blue-100 bg-white p-4 shadow-sm">
             <span className="text-xs font-bold uppercase tracking-wide text-slate-500">Business name</span>
             <div className="relative inline-flex justify-self-end whitespace-nowrap pr-3 text-slate-950">
