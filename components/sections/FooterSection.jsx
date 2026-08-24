@@ -21,11 +21,10 @@ const FooterSection = ({ description }) => {
           <p className="text-slate-100 max-md:text-xs">
             {description || (
               <>
-                Secure your brand&apos;s future with Legal Trademark Office®
-                tailored protection packages. Choose our DIY assisted service
-                for a hands-on approach, or enlist our expert attorneys to
-                handle your trademark filing with precision and care. Protect
-                your uniqueness.
+                Prepare your U.S. trademark application with clear service
+                packages, specialist filing support and customer approval
+                before submission. Choose the preparation speed and support
+                level that fit your brand.
               </>
             )}
           </p>
@@ -53,7 +52,7 @@ const FooterSection = ({ description }) => {
 
         <div className="text-slate-100 flex flex-col gap-4">
           <h4 className="text-xl font-normal mb-7">
-            Call Now for a Free Consultation:
+            Customer Support:
           </h4>
           <div className="flex items-center gap-2">
             <div className="flex-center md:flex-col gap-4 -m-5">
@@ -72,7 +71,7 @@ const FooterSection = ({ description }) => {
           <div className="flex items-center gap-2 mt-[2rem]">
             <div className="flex-center md:flex-col gap-6 -m-5">
               <Link
-                href="#"
+                href="/contact-us"
                 className="flex-center !items-start gap-3 max-md:w-[90%] max-md:mx-auto md:translate-x-4"
               >
                 <BsMap className="text-[20px] translate-y-1" />
@@ -106,7 +105,7 @@ const FooterSection = ({ description }) => {
         </nav>
 
         <p className="text-center text-sm md:text-base mt-2">
-          © 2025 <Link className="text-blue-400 hover:underline" href={`#`}>Legal Trademark Office</Link>. All rights reserved.
+          © {new Date().getFullYear()} <Link className="text-blue-400 hover:underline" href="/">Legal Trademark Office</Link>. All rights reserved.
           {" "}
          
         </p>

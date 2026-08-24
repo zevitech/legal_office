@@ -1,24 +1,13 @@
 import React from "react";
 import Header from "@/components/ui/Header";
-import { Button, Input, Textarea } from "@nextui-org/react";
 import TMButton from "@/components/ui/TMButton";
-import TestimonialSection from "@/components/sections/TestimonialSection";
 import FooterSection from "@/components/sections/FooterSection";
-import { FaUser } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { BsFillQuestionSquareFill, BsPhoneFill } from "react-icons/bs";
-import { MdQuestionAnswer } from "react-icons/md";
-import { BsFillSendFill } from "react-icons/bs";
-import { BiPhoneCall } from "react-icons/bi";
-import { FaSquarePhone } from "react-icons/fa6";
-import Link from "next/link";
-import Image from "next/image";
 import FaqAccordion from "@/components/sections/FaqAccordion";
 
 export const metadata = {
-  title: "FAQ's - Legal Trademark Office | US Based trademark register website",
+  title: "Trademark Filing Support FAQs | Legal Trademark Office",
   description:
-    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
+    "Get clear answers about U.S. trademark filing support, service plans, application preparation and what happens after you get started.",
   alternates: { canonical: "/faq" },
 };
 
@@ -34,7 +23,8 @@ const page = () => {
               Frequently Asked Questions
             </h1>
             <p className="text-slate-100 text-lg text-center max-w-[700px] m-auto">
-              {`Protect Your Brand with Confidence - Expert Trademark Services Made Simple.`}
+              Trademark filing support made easier to understand, with a clear
+              next step when you are ready to begin.
             </p>
             <div className="flex-center gap-10 mt-5">
               <TMButton px="80px" py="30px" text={"Trademark Now"} />

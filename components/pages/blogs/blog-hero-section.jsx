@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 import { Button } from "@nextui-org/react";
+import Link from "next/link";
 
 import BlogHeroImg from "../../../public/images/blog-hero.svg";
 
@@ -13,20 +14,20 @@ const BlogHeroSection = () => {
     >
       <Image
         src={BlogHeroImg}
-        alt="Welcome to Our Blog Page"
+        alt="Trademark news and filing insights"
         className="max-lg:w-full h-auto"
       />
       <div className="flex flex-col gap-4">
         <h1 className="text-white lg:text-[32px] sm:text-[24.73px] text-[18px] font-[600] lg:leading-[34px] sm:leading-[28.09px] leading-[20px]">
-          Lorem Ipsum is simply dummy text of the printing
+          Trademark Filing News and Practical Insights
         </h1>
         <p className="text-white/70 sm:text-[15px] text-[12px] sm:leading-[22.5px] font-normal mb-4">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry&apos;s standard dummy text
-          ever since the 1500s,
+          Follow useful updates about U.S. trademark filings, maintenance and
+          brand application planning. For step-by-step resources, explore our
+          trademark guide library.
         </p>
-        <Button className="lg:w-[252px] w-full h-[58px] rounded-[5px] bg-white text-black font-normal">
-          Register Now
+        <Button as={Link} href="/guides" className="lg:w-[252px] w-full h-[58px] rounded-[5px] bg-white text-black font-normal">
+          Explore Trademark Guides
         </Button>
       </div>
     </div>

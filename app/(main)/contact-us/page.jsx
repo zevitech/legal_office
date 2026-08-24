@@ -2,7 +2,6 @@ import React from "react";
 import Header from "@/components/ui/Header";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import TMButton from "@/components/ui/TMButton";
-import TestimonialSection from "@/components/sections/TestimonialSection";
 import FooterSection from "@/components/sections/FooterSection";
 import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -14,10 +13,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title:
-    "Contact Us - Legal Trademark Office | US Based trademark register website",
+  title: "Trademark Filing Support Contact | Legal Trademark Office",
   description:
-    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
+    "Send your trademark filing-support question to Legal Trademark Office LLC or start your U.S. trademark application online.",
   alternates: { canonical: "/contact-us" },
 };
 
@@ -30,12 +28,12 @@ const page = () => {
         <section className="bg-contactBg w-full h-[90vh] max-md:h-auto max-md:py-[100px] bg-no-repeat bg-cover bg-bottom flex-center px-20 max-md:px-5">
           <div className="col-flex gap-6">
             <h1 className="text-4xl max-md:text-3xl font-bold text-white">
-              Contact Us Today for Brighter Tomorrow
+              Get Help with Your Trademark Filing
             </h1>
             <p className="text-slate-100 text-lg text-center max-w-[700px] m-auto max-md:text-start">
-              {`Connect with us today to pave the path for a brighter, more
-              promising tomorrow. Your inquiries and feedback are the building
-              blocks of our shared success. Let's make a difference together.`}
+              Tell our filing-support team what you need, or start your
+              application online and we will follow up using the details you
+              provide.
             </p>
             <div className="flex-center gap-10 mt-5 max-md:mt-0">
               <TMButton px="80px" py="30px" text={"Trademark Now"} />
@@ -134,18 +132,18 @@ const page = () => {
           <div>
             <div className="flex-center gap-20 max-md:flex-col max-md:gap-10">
               <div className="max-w-lg">
-                <h1 className="text-color-primary font-bold text-2xl">
-                  {`Before someone else files for your name, why don't you get it?`}
-                </h1>
+                <h2 className="text-color-primary font-bold text-2xl">
+                  Start your filing with a clear next step
+                </h2>
                 <p className="text-base text-slate-600 mt-4">
-                  {`
-                    Protect your brand before it's too late. Schedule a free consultation with a qualified legal professional to discuss your trademark needs and explore your options. Unsure of the next steps? We're here to guide you through every part of the process.
-                    `}
+                  Choose a service plan, provide your mark and business details,
+                  and review the prepared filing information before submission.
+                  Our support team follows up after you begin.
                 </p>
               </div>
               <div className="text-slate-700">
                 <h4 className="text-xl font-normal mb-7 max-md:font-bold max-md:mb-1">
-                  Call Now for a Free Consultation:
+                  Customer Support:
                 </h4>
                 <div className="flex items-center gap-2">
                   <div className="flex-center gap-10 -m-5 max-md:flex-col max-md:gap-3 max-md:-mt-0">
@@ -163,7 +161,7 @@ const page = () => {
                     </Link>
                   </div>
                 </div>
-                <p className="mt-5">All of our experts are based in the U.S.</p>
+                <p className="mt-5">Legal Trademark Office LLC is organized in Virginia.</p>
               </div>
             </div>
 
@@ -180,11 +178,6 @@ const page = () => {
               <TMButton px="80px" py="30px" text={"Trademark Now"} />
             </div>
           </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pb-8 pt-32 max-md:pt-20 pl-20 max-md:px-5">
-          <TestimonialSection />
         </section>
 
         {/* footer section */}

@@ -18,6 +18,7 @@ const NmiPayment = ({
   errorMessage,
   initialBilling = {},
   allowSavePaymentMethod = true,
+  statementDescriptor = "XTARLABS LLC",
 }) => {
   // Saving a card requires the Customer Vault add-on on the NMI account. When
   // it is absent the gateway rejects the entire sale, so the option is hidden
@@ -26,6 +27,7 @@ const NmiPayment = ({
   const formRef = useRef(null);
   const onTokenRef = useRef(onToken);
   const savePaymentMethodRef = useRef(false);
+  const statementDescriptorRef = useRef(statementDescriptor);
   const [collectJsReady, setCollectJsReady] = useState(false);
   const [fieldError, setFieldError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -40,6 +42,10 @@ const NmiPayment = ({
   useEffect(() => {
     savePaymentMethodRef.current = savePaymentMethod && vaultEnabled;
   }, [savePaymentMethod, vaultEnabled]);
+
+  useEffect(() => {
+    statementDescriptorRef.current = statementDescriptor;
+  }, [statementDescriptor]);
 
   useEffect(() => {
     if (!window.location.pathname.startsWith("/client-portal")) return;
@@ -96,6 +102,7 @@ const NmiPayment = ({
             zip: valueOf("zip"),
             acceptedTerms: true,
             agreementVersion: "2026-08-07",
+            statementDescriptor: statementDescriptorRef.current,
             savePaymentMethod: savePaymentMethodRef.current,
             attorneyChargeConsent: false,
           });
@@ -165,6 +172,7 @@ const NmiPayment = ({
     onTokenRef.current?.("", {
       acceptedTerms: true,
       agreementVersion: "2026-08-07",
+      statementDescriptor: statementDescriptorRef.current,
       billingMethodId: method.id,
       useSavedPaymentMethod: true,
       savePaymentMethod: false,

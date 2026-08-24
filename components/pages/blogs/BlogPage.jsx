@@ -66,10 +66,15 @@ const BlogPage = ({ initialBlogs = [] }) => {
               />
             ))
           ) : (
-            <p className="text-center w-full text-gray-500 text-lg">
-              No results found for &quot;{searchTerm}&quot;. Try searching for
-              another topic.
-            </p>
+            <div className="max-w-xl rounded-xl bg-slate-50 p-8 text-center">
+              <h2 className="text-2xl font-bold text-[#075A96]">
+                {searchTerm ? "No matching updates yet" : "New articles are coming soon"}
+              </h2>
+              <p className="mt-3 text-gray-600">
+                {searchTerm ? "Try another search or browse our current trademark guides." : "Browse our current trademark guides for practical filing information while this news section grows."}
+              </p>
+              <a href="/guides" className="mt-5 inline-block font-semibold text-[#027DD6] hover:underline">Browse trademark guides</a>
+            </div>
           )}
         </div>
 

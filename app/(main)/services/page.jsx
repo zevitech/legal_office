@@ -1,176 +1,27 @@
-import React from "react";
 import Header from "@/components/ui/Header";
-import Image from "next/image";
-import { Button } from "@nextui-org/react";
-import HeaderText from "@/components/ui/HeaderText";
-import TMButton from "@/components/ui/TMButton";
-import { whyChooseUs } from "@/constant";
 import Link from "next/link";
+import { Button } from "@nextui-org/react";
 import { FaArrowRightLong } from "react-icons/fa6";
-import TestimonialSection from "@/components/sections/TestimonialSection";
 import FooterSection from "@/components/sections/FooterSection";
-import SimilarMarks from "@/components/sections/SimilarMarks";
+import TMButton from "@/components/ui/TMButton";
 
 export const metadata = {
-  title:
-    "Services - Legal Trademark Office | US Based trademark register website",
-  description:
-    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
+  title: "Trademark Filing Services | Legal Trademark Office",
+  description: "Compare U.S. trademark application, renewal and revival filing-support services, then choose the next step for your brand.",
   alternates: { canonical: "/services" },
 };
 
-const page = () => {
-  return (
-    <>
-      <Header />
-      <main className="bg-slate-100">
-        {/* Hero Section */}
-        <section className="bg-itBanner w-full h-[85vh] max-md:h-auto max-md:pt-[100px] bg-no-repeat bg-cover bg-bottom flex items-center px-20 max-md:px-5">
-          <div className=" flex-between -mt-24 max-md:mt-0 max-md:flex-col">
-            <div className="col-flex gap-6 max-md:gap-4 w-[600px] max-md:w-full">
-              <h1 className="text-4xl max-md:text-3xl font-bold text-white">
-                Protect Your Brand with Expert Trademark Services
-              </h1>
-              <p className="text-slate-100 text-lg">
-                Comprehensive Trademark Registration, Monitoring, and
-                Enforcement to Secure Your Business Identity
-              </p>
-              <div className="flex items-center gap-10 max-md:flex-col max-md:gap-1">
-                <TMButton px="80px" py="30px" text={"Start Now"} />
-                <Button
-                  as={Link}
-                  href="/contact-us"
-                  className="px-[50px] py-[30px] font-semibold text-white w-fit capitalize"
-                  radius="md"
-                  variant="light"
-                  endContent={
-                    <FaArrowRightLong className="text-white text-[20px]" />
-                  }
-                >
-                  contact us
-                </Button>
-              </div>
-            </div>
-            <Image
-              width={700}
-              height={700}
-              alt="image-gallary"
-              src={`/images/image-gallary.png`}
-              className="object-contain absolute bottom-[-130px] max-md:bottom-[-40px] right-0 max-md:relative max-md:w-full"
-            />
-          </div>
-        </section>
+const services = [
+  ["Trademark Registration", "Turn your name, logo or slogan details into an organized U.S. trademark application prepared for your review.", "/trademark-registration", "Compare registration plans"],
+  ["Trademark Renewal Support", "Organize registration details and maintenance information so your renewal filing can move forward with a clear checklist.", "/services/trademark-renewal", "Explore renewal support"],
+  ["Trademark Revival Support", "Get filing support for an eligible application that needs a response or revival step after an abandonment notice.", "/services/trademark-revival", "Explore revival support"],
+];
 
-        {/* experience partners */}
-        <section className="pt-40 max-md:pt-16 max-md:px-5">
-          <div className="flex-center gap-20 max-md:flex-col-reverse max-md:gap-8 ">
-            <div className="">
-              <Image
-                width={500}
-                height={500}
-                alt="partners"
-                src={`/images/user-partner.png`}
-                className="object-contain"
-              />
-            </div>
-            <div className="max-w-lg col-flex gap-7">
-              <HeaderText
-                text1=" "
-                text2="Experienced Trademark Registration Partners!"
-              />
-              <div className="col-flex gap-6 text-lg text-slate-700">
-                <p>
-                  We help you protect your intellectual property from theft so
-                  you can own the exclusive rights to your business names,
-                  slogans, and other digital assets.
-                </p>
-                <ul className="col-flex gap-5">
-                  <li className="text-slate-600 font-bold flex items-center gap-3">
-                    <Image
-                      width={20}
-                      height={20}
-                      alt="rectangle"
-                      src={`/images/rectangle-icon.png`}
-                      className="object-contain"
-                    />
-                    <span>Get ® Symbol on Logos</span>
-                  </li>
-                  <li className="text-slate-600 font-bold flex items-center gap-3">
-                    <Image
-                      width={20}
-                      height={20}
-                      alt="rectangle"
-                      src={`/images/rectangle-icon.png`}
-                      className="object-contain"
-                    />
-                    <span>Protect Against Infringement</span>
-                  </li>
-                  <li className="text-slate-600 font-bold flex items-center gap-3">
-                    <Image
-                      width={20}
-                      height={20}
-                      alt="rectangle"
-                      src={`/images/rectangle-icon.png`}
-                      className="object-contain"
-                    />
-                    <span>Build Goodwill & Trust</span>
-                  </li>
-                </ul>
-              </div>
-              <TMButton px="70px" py="30px" text={"Start Now"} />
-            </div>
-          </div>
-        </section>
-
-        {/* similar marks section */}
-        <section className="py-28 max-md:px-5 max-md:py-20">
-          <SimilarMarks />
-        </section>
-
-        {/* why choose us */}
-        <section className="bg-[#E5F4FF] py-28 shadow-inner-md max-md:py-20 max-md:px-5">
-          <div className="col-flex justify-center items-center gap-5 max-w-3xl m-auto !text-[#075A96]">
-            <HeaderText text1=" " text2="Why Choose Us" />
-            <p className=" text-base text-center">
-              Trademark applicants represented by attorneys are 50% more likely
-              to successfully register than those who go it alone.
-            </p>
-          </div>
-          <div className="flex-center gap-10 mt-20 max-md:flex-col max-md:gap-24">
-            {whyChooseUs.map((item, index) => (
-              <div
-                key={index}
-                className="w-[250px] max-md:w-full rounded-lg shadow-lg  px-5 text-center bg-slate-100 hover:shadow-none md:h-[420px] relative items-start max-md:pb-[50px]"
-              >
-                <Image
-                  width={100}
-                  height={100}
-                  alt="icon"
-                  src={`/images/${item.icon}`}
-                  className="object-contain m-auto mt-[-20px]"
-                />
-                <h1 className="text-color-primary font-bold py-6">
-                  {item.heading}
-                </h1>
-                <p className="text-slate-600 text-sm">{item.details}</p>
-                <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2">
-                  <TMButton px="70px" py="30px" text={"Start Now"} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* testimonial section */}
-        <section className="pb-8 pt-32 max-md:pt-20 pl-20 max-md:px-5">
-          <TestimonialSection />
-        </section>
-
-        {/* footer section */}
-        <FooterSection />
-      </main>
-    </>
-  );
-};
-
-export default page;
+export default function ServicesPage() {
+  return <><Header /><main className="bg-slate-100">
+    <section className="bg-itBanner min-h-[78vh] bg-cover bg-bottom px-5 py-28 md:px-20 flex items-center"><div className="max-w-2xl space-y-6"><p className="font-semibold uppercase tracking-[0.18em] text-blue-100">U.S. trademark filing support</p><h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">Choose the Trademark Service That Fits Your Next Step</h1><p className="max-w-xl text-lg leading-8 text-slate-100">Start a new trademark application, organize a renewal, or get support with an eligible revival request through one clear process.</p><div className="flex flex-wrap gap-4"><TMButton px="80px" py="30px" text="Start Registration" /><Button as={Link} href="/contact-us" className="px-10 py-[30px] font-semibold text-white" variant="light" endContent={<FaArrowRightLong />}>Contact support</Button></div></div></section>
+    <section className="px-5 py-20 md:py-28"><div className="mx-auto max-w-6xl"><div className="mx-auto max-w-3xl text-center"><p className="font-semibold text-[#027DD6]">Select your service</p><h2 className="mt-2 text-3xl font-bold text-[#075A96] md:text-4xl">A focused path from details to filing</h2><p className="mt-4 text-lg text-slate-600">Each service is designed around a specific trademark filing need, with your information reviewed by you before submission.</p></div><div className="mt-12 grid gap-6 md:grid-cols-3">{services.map(([title,copy,href,action], index)=><article key={title} className="flex min-h-[310px] flex-col rounded-2xl bg-white p-7 shadow-lg"><span className="text-sm font-bold text-[#027DD6]">0{index+1}</span><h2 className="mt-4 text-2xl font-bold text-[#075A96]">{title}</h2><p className="mt-4 flex-1 leading-7 text-slate-600">{copy}</p><Link href={href} className="mt-7 inline-flex items-center gap-2 font-semibold text-[#027DD6] hover:underline">{action} <FaArrowRightLong /></Link></article>)}</div></div></section>
+    <section className="bg-[#E5F4FF] px-5 py-20 shadow-inner-md"><div className="mx-auto max-w-5xl text-center"><h2 className="text-3xl font-bold text-[#075A96]">Simple support. Clear customer control.</h2><div className="mt-10 grid gap-5 text-left md:grid-cols-3">{[["Share your details","Provide the mark, owner and goods or services information needed for the selected filing."],["Review the preparation","Check the organized application information and confirm changes before submission."],["Follow the next step","Receive filing or status information based on the service you selected."]].map(([title,copy])=><div key={title} className="rounded-xl bg-white p-6 shadow-sm"><h3 className="text-xl font-bold text-[#075A96]">{title}</h3><p className="mt-3 leading-7 text-slate-600">{copy}</p></div>)}</div><div className="mt-10"><TMButton px="80px" py="30px" text="Start Now" /></div></div></section>
+    <FooterSection />
+  </main></>;
+}

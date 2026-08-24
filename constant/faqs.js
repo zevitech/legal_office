@@ -4,7 +4,7 @@ export const basicQuestions = [
   {
     key: randomKey(),
     question: `How long does a trademark last?`,
-    answer: `A registered trademark lasts for 10 years and can be renewed indefinitely as long as it continues to be used in commerce.`,
+    answer: `A U.S. federal registration can continue through recurring maintenance filings. A declaration is generally due between years five and six, followed by renewal filings between years nine and ten and every 10 years after that.`,
   },
   {
     key: randomKey(),
@@ -24,7 +24,7 @@ export const basicQuestions = [
   {
     key: randomKey(),
     question: `What should I do if someone infringes on my trademark?`,
-    answer: `If someone uses your trademark without permission, you can send a cease-and-desist letter, and if necessary, pursue legal action to enforce your rights.`,
+    answer: `Potential infringement depends on the facts. Consider preserving the relevant records and consulting a qualified trademark attorney before sending demands or taking legal action.`,
   },
 ];
 
@@ -70,17 +70,17 @@ export const applicationProcess = [
   {
     key: randomKey(),
     question: `Do I need to conduct a trademark search before applying?`,
-    answer: `Yes, conducting a search helps ensure that your trademark does not infringe on existing trademarks, reducing the risk of application rejection.`,
+    answer: `A search can identify potentially similar marks and help you make a more informed filing decision, but no search can guarantee approval or eliminate every conflict risk.`,
   },
   {
     key: randomKey(),
     question: `What happens after I submit the application form?`,
-    answer: `Once you submit the form, we review your information, conduct a trademark search, and then proceed with filing the application with the relevant trademark office.`,
+    answer: `We organize the information included in your selected service and provide the prepared filing details for your review before submission.`,
   },
   {
     key: randomKey(),
     question: `Is the application fee refundable if my trademark is not approved?`,
-    answer: `The application fee is typically non-refundable, as it covers the cost of processing and reviewing your application.`,
+    answer: `USPTO government fees are generally non-refundable. Eligibility for a service-fee refund depends on the work completed and the terms of our Refund Policy.`,
   },
 ];
 
@@ -88,7 +88,7 @@ export const allFAQ = [
   {
     key: randomKey(),
     question: `How long does a trademark last?`,
-    answer: `A registered trademark lasts for 10 years and can be renewed indefinitely as long as it continues to be used in commerce.`,
+    answer: `A U.S. federal registration can continue through recurring maintenance filings. A declaration is generally due between years five and six, followed by renewal filings between years nine and ten and every 10 years after that.`,
   },
   {
     key: randomKey(),
@@ -108,7 +108,7 @@ export const allFAQ = [
   {
     key: randomKey(),
     question: `What should I do if someone infringes on my trademark?`,
-    answer: `If someone uses your trademark without permission, you can send a cease-and-desist letter, and if necessary, pursue legal action to enforce your rights.`,
+    answer: `Potential infringement depends on the facts. Consider preserving the relevant records and consulting a qualified trademark attorney before sending demands or taking legal action.`,
   },
   {
     key: randomKey(),
@@ -148,16 +148,16 @@ export const allFAQ = [
   {
     key: randomKey(),
     question: `Do I need to conduct a trademark search before applying?`,
-    answer: `Yes, conducting a search helps ensure that your trademark does not infringe on existing trademarks, reducing the risk of application rejection.`,
+    answer: `A search can identify potentially similar marks and help you make a more informed filing decision, but no search can guarantee approval or eliminate every conflict risk.`,
   },
   {
     key: randomKey(),
     question: `What happens after I submit the application form?`,
-    answer: `Once you submit the form, we review your information, conduct a trademark search, and then proceed with filing the application with the relevant trademark office.`,
+    answer: `We organize the information included in your selected service and provide the prepared filing details for your review before submission.`,
   },
   {
     key: randomKey(),
     question: `Is the application fee refundable if my trademark is not approved?`,
-    answer: `The application fee is typically non-refundable, as it covers the cost of processing and reviewing your application.`,
+    answer: `USPTO government fees are generally non-refundable. Eligibility for a service-fee refund depends on the work completed and the terms of our Refund Policy.`,
   },
 ];

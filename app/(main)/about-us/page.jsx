@@ -6,17 +6,13 @@ import HeaderText from "@/components/ui/HeaderText";
 import TMButton from "@/components/ui/TMButton";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
-import TestimonialSection from "@/components/sections/TestimonialSection";
 import FooterSection from "@/components/sections/FooterSection";
-import CounterBoxTR from "@/components/ui/CounterBoxTR";
-import PackageCard from "@/components/ui/PackageCard";
 import ExpandableText from "@/components/ui/ExpandableText";
 
 export const metadata = {
-  title:
-    "About Us - Legal Trademark Office | US Based trademark register website",
+  title: "About Legal Trademark Office LLC | Filing Support",
   description:
-    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
+    "Meet Legal Trademark Office LLC, a Virginia trademark filing-support company helping customers prepare and submit U.S. trademark applications.",
   alternates: { canonical: "/about-us" },
 };
 
@@ -39,9 +35,9 @@ const page = () => {
                 />
               </div>
               <div>
-                <h1 className="text-[55px] max-md:text-4xl font-normal text-[#027DD6] text-center">
+                <p className="text-[55px] max-md:text-4xl font-normal text-[#027DD6] text-center">
                   Know About
-                </h1>
+                </p>
                 <h1 className="text-[55px] max-md:text-4xl font-bold text-[#075A96] text-center">
                   Legal Trademark Office
                 </h1>
@@ -115,8 +111,8 @@ const page = () => {
               </div>
               <div className="col-flex gap-3 text-lg text-slate-600">
                 <ExpandableText
-                  text={`At Legal Trademark Office, we are dedicated to protecting your brand's identity and integrity. Our mission is to provide comprehensive trademark services that ensure your brand's uniqueness and value are safeguarded in an increasingly competitive marketplace. With years of expertise in trademark registration, we are committed to helping businesses of all sizes secure their intellectual property, ensuring that their brand's assets are protected for long-term success. Our team of skilled professionals offers personalized support, guiding you through each step of the trademark process with precision and care.
-We understand that your brand is one of your most valuable assets, and we treat it as such. At Legal Trademark Office, we take a proactive approach to ensure that your trademark registration is handled efficiently, minimizing risks and maximizing protection. From initial consultation to registration, we provide a seamless experience backed by industry knowledge and legal expertise. Our goal is to be your trusted partner in securing your brand's future, giving you the confidence to focus on growth and innovation.`}
+                  text={`Legal Trademark Office LLC is a Virginia limited liability company focused on U.S. trademark filing support. We help customers turn their brand, ownership, goods or services, and filing-basis information into an organized application for review before submission.
+Our service plans are built around clear preparation times and defined support. Customers approve their filing information and any separate USPTO class fees before filing. When a matter requires individualized legal advice or representation, attorney involvement is offered only through a separate written engagement after appropriate review.`}
                 />
               </div>
               <div className="flex items-center gap-10 mt-5 max-md:gap-5">
@@ -147,27 +143,19 @@ We understand that your brand is one of your most valuable assets, and we treat 
           </div>
         </section>
 
-        {/* statistic section */}
+        {/* customer confidence section */}
         <section className="bg-[#E9EFF3] py-20 max-md:py-16 shadow-inner-md">
-          <div className="flex-center gap-36 max-md:flex-col max-md:gap-10">
-            <CounterBoxTR
-              number={12}
-              text={`Years Experience`}
-              symbol={`+`}
-              icon={`Pressure.png`}
-            />
-            <CounterBoxTR
-              number={99}
-              text={`Customer Approval`}
-              symbol={`%`}
-              icon={`Chart.png`}
-            />
-            <CounterBoxTR
-              number={7}
-              text={`Trademark Managed`}
-              symbol={`K`}
-              icon={`Pipe_duotone.png`}
-            />
+          <div className="mx-auto grid max-w-5xl gap-5 px-5 md:grid-cols-3">
+            {[
+              ["Virginia LLC", "A registered U.S. filing-support company"],
+              ["Clear package scope", "Know the service work included before checkout"],
+              ["Approval before filing", "Review application details and separate USPTO fees"],
+            ].map(([title, copy]) => (
+              <div key={title} className="rounded-2xl bg-white p-7 text-center shadow-sm">
+                <h2 className="text-xl font-bold text-color-primary">{title}</h2>
+                <p className="mt-3 leading-6 text-slate-600">{copy}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -190,9 +178,9 @@ We understand that your brand is one of your most valuable assets, and we treat 
               />
               <div className="col-flex gap-6 text-lg text-slate-700">
                 <p>
-                  We help you protect your intellectual property from theft so
-                  you can own the exclusive rights to your business names,
-                  slogans, and other digital assets.
+                  Choose filing support that helps organize the information
+                  needed for a U.S. trademark application and keeps the next
+                  step clear.
                 </p>
                 <ul className="col-flex gap-5">
                   <li className="text-slate-600 font-bold flex items-center gap-3">
@@ -203,7 +191,7 @@ We understand that your brand is one of your most valuable assets, and we treat 
                       src={`/images/rectangle-icon.png`}
                       className="object-contain"
                     />
-                    <span>Get ® Symbol on Logos</span>
+                    <span>Application Preparation</span>
                   </li>
                   <li className="text-slate-600 font-bold flex items-center gap-3">
                     <Image
@@ -213,7 +201,7 @@ We understand that your brand is one of your most valuable assets, and we treat 
                       src={`/images/rectangle-icon.png`}
                       className="object-contain"
                     />
-                    <span>Protect Against Infringement</span>
+                    <span>Customer Review Before Submission</span>
                   </li>
                   <li className="text-slate-600 font-bold flex items-center gap-3">
                     <Image
@@ -223,7 +211,7 @@ We understand that your brand is one of your most valuable assets, and we treat 
                       src={`/images/rectangle-icon.png`}
                       className="object-contain"
                     />
-                    <span>Build Goodwill & Trust</span>
+                    <span>Application Status Updates</span>
                   </li>
                 </ul>
               </div>

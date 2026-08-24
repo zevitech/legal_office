@@ -6,9 +6,9 @@ import client from "@/utils/contentful";
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Trademark Guides and Resources | Legal Trademark Office",
+  title: "Trademark Filing News & Updates | Legal Trademark Office",
   description:
-    "Read educational resources about U.S. trademark applications, searches, filing requirements, maintenance, and the USPTO process.",
+    "Read company updates and practical news about U.S. trademark applications, maintenance and filing support.",
   alternates: {
     canonical: "https://www.legaltrademarkoffice.com/blogs",
   },
