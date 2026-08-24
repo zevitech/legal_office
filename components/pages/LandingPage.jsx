@@ -149,13 +149,6 @@ const LandingPage = () => {
               className="w-20 h-20 max-md:w-14 max-md:h-auto"
             /> */}
             <Image
-              src={"/images/accredited-business.jpg"}
-              alt="trustpilot"
-              width={110}
-              height={40}
-              className="w-24 h-10 max-md:w-14 max-md:h-auto"
-            />
-            <Image
               src={
                 "/images/Advisor-logo_2-line_Profile-V2-e1589299562467-removebg-preview.webp"
               }
