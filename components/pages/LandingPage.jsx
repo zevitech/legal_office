@@ -464,7 +464,6 @@ finish, so you can focus on growing your business.`}
 
       {/* testimonial section  */}
       <section data-customizer-old-section="testimonials" className="order-11 flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-16">
-        {optimizedCopy ? <div className="mx-auto grid w-full max-w-6xl gap-5 px-4 md:grid-cols-3">{[["Review before submission","Confirm the prepared filing information before it moves forward."],["Transparent plan choices","Compare service fees, search coverage and preparation speed."],["Account access","Keep documents, messages and application updates together."]].map(([title,copy]) => <article key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><HiCheck className="text-2xl text-emerald-600" aria-hidden="true" /><h2 className="mt-4 text-xl font-bold text-slate-800">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{copy}</p></article>)}</div> : <>
         <div className="flex">
           <div className="flex-center gap-2 flex-col">
             <h2 className="text-2xl font-bold text-slate-800">Excellent</h2>
@@ -486,7 +485,6 @@ finish, so you can focus on growing your business.`}
         <div className="max-md:w-full">
           <TestimonialCarousel />
         </div>
-        </>}
       </section>
 
       {/* footer section */}
