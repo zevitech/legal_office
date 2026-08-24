@@ -309,7 +309,7 @@ const INDUSTRIES = [
   },
 ];
 
-const StepTwo = () => {
+const StepTwo = ({ previewMode = false }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const stepOneData = useSelector((state) => state.form.stepOne);
@@ -319,7 +319,8 @@ const StepTwo = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [validation, setValidation] = useState(false);
-  const [reviewPreference, setReviewPreference] = useState("attorney_call");
+  const [previewComplete, setPreviewComplete] = useState(false);
+  const reviewPreference = "application_review";
 
   const filteredIndustries = INDUSTRIES.filter((industry) =>
     `${industry.name} ${industry.activities.map((item) => item.label).join(" ")}`
@@ -327,7 +328,7 @@ const StepTwo = () => {
       .includes(search.toLowerCase()),
   );
   const industry =
-    INDUSTRIES.find((item) => item.name === activeIndustry) ||
+    filteredIndustries.find((item) => item.name === activeIndustry) ||
     filteredIndustries[0];
   const uniqueClasses = [
     ...new Set(selectedActivities.map((item) => item.classNo).filter(Boolean)),
@@ -341,6 +342,7 @@ const StepTwo = () => {
   );
 
   if (
+    !previewMode &&
     process.env.NODE_ENV === "production" &&
     Object.keys(stepOneData).length === 0
   ) {
@@ -379,6 +381,12 @@ const StepTwo = () => {
       reviewPreference,
     };
     dispatch(saveStepTwo(payload));
+
+    if (previewMode) {
+      setIsLoading(false);
+      setPreviewComplete(true);
+      return;
+    }
 
     try {
       if (process.env.NODE_ENV !== "production")
@@ -427,30 +435,28 @@ const StepTwo = () => {
       </div>
 
 
-      <section className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
-          {filteredIndustries.map((item) => {
-            const selected = activeIndustry === item.name;
-            return (
-              <button
-                key={item.name}
-                type="button"
-                onClick={() => setActiveIndustry(item.name)}
-                className={`flex min-h-16 items-center gap-3 rounded-xl border-2 p-3 text-left text-sm font-semibold transition ${selected ? "border-blue-600 bg-blue-50 text-blue-900" : "border-slate-200 bg-white text-slate-700 hover:border-blue-300"}`}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span>{item.name}</span>
-              </button>
-            );
-          })}
+      <section className="grid gap-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <label htmlFor="industry-category" className="mb-2 block text-sm font-bold text-slate-900">
+            Business category
+          </label>
+          <select
+            id="industry-category"
+            value={industry?.name || ""}
+            onChange={(event) => setActiveIndustry(event.target.value)}
+            className="min-h-14 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-base font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          >
+            {filteredIndustries.length === 0 && <option value="">No matching category</option>}
+            {filteredIndustries.map((item) => (
+              <option key={item.name} value={item.name}>{item.name}</option>
+            ))}
+          </select>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <h2 className="text-xl font-bold text-slate-900">
-            {industry?.icon} {industry?.name}
-          </h2>
+          <h2 className="text-xl font-bold text-slate-900">{industry?.name}</h2>
           <p className="mt-1 text-sm text-slate-500">Select all that apply.</p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {industry?.activities.map((activity) => {
               const selected = selectedActivities.some(
                 (item) => item.label === activity.label,
@@ -460,17 +466,10 @@ const StepTwo = () => {
                   key={activity.label}
                   type="button"
                   aria-pressed={selected}
-                  onClick={() => toggleActivity(activity)}
-                  className={`flex min-h-20 items-start justify-between gap-3 rounded-xl border-2 p-4 text-left transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}
+                  onClick={() => toggleActivity(activity, industry?.name)}
+                  className={`flex min-h-14 items-center justify-between gap-3 rounded-xl border-2 p-3 text-left transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}
                 >
-                  <span>
-                    <span className="block font-semibold text-slate-900">
-                      {activity.label}
-                    </span>
-                    <span className="mt-1 block text-xs text-slate-500">
-                      Business activity
-                    </span>
-                  </span>
+                  <span className="block font-semibold text-slate-900">{activity.label}</span>
                   <span
                     className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"}`}
                   >
@@ -490,7 +489,7 @@ const StepTwo = () => {
         labelPlacement="outside"
         placeholder="Example: custom printed packaging and an online store selling stationery"
         radius="lg"
-        minRows={3}
+        minRows={2}
         value={customActivity}
         onChange={(event) => {
           setCustomActivity(event.target.value);
@@ -500,58 +499,15 @@ const StepTwo = () => {
         errorMessage="Select an activity or describe what your business offers."
       />
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900">
-          How would you like your classes finalized?
-        </h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {[
-            {
-              value: "attorney_call",
-              title: "Attorney review call",
-              copy: "Discuss business activities and finalize the class strategy during a scheduled consultation.",
-            },
-            {
-              value: "application_review",
-              title: "Review my application details",
-              copy: "Have the filing team review the selections and contact me only if clarification is needed.",
-            },
-          ].map((option) => {
-            const selected = reviewPreference === option.value;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                aria-pressed={selected}
-                onClick={() => setReviewPreference(option.value)}
-                className={`rounded-xl border-2 p-4 text-left transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}
-              >
-                <span className="flex items-center justify-between font-bold text-slate-900">
-                  {option.title}
-                  <span
-                    className={`grid h-5 w-5 place-items-center rounded-full border-2 text-xs ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"}`}
-                  >
-                    {selected && "✓"}
-                  </span>
-                </span>
-                <span className="mt-1 block text-sm leading-5 text-slate-600">
-                  {option.copy}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <div className="sticky bottom-3 z-20 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:static sm:grid-cols-[auto_1fr_auto] sm:items-center sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+      <div className="sticky bottom-3 z-20 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:grid-cols-[auto_1fr_auto] sm:items-center">
         <Button
           onClick={() => router.back()}
           className="h-14 w-full border-2 border-primary-theme bg-white px-7 text-base font-bold text-primary-theme sm:w-auto"
         >
           Previous
         </Button>
-        <div className="hidden items-center justify-center gap-2 text-sm text-slate-600 sm:flex">
-          <IoMdLock /> Your selections are securely saved
+        <div className={`hidden items-center justify-center gap-2 text-sm sm:flex ${previewComplete ? "font-semibold text-emerald-700" : "text-slate-600"}`} role={previewComplete ? "status" : undefined}>
+          {previewComplete ? <HiOutlineCheck /> : <IoMdLock />} {previewComplete ? "Preview selections are ready" : "Your selections are securely saved"}
         </div>
         <Button
           onClick={handleFormSubmit}
