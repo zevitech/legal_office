@@ -6,21 +6,20 @@ import { allFAQ } from "@/constant/faqs";
 
 const FaqAccordion = () => {
   const itemClasses = {
-    base: "py-0 w-full",
+    base: "w-full rounded-2xl border border-blue-100 bg-white px-5 shadow-sm",
     title:
-      "text-2xl font-semibold max-md:font-medium text-slate-600 max-md:text-lg max-md:py-4",
+      "text-lg font-semibold text-slate-800 md:text-xl",
     trigger:
-      "px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center border-b-1",
-    indicator: "text-medium",
-    content: "text-xl px-2 max-md:text-sm",
+      "min-h-20 py-4 data-[hover=true]:bg-blue-50/50",
+    indicator: "text-xl text-[#027DD6]",
+    content: "pb-6 text-base leading-7 text-slate-600 md:text-lg",
   };
 
   return (
-    <div className="flex-center">
+    <div className="mx-auto max-w-4xl">
       <Accordion
         showDivider={false}
-        className="p-2 flex flex-col gap-7 max-md:gap-6 bg-transparent shadow-none border-none rounded-none w-[80%] max-md:w-full"
-        variant="shadow"
+        className="flex flex-col gap-4 bg-transparent p-0 shadow-none"
         itemClasses={itemClasses}
         defaultExpandedKeys={["0"]}
       >
