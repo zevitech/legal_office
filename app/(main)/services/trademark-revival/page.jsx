@@ -1,18 +1,26 @@
-import Header from "@/components/ui/Header";
-import Image from "next/image";
-import Link from "next/link";
-import FooterSection from "@/components/sections/FooterSection";
-import TMButton from "@/components/ui/TMButton";
+import PremiumServicePage from "@/components/sections/PremiumServicePage";
 
 export const metadata = { title: "Trademark Revival Filing Support | Legal Trademark Office", description: "Get organized filing support for an eligible U.S. trademark application that may require a revival request after abandonment.", alternates: { canonical: "/services/trademark-revival" } };
 
-const steps = [["Status review","Start with the application record and notice so the required next step is clear."],["Information preparation","Organize the filing details and supporting information needed for your review."],["Submission coordination","Approve the prepared information and receive updates as the selected service moves forward."]];
-
 export default function TrademarkRevivalPage() {
-  return <><Header /><main className="bg-slate-100">
-    <section className="flex min-h-[72vh] items-center bg-gradient-to-br from-[#063f70] via-[#075A96] to-[#027DD6] px-5 py-28"><div className="mx-auto w-full max-w-5xl space-y-6"><p className="font-semibold uppercase tracking-[0.18em] text-blue-100">Trademark revival support</p><h1 className="max-w-3xl text-4xl font-bold leading-tight text-white md:text-5xl">Move an Eligible Trademark Revival Request Forward</h1><p className="max-w-2xl text-lg leading-8 text-slate-100">If a U.S. trademark application has an abandonment notice, our filing-support team can help organize the record, required information and next submission step.</p><div className="flex flex-col gap-4 sm:flex-row"><TMButton px="80px" py="30px" text="Start Now" /><Link href="/contact-us" className="inline-flex min-h-14 items-center justify-center rounded-lg border border-white px-10 py-4 font-semibold text-white">Contact support</Link></div></div></section>
-    <section className="px-5 py-20 md:py-28"><div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2"><Image width={560} height={500} sizes="(max-width: 768px) 100vw, 50vw" alt="Trademark revival filing support" src="/images/trademark-revival.jpg" className="h-auto rounded-2xl object-cover" /><div><p className="font-semibold text-[#027DD6]">A focused next step</p><h2 className="mt-2 text-3xl font-bold text-[#075A96]">Get clarity from notice to response</h2><p className="mt-5 text-lg leading-8 text-slate-600">Revival eligibility and requirements depend on the application record. We help collect and organize the relevant details so you can review the prepared filing information before submission.</p><div className="mt-8"><TMButton px="70px" py="30px" text="Begin Revival Support" /></div></div></div></section>
-    <section className="bg-[#E5F4FF] px-5 py-20"><div className="mx-auto max-w-6xl"><div className="text-center"><h2 className="text-3xl font-bold text-[#075A96]">Revival support built for action</h2><p className="mt-3 text-slate-600">A simple process that keeps the application record and next step together.</p></div><div className="mt-10 grid gap-6 md:grid-cols-3">{steps.map(([title,copy],i)=><article key={title} className="rounded-2xl bg-white p-7 shadow-sm"><span className="font-bold text-[#027DD6]">0{i+1}</span><h3 className="mt-4 text-xl font-bold text-[#075A96]">{title}</h3><p className="mt-3 leading-7 text-slate-600">{copy}</p></article>)}</div><div className="mt-10 text-center"><Link href="/contact-us" className="inline-flex min-h-14 items-center rounded-lg bg-[#027DD6] px-10 py-4 font-semibold text-white">Request revival support</Link></div></div></section>
-    <FooterSection />
-  </main></>;
+  return <PremiumServicePage
+    eyebrow="Trademark revival support"
+    title="Move an Eligible Trademark Revival Request Forward"
+    description="Turn an abandonment notice and application record into an organized next-step workflow with focused information preparation and customer review."
+    primaryLabel="Request Revival Support"
+    primaryHref="/contact-us"
+    visualTitle="Your revival workflow"
+    visualItems={["Application status reviewed", "Required details organized", "Next filing step confirmed"]}
+    trustItems={[["Record-focused review","Begin with the actual application record and notice."],["Organized preparation","Collect the information relevant to the potential revival step."],["Customer control","Review and approve prepared information before submission."]]}
+    sectionEyebrow="Respond with direction"
+    sectionTitle="A focused path from abandonment notice to next action"
+    sectionDescription="Revival requirements depend on the application record. Our process keeps the notice, requested details and next step together."
+    benefits={[["Application status review","Use the record and abandonment notice to identify the preparation path."],["Revival details organized","Bring the requested information and supporting details into one workflow."],["Submission coordination","Review what has been prepared and receive updates as the selected support moves forward."]]}
+    process={[["Provide the application record","Share the serial number and relevant USPTO notice."],["Complete the focused checklist","Supply the facts and materials requested for the potential revival step."],["Review the prepared information","Confirm accuracy and authorize the appropriate next step."]]}
+    highlightTitle="Built for an urgent moment without visual pressure"
+    highlightDescription="The experience makes the next action prominent while keeping the language measured, the workflow understandable and the customer in control."
+    highlightItems={["Clear application-record starting point", "No outcome or timing guarantee", "Mobile-friendly action path", "Support updates after the order begins"]}
+    closingTitle="Have an abandonment notice to review?"
+    closingDescription="Bring the application record and notice together, then start a focused revival-support conversation."
+  />;
 }

@@ -1,12 +1,28 @@
-import Header from "@/components/ui/Header";
-import FooterSection from "@/components/sections/FooterSection";
-import TMButton from "@/components/ui/TMButton";
-import Link from "next/link";
-import { IoCallSharp } from "react-icons/io5";
-import { FaArrowRightLong } from "react-icons/fa6";
+import PremiumServicePage from "@/components/sections/PremiumServicePage";
 
 export const metadata = { title: "Trademark Filing Support Contact | Legal Trademark Office", description: "Start a U.S. trademark application online or reach Legal Trademark Office LLC customer support about an existing filing-support order.", alternates: { canonical: "/contact-us" } };
 
 export default function ContactPage() {
-  return <><Header /><main className="bg-white"><section className="flex min-h-[70vh] items-center bg-gradient-to-br from-[#063f70] via-[#075A96] to-[#027DD6] px-5 py-28 text-white"><div className="mx-auto w-full max-w-5xl text-center"><p className="font-semibold uppercase tracking-[0.18em] text-blue-100">Customer support</p><h1 className="mx-auto mt-4 max-w-3xl text-4xl font-bold leading-tight md:text-5xl">Choose the Fastest Way to Move Your Trademark Filing Forward</h1><p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-blue-50">New customers can begin online in minutes. Existing customers can call support with their receipt or order information ready.</p><div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row"><TMButton px="70px" py="30px" text="Start Trademark Registration" /><Link href="tel:+13104244909" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-lg border border-white px-8 py-4 font-semibold text-white hover:bg-white/10"><IoCallSharp aria-hidden="true" /> +1 (310) 424-4909</Link></div></div></section><section className="px-5 py-20 md:py-28"><div className="mx-auto max-w-5xl"><div className="text-center"><h2 className="text-3xl font-bold text-[#075A96]">What happens next</h2><p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">A straightforward support path for new and existing customers.</p></div><div className="mt-10 grid gap-6 md:grid-cols-3">{[["Start online","Choose a service plan and provide the basic mark and owner details."],["We follow up","After an order is placed, our team uses the contact information provided to send confirmation and service updates."],["Review before filing","Review the prepared filing information and approve the next step before submission."]].map(([title,copy],i)=><article key={title} className="rounded-2xl border border-slate-200 bg-slate-50 p-7"><span className="font-bold text-[#027DD6]">0{i+1}</span><h3 className="mt-4 text-xl font-bold text-[#075A96]">{title}</h3><p className="mt-3 leading-7 text-slate-600">{copy}</p></article>)}</div></div></section><section className="bg-[#E9EFF3] px-5 py-16"><div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 rounded-2xl bg-white p-8 shadow-sm md:flex-row"><div><h2 className="text-2xl font-bold text-[#075A96]">Ready to begin?</h2><p className="mt-2 text-slate-600">Compare the available registration service plans and choose the preparation level that fits your brand.</p></div><Link href="/trademark-registration" className="inline-flex min-h-14 shrink-0 items-center gap-3 rounded-lg bg-[#027DD6] px-8 py-4 font-semibold text-white">View registration plans <FaArrowRightLong aria-hidden="true" /></Link></div></section><FooterSection /></main></>;
+  return <PremiumServicePage
+    eyebrow="Customer support"
+    title="Choose the Fastest Way to Move Your Trademark Filing Forward"
+    description="New customers can begin online in minutes. Existing customers can call support with their receipt or order information ready."
+    primaryLabel="Start Trademark Registration"
+    primaryHref="/trademark-registration"
+    secondaryLabel="Call +1 (310) 424-4909"
+    secondaryHref="tel:+13104244909"
+    visualTitle="Your support path"
+    visualItems={["Choose the right destination", "Provide order or mark details", "Receive a clear next step"]}
+    trustItems={[["New applications","Compare plans and begin through the dedicated registration page."],["Existing orders","Have the order email or receipt information ready when calling."],["Automatic follow-up","After purchase, confirmation and service updates go to the provided contact details."]]}
+    sectionEyebrow="Get to the right team"
+    sectionTitle="Support designed around where you are in the process"
+    sectionDescription="You should not have to submit a form that goes nowhere. Choose the working action that matches your situation."
+    benefits={[["Ready to register","Go directly to the registration page to compare service plans and begin."],["Already purchased","Call customer support with the order email or receipt details for faster identification."],["Comparing services","Explore registration, renewal and revival support before choosing the next step."]]}
+    process={[["Select your path","Start a new registration or contact support about an existing order."],["Share the relevant details","Provide the mark information or order identifier needed for the request."],["Receive the next action","Our team follows up with confirmation or the applicable support step."]]}
+    highlightTitle="Clear support without a broken contact form"
+    highlightDescription="Every prominent action on this page now leads to a real destination: registration plans, service information or the published customer-support number."
+    highlightItems={["Working phone link on mobile", "Direct registration-plan link", "No unnecessary data collection", "Service and policy links in the footer"]}
+    closingTitle="New trademark application or existing order?"
+    closingDescription="Begin online for a new registration, or call support when you already have an order."
+  />;
 }

@@ -1,18 +1,26 @@
-import Header from "@/components/ui/Header";
-import Image from "next/image";
-import Link from "next/link";
-import FooterSection from "@/components/sections/FooterSection";
-import TMButton from "@/components/ui/TMButton";
+import PremiumServicePage from "@/components/sections/PremiumServicePage";
 
 export const metadata = { title: "Trademark Renewal Filing Support | Legal Trademark Office", description: "Organize the information needed for a U.S. trademark maintenance or renewal filing with clear customer review and filing support.", alternates: { canonical: "/services/trademark-renewal" } };
 
-const steps = [["Review the registration record","Share the registration details and current owner information so the maintenance need can be identified."],["Organize the renewal information","Prepare the required use, ownership and filing details for your review."],["Approve the next step","Confirm the prepared information and applicable fees before a submission moves forward."]];
-
 export default function TrademarkRenewalPage() {
-  return <><Header /><main className="bg-slate-100">
-    <section className="flex min-h-[72vh] items-center bg-gradient-to-br from-[#063f70] via-[#075A96] to-[#027DD6] px-5 py-28"><div className="mx-auto w-full max-w-5xl space-y-6"><p className="font-semibold uppercase tracking-[0.18em] text-blue-100">Trademark maintenance support</p><h1 className="max-w-3xl text-4xl font-bold leading-tight text-white md:text-5xl">Keep Your Trademark Renewal on a Clear Path</h1><p className="max-w-2xl text-lg leading-8 text-slate-100">Get structured filing support for U.S. trademark maintenance and renewal information, with a clear checklist and customer review before submission.</p><div className="flex flex-col gap-4 sm:flex-row"><TMButton px="80px" py="30px" text="Start Now" /><Link href="/contact-us" className="inline-flex min-h-14 items-center justify-center rounded-lg border border-white px-10 py-4 font-semibold text-white">Contact support</Link></div></div></section>
-    <section className="px-5 py-20 md:py-28"><div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2"><Image width={560} height={500} sizes="(max-width: 768px) 100vw, 50vw" alt="Trademark renewal filing support" src="/images/tm-renewal.jpg" className="h-auto rounded-2xl object-cover" /><div><p className="font-semibold text-[#027DD6]">Renewal filing support</p><h2 className="mt-2 text-3xl font-bold text-[#075A96]">Prepare the details your maintenance filing needs</h2><p className="mt-5 text-lg leading-8 text-slate-600">Renewal support helps bring registration, ownership and use information into one organized workflow. You review the prepared details and approve the next step.</p><div className="mt-8"><TMButton px="70px" py="30px" text="Get Started" /></div></div></div></section>
-    <section className="bg-[#E5F4FF] px-5 py-20"><div className="mx-auto max-w-6xl"><div className="text-center"><h2 className="text-3xl font-bold text-[#075A96]">Three steps to move forward</h2><p className="mt-3 text-slate-600">A simple sales and support process built around your renewal need.</p></div><div className="mt-10 grid gap-6 md:grid-cols-3">{steps.map(([title,copy],i)=><article key={title} className="rounded-2xl bg-white p-7 shadow-sm"><span className="font-bold text-[#027DD6]">0{i+1}</span><h3 className="mt-4 text-xl font-bold text-[#075A96]">{title}</h3><p className="mt-3 leading-7 text-slate-600">{copy}</p></article>)}</div><div className="mt-10 text-center"><Link href="/contact-us" className="inline-flex min-h-14 items-center rounded-lg bg-[#027DD6] px-10 py-4 font-semibold text-white">Request renewal support</Link></div></div></section>
-    <FooterSection />
-  </main></>;
+  return <PremiumServicePage
+    eyebrow="Trademark maintenance support"
+    title="Keep Your Trademark Renewal on a Clear Path"
+    description="Bring registration, ownership and use information into one organized renewal workflow with clear preparation, customer review and filing support."
+    primaryLabel="Request Renewal Support"
+    primaryHref="/contact-us"
+    visualTitle="Your renewal workflow"
+    visualItems={["Registration record organized", "Maintenance details prepared", "Customer approval confirmed"]}
+    trustItems={[["Focused preparation","A workflow designed around trademark maintenance information."],["Customer review","Review the prepared details before the next filing step."],["Clear fee approval","Any applicable government fee is handled separately with authorization."]]}
+    sectionEyebrow="Renew with less friction"
+    sectionTitle="Everything needed to organize the next maintenance step"
+    sectionDescription="Renewal filing support turns scattered registration information into a clear, customer-controlled process."
+    benefits={[["Registration record review","Start with the registration number, owner details and relevant maintenance window."],["Use information organized","Bring current use and ownership details together for the selected filing support."],["Filing-step coordination","Know what is ready, what still needs attention and what happens after approval."]]}
+    process={[["Share the registration details","Provide the registration record and current owner information."],["Complete the requested information","Respond to the focused checklist for the applicable maintenance filing."],["Review and authorize","Check the prepared details and approve the next step before submission."]]}
+    highlightTitle="A renewal experience designed around clarity"
+    highlightDescription="The page and support workflow are built to help customers move forward without searching through unrelated services or unclear package claims."
+    highlightItems={["Defined maintenance-support scope", "Responsive mobile experience", "No automatic package renewal", "Status and service updates after purchase"]}
+    closingTitle="Ready to organize your trademark renewal?"
+    closingDescription="Start with your registration details and our support team will help identify the next preparation step."
+  />;
 }

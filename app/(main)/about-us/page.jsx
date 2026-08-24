@@ -1,12 +1,28 @@
-import Header from "@/components/ui/Header";
-import FooterSection from "@/components/sections/FooterSection";
-import TMButton from "@/components/ui/TMButton";
-import Link from "next/link";
-import { FaArrowRightLong } from "react-icons/fa6";
+import PremiumServicePage from "@/components/sections/PremiumServicePage";
 
 export const metadata = { title: "About Legal Trademark Office LLC | Filing Support", description: "Learn how Virginia-based Legal Trademark Office LLC helps customers prepare and submit U.S. trademark application information.", alternates: { canonical: "/about-us" } };
 
 export default function AboutPage() {
-  const steps = [["Organized preparation","We bring mark, owner, goods or services and filing-basis details into one preparation workflow."],["Customer review","Customers review their prepared application information and approve the next step before submission."],["Clear service scope","The selected plan defines the preparation speed and included filing-support work."]];
-  return <><Header /><main className="bg-slate-100"><section className="flex min-h-[70vh] items-center bg-gradient-to-br from-slate-50 via-blue-50 to-[#dceeff] px-5 py-28"><div className="mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-[1.15fr_.85fr]"><div><p className="font-semibold uppercase tracking-[0.18em] text-[#027DD6]">About our filing-support company</p><h1 className="mt-4 text-4xl font-bold leading-tight text-[#075A96] md:text-5xl">Trademark Application Support Built Around a Clear Next Step</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">Legal Trademark Office LLC is a Virginia company that helps customers organize U.S. trademark application information for review and submission.</p><div className="mt-8 flex flex-col gap-4 sm:flex-row"><TMButton px="70px" py="30px" text="Start Registration" /><Link href="/services" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-lg border border-[#027DD6] px-8 py-4 font-semibold text-[#075A96]">Explore services <FaArrowRightLong aria-hidden="true" /></Link></div></div><aside className="rounded-3xl bg-[#075A96] p-8 text-white shadow-xl"><p className="text-sm font-semibold uppercase tracking-widest text-blue-100">Our focus</p><h2 className="mt-3 text-3xl font-bold">Careful preparation with customer control</h2><p className="mt-4 leading-7 text-blue-50">Your name, logo or slogan remains connected to the owner information you provide. You review material filing details and any separate USPTO class fees before filing.</p></aside></div></section><section className="px-5 py-20 md:py-28"><div className="mx-auto max-w-6xl"><div className="mx-auto max-w-3xl text-center"><p className="font-semibold text-[#027DD6]">How we support customers</p><h2 className="mt-2 text-3xl font-bold text-[#075A96]">A simple filing-support workflow</h2></div><div className="mt-10 grid gap-6 md:grid-cols-3">{steps.map(([title,copy],i)=><article key={title} className="rounded-2xl bg-white p-7 shadow-sm"><span className="font-bold text-[#027DD6]">0{i+1}</span><h3 className="mt-4 text-xl font-bold text-[#075A96]">{title}</h3><p className="mt-3 leading-7 text-slate-600">{copy}</p></article>)}</div></div></section><section className="bg-[#E5F4FF] px-5 py-20"><div className="mx-auto max-w-5xl text-center"><h2 className="text-3xl font-bold text-[#075A96]">Choose support that fits your brand</h2><p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">Compare registration plans, preparation times and included services before you begin.</p><div className="mt-8"><TMButton px="80px" py="30px" text="Compare Plans and Start" /></div></div></section><FooterSection /></main></>;
+  return <PremiumServicePage
+    eyebrow="About Legal Trademark Office LLC"
+    title="Trademark Filing Support Built Around a Better Customer Experience"
+    description="We help customers turn brand, ownership, goods or services and filing-basis information into an organized U.S. trademark application workflow."
+    primaryLabel="Start Trademark Registration"
+    primaryHref="/trademark-registration"
+    secondaryLabel="Explore our services"
+    secondaryHref="/services"
+    visualTitle="How we support your filing"
+    visualItems={["Information organized", "Application details reviewed", "Next step kept clear"]}
+    trustItems={[["Virginia company","Legal Trademark Office LLC is organized in Virginia."],["Independent service","We are not the USPTO or another government agency."],["Customer ownership","The applicant and owner information comes from the customer."]]}
+    sectionEyebrow="Our approach"
+    sectionTitle="Careful preparation without taking control away from you"
+    sectionDescription="Our role is to make the preparation and submission workflow easier to follow while keeping material filing information visible to the customer."
+    benefits={[["Organized application details","Bring mark, ownership, goods or services and filing-basis information into one preparation path."],["Defined service choices","Select the preparation time and support scope that fit the application."],["Post-purchase follow-up","Receive confirmation and service updates using the contact details provided with the order."]]}
+    process={[["Choose a service plan","Compare the available preparation levels and included support."],["Provide the filing details","Complete the focused application questionnaire for the name, logo or slogan."],["Review the prepared information","Confirm material details and the next filing step before submission."]]}
+    highlightTitle="A service experience designed to feel clear and professional"
+    highlightDescription="Good filing support is not only about forms. It is also about keeping service scope, customer decisions and next actions understandable from the beginning."
+    highlightItems={["One clear registration destination", "Customer review before submission", "Separate government-fee authorization", "Privacy, Terms and Refund policies linked sitewide"]}
+    closingTitle="Ready to build a stronger filing starting point?"
+    closingDescription="Compare the registration plans and choose the preparation support that fits your brand."
+  />;
 }
