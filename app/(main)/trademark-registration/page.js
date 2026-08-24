@@ -1,5 +1,5 @@
 import React from "react";
-import ConversionPreview from "@/components/pages/ConversionPreview";
+import LandingPage from "@/components/pages/LandingPage";
 
 export const metadata = {
   title: "Trademark Registration Filing Support | Legal Trademark Office",
@@ -30,7 +30,7 @@ const page = () => {
           __html: JSON.stringify(serviceSchema).replace(/</g, "\\u003c"),
         }}
       />
-      <ConversionPreview showPreviewNotice={false} />
+      <LandingPage />
     </>
   );
 };
