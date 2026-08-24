@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import HeaderText from "@/components/ui/HeaderText";
 import TMButton from "@/components/ui/TMButton";
-import AttorneyCard from "@/components/ui/AttorneyCard";
 import StepCard from "@/components/ui/StepCard";
 import Link from "next/link";
 import { FaArrowRightLong, FaShieldHeart } from "react-icons/fa6";
@@ -106,7 +105,7 @@ const page = () => {
           <SimilarMarks />
         </section>
 
-        {/* attorney section */}
+        {/* filing support section */}
         <section className="relative">
           <div className="bg-[#DFEAF1] h-[530px] absolute w-full top-0"></div>
           <div className="flex-between gap-7 max-md:gap-1 max-w-5xl m-auto pt-24 max-md:pt-20 pb-16 relative">
@@ -120,12 +119,12 @@ const page = () => {
               />
             </div>
             <div className="col-flex justify-center items-center gap-4">
-              <h1 className="text-4xl max-md:text-3xl text-slate-700">
-                <span className="font-bold text-color-primary">{`Attorneys with`}</span>
-                <span className="font-normal">{` You Every Step of the Way`}</span>
-              </h1>
+              <h2 className="text-4xl max-md:text-3xl text-slate-700 text-center">
+                <span className="font-bold text-color-primary">{`Professional Filing Support`}</span>
+                <span className="font-normal">{` at Every Step`}</span>
+              </h2>
               <p className="text-slate-600 text-base text-center">
-                {`At Legal Trademark Office, our experienced attorneys have represented a wide range of businesses, from Amazon sellers and clothing designers to professional service providers. We understand the unique needs of every business and are dedicated to ensuring your brand is protected with expert legal guidance.`}
+                {`Our team helps organize your application details, prepare filing information, and keep you informed throughout the trademark submission process.`}
               </p>
             </div>
             <div className="flex items-end">
@@ -138,22 +137,46 @@ const page = () => {
               />
             </div>
           </div>
-          <div className="flex-center gap-10 max-md:flex-col">
-            <AttorneyCard
-              name={`Ksean Williams`}
-              details={`Ksean is a seasoned intellectual property attorney who has represented a diverse range of clients, from small businesses to international corporations. His strategic approach ensures your trademark is secure and fully compliant.`}
-              imageName={`attorney-1.png`}
-            />
-            <AttorneyCard
-              name={`James Clarke`}
-              details={`James has extensive experience in trademark law and is committed to helping businesses protect their intellectual property, With over 7 years of legal experience.`}
-              imageName={`attorney-2.png`}
-            />
-            <AttorneyCard
-              name={`Sophia Green`}
-              details={`With over 10 years of legal experience, Sophia specializes in helping startups secure their trademarks and grow their brand with confidence. She's known for her attention to detail and client-focused approach.`}
-              imageName={`attorney-3.png`}
-            />
+          <div className="flex-center gap-10 max-md:flex-col max-md:px-5">
+            {[
+              {
+                title: "Application Preparation",
+                details:
+                  "We help organize your mark, ownership, and goods or services information so your application is prepared clearly and accurately.",
+                icon: "/images/form_fill.png",
+              },
+              {
+                title: "Filing Coordination",
+                details:
+                  "Our filing team coordinates the submission process and helps you understand what information is needed at each stage.",
+                icon: "/images/search-icon.png",
+              },
+              {
+                title: "Case Updates",
+                details:
+                  "Stay informed about important application activity, document requests, and next steps as your filing progresses.",
+                icon: "/images/user-group.png",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="w-[300px] min-h-[330px] bg-white rounded-xl shadow-lg px-7 py-9 col-flex items-center gap-5 text-center"
+              >
+                <div className="w-20 h-20 rounded-full bg-[#E9F5FD] flex-center">
+                  <Image
+                    width={48}
+                    height={48}
+                    alt=""
+                    src={item.icon}
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-bold text-color-primary">
+                  {item.title}
+                </h3>
+                <p className="text-slate-600 leading-7">{item.details}</p>
+              </div>
+            ))}
           </div>
         </section>
 
