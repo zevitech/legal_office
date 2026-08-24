@@ -1,4 +1,8 @@
-import { Country, State, City } from "country-state-city";
+// Import only the datasets used by the intake form. Importing the package root
+// also bundles its multi-megabyte worldwide city dataset even though this form
+// never requests cities.
+import Country from "country-state-city/lib/country";
+import State from "country-state-city/lib/state";
 
 /**
  * Fetch geographical data based on the type and specific country/state.
@@ -19,12 +23,6 @@ export const GetGeographicalData = (type, countryCode = "", stateCode = "") => {
     return states.map((state) => ({
       value: state.isoCode,
       name: state.name,
-    }));
-  } else if (type === "city" && countryCode && stateCode) {
-    const cities = City.getCitiesOfState(countryCode, stateCode);
-    return cities.map((city) => ({
-      value: city.name,
-      name: city.name,
     }));
   } else {
     return [];
