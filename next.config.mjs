@@ -38,6 +38,7 @@ const nextConfig = {
       },
       ...[
         "/conversion-preview",
+        "/legacy-landing-preview",
         "/form-conversion-preview",
         "/goods-services-preview",
       ].map((source) => ({

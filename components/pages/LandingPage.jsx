@@ -91,13 +91,13 @@ const LandingPage = () => {
   return (
     <>
       {/* hero section */}
-      <section className="relative w-full bg-of-hero pb-20 max-md:pb-10 backdrop-brightness-150">
+      <section data-customizer-old-section="hero" className="relative w-full bg-of-hero pb-20 max-md:pb-10 backdrop-brightness-150">
         <div className="heroBg absolute"></div>
         <div>
           <LandingHeader />
           <div className="flex-center mt-8 max-md:mt-4">
             <div className="flex flex-col gap-5 max-md:gap-2 max-w-[1000px] px-2">
-              <h1 className="text-slate-800 text-5xl max-md:text-2xl leading-tight font-bold text-center">
+              <h1 data-customizer-old-text="hero-title" className="text-slate-800 text-5xl max-md:text-2xl leading-tight font-bold text-center">
                 Trademark Registration for Your Business Name, Logo or Slogan
               </h1>
               <h2 className="text-slate-700 text-2xl font-bold text-center">
@@ -105,7 +105,7 @@ const LandingPage = () => {
                   U.S. Trademark Registration from $49 + USPTO Filing Fee
                 </span>
               </h2>
-              <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
+              <p data-customizer-old-text="hero-copy" className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
                 Complete our guided questionnaire and our filing team will prepare
                 your trademark application. Review and approve the details, then
                 track documents and updates in your secure account.
@@ -168,10 +168,10 @@ const LandingPage = () => {
       </section>
 
       {/* clients or partner section */}
-      <ClientSection />
+      <div data-customizer-old-section="brand-examples"><ClientSection /></div>
 
       {/* interactive protection selector */}
-      <section className="mx-auto mt-20 max-w-6xl px-4 max-md:mt-14">
+      <section data-customizer-old-section="mark-selector" className="mx-auto mt-20 max-w-6xl px-4 max-md:mt-14">
         <div className="text-center">
           <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">Start with your mark</p>
           <h2 className="mt-2 text-4xl font-bold text-slate-800 max-md:text-3xl">What would you like to protect?</h2>
@@ -187,7 +187,7 @@ const LandingPage = () => {
       </section>
 
       {/* how it's work section */}
-      <section className="flex-center mt-24 max-md:mt-20 max-md:w-full">
+      <section data-customizer-old-section="process" className="flex-center mt-24 max-md:mt-20 max-md:w-full">
         <div className="flex flex-col gap-16 max-md:gap-8">
           <div className="text-center flex flex-col gap-4  max-md:px-3">
             <h2 className="text-4xl text-[#025da0] font-bold max-md:text-3xl">
@@ -232,7 +232,7 @@ const LandingPage = () => {
       </section>
 
       {/* filing readiness section */}
-      <section className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
+      <section data-customizer-old-section="filing-readiness" className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
           <div className="grid items-start gap-8 lg:grid-cols-[.85fr_1.15fr]">
             <div>
@@ -254,7 +254,7 @@ const LandingPage = () => {
       </section>
 
       {/* customer account preview */}
-      <section className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
+      <section data-customizer-old-section="customer-account" className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
         <div className="overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-xl shadow-blue-100/50 md:p-10">
           <div className="grid items-center gap-10 lg:grid-cols-[.9fr_1.1fr]">
             <div>
@@ -276,7 +276,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-        <section className="py-10 max-md:px-2 mb-[5rem]">
+        <section data-customizer-old-section="pricing" className="py-10 max-md:px-2 mb-[5rem]">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
             <HeaderText text1="Trademark" text2="Registration Packages" />
             <p className="text-slate-500 text-base text-center max-md:text-start">
@@ -291,7 +291,7 @@ const LandingPage = () => {
         </section>
 
       {/* after-payment timeline */}
-      <section className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
+      <section data-customizer-old-section="after-checkout" className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
         <div className="text-center"><p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">After checkout</p><h2 className="mt-2 text-4xl font-bold text-slate-800 max-md:text-3xl">Know what happens next.</h2><p className="mx-auto mt-3 max-w-2xl text-slate-600">Your receipt is immediate, and your account keeps every following step visible.</p></div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[
           ["1", "Payment confirmed", "Receive your receipt and account access."],
@@ -302,7 +302,7 @@ const LandingPage = () => {
       </section>
 
       {/* benefit section */}
-      <section className="mt-24 max-md:mt-20">
+      <section data-customizer-old-section="benefits" className="mt-24 max-md:mt-20">
         <div className="text-center flex flex-col gap-4 mb-16 max-md:mb-10 max-md:px-5">
           <h2 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
             Why Choose Us
@@ -365,7 +365,7 @@ finish, so you can focus on growing your business.`}
       </section>
 
       {/* contact us section */}
-      <section className="mt-28 bg-of-hero py-12 max-md:mt-20 max-md:py-16">
+      <section data-customizer-old-section="contact" className="mt-28 bg-of-hero py-12 max-md:mt-20 max-md:py-16">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-4 lg:grid-cols-2 lg:gap-16">
           <div className="flex w-full justify-end">
             <div>
@@ -421,7 +421,7 @@ finish, so you can focus on growing your business.`}
       </section>
 
       {/* faq section */}
-      <section className="mt-28 flex justify-center max-md:mt-20">
+      <section data-customizer-old-section="faq" className="mt-28 flex justify-center max-md:mt-20">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-10 px-4 lg:grid-cols-[5fr_6fr] lg:gap-16">
           <div className="w-full">
             <div className="text-center flex flex-col gap-4 ">
@@ -457,7 +457,7 @@ finish, so you can focus on growing your business.`}
       </section>
 
       {/* why choose us */}
-      <section className="flex flex-col gap-16 max-md:gap-14 mt-28 max-md:mt-20 bg-slate-50 py-24 max-md:py-20">
+      <section data-customizer-old-section="proof" className="flex flex-col gap-16 max-md:gap-14 mt-28 max-md:mt-20 bg-slate-50 py-24 max-md:py-20">
         <div className="text-center flex flex-col gap-4 max-md:px-5">
           <h2 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
             Trusted by clients in over 20 countries
@@ -516,7 +516,7 @@ finish, so you can focus on growing your business.`}
       </section>
 
       {/* testimonial section  */}
-      <section className="flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-16">
+      <section data-customizer-old-section="testimonials" className="flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-16">
         <div className="flex">
           <div className="flex-center gap-2 flex-col">
             <h2 className="text-2xl font-bold text-slate-800">Excellent</h2>
@@ -541,7 +541,7 @@ finish, so you can focus on growing your business.`}
       </section>
 
       {/* footer section */}
-      <footer className="mt-28 max-md:mt-20 bg-footer w-full bg-no-repeat bg-cover relative">
+      <footer data-customizer-old-section="footer" className="mt-28 max-md:mt-20 bg-footer w-full bg-no-repeat bg-cover relative">
         <div className="footer-overly"></div>
         <div className="pt-20 z-30 relative">
           <div className="flex-center">

@@ -25,6 +25,23 @@ const LANDING_SECTIONS = [
   { id: "final-cta", label: "Final call to action" },
 ];
 
+const CURRENT_SECTIONS = [
+  { id: "hero", label: "Current hero", replacement: "New hero" },
+  { id: "brand-examples", label: "Brand examples", replacement: "Benefit strip" },
+  { id: "mark-selector", label: "Mark-type selector", replacement: "New mark selector" },
+  { id: "process", label: "Three-step process", replacement: "New process" },
+  { id: "filing-readiness", label: "Filing readiness", replacement: "No direct replacement" },
+  { id: "customer-account", label: "Customer account preview", replacement: "New account section" },
+  { id: "pricing", label: "Current packages", replacement: "New package cards" },
+  { id: "after-checkout", label: "After-checkout timeline", replacement: "New account section" },
+  { id: "benefits", label: "Why choose us", replacement: "New benefit strip" },
+  { id: "contact", label: "Call and live chat", replacement: "No direct replacement" },
+  { id: "faq", label: "Current FAQs", replacement: "New concise FAQs" },
+  { id: "proof", label: "Statistics and proof", replacement: "No direct replacement" },
+  { id: "testimonials", label: "Customer reviews", replacement: "No direct replacement" },
+  { id: "footer", label: "Current full footer", replacement: "New compact footer" },
+];
+
 const DEFAULT_CONFIG = {
   landing: {
     order: LANDING_SECTIONS.map(({ id }) => id),
@@ -34,6 +51,13 @@ const DEFAULT_CONFIG = {
     mobileCta: true,
     heroTitle: "Trademark Registration for Your Business Name, Logo or Slogan",
     heroCopy: "Complete a guided questionnaire and our filing team will prepare your application for review. Approve the details, then follow documents and updates from your secure customer account.",
+  },
+  currentLanding: {
+    order: CURRENT_SECTIONS.map(({ id }) => id),
+    visible: Object.fromEntries(CURRENT_SECTIONS.map(({ id }) => [id, true])),
+    decision: Object.fromEntries(CURRENT_SECTIONS.map(({ id }) => [id, "current"])),
+    heroTitle: "Trademark Registration for Your Business Name, Logo or Slogan",
+    heroCopy: "Complete our guided questionnaire and our filing team will prepare your trademark application. Review and approve the details, then track documents and updates in your secure account.",
   },
   form: { header: true, progress: true, footer: true, notice: true },
 };
@@ -64,6 +88,7 @@ function Toggle({ checked, onChange, label }) {
 export default function PageCustomizer() {
   const iframeRef = useRef(null);
   const [mode, setMode] = useState("landing");
+  const [landingVersion, setLandingVersion] = useState("current");
   const [formScreen, setFormScreen] = useState("application");
   const [viewport, setViewport] = useState("desktop");
   const [config, setConfig] = useState(DEFAULT_CONFIG);
@@ -78,15 +103,15 @@ export default function PageCustomizer() {
   }, []);
 
   const previewUrl = useMemo(() => {
-    if (mode === "landing") return "/conversion-preview?customizer=1";
+    if (mode === "landing") return landingVersion === "current" ? "/legacy-landing-preview?customizer=1" : "/conversion-preview?customizer=1";
     return formScreen === "goods" ? "/goods-services-preview?customizer=1" : "/form-conversion-preview?customizer=1";
-  }, [formScreen, mode]);
+  }, [formScreen, landingVersion, mode]);
 
   const applyConfiguration = useCallback(() => {
     const document = iframeRef.current?.contentDocument;
     if (!document) return;
 
-    if (mode === "landing") {
+    if (mode === "landing" && landingVersion === "replacement") {
       const { landing } = config;
       document.querySelector('[data-customizer-section="preview-notice"]')?.style.setProperty("display", "none");
       document.querySelector('[data-customizer-section="header"]')?.style.setProperty("display", landing.header ? "" : "none");
@@ -102,6 +127,18 @@ export default function PageCustomizer() {
       const copy = document.querySelector('[data-customizer-text="hero-copy"]');
       if (title) title.textContent = landing.heroTitle;
       if (copy) copy.textContent = landing.heroCopy;
+    } else if (mode === "landing") {
+      const { currentLanding } = config;
+      currentLanding.order.forEach((id) => {
+        const element = document.querySelector(`[data-customizer-old-section="${id}"]`);
+        const footer = document.querySelector('[data-customizer-old-section="footer"]');
+        if (element && footer && id !== "footer") footer.parentNode.insertBefore(element, footer);
+        if (element) element.style.display = currentLanding.decision?.[id] === "current" ? "" : "none";
+      });
+      const title = document.querySelector('[data-customizer-old-text="hero-title"]');
+      const copy = document.querySelector('[data-customizer-old-text="hero-copy"]');
+      if (title) title.textContent = currentLanding.heroTitle;
+      if (copy) copy.textContent = currentLanding.heroCopy;
     } else {
       Object.entries(config.form).forEach(([id, visible]) => {
         document.querySelectorAll(`[data-customizer-form="${id}"]`).forEach((element) => {
@@ -109,7 +146,7 @@ export default function PageCustomizer() {
         });
       });
     }
-  }, [config, mode]);
+  }, [config, landingVersion, mode]);
 
   useEffect(() => {
     applyConfiguration();
@@ -125,12 +162,25 @@ export default function PageCustomizer() {
     setConfig((current) => ({ ...current, form: { ...current.form, ...patch } }));
   };
 
+  const updateCurrentLanding = (patch) => {
+    setSaved(false);
+    setConfig((current) => ({ ...current, currentLanding: { ...current.currentLanding, ...patch } }));
+  };
+
   const moveSection = (index, direction) => {
     const nextIndex = index + direction;
     if (nextIndex < 0 || nextIndex >= config.landing.order.length) return;
     const order = [...config.landing.order];
     [order[index], order[nextIndex]] = [order[nextIndex], order[index]];
     updateLanding({ order });
+  };
+
+  const moveCurrentSection = (index, direction) => {
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= config.currentLanding.order.length) return;
+    const order = [...config.currentLanding.order];
+    [order[index], order[nextIndex]] = [order[nextIndex], order[index]];
+    updateCurrentLanding({ order });
   };
 
   const saveConfiguration = () => {
@@ -152,6 +202,14 @@ export default function PageCustomizer() {
       `Header: ${config.landing.header ? "SHOW" : "HIDE"}`,
       `Footer: ${config.landing.footer ? "SHOW" : "HIDE"}`,
       `Mobile CTA: ${config.landing.mobileCta ? "SHOW" : "HIDE"}`,
+      "",
+      "CURRENT LANDING PAGE SECTIONS",
+      ...config.currentLanding.order.map((id, index) => {
+        const section = CURRENT_SECTIONS.find((item) => item.id === id);
+        return `${index + 1}. ${section?.label}: ${(config.currentLanding.decision?.[id] || "current").toUpperCase()} | Replacement: ${section?.replacement}`;
+      }),
+      `Current hero title: ${config.currentLanding.heroTitle}`,
+      `Current hero copy: ${config.currentLanding.heroCopy}`,
       "",
       "FORM CONFIGURATION",
       ...formLines,
@@ -193,25 +251,37 @@ export default function PageCustomizer() {
 
           {mode === "landing" ? (
             <div className="space-y-5 p-4">
+              <div className="grid grid-cols-2 rounded-xl bg-slate-100 p-1" aria-label="Landing page version">
+                {[['current','Current LP'],['replacement','Replacement']].map(([id,label]) => <button key={id} type="button" onClick={() => setLandingVersion(id)} aria-pressed={landingVersion === id} className={`min-h-11 cursor-pointer rounded-lg px-3 text-sm font-bold transition ${landingVersion === id ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600 hover:text-slate-900"}`}>{label}</button>)}
+              </div>
               <div>
                 <h2 className="font-black">Sections</h2>
-                <p className="mt-1 text-sm leading-6 text-slate-600">Show, hide or reorder the conversion preview.</p>
+                <p className="mt-1 text-sm leading-6 text-slate-600">{landingVersion === "current" ? "Review every section already on your LP and compare its suggested replacement." : "Review, hide and reorder the proposed replacement sections."}</p>
               </div>
               <div className="space-y-2">
-                {config.landing.order.map((id, index) => {
+                {landingVersion === "replacement" ? config.landing.order.map((id, index) => {
                   const section = LANDING_SECTIONS.find((item) => item.id === id);
                   return <div key={id} className="flex min-h-14 items-center gap-2 rounded-xl border border-slate-200 p-2.5"><Toggle checked={config.landing.visible[id]} onChange={(checked) => updateLanding({ visible: { ...config.landing.visible, [id]: checked } })} label={`${config.landing.visible[id] ? "Hide" : "Show"} ${section?.label}`} /><span className="min-w-0 flex-1 text-sm font-bold">{section?.label}</span><button type="button" aria-label={`Move ${section?.label} up`} disabled={index === 0} onClick={() => moveSection(index, -1)} className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"><HiArrowUp aria-hidden="true" /></button><button type="button" aria-label={`Move ${section?.label} down`} disabled={index === config.landing.order.length - 1} onClick={() => moveSection(index, 1)} className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"><HiArrowDown aria-hidden="true" /></button></div>;
+                }) : config.currentLanding.order.map((id, index) => {
+                  const section = CURRENT_SECTIONS.find((item) => item.id === id);
+                  const decision = config.currentLanding.decision?.[id] || "current";
+                  const hasReplacement = section?.replacement !== "No direct replacement";
+                  const chooseDecision = (nextDecision) => {
+                    updateCurrentLanding({ decision: { ...config.currentLanding.decision, [id]: nextDecision } });
+                    if (nextDecision === "replacement") setLandingVersion("replacement");
+                  };
+                  return <div key={id} className={`rounded-xl border p-2.5 ${decision === "current" ? "border-sky-300 bg-sky-50/50" : "border-slate-200"}`}><div className="flex min-h-11 items-center gap-2"><span className="min-w-0 flex-1 text-sm font-bold">{section?.label}</span><button type="button" aria-label={`Move ${section?.label} up`} disabled={index === 0} onClick={() => moveCurrentSection(index, -1)} className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"><HiArrowUp aria-hidden="true" /></button><button type="button" aria-label={`Move ${section?.label} down`} disabled={index === config.currentLanding.order.length - 1} onClick={() => moveCurrentSection(index, 1)} className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"><HiArrowDown aria-hidden="true" /></button></div><p className="mb-2 text-xs leading-5 text-slate-500">Suggested: {section?.replacement}</p><div className="grid grid-cols-3 rounded-lg bg-slate-100 p-1 text-xs font-bold"><button type="button" onClick={() => chooseDecision("current")} className={`min-h-9 cursor-pointer rounded-md px-2 ${decision === "current" ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600"}`}>Keep</button><button type="button" disabled={!hasReplacement} onClick={() => chooseDecision("replacement")} className={`min-h-9 cursor-pointer rounded-md px-2 disabled:cursor-not-allowed disabled:opacity-35 ${decision === "replacement" ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600"}`}>Replace</button><button type="button" onClick={() => chooseDecision("remove")} className={`min-h-9 cursor-pointer rounded-md px-2 ${decision === "remove" ? "bg-white text-red-700 shadow-sm" : "text-slate-600"}`}>Remove</button></div></div>;
                 })}
               </div>
               <div className="space-y-3 border-t border-slate-200 pt-5">
                 <label className="block text-sm font-bold" htmlFor="hero-title">Hero heading</label>
-                <textarea id="hero-title" rows={3} value={config.landing.heroTitle} onChange={(event) => updateLanding({ heroTitle: event.target.value })} className="w-full resize-y rounded-xl border border-slate-300 px-3 py-3 text-sm leading-6 outline-none focus:border-[#087fd3] focus:ring-4 focus:ring-sky-100" />
+                <textarea id="hero-title" rows={3} value={landingVersion === "current" ? config.currentLanding.heroTitle : config.landing.heroTitle} onChange={(event) => landingVersion === "current" ? updateCurrentLanding({ heroTitle: event.target.value }) : updateLanding({ heroTitle: event.target.value })} className="w-full resize-y rounded-xl border border-slate-300 px-3 py-3 text-sm leading-6 outline-none focus:border-[#087fd3] focus:ring-4 focus:ring-sky-100" />
                 <label className="block text-sm font-bold" htmlFor="hero-copy">Hero supporting text</label>
-                <textarea id="hero-copy" rows={5} value={config.landing.heroCopy} onChange={(event) => updateLanding({ heroCopy: event.target.value })} className="w-full resize-y rounded-xl border border-slate-300 px-3 py-3 text-sm leading-6 outline-none focus:border-[#087fd3] focus:ring-4 focus:ring-sky-100" />
+                <textarea id="hero-copy" rows={5} value={landingVersion === "current" ? config.currentLanding.heroCopy : config.landing.heroCopy} onChange={(event) => landingVersion === "current" ? updateCurrentLanding({ heroCopy: event.target.value }) : updateLanding({ heroCopy: event.target.value })} className="w-full resize-y rounded-xl border border-slate-300 px-3 py-3 text-sm leading-6 outline-none focus:border-[#087fd3] focus:ring-4 focus:ring-sky-100" />
               </div>
-              <div className="space-y-3 border-t border-slate-200 pt-5">
+              {landingVersion === "replacement" && <div className="space-y-3 border-t border-slate-200 pt-5">
                 {[['header','Header'],['footer','Policy footer'],['mobileCta','Mobile sticky CTA']].map(([id,label]) => <div key={id} className="flex min-h-11 items-center justify-between gap-3"><span className="text-sm font-bold">{label}</span><Toggle checked={config.landing[id]} onChange={(checked) => updateLanding({ [id]: checked })} label={`${config.landing[id] ? "Hide" : "Show"} ${label}`} /></div>)}
-              </div>
+              </div>}
             </div>
           ) : (
             <div className="space-y-5 p-4">
