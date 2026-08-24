@@ -65,7 +65,6 @@ const PackageCard2 = () => (
         </article>
       ))}
     </div>
-    <p className="mt-5 text-center text-sm font-semibold text-amber-900">USPTO filing fee: $350 per class, paid separately from the selected service plan.</p>
   </div>
 );
 

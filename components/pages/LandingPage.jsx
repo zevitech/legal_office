@@ -172,9 +172,6 @@ const LandingPage = () => {
             /> */}
           </div>
         </div>
-        <p className="mx-auto mt-5 max-w-2xl px-4 text-center text-xs font-semibold text-slate-600">
-          Service plans start at $49. The USPTO government filing fee is $350 per class and is paid separately before filing.
-        </p>
       </section>
 
       {/* clients or partner section */}
@@ -249,6 +246,29 @@ const LandingPage = () => {
               Start Your Application
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* filing readiness section */}
+      <section className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
+          <div className="grid items-start gap-8 lg:grid-cols-[.85fr_1.15fr]">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[.14em] text-primary-theme">Prepare with confidence</p>
+              <h2 className="mt-2 text-3xl font-bold leading-tight text-slate-800 max-md:text-2xl">Avoid common filing problems.</h2>
+              <p className="mt-4 leading-7 text-slate-600">The USPTO may raise questions when important details are incomplete or inconsistent. Our guided application helps collect the information needed for review before filing.</p>
+              <Button onClick={handleRegisterClick} isLoading={isLoading} className="mt-6 bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">Start Your Application</Button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {["A similar existing trademark", "Incorrect goods or services class", "Unclear business activity description", "Incomplete ownership information", "Weak or unsuitable proof of use", "Missing application details"].map((item) => (
+                <div key={item} className="flex min-h-16 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-700">
+                  <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-100 text-primary-theme">✓</span>
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="mt-6 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">Careful preparation can reduce avoidable errors, but it does not guarantee USPTO approval.</p>
         </div>
       </section>
 
@@ -416,29 +436,6 @@ finish, so you can focus on growing your business.`}
           >
             Live Chat
           </Button>
-        </div>
-      </section>
-
-      {/* filing readiness section */}
-      <section className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
-          <div className="grid items-start gap-8 lg:grid-cols-[.85fr_1.15fr]">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-[.14em] text-primary-theme">Prepare with confidence</p>
-              <h2 className="mt-2 text-3xl font-bold leading-tight text-slate-800 max-md:text-2xl">Avoid common filing problems.</h2>
-              <p className="mt-4 leading-7 text-slate-600">The USPTO may raise questions when important details are incomplete or inconsistent. Our guided application helps collect the information needed for review before filing.</p>
-              <Button onClick={handleRegisterClick} isLoading={isLoading} className="mt-6 bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">Start Your Application</Button>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {["A similar existing trademark", "Incorrect goods or services class", "Unclear business activity description", "Incomplete ownership information", "Weak or unsuitable proof of use", "Missing application details"].map((item) => (
-                <div key={item} className="flex min-h-16 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-700">
-                  <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-100 text-primary-theme">✓</span>
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-          <p className="mt-6 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">Careful preparation can reduce avoidable errors, but it does not guarantee USPTO approval.</p>
         </div>
       </section>
 
