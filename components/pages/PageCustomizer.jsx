@@ -42,6 +42,19 @@ const CURRENT_SECTIONS = [
   { id: "footer", label: "Current full footer", replacement: "New compact footer" },
 ];
 
+const REPLACEMENT_SECTION_MAP = {
+  hero: "hero",
+  "brand-examples": "benefits",
+  "mark-selector": "mark-selector",
+  process: "process",
+  "customer-account": "account",
+  pricing: "pricing",
+  "after-checkout": "account",
+  benefits: "benefits",
+  faq: "faq",
+  footer: "footer",
+};
+
 const DEFAULT_CONFIG = {
   landing: {
     order: LANDING_SECTIONS.map(({ id }) => id),
@@ -87,6 +100,7 @@ function Toggle({ checked, onChange, label }) {
 
 export default function PageCustomizer() {
   const iframeRef = useRef(null);
+  const replacementIframeRef = useRef(null);
   const [mode, setMode] = useState("landing");
   const [landingVersion, setLandingVersion] = useState("current");
   const [formScreen, setFormScreen] = useState("application");
@@ -129,11 +143,27 @@ export default function PageCustomizer() {
       if (copy) copy.textContent = landing.heroCopy;
     } else if (mode === "landing") {
       const { currentLanding } = config;
+      document.querySelectorAll("[data-customizer-injected]").forEach((element) => element.remove());
+      const replacementDocument = replacementIframeRef.current?.contentDocument;
       currentLanding.order.forEach((id) => {
         const element = document.querySelector(`[data-customizer-old-section="${id}"]`);
         const footer = document.querySelector('[data-customizer-old-section="footer"]');
         if (element && footer && id !== "footer") footer.parentNode.insertBefore(element, footer);
-        if (element) element.style.display = currentLanding.decision?.[id] === "current" ? "" : "none";
+        const decision = currentLanding.decision?.[id] || "current";
+        if (element) element.style.display = decision === "current" ? "" : "none";
+        if (decision === "replacement" && element && replacementDocument) {
+          const replacementId = REPLACEMENT_SECTION_MAP[id];
+          const source = replacementDocument.querySelector(`[data-customizer-section="${replacementId}"]`);
+          if (source) {
+            const clone = document.importNode(source, true);
+            clone.setAttribute("data-customizer-injected", id);
+            clone.querySelectorAll("button").forEach((button) => {
+              button.setAttribute("type", "button");
+              button.setAttribute("data-customizer-preview-control", "true");
+            });
+            element.parentNode.insertBefore(clone, element);
+          }
+        }
       });
       const title = document.querySelector('[data-customizer-old-text="hero-title"]');
       const copy = document.querySelector('[data-customizer-old-text="hero-copy"]');
@@ -266,10 +296,7 @@ export default function PageCustomizer() {
                   const section = CURRENT_SECTIONS.find((item) => item.id === id);
                   const decision = config.currentLanding.decision?.[id] || "current";
                   const hasReplacement = section?.replacement !== "No direct replacement";
-                  const chooseDecision = (nextDecision) => {
-                    updateCurrentLanding({ decision: { ...config.currentLanding.decision, [id]: nextDecision } });
-                    if (nextDecision === "replacement") setLandingVersion("replacement");
-                  };
+                  const chooseDecision = (nextDecision) => updateCurrentLanding({ decision: { ...config.currentLanding.decision, [id]: nextDecision } });
                   return <div key={id} className={`rounded-xl border p-2.5 ${decision === "current" ? "border-sky-300 bg-sky-50/50" : "border-slate-200"}`}><div className="flex min-h-11 items-center gap-2"><span className="min-w-0 flex-1 text-sm font-bold">{section?.label}</span><button type="button" aria-label={`Move ${section?.label} up`} disabled={index === 0} onClick={() => moveCurrentSection(index, -1)} className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"><HiArrowUp aria-hidden="true" /></button><button type="button" aria-label={`Move ${section?.label} down`} disabled={index === config.currentLanding.order.length - 1} onClick={() => moveCurrentSection(index, 1)} className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30"><HiArrowDown aria-hidden="true" /></button></div><p className="mb-2 text-xs leading-5 text-slate-500">Suggested: {section?.replacement}</p><div className="grid grid-cols-3 rounded-lg bg-slate-100 p-1 text-xs font-bold"><button type="button" onClick={() => chooseDecision("current")} className={`min-h-9 cursor-pointer rounded-md px-2 ${decision === "current" ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600"}`}>Keep</button><button type="button" disabled={!hasReplacement} onClick={() => chooseDecision("replacement")} className={`min-h-9 cursor-pointer rounded-md px-2 disabled:cursor-not-allowed disabled:opacity-35 ${decision === "replacement" ? "bg-white text-[#026daf] shadow-sm" : "text-slate-600"}`}>Replace</button><button type="button" onClick={() => chooseDecision("remove")} className={`min-h-9 cursor-pointer rounded-md px-2 ${decision === "remove" ? "bg-white text-red-700 shadow-sm" : "text-slate-600"}`}>Remove</button></div></div>;
                 })}
               </div>
@@ -320,6 +347,7 @@ export default function PageCustomizer() {
               <iframe ref={iframeRef} key={previewUrl} src={previewUrl} title={`${mode === "landing" ? "Landing page" : "Application form"} customized preview`} onLoad={applyConfiguration} className="block h-[calc(100vh-210px)] min-h-[620px] w-full border-0 bg-white" />
             </div>
           </div>
+          {mode === "landing" && landingVersion === "current" && <iframe ref={replacementIframeRef} src="/conversion-preview?customizer-source=1" title="Replacement section source" onLoad={applyConfiguration} className="hidden" tabIndex={-1} aria-hidden="true" />}
           <div className="mt-4 flex items-start gap-3 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-950"><span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-emerald-600 text-white"><HiCheck aria-hidden="true" /></span><p><strong>Your live website is untouched.</strong> Save or copy your choices when ready; implementation and production deployment remain separate approval steps.</p></div>
         </section>
       </div>
