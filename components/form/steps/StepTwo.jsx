@@ -447,9 +447,13 @@ const StepTwo = ({ previewMode = false }) => {
       </div>
 
 
-      <section className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <div className="max-h-[420px] overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-2 pr-1 shadow-inner [scrollbar-color:#93c5fd_transparent] [scrollbar-width:thin]">
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
+      <section className="grid gap-5 lg:h-[680px] lg:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="max-h-[360px] overflow-y-scroll rounded-2xl border border-slate-200 bg-slate-50 shadow-inner [scrollbar-color:#60a5fa_#e2e8f0] [scrollbar-width:thin] lg:h-full lg:max-h-none">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-slate-50/95 px-3 py-3 text-xs font-bold uppercase tracking-wide text-slate-600 backdrop-blur">
+            <span>Business categories</span>
+            <span className="text-blue-700">Scroll to explore ↓</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 p-2 pr-1 sm:grid-cols-3 lg:grid-cols-1">
             {filteredIndustries.map((item) => {
               const selected = activeIndustry === item.name;
               return (
@@ -467,7 +471,7 @@ const StepTwo = ({ previewMode = false }) => {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 lg:h-full lg:overflow-y-auto lg:[scrollbar-color:#cbd5e1_transparent] lg:[scrollbar-width:thin]">
           <h2 className="text-xl font-bold text-slate-900">
             <span aria-hidden="true">{industry?.icon}</span> {industry?.name}
           </h2>
