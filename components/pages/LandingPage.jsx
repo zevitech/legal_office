@@ -10,12 +10,15 @@ import HowWorkCard from "../ui/HowWorkCard";
 import { AiOutlineDoubleRight } from "react-icons/ai";
 import BenefitCard from "../ui/BenefitCard";
 import Link from "next/link";
+import { LuCopyright } from "react-icons/lu";
 import ClientSection from "../ui/ClientSection";
+import WhyChooseCard from "../ui/WhyChooseCard";
+import WhyChooseInfo from "../ui/WhyChooseInfo";
 import { FaAnglesDown } from "react-icons/fa6";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import HeaderText from "../ui/HeaderText";
-import { HiArrowRight, HiCheck, HiOutlineBell, HiOutlineChatAlt2, HiOutlineDocumentText, HiOutlineShieldCheck } from "react-icons/hi";
-import { LuBuilding2, LuFileSignature, LuImage } from "react-icons/lu";
+import { HiOutlineBell, HiOutlineChatAlt2, HiOutlineDocumentText, HiOutlineShieldCheck } from "react-icons/hi";
+import { LuBuilding2, LuFileSignature, LuImage, LuVolume2 } from "react-icons/lu";
 
 const PackageCard2 = dynamic(() => import("../ui/PackageCard2"), {
   loading: () => <div className="mx-auto my-10 h-40 max-w-6xl animate-pulse rounded-3xl bg-slate-100" />,
@@ -32,9 +35,8 @@ const PROTECTION_OPTIONS = [
   { value: "name", title: "Business name", description: "Protect the words customers use to identify your business.", icon: LuBuilding2 },
   { value: "logo", title: "Logo or design", description: "Protect a symbol, icon or stylized visual identity.", icon: LuImage },
   { value: "slogan", title: "Slogan", description: "Protect a memorable phrase connected with your brand.", icon: LuFileSignature },
+  { value: "sound", title: "Sound mark", description: "Protect a distinctive jingle, tone or audio signature.", icon: LuVolume2 },
 ];
-
-const primaryConversionButton = "inline-flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition duration-200 hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -88,25 +90,101 @@ const LandingPage = () => {
 
   return (
     <>
-      <div data-customizer-old-section="hero">
-        <LandingHeader />
-        <section className="relative overflow-hidden bg-gradient-to-br from-cyan-50 via-white to-blue-100 px-4 py-14 sm:py-20 lg:py-24">
-          <div className="absolute -left-24 top-20 h-72 w-72 rounded-full bg-cyan-200/35 blur-3xl" aria-hidden="true" />
-          <div className="absolute -right-24 top-0 h-80 w-80 rounded-full bg-blue-200/45 blur-3xl" aria-hidden="true" />
-          <div className="relative mx-auto max-w-5xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[.16em] text-[#026daf]">U.S. trademark filing support</p>
-            <h1 data-customizer-old-text="hero-title" className="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-[1.08] text-slate-900 sm:text-5xl lg:text-6xl">Trademark Registration for Your Business Name, Logo or Slogan</h1>
-            <p data-customizer-old-text="hero-copy" className="mx-auto mt-6 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">Complete our guided questionnaire and our filing team will prepare your trademark application. Review and approve the details, then track documents and updates in your secure account.</p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <button type="button" onClick={handleRegisterClick} className={primaryConversionButton}>Start My Trademark Registration <HiArrowRight aria-hidden="true" /></button>
-              <p className="text-sm font-semibold text-slate-600">Service plans from $49 + USPTO filing fee</p>
-            </div>
-            <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">
-              {["Review before submission", "Secure customer account", "No automatic renewal"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}
+      {/* hero section */}
+      <section data-customizer-old-section="hero" className="relative w-full bg-of-hero pb-20 max-md:pb-10 backdrop-brightness-150">
+        <div className="heroBg absolute"></div>
+        <div>
+          <LandingHeader />
+          <div className="flex-center mt-8 max-md:mt-4">
+            <div className="flex flex-col gap-5 max-md:gap-2 max-w-[1000px] px-2">
+              <h1 data-customizer-old-text="hero-title" className="text-slate-800 text-5xl max-md:text-2xl leading-tight font-bold text-center">
+                Trademark Registration for Your Business Name, Logo or Slogan
+              </h1>
+              <h2 className="text-slate-700 text-2xl font-bold text-center">
+                <span className="block text-[38px] leading-tight max-md:text-2xl text-[#025da0]">
+                  U.S. Trademark Registration from $49 + USPTO Filing Fee
+                </span>
+              </h2>
+              <p data-customizer-old-text="hero-copy" className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
+                Complete our guided questionnaire and our filing team will prepare
+                your trademark application. Review and approve the details, then
+                track documents and updates in your secure account.
+              </p>
             </div>
           </div>
-        </section>
-      </div>
+          <div className="flex-center mt-16 max-md:mt-10 w-[80%] m-auto">
+            <Button
+              color="primary"
+              radius="sm"
+              onClick={handleRegisterClick}
+              isLoading={isLoading}
+              className="hero-cta w-full max-w-sm bg-primary-theme px-8 py-8 text-lg font-bold text-white hover:bg-primary-hovered"
+            >
+              Trademark Now
+            </Button>
+          </div>
+        </div>
+        <div className="flex-center mt-12">
+          <div className="flex flex-wrap items-center justify-center gap-6 px-4 max-md:gap-4">
+            <Image
+              src={"/images/trustpilot-logo.webp"}
+              alt="Trustpilot Review"
+              width={110}
+              height={40}
+              className="w-26 h-12 max-md:w-14 max-md:h-auto"
+            />
+            <Image
+              src={"/images/Untitled-design-1.webp"}
+              alt="Google Review"
+              width={110}
+              height={40}
+              className="w-24 h-16 max-md:w-14 max-md:h-auto"
+            />
+            {/* <Image
+              src={"/images/Seal_of_the_United_States_Patent.png"}
+              alt="Seal of the United States patient"
+              width={110}
+              height={40}
+              className="w-20 h-20 max-md:w-14 max-md:h-auto"
+            /> */}
+            <Image
+              src={
+                "/images/Advisor-logo_2-line_Profile-V2-e1589299562467-removebg-preview.webp"
+              }
+              alt="Forbes"
+              width={110}
+              height={40}
+              className="w-24 h-10 max-md:w-14 max-md:h-auto"
+            />
+            {/* <Image
+              src={"/images/seal-cs-grnte.png"}
+              alt="Forbes"
+              width={110}
+              height={110}
+              className="w-26 h-24"
+            /> */}
+          </div>
+        </div>
+      </section>
+
+      {/* clients or partner section */}
+      <div data-customizer-old-section="brand-examples"><ClientSection /></div>
+
+      {/* interactive protection selector */}
+      <section data-customizer-old-section="mark-selector" className="mx-auto mt-20 max-w-6xl px-4 max-md:mt-14">
+        <div className="text-center">
+          <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">Start with your mark</p>
+          <h2 className="mt-2 text-4xl font-bold text-slate-800 max-md:text-3xl">What would you like to protect?</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-slate-600">Choose one to begin. You can add other mark types during the application.</p>
+        </div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {PROTECTION_OPTIONS.map(({ value, title, description, icon: Icon }) => {
+            const selected = selectedProtection === value;
+            return <button key={value} type="button" aria-pressed={selected} onClick={() => setSelectedProtection(value)} className={`min-h-52 rounded-2xl border-2 p-5 text-left transition ${selected ? "border-[#025da0] bg-blue-50 shadow-lg shadow-blue-100" : "border-slate-200 bg-white hover:border-blue-300"}`}><span className={`grid h-11 w-11 place-items-center rounded-xl text-xl ${selected ? "bg-[#025da0] text-white" : "bg-slate-100 text-slate-600"}`}><Icon /></span><h3 className="mt-6 text-lg font-bold text-slate-800">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{description}</p><span className={`mt-4 inline-block text-sm font-bold ${selected ? "text-[#025da0]" : "text-slate-500"}`}>{selected ? "✓ Selected" : "Select"}</span></button>;
+          })}
+        </div>
+        <div className="mt-7 flex justify-center"><Button onClick={handleProtectionStart} isLoading={isLoading} className="w-full max-w-sm bg-primary-theme px-8 py-7 text-lg font-bold text-white shadow-lg shadow-blue-200 hover:bg-primary-hovered">Trademark Now</Button></div>
+      </section>
 
       {/* how it's work section */}
       <section data-customizer-old-section="process" className="flex-center mt-24 max-md:mt-20 max-md:w-full">
@@ -152,25 +230,6 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-
-      {/* interactive protection selector */}
-      <section data-customizer-old-section="mark-selector" className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-        <div className="text-center">
-          <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">Start with your mark</p>
-          <h2 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">What would you like to register?</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-slate-600">Choose one to begin. Your selection opens the real application questionnaire.</p>
-        </div>
-        <div className="mt-9 grid gap-4 md:grid-cols-3">
-          {PROTECTION_OPTIONS.map(({ value, title, description, icon: Icon }) => {
-            const selected = selectedProtection === value;
-            return <button key={value} type="button" aria-pressed={selected} onClick={() => setSelectedProtection(value)} className={`min-h-48 cursor-pointer rounded-2xl border-2 p-6 text-left transition duration-200 focus:outline-none focus:ring-4 focus:ring-blue-200 ${selected ? "border-[#087fd3] bg-blue-50 shadow-lg shadow-blue-100" : "border-slate-200 bg-white hover:border-blue-300"}`}><span className={`grid h-12 w-12 place-items-center rounded-xl text-xl ${selected ? "bg-[#087fd3] text-white" : "bg-slate-100 text-slate-600"}`}><Icon aria-hidden="true" /></span><h3 className="mt-6 text-xl font-bold text-slate-900">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{description}</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#026daf]">{selected ? <><HiCheck aria-hidden="true" /> Selected</> : "Select"}</span></button>;
-          })}
-        </div>
-        <div className="mt-7 text-center"><button type="button" onClick={handleProtectionStart} className={primaryConversionButton}>Continue with {PROTECTION_OPTIONS.find((option) => option.value === selectedProtection)?.title} <HiArrowRight aria-hidden="true" /></button></div>
-      </section>
-
-      {/* clients or partner section */}
-      <div data-customizer-old-section="brand-examples"><ClientSection /></div>
 
       {/* filing readiness section */}
       <section data-customizer-old-section="filing-readiness" className="mx-auto mt-24 max-w-6xl px-4 max-md:mt-16">
@@ -397,6 +456,65 @@ finish, so you can focus on growing your business.`}
         </div>
       </section>
 
+      {/* why choose us */}
+      <section data-customizer-old-section="proof" className="flex flex-col gap-16 max-md:gap-14 mt-28 max-md:mt-20 bg-slate-50 py-24 max-md:py-20">
+        <div className="text-center flex flex-col gap-4 max-md:px-5">
+          <h2 className="text-4xl max-md:text-3xl text-[#025da0] font-bold">
+            Trusted by clients in over 20 countries
+          </h2>
+          <p className="text-base text-slate-600">
+            {`Collectively, Legal Trademark Office® attorneys have unparalleled trademark experience and great reviews.`}
+          </p>
+          <Image
+            src={"/images/curve-DplsLMf8.webp"}
+            width={300}
+            height={10}
+            alt="curve line"
+            className="m-auto max-md:w-56"
+          />
+        </div>
+        <div className="flex flex-col gap-3">
+          <div className="mx-auto w-full max-w-4xl px-4">
+            <div className="grid w-full grid-cols-1 overflow-hidden rounded-xl bg-white shadow-md sm:grid-cols-3">
+              <WhyChooseCard number={`12+`} title={`Years Experience`} />
+              <WhyChooseCard number={`99%`} title={`Customer Approval`} />
+              <WhyChooseCard number={`7k+`} title={`Trademarks Managed`} />
+            </div>
+          </div>
+          <div className="mx-4 mt-10 grid grid-cols-2 gap-4 border-t-1 pt-9 sm:grid-cols-3 lg:mx-14 lg:grid-cols-6">
+            <WhyChooseInfo
+              image={`pi-01.png`}
+              title={`Unlimited Customer Service`}
+            />
+            <WhyChooseInfo image={`pi-02.png`} title={`Simple Process`} />
+            <WhyChooseInfo
+              image={`pi-03.png`}
+              title={`No Hidden Costs or Fees`}
+            />
+            <WhyChooseInfo
+              image={`pi-04.png`}
+              title={`100% Satisfaction Guaranteed`}
+            />
+            <WhyChooseInfo
+              image={`pi-05.png`}
+              title={`Best Trademark Search Platform`}
+            />
+            <WhyChooseInfo image={`pi-06.png`} title={`We're Affordable`} />
+          </div>
+        </div>
+        <div className="flex-center max-md:mt-7">
+          <Button
+            color="primary"
+            radius="sm"
+            onClick={handleRegisterClick}
+            isLoading={isLoading}
+            className="w-full max-w-sm bg-primary-theme px-8 py-8 text-lg font-bold text-white shadow-lg shadow-blue-200 hover:bg-primary-hovered"
+          >
+            Start Your Application
+          </Button>
+        </div>
+      </section>
+
       {/* testimonial section  */}
       <section data-customizer-old-section="testimonials" className="flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-16">
         <div className="flex">
@@ -422,14 +540,64 @@ finish, so you can focus on growing your business.`}
         </div>
       </section>
 
-      <footer data-customizer-old-section="footer" className="mt-24 border-t border-slate-200 bg-white px-4 py-8 text-slate-600 max-md:mt-16">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-semibold text-slate-800">Legal Trademark Office</p>
-          <nav aria-label="Landing page policies" className="flex flex-wrap gap-5">
-            <Link className="hover:text-[#026daf]" href="/legal/privacy">Privacy</Link>
-            <Link className="hover:text-[#026daf]" href="/legal/terms">Terms</Link>
-            <Link className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</Link>
-          </nav>
+      {/* footer section */}
+      <footer data-customizer-old-section="footer" className="mt-28 max-md:mt-20 bg-footer w-full bg-no-repeat bg-cover relative">
+        <div className="footer-overly"></div>
+        <div className="pt-20 z-30 relative">
+          <div className="flex-center">
+            <div className="w-[1100px] max-md:w-full max-md:px-6 max-md:gap-9 flex-center max-md:flex-col">
+              <div className="w-[50%] max-md:w-full">
+                <Image
+                  src={`/images/Legal-Trademark-White-Logo.png`}
+                  alt="Legal Trademark"
+                  width={200}
+                  height={200}
+                  className="max-md:w-[150px] max-md:h-auto"
+                />
+                <p className="mt-1 max-md:mt-0 text-slate-100 text-sm">
+                  {`Secure your brand's future with Legal Trademark Office® tailored protection packages. Choose our DIY assisted service for a hands-on approach, or enlist our expert attorneys to handle your trademark filing with precision and care. Protect your uniqueness.`}
+                </p>
+              </div>
+              <div className="w-[50%] max-md:w-full flex-center max-md:block">
+                <div className="bg-[#fefefe] p-10 max-md:p-4 rounded-md shadow-lg">
+                  <h2 className="text-slate-800 font-semibold text-lg ">
+                    Call us at:
+                    <Link
+                      href="tel:+13104244909"
+                      className="text-blue-600 font-semibold"
+                    >
+                      +1 (310) 424 4909
+                    </Link>
+                  </h2>
+                  <p className="text-xs text-slate-700">
+                    Mon-Fri 6:00 am - 5:00 pm
+                  </p>
+                  <div className="mt-4">
+                    <h2 className="text-slate-800 font-semibold text-lg">
+                      Email us for any support:
+                    </h2>
+                    <Link
+                      href="mailto:support@legaltrademarkoffice.com"
+                      className="text-blue-600 font-semibold"
+                    >
+                      support@legaltrademarkoffice.com
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-14 border-t-1 border-slate-700 py-6 max-md:px-6">
+            <div className="text-slate-300 flex-center max-md:items-start gap-1">
+              <LuCopyright className=" text-lg" />
+              <p>
+                Copyright & all rights reserved by{" "}
+                <Link href={"/"} className=" underline">
+                  Legal Trademark Office
+                </Link>
+              </p>
+            </div>
+          </div>
         </div>
       </footer>
 
