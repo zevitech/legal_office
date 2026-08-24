@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiArrowRight,
   HiCheck,
@@ -48,6 +48,23 @@ const buttonClass = "inline-flex min-h-14 items-center justify-center gap-2 roun
 export default function ConversionPreview() {
   const [selectedMark, setSelectedMark] = useState("name");
   const [usage, setUsage] = useState("yes");
+
+  useEffect(() => {
+    const hiddenFrames = new Map();
+    const hideChat = () => {
+      document.querySelectorAll('iframe[id^="chat-widget"]').forEach((frame) => {
+        if (!hiddenFrames.has(frame)) hiddenFrames.set(frame, frame.style.display);
+        frame.style.display = "none";
+      });
+    };
+    hideChat();
+    const observer = new MutationObserver(hideChat);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      hiddenFrames.forEach((display, frame) => { frame.style.display = display; });
+    };
+  }, []);
 
   const scrollToForm = () => document.getElementById("form-preview")?.scrollIntoView({ behavior: "smooth" });
 
