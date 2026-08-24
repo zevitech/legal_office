@@ -52,7 +52,7 @@ export default function ConversionPreview() {
   useEffect(() => {
     const hiddenFrames = new Map();
     const hideChat = () => {
-      document.querySelectorAll('iframe[id^="chat-widget"]').forEach((frame) => {
+      document.querySelectorAll('iframe[id^="chat-widget"], #chat-widget-container').forEach((frame) => {
         if (!hiddenFrames.has(frame)) hiddenFrames.set(frame, frame.style.display);
         frame.style.display = "none";
       });
