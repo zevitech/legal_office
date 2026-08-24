@@ -236,17 +236,6 @@ const LandingPage = () => {
               />
             </div>
           </div>
-          <div className="flex-center max-md:w-[80%] max-md:m-auto max-md:mt-6">
-            <Button
-              color="primary"
-              radius="sm"
-              onClick={handleRegisterClick}
-              isLoading={isLoading}
-              className="w-full max-w-sm bg-primary-theme px-8 py-8 text-lg font-bold text-white shadow-lg shadow-blue-200 hover:bg-primary-hovered"
-            >
-              Start Your Application
-            </Button>
-          </div>
         </div>
       </section>
 
