@@ -7,7 +7,7 @@ export const _35_USD = [
   {
     title: "Trademark Monitoring",
     description:
-      "1 Month of free trademark monitoring included to ensure no infringements on your mark are filed.",
+      "Trademark monitoring is not included with this service plan.",
   },
   ,
   {
@@ -30,7 +30,7 @@ export const _135_USD = [
   {
     title: "Trademark Monitoring",
     description:
-      "1 Month of free trademark monitoring included to ensure no infringements on your mark are filed.",
+      "Trademark monitoring is not included with this service plan.",
   },
   ,
   {
@@ -54,7 +54,7 @@ export const _235_USD = [
   {
     title: "Trademark Monitoring",
     description:
-      "1 Month of free trademark monitoring included to ensure no infringements on your mark are filed.",
+      "Six months of trademark monitoring is included with this service plan.",
   },
   ,
   {

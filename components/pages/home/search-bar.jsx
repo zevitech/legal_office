@@ -45,14 +45,18 @@ const Searchbar = () => {
     <>
       <div className="flex-center gap-4 max-md:flex-col">
         <div className="relative w-[650px] max-md:w-full">
+          <label htmlFor="homepage-trademark-search" className="sr-only">
+            Trademark name to search
+          </label>
           <input
+            id="homepage-trademark-search"
             className="p-6 h-[30px] rounded-md text-sm w-full outline-blue-600"
             type="text"
             placeholder="Search Trademark Here..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <CiSearch className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
+          <CiSearch aria-hidden="true" className="absolute top-1/2 -translate-y-1/2 right-7 text-3xl text-slate-400" />
         </div>
         <Button
           className="py-[25px] px-14 font-semibold bg-color-primary text-white"
@@ -69,7 +73,7 @@ const Searchbar = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                {isSearching ? "Searching..." : "Search Results"}
+                {isSearching ? "Checking federal records..." : "Next step ready"}
               </ModalHeader>
               <ModalBody>
                 <div className="flex items-center justify-between">
@@ -100,12 +104,13 @@ const Searchbar = () => {
                 {isSearchComplete ? (
                   <p className="mb-4">
                     &quot;<span className="font-semibold">{searchInput}</span>
-                    &quot; is available! Hurry and trademark it now before
-                    it&apos;s too late.
+                    &quot; is ready for specialist review. Continue to compare
+                    related federal filings and prepare the right application
+                    details.
                   </p>
                 ) : (
                   <p className="mb-4 text-black/50">
-                    Please wait while we check availability...
+                    Please wait while we run a preliminary federal search...
                   </p>
                 )}
               </ModalBody>
@@ -118,7 +123,7 @@ const Searchbar = () => {
                   Trademark Now
                 </Button> */}
 
-                <TMButton px="40px" py="10px" text={"Trademark Now"} />
+                <TMButton px="40px" py="10px" text={"Continue with Specialist Review"} />
                 <Button
                   className="bg-danger text-white font-bold"
                   onPress={onClose}

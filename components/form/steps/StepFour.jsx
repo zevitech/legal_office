@@ -125,7 +125,7 @@ const StepFour = () => {
             <p className="font-bold text-[14px]">Disclaimer</p>
 
             <SmallLabel
-              text={`The package includes the government fee of $350 for the registration of one mandatory class for your trademark. Our expert paralegals will review your case to determine the optimal number of classes needed to fully protect your business name, logo, or slogan. Additional government fees may apply for each additional class identified during the paralegal team's review. You will be informed about additional classes before proceeding. Our goal is to ensure comprehensive protection for your intellectual property, and our team will guide you through the process with transparency and expertise.`}
+              text={`The $350 USPTO government filing fee covers one class and is paid separately from the selected service plan. Additional government fees apply for each additional class. You will review the class selection and applicable government fees before proceeding.`}
             />
             <Checkbox
               isSelected={isGovermentFeesProcessing}

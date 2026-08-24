@@ -6,7 +6,7 @@ import React from "react";
 import { BsMap } from "react-icons/bs";
 import { IoCallSharp } from "react-icons/io5";
 
-const FooterSection = () => {
+const FooterSection = ({ description }) => {
   return (
     <footer className="">
       <div className="footer-bg max-md:px-6 pt-24 max-md:pt-20 pb-10 max-md:pb-10 flex justify-center gap-28 max-md:gap-10 max-md:flex-col">
@@ -19,10 +19,15 @@ const FooterSection = () => {
             className="object-contain"
           />
           <p className="text-slate-100 max-md:text-xs">
-            Secure your brand&apos;s future with Legal Trademark Office®
-            tailored protection packages. Choose our DIY assisted service for a
-            hands-on approach, or enlist our expert attorneys to handle your
-            trademark filing with precision and care. Protect your uniqueness.
+            {description || (
+              <>
+                Secure your brand&apos;s future with Legal Trademark Office®
+                tailored protection packages. Choose our DIY assisted service
+                for a hands-on approach, or enlist our expert attorneys to
+                handle your trademark filing with precision and care. Protect
+                your uniqueness.
+              </>
+            )}
           </p>
         </div>
         <div className="text-slate-100">
