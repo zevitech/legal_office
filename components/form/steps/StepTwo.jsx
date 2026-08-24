@@ -364,6 +364,18 @@ const StepTwo = ({ previewMode = false }) => {
     setValidation(false);
   };
 
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearch(value);
+    const normalized = value.toLowerCase();
+    const firstMatch = INDUSTRIES.find((item) =>
+      `${item.name} ${item.activities.map((activity) => activity.label).join(" ")}`
+        .toLowerCase()
+        .includes(normalized),
+    );
+    if (firstMatch) setActiveIndustry(firstMatch.name);
+  };
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     if (!classificationSummary) {
@@ -428,35 +440,39 @@ const StepTwo = ({ previewMode = false }) => {
         <HiOutlineSearch className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-xl text-slate-400" />
         <input
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={handleSearchChange}
           placeholder="Search industries or activities"
           className="min-h-14 w-full rounded-2xl border border-slate-300 bg-white py-3 pl-12 pr-4 text-base outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
       </div>
 
 
-      <section className="grid gap-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-          <label htmlFor="industry-category" className="mb-2 block text-sm font-bold text-slate-900">
-            Business category
-          </label>
-          <select
-            id="industry-category"
-            value={industry?.name || ""}
-            onChange={(event) => setActiveIndustry(event.target.value)}
-            className="min-h-14 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-base font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-          >
-            {filteredIndustries.length === 0 && <option value="">No matching category</option>}
-            {filteredIndustries.map((item) => (
-              <option key={item.name} value={item.name}>{item.name}</option>
-            ))}
-          </select>
+      <section className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="max-h-[420px] overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-2 pr-1 shadow-inner [scrollbar-color:#93c5fd_transparent] [scrollbar-width:thin]">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
+            {filteredIndustries.map((item) => {
+              const selected = activeIndustry === item.name;
+              return (
+                <button
+                  key={item.name}
+                  type="button"
+                  onClick={() => setActiveIndustry(item.name)}
+                  className={`flex min-h-16 items-center gap-3 rounded-xl border-2 p-3 text-left text-sm font-semibold transition ${selected ? "border-blue-600 bg-blue-50 text-blue-900" : "border-slate-200 bg-white text-slate-700 hover:border-blue-300"}`}
+                >
+                  <span className="text-xl" aria-hidden="true">{item.icon}</span>
+                  <span>{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <h2 className="text-xl font-bold text-slate-900">{industry?.name}</h2>
+          <h2 className="text-xl font-bold text-slate-900">
+            <span aria-hidden="true">{industry?.icon}</span> {industry?.name}
+          </h2>
           <p className="mt-1 text-sm text-slate-500">Select all that apply.</p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {industry?.activities.map((activity) => {
               const selected = selectedActivities.some(
                 (item) => item.label === activity.label,
@@ -467,9 +483,12 @@ const StepTwo = ({ previewMode = false }) => {
                   type="button"
                   aria-pressed={selected}
                   onClick={() => toggleActivity(activity, industry?.name)}
-                  className={`flex min-h-14 items-center justify-between gap-3 rounded-xl border-2 p-3 text-left transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}
+                  className={`flex min-h-20 items-start justify-between gap-3 rounded-xl border-2 p-4 text-left transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}
                 >
-                  <span className="block font-semibold text-slate-900">{activity.label}</span>
+                  <span>
+                    <span className="block font-semibold text-slate-900">{activity.label}</span>
+                    <span className="mt-1 block text-xs text-slate-500">Business activity</span>
+                  </span>
                   <span
                     className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"}`}
                   >
@@ -489,7 +508,7 @@ const StepTwo = ({ previewMode = false }) => {
         labelPlacement="outside"
         placeholder="Example: custom printed packaging and an online store selling stationery"
         radius="lg"
-        minRows={2}
+        minRows={3}
         value={customActivity}
         onChange={(event) => {
           setCustomActivity(event.target.value);
