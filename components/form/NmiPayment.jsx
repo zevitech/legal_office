@@ -18,7 +18,6 @@ const NmiPayment = ({
   errorMessage,
   initialBilling = {},
   allowSavePaymentMethod = true,
-  statementDescriptor = "XTARLABS LLC",
 }) => {
   // Saving a card requires the Customer Vault add-on on the NMI account. When
   // it is absent the gateway rejects the entire sale, so the option is hidden
@@ -27,7 +26,6 @@ const NmiPayment = ({
   const formRef = useRef(null);
   const onTokenRef = useRef(onToken);
   const savePaymentMethodRef = useRef(false);
-  const statementDescriptorRef = useRef(statementDescriptor);
   const [collectJsReady, setCollectJsReady] = useState(false);
   const [fieldError, setFieldError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -42,10 +40,6 @@ const NmiPayment = ({
   useEffect(() => {
     savePaymentMethodRef.current = savePaymentMethod && vaultEnabled;
   }, [savePaymentMethod, vaultEnabled]);
-
-  useEffect(() => {
-    statementDescriptorRef.current = statementDescriptor;
-  }, [statementDescriptor]);
 
   useEffect(() => {
     if (!window.location.pathname.startsWith("/client-portal")) return;
@@ -102,7 +96,6 @@ const NmiPayment = ({
             zip: valueOf("zip"),
             acceptedTerms: true,
             agreementVersion: "2026-08-07",
-            statementDescriptor: statementDescriptorRef.current,
             savePaymentMethod: savePaymentMethodRef.current,
             attorneyChargeConsent: false,
           });
@@ -172,7 +165,6 @@ const NmiPayment = ({
     onTokenRef.current?.("", {
       acceptedTerms: true,
       agreementVersion: "2026-08-07",
-      statementDescriptor: statementDescriptorRef.current,
       billingMethodId: method.id,
       useSavedPaymentMethod: true,
       savePaymentMethod: false,
@@ -280,7 +272,7 @@ const NmiPayment = ({
         <span>
           I agree to the <Link className="underline" href="/legal/terms" target="_blank">Terms</Link>,{" "}
           <Link className="underline" href="/legal/privacy" target="_blank">Privacy Policy</Link> and{" "}
-          <Link className="underline" href="/legal/refund-policy" target="_blank">Refund Policy</Link>. I authorize the amount shown today. I understand service fees become non-refundable after the application is submitted to the USPTO, subject to applicable law, and USPTO fees are generally non-refundable. The charge will appear as <strong>{statementDescriptor}</strong>.
+          <Link className="underline" href="/legal/refund-policy" target="_blank">Refund Policy</Link>. I authorize the amount shown today. I understand service fees become non-refundable after the application is submitted to the USPTO, subject to applicable law, and USPTO fees are generally non-refundable. Payment details and the applicable card-statement descriptor will be provided on my receipt after a successful payment.
         </span>
       </label>
 
@@ -313,7 +305,7 @@ const NmiPayment = ({
       </button>
 
       <p className="text-[11px] text-gray-400 text-center leading-relaxed">
-        Card details are encrypted and handled by our secure payment provider. Your statement will show <strong>{statementDescriptor}</strong>.
+        Card details are encrypted and handled by our secure payment provider. Payment confirmation details are provided on your receipt.
       </p>
     </form>
   );

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const LegalPage = ({ title, updated = "August 6, 2026", children }) => (
+const LegalPage = ({ title, updated = "August 24, 2026", children }) => (
   <main className="min-h-screen bg-slate-50 py-12">
     <article className="mx-auto w-[92%] max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm md:p-10">
       <Link href="/" className="text-sm font-semibold text-primary-theme">
@@ -10,8 +10,8 @@ const LegalPage = ({ title, updated = "August 6, 2026", children }) => (
       <p className="mt-2 text-sm text-slate-500">Last updated: {updated}</p>
       <div className="prose prose-slate mt-8 max-w-none space-y-6">{children}</div>
       <p className="mt-10 border-t border-slate-200 pt-6 text-sm">
-        Questions? Call <a href="tel:+13104244909">+1 (310) 424-4909</a> or
-        use our contact page before purchasing.
+        After an order is placed, our team uses the contact information provided
+        with the application to send confirmation and service updates.
       </p>
     </article>
   </main>

@@ -34,12 +34,15 @@ export default function GuideShell({ guide, children, relatedGuides }) {
           {children}
 
           <aside className="mt-12 rounded-2xl border border-blue-200 bg-blue-50 p-6">
-            <h2 className="text-2xl font-bold text-slate-950">Need filing preparation support?</h2>
+            <h2 className="text-2xl font-bold text-slate-950">Turn what you learned into a prepared application.</h2>
             <p className="mt-3 leading-7 text-slate-700">
-              Legal Trademark Office is an independent filing-support provider, not the USPTO or a government agency. Review what the service includes before choosing assisted filing.
+              Legal Trademark Office specialists help organize your owner, mark,
+              goods or services, class and filing information for review before
+              submission. Choose the service plan, preparation speed and support
+              level that fit your trademark registration needs.
             </p>
             <Link className="mt-5 inline-flex rounded-xl bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800" href="/trademark-registration">
-              Explore trademark registration support
+              Compare trademark registration plans
             </Link>
           </aside>
 
