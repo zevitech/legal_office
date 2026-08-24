@@ -2,6 +2,7 @@ import LegalPage from "@/components/legal/LegalPage";
 
 export const metadata = {
   title: "Refund Policy | Legal Trademark Office",
+  description: "Review cancellation, service-fee, government-fee and refund-request rules for Legal Trademark Office filing-support orders.",
   alternates: { canonical: "/legal/refund-policy" },
 };
 
@@ -14,7 +15,10 @@ export default function RefundPolicyPage() {
       <section><h2 className="text-xl font-semibold text-slate-900">Monitoring periods and renewals</h2><p>A monitoring period included in a package ends after the stated number of months and does not renew automatically. No recurring package or monitoring charge is made unless a future subscription is separately offered and affirmatively authorized.</p></section>
       <section><h2 className="text-xl font-semibold text-slate-900">Payment inquiries and disputes</h2><p>The payment receipt identifies the applicable card-statement descriptor after a successful payment. Before opening a dispute, contact us with the order email and transaction details so we can identify the charge and review the service record. We retain transaction authorizations, accepted agreement versions, case activity and delivery records to respond accurately to payment inquiries and disputes.</p></section>
       <section><h2 className="text-xl font-semibold text-slate-900">No outcome-based refund</h2><p>A refusal, opposition, abandonment or failure to obtain registration does not automatically qualify for a refund. Trademark outcomes are controlled by the USPTO, the accuracy of customer information and possible third-party rights.</p></section>
-      <section><h2 className="text-xl font-semibold text-slate-900">Requesting a review</h2><p>Contact us promptly with the order email, receipt number and reason for the request. We will acknowledge the request and provide a written decision after reviewing the work already performed.</p></section>
+      <section><h2 className="text-xl font-semibold text-slate-900">Our preparation errors</h2><p>If we make a clerical preparation error within the purchased scope, contact us promptly. We will review the order and, where reasonably possible, correct our work without an additional service charge. A correction does not include changed instructions, inaccurate customer-supplied information, a new filing requirement, government action or a third-party objection.</p></section>
+      <section><h2 className="text-xl font-semibold text-slate-900">Requesting a review</h2><p>Submit a request through our contact page with the order email, receipt number and reason for the request. We will acknowledge the request and provide a written decision after reviewing the work already performed, expenses incurred and submission status. We may request additional information needed to verify the purchaser or transaction.</p></section>
+      <section><h2 className="text-xl font-semibold text-slate-900">How approved refunds are issued</h2><p>An approved refund is returned to the original payment method unless another method is required by the payment provider or applicable law. Bank and card-network processing times are outside our control. We will provide confirmation after the refund is submitted for processing.</p></section>
+      <section><h2 className="text-xl font-semibold text-slate-900">Attorney services</h2><p>If a customer separately enters a written engagement for attorney services, cancellation and refund terms for that legal service are governed by the separately accepted engagement. Purchasing a standard filing-support package alone does not create an attorney-client relationship.</p></section>
     </LegalPage>
   );
 }

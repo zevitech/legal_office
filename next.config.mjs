@@ -7,8 +7,11 @@ const nextConfig = {
         protocol: "http",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "images.ctfassets.net",
+      },
     ],
-    domains: ["images.ctfassets.net"],
   },
   reactStrictMode: true,
   async redirects() {
