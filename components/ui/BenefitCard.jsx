@@ -7,7 +7,7 @@ import { PiTrademark } from "react-icons/pi";
 
 import { TbHandStop } from "react-icons/tb";
 
-const BenefitCard = ({ title, description, icon }) => {
+const BenefitCard = ({ title, description, icon, ctaLabel = "Trademark Now" }) => {
   return (
     <div className="benefit-card flex h-full min-w-0 w-full flex-col bg-slate-50 p-6 hover:bg-white hover:shadow-medium sm:p-8">
       <h3 className="text-[20px] font-medium text-slate-600">{title}</h3>
@@ -36,7 +36,7 @@ const BenefitCard = ({ title, description, icon }) => {
           )}
         </div>
         <div className="flex-center min-w-0 gap-1 text-sm sm:gap-2 sm:text-base">
-          <Link className="whitespace-nowrap" href={`trademark-register`}>Trademark Now</Link>
+          <Link className="whitespace-nowrap" href={`/trademark-register`}>{ctaLabel}</Link>
           <BiChevronRight />
         </div>
       </div>

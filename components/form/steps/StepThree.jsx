@@ -26,7 +26,7 @@ const StepThree = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loadingPlanId, setLoadingPlanId] = useState(null);
-  const [selectedPlanId, setSelectedPlanId] = useState(1);
+  const [selectedPlanId, setSelectedPlanId] = useState(2);
   const stepTwoData = useSelector((state) => state.form.stepTwo);
   const stepOneData = useSelector((state) => state.form.stepOne);
 

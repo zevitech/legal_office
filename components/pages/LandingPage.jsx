@@ -34,7 +34,7 @@ const PROTECTION_OPTIONS = [
   { value: "slogan", title: "Slogan", description: "A memorable phrase associated with your brand.", icon: LuFileSignature },
 ];
 
-const LandingPage = () => {
+const LandingPage = ({ optimizedCopy = false }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [chatLoader, setChatLoader] = useState(false);
@@ -184,7 +184,7 @@ const LandingPage = () => {
               <p className="text-sm font-bold uppercase tracking-[.14em] text-primary-theme">Prepare with confidence</p>
               <h2 className="mt-2 text-3xl font-bold leading-tight text-slate-800 max-md:text-2xl">Avoid common filing problems.</h2>
               <p className="mt-4 leading-7 text-slate-600">The USPTO may raise questions when important details are incomplete or inconsistent. Our guided application helps collect the information needed for review before filing.</p>
-              <Button onClick={handleRegisterClick} isLoading={isLoading} className="mt-6 bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">Start Your Application</Button>
+              <Button onClick={handleRegisterClick} isLoading={isLoading} className="mt-6 bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">{optimizedCopy ? "Start My Trademark Registration" : "Start Your Application"}</Button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {["A similar existing trademark", "Incorrect goods or services class", "Unclear business activity description", "Incomplete ownership information", "Weak or unsuitable proof of use", "Missing application details"].map((item) => (
@@ -209,7 +209,7 @@ const LandingPage = () => {
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 {["Application timeline", "Secure documents", "Status notifications", "Team messages"].map((item) => <div key={item} className="flex items-center gap-2 rounded-xl bg-white p-3 text-sm font-semibold text-slate-700 shadow-sm"><HiOutlineShieldCheck className="text-lg text-[#025da0]" />{item}</div>)}
               </div>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Button onClick={handleRegisterClick} isLoading={isLoading} className="bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">Start Your Application</Button><Button onClick={() => setDashboardOpen(true)} variant="bordered" className="border-2 border-primary-theme px-8 py-6 font-bold text-primary-theme hover:bg-blue-50">View Sample Dashboard</Button></div>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Button onClick={handleRegisterClick} isLoading={isLoading} className="bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">{optimizedCopy ? "Start My Trademark Registration" : "Start Your Application"}</Button><Button onClick={() => setDashboardOpen(true)} variant="bordered" className="border-2 border-primary-theme px-8 py-6 font-bold text-primary-theme hover:bg-blue-50">View Sample Dashboard</Button></div>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg">
               <div className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-wide text-[#025da0]">My trademark</p><h3 className="mt-1 text-xl font-bold text-slate-900">NORTH & PINE</h3></div><span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">Review in progress</span></div>
@@ -267,34 +267,38 @@ const LandingPage = () => {
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 xl:grid-cols-[minmax(0,1fr)_280px]">
           <div className="grid min-w-0 grid-cols-1 gap-6 sm:grid-cols-2">
               <BenefitCard
-                title={`Expertise You Can Trust`}
-                description={`Our team of seasoned trademark professionals brings years of experience to ensure your brand
+                title={optimizedCopy ? "Careful Application Preparation" : "Expertise You Can Trust"}
+                description={optimizedCopy ? "Your questionnaire answers are organized for review so important ownership, mark and business-activity details are easier to confirm before submission." : `Our team of seasoned trademark professionals brings years of experience to ensure your brand
 is protected with precision. We stay abreast of the latest legal developments to provide you with
 expert guidance every step of the way.`}
                 icon={`hand`}
+                ctaLabel={optimizedCopy ? "Start Registration" : "Trademark Now"}
               />
               <BenefitCard
-                title={`Comprehensive Trademark Services
+                title={optimizedCopy ? "Search and Filing Support" : `Comprehensive Trademark Services
 `}
-                description={`We offer a full spectrum of trademark services, from name searches and registration to
+                description={optimizedCopy ? "Choose the search coverage and preparation speed that fit your needs, then review the filing information before it is submitted." : `We offer a full spectrum of trademark services, from name searches and registration to
 monitoring and enforcement. Our all-inclusive approach ensures that all aspects of your
 trademark needs are addressed efficiently and effectively.`}
                 icon={`registered`}
+                ctaLabel={optimizedCopy ? "Start Registration" : "Trademark Now"}
               />
               <BenefitCard
                 title={`Personalized Support for Your Brand`}
-                description={`We understand that every brand is unique. Our personalized approach means we tailor our
+                description={optimizedCopy ? "Select a business name, logo or slogan and provide the information relevant to that mark through a guided questionnaire." : `We understand that every brand is unique. Our personalized approach means we tailor our
 services to fit your specific needs, providing dedicated support and customized solutions to
 safeguard your intellectual property.`}
                 icon={`scale`}
+                ctaLabel={optimizedCopy ? "Start Registration" : "Trademark Now"}
               />
               <BenefitCard
-                title={`Fast and Reliable Registration Process
+                title={optimizedCopy ? "Clear Progress After Checkout" : `Fast and Reliable Registration Process
 `}
-                description={`Our streamlined registration process is designed to be quick and dependable, minimizing delays
+                description={optimizedCopy ? "Use your secure customer account to follow preparation, documents, messages and application updates from one place." : `Our streamlined registration process is designed to be quick and dependable, minimizing delays
 and maximizing efficiency. We handle all the details to ensure a smooth experience from start to
 finish, so you can focus on growing your business.`}
                 icon={`trademark`}
+                ctaLabel={optimizedCopy ? "Start Registration" : "Trademark Now"}
               />
           </div>
           <div className="hidden justify-center xl:flex">
@@ -315,10 +319,10 @@ finish, so you can focus on growing your business.`}
           <div className="flex w-full justify-end">
             <div>
               <h2 className="text-slate-700 font-semibold text-2xl">
-                {`Before someone else files for your name, why don't you get it?`}
+                {optimizedCopy ? "Ready to prepare your trademark application?" : `Before someone else files for your name, why don't you get it?`}
               </h2>
               <p className="text-slate-700 text-base mt-2 mb-6">
-                {`Protect your brand before it's too late. Schedule a free
+                {optimizedCopy ? "Start with a guided questionnaire for your business name, logo or slogan. Review the available service plans and follow your application from your secure customer account." : `Protect your brand before it's too late. Schedule a free
                 consultation with a qualified legal professional to discuss your
                 trademark needs and explore your options. Unsure of the next
                 steps? We're here to guide you through every part of the
@@ -336,7 +340,7 @@ finish, so you can focus on growing your business.`}
           <div className="flex w-full justify-start text-slate-800 lg:justify-center">
             <div>
               <p className="font-semibold text-lg mb-1">
-                Call Now for a Free Consultation:
+                {optimizedCopy ? "Questions about the application?" : "Call Now for a Free Consultation:"}
               </p>
               <Link
                 href={"tel:+13104244909"}
@@ -344,9 +348,7 @@ finish, so you can focus on growing your business.`}
               >
                 +1 (310) 424 4909
               </Link>
-              <p className="text-slate-800">
-                All of our experts are based in the U.S.
-              </p>
+              <p className="text-slate-800">{optimizedCopy ? "Customer support is available during published business hours." : "All of our experts are based in the U.S."}</p>
             </div>
           </div>
         </div>
@@ -462,6 +464,7 @@ finish, so you can focus on growing your business.`}
 
       {/* testimonial section  */}
       <section data-customizer-old-section="testimonials" className="order-11 flex-center max-md:flex-col gap-28 max-md:gap-10 mt-24 max-md:mt-16">
+        {optimizedCopy ? <div className="mx-auto grid w-full max-w-6xl gap-5 px-4 md:grid-cols-3">{[["Review before submission","Confirm the prepared filing information before it moves forward."],["Transparent plan choices","Compare service fees, search coverage and preparation speed."],["Account access","Keep documents, messages and application updates together."]].map(([title,copy]) => <article key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><HiCheck className="text-2xl text-emerald-600" aria-hidden="true" /><h2 className="mt-4 text-xl font-bold text-slate-800">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{copy}</p></article>)}</div> : <>
         <div className="flex">
           <div className="flex-center gap-2 flex-col">
             <h2 className="text-2xl font-bold text-slate-800">Excellent</h2>
@@ -483,10 +486,11 @@ finish, so you can focus on growing your business.`}
         <div className="max-md:w-full">
           <TestimonialCarousel />
         </div>
+        </>}
       </section>
 
       {/* footer section */}
-      <footer data-customizer-old-section="footer" className="order-12 mt-28 border-t border-slate-200 bg-white px-4 py-8 text-slate-600 max-md:mt-20"><div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm sm:flex-row sm:items-center sm:justify-between"><p className="font-semibold text-slate-700">Legal Trademark Office</p><nav aria-label="Landing page policies" className="flex flex-wrap gap-5"><Link className="hover:text-[#026daf]" href="/legal/privacy">Privacy</Link><Link className="hover:text-[#026daf]" href="/legal/terms">Terms</Link><Link className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</Link></nav></div></footer>
+      <footer data-customizer-old-section="footer" className="order-12 mt-28 border-t border-slate-200 bg-white px-4 py-8 text-slate-600 max-md:mt-20"><div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm sm:flex-row sm:items-center sm:justify-between"><p className="font-semibold text-slate-700">Legal Trademark Office{optimizedCopy ? " · Independent filing support" : ""}</p><nav aria-label="Landing page policies" className="flex flex-wrap gap-5"><Link className="hover:text-[#026daf]" href="/legal/privacy">Privacy</Link><Link className="hover:text-[#026daf]" href="/legal/terms">Terms</Link><Link className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</Link></nav></div></footer>
       </div>
 
       {dashboardOpen && (
