@@ -92,11 +92,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }}
       />
 
-      {/* Google tag (gtag.js) for Google Ads. One gtag.js load serves both
-          accounts. Kept as a direct base tag so conversions keep recording
+      {/* Google tag (gtag.js) for Google Ads. Kept as a direct base tag so
+          conversions keep recording
           even before the GTM container's triggers are fully configured. */}
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=AW-18263994803"
+        src="https://www.googletagmanager.com/gtag/js?id=AW-16565473053"
         strategy="afterInteractive"
       />
 
@@ -109,7 +109,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'AW-16565473053');
-            gtag('config', 'AW-18263994803');
           `,
         }}
       />
