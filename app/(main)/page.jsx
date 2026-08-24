@@ -106,77 +106,81 @@ const page = () => {
         </section>
 
         {/* filing support section */}
-        <section className="relative">
-          <div className="bg-[#DFEAF1] h-[530px] absolute w-full top-0"></div>
-          <div className="flex-between gap-7 max-md:gap-1 max-w-5xl m-auto pt-24 max-md:pt-20 pb-16 relative">
-            <div className="flex items-end">
-              <Image
-                width={130}
-                height={130}
-                alt="'"
-                src={`/images/meter-hand-icon.png`}
-                className="object-contain"
-              />
-            </div>
-            <div className="col-flex justify-center items-center gap-4">
-              <h2 className="text-4xl max-md:text-3xl text-slate-700 text-center">
-                <span className="font-bold text-color-primary">{`Professional Filing Support`}</span>
-                <span className="font-normal">{` at Every Step`}</span>
-              </h2>
-              <p className="text-slate-600 text-base text-center">
-                {`Our team helps organize your application details, prepare filing information, and keep you informed throughout the trademark submission process.`}
-              </p>
-            </div>
-            <div className="flex items-end">
-              <Image
-                width={130}
-                height={130}
-                alt="'"
-                src={`/images/hammer-icon.png`}
-                className="object-contain"
-              />
-            </div>
-          </div>
-          <div className="flex-center gap-10 max-md:flex-col max-md:px-5">
-            {[
-              {
-                title: "Application Preparation",
-                details:
-                  "We help organize your mark, ownership, and goods or services information so your application is prepared clearly and accurately.",
-                icon: "/images/form_fill.png",
-              },
-              {
-                title: "Filing Coordination",
-                details:
-                  "Our filing team coordinates the submission process and helps you understand what information is needed at each stage.",
-                icon: "/images/search-icon.png",
-              },
-              {
-                title: "Case Updates",
-                details:
-                  "Stay informed about important application activity, document requests, and next steps as your filing progresses.",
-                icon: "/images/user-group.png",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="w-[300px] min-h-[330px] bg-white rounded-xl shadow-lg px-7 py-9 col-flex items-center gap-5 text-center"
-              >
-                <div className="w-20 h-20 rounded-full bg-[#E9F5FD] flex-center">
-                  <Image
-                    width={48}
-                    height={48}
-                    alt=""
-                    src={item.icon}
-                    className="object-contain"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-color-primary">
-                  {item.title}
-                </h3>
-                <p className="text-slate-600 leading-7">{item.details}</p>
+        <section className="bg-[#DFEAF1] px-5 py-20 md:px-8 md:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid grid-cols-[112px_minmax(0,1fr)_112px] items-center gap-8 max-md:grid-cols-1 max-md:gap-5">
+              <div className="flex justify-center max-md:hidden" aria-hidden="true">
+                <Image
+                  width={112}
+                  height={112}
+                  alt=""
+                  src={`/images/meter-hand-icon.png`}
+                  className="h-28 w-28 object-contain"
+                />
               </div>
-            ))}
+              <div className="col-flex items-center gap-5 text-center">
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-color-primary">
+                  Trademark filing assistance
+                </p>
+                <h2 className="text-3xl font-bold leading-tight text-slate-800 md:text-4xl">
+                  <span className="font-bold text-color-primary">{`Professional Filing Support`}</span>
+                  <span className="font-normal">{` at Every Step`}</span>
+                </h2>
+                <p className="max-w-2xl text-base leading-7 text-slate-700 md:text-lg">
+                  {`Our team helps organize your application details, prepare filing information, and keep you informed throughout the trademark submission process.`}
+                </p>
+              </div>
+              <div className="flex justify-center max-md:hidden" aria-hidden="true">
+                <Image
+                  width={112}
+                  height={112}
+                  alt=""
+                  src={`/images/hammer-icon.png`}
+                  className="h-28 w-28 object-contain"
+                />
+              </div>
+            </div>
+
+            <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+              {[
+                {
+                  title: "Application Preparation",
+                  details:
+                    "We help organize your mark, ownership, and goods or services information so your application is prepared clearly and accurately.",
+                  Icon: FaShieldHeart,
+                },
+                {
+                  title: "Filing Coordination",
+                  details:
+                    "Our filing team coordinates the submission process and helps you understand what information is needed at each stage.",
+                  Icon: FaRegUser,
+                },
+                {
+                  title: "Case Updates",
+                  details:
+                    "Stay informed about important application activity, document requests, and next steps as your filing progresses.",
+                  Icon: IoMdTime,
+                },
+              ].map((item) => (
+                <article
+                  key={item.title}
+                  className="flex min-w-0 flex-col rounded-2xl border border-white/80 bg-white p-7 shadow-[0_14px_40px_rgba(15,55,85,0.10)] md:min-h-[300px] md:p-8"
+                >
+                  <div
+                    className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E9F5FD] text-color-primary"
+                    aria-hidden="true"
+                  >
+                    <item.Icon className="h-7 w-7" />
+                  </div>
+                  <h3 className="mt-6 text-xl font-bold leading-snug text-slate-800">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-base leading-7 text-slate-600">
+                    {item.details}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
