@@ -101,16 +101,14 @@ const LandingPage = () => {
                 Trademark Registration for Your Business Name, Logo or Slogan
               </h1>
               <h2 className="text-slate-700 text-2xl font-bold text-center">
-                <span className="text-[44px]  max-md:text-2xl text-[#025da0]">
-                  Start Your U.S. Trademark Registration for $49 + USPTO Filing Fee
+                <span className="block text-[38px] leading-tight max-md:text-2xl text-[#025da0]">
+                  U.S. Trademark Registration from $49 + USPTO Filing Fee
                 </span>
               </h2>
               <p className="text-slate-700 mt-4 text-center max-w-[80%] max-md:max-w-full px-2 m-auto">
-                Complete our guided questionnaire and let our experienced filing
-                team carefully prepare your trademark application. Review and
-                approve your filing details before submission, then conveniently
-                track your application, documents and updates through your secure
-                customer account.
+                Complete our guided questionnaire and our filing team will prepare
+                your trademark application. Review and approve the details, then
+                track documents and updates in your secure account.
               </p>
             </div>
           </div>
