@@ -265,7 +265,7 @@ const Payment = () => {
   }
 
   return (
-    <main className="system-page-standard-layout flex flex-col gap-4">
+    <section className="system-page-standard-layout flex flex-col gap-4" aria-labelledby="checkout-heading">
       <FormLoader
         isVisible={isProcessing}
         message="Processing your payment..."
@@ -273,7 +273,7 @@ const Payment = () => {
       />
       <div className="mb-8 w-full">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Secure checkout</p>
-        <h1 className="mt-2 w-full font-inria text-3xl font-bold text-heading-color sm:text-4xl">
+        <h1 id="checkout-heading" className="mt-2 w-full font-inria text-3xl font-bold text-heading-color sm:text-4xl">
           Review and complete your order
         </h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">
@@ -351,7 +351,7 @@ const Payment = () => {
               {orderDetails.map(({ title, amount }, index) => (
                 <React.Fragment key={`${title}-${index}`}>
                   <div className="w-full flex items-center justify-between md:text-[16px] text-[14px]">
-                    <h1 className="text-heading-color">{title}:</h1>
+                    <p className="text-heading-color">{title}:</p>
                     <p>${amount}</p>
                   </div>
                   <Divider />
@@ -359,7 +359,7 @@ const Payment = () => {
               ))}
 
               <div className="w-full flex items-center justify-between md:text-[20px] text-[16px]">
-                <h1 className="font-bold text-heading-color">Charged today:</h1>
+                <p className="font-bold text-heading-color">Charged today:</p>
                 <p className="font-bold">${totalAmount}.00</p>
               </div>
               <Divider />
@@ -376,7 +376,7 @@ const Payment = () => {
           </Card>
         </div>
       </section>
-    </main>
+    </section>
   );
 };
 

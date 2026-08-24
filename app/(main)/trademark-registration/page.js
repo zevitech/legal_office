@@ -1,5 +1,5 @@
 import React from "react";
-import LandingPage from "@/components/pages/LandingPage";
+import ConversionPreview from "@/components/pages/ConversionPreview";
 
 export const metadata = {
   title: "Trademark Registration Filing Support | Legal Trademark Office",
@@ -24,21 +24,13 @@ const serviceSchema = {
 const page = () => {
   return (
     <>
-      <link
-        rel="preload"
-        as="image"
-        href="/images/legal-trademark-office-hero-background.jpg"
-        fetchPriority="high"
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(serviceSchema).replace(/</g, "\\u003c"),
         }}
       />
-      <main>
-        <LandingPage />
-      </main>
+      <ConversionPreview showPreviewNotice={false} />
     </>
   );
 };

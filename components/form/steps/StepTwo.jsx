@@ -420,13 +420,13 @@ const StepTwo = ({ previewMode = false }) => {
   };
 
   return (
-    <main className="system-page-standard-layout flex flex-col gap-7">
+    <section className="system-page-standard-layout flex flex-col gap-7" aria-labelledby="goods-services-heading">
       <FormLoader isVisible={isLoading} />
       <div>
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">
           Goods and services
         </p>
-        <h1 className="mt-2 font-inria text-3xl font-bold text-heading-color sm:text-4xl">
+        <h1 id="goods-services-heading" className="mt-2 font-inria text-3xl font-bold text-heading-color sm:text-4xl">
           What does your business offer?
         </h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">
@@ -570,7 +570,7 @@ const StepTwo = ({ previewMode = false }) => {
           Continue to packages
         </Button>
       </div>
-    </main>
+    </section>
   );
 };
 

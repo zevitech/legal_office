@@ -17,9 +17,9 @@ const marks = [
 ];
 
 const plans = [
-  { name: "Basic", price: "$49", label: "Essential preparation", features: ["Federal database search", "Application preparation", "Customer account tracking"] },
-  { name: "Standard", price: "$149", label: "Most selected", featured: true, features: ["Federal and state search", "Three-business-day preparation", "Completeness review"] },
-  { name: "Advanced", price: "$249", label: "Expanded support", features: ["Expanded search coverage", "Priority preparation", "Six months of monitoring"] },
+  { id: 1, name: "Basic", price: "$49", label: "Essential preparation", features: ["Federal database search", "Seven-business-day preparation", "Specialist application review"] },
+  { id: 3, name: "Standard", price: "$149", label: "Most selected", featured: true, features: ["Federal and state search", "Three-business-day preparation", "Completeness review"] },
+  { id: 2, name: "Advanced", price: "$249", label: "Expanded support", features: ["Federal and state comprehensive search", "24–48-hour preparation", "Six months of monitoring"] },
 ];
 
 const faqs = [
@@ -31,18 +31,22 @@ const faqs = [
 
 const primaryButton = "inline-flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition duration-200 hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none";
 
-export default function ConversionPreview() {
+export default function ConversionPreview({ showPreviewNotice = true }) {
   const router = useRouter();
   const [selectedMark, setSelectedMark] = useState("name");
 
-  const startApplication = (mark = selectedMark) => {
+  const startApplication = (mark = selectedMark, planId = null) => {
     try { sessionStorage.setItem("lto_preselected_mark", mark); } catch {}
+    try {
+      if (planId) sessionStorage.setItem("lto_preselected_plan", String(planId));
+      else sessionStorage.removeItem("lto_preselected_plan");
+    } catch {}
     router.push("/trademark-register");
   };
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-white text-slate-900">
-      <div data-customizer-section="preview-notice" className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-semibold text-amber-950">Private conversion preview · the current live landing page remains unchanged</div>
+      {showPreviewNotice && <div data-customizer-section="preview-notice" className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-semibold text-amber-950">Private conversion preview · the current live landing page remains unchanged</div>}
 
       <header data-customizer-section="header" className="border-b border-slate-100 bg-white">
         <div className="mx-auto flex w-[92%] max-w-6xl items-center justify-between gap-4 py-4">
@@ -98,7 +102,7 @@ export default function ConversionPreview() {
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center"><p className="text-sm font-bold uppercase tracking-[.14em] text-[#026daf]">Transparent service plans</p><h2 className="mt-2 text-3xl font-black sm:text-4xl">Choose the preparation level that fits</h2><p className="mt-3 text-slate-600">The amounts below are service fees. Government filing fees are reviewed separately before submission.</p></div>
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {plans.map((plan) => <article key={plan.name} className={`relative flex flex-col rounded-3xl border-2 bg-white p-7 ${plan.featured ? "border-[#087fd3] shadow-xl shadow-blue-100" : "border-slate-200 shadow-sm"}`}>{plan.featured && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#087fd3] px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">Most selected</span>}<p className="text-sm font-bold text-[#026daf]">{plan.label}</p><h3 className="mt-2 text-2xl font-black">{plan.name}</h3><p className="mt-5 text-5xl font-black">{plan.price}</p><p className="mt-1 text-sm text-slate-500">service fee</p><ul className="mt-6 flex-1 space-y-3">{plan.features.map((item) => <li key={item} className="flex gap-3 text-sm text-slate-700"><HiCheck className="mt-0.5 shrink-0 text-emerald-600" aria-hidden="true" />{item}</li>)}</ul><button type="button" onClick={() => startApplication()} className={`mt-7 min-h-12 cursor-pointer rounded-xl px-5 font-bold transition focus:outline-none focus:ring-4 focus:ring-blue-200 ${plan.featured ? "bg-[#087fd3] text-white hover:bg-[#026bb5]" : "border-2 border-[#087fd3] text-[#026daf] hover:bg-blue-50"}`}>Choose {plan.name}</button></article>)}
+            {plans.map((plan) => <article key={plan.name} className={`relative flex flex-col rounded-3xl border-2 bg-white p-7 ${plan.featured ? "border-[#087fd3] shadow-xl shadow-blue-100" : "border-slate-200 shadow-sm"}`}>{plan.featured && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#087fd3] px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">Most selected</span>}<p className="text-sm font-bold text-[#026daf]">{plan.label}</p><h3 className="mt-2 text-2xl font-black">{plan.name}</h3><p className="mt-5 text-5xl font-black">{plan.price}</p><p className="mt-1 text-sm text-slate-500">service fee</p><ul className="mt-6 flex-1 space-y-3">{plan.features.map((item) => <li key={item} className="flex gap-3 text-sm text-slate-700"><HiCheck className="mt-0.5 shrink-0 text-emerald-600" aria-hidden="true" />{item}</li>)}</ul><button type="button" onClick={() => startApplication(selectedMark, plan.id)} className={`mt-7 min-h-12 cursor-pointer rounded-xl px-5 font-bold transition focus:outline-none focus:ring-4 focus:ring-blue-200 ${plan.featured ? "bg-[#087fd3] text-white hover:bg-[#026bb5]" : "border-2 border-[#087fd3] text-[#026daf] hover:bg-blue-50"}`}>Choose {plan.name}</button></article>)}
           </div>
         </div>
       </section>

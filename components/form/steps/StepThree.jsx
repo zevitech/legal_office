@@ -2,7 +2,7 @@
 
 import Package from "../Package";
 import FormLoader from "@/components/form/FormLoader";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NormalLabel from "../NormalLabel";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,9 +26,19 @@ const StepThree = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loadingPlanId, setLoadingPlanId] = useState(null);
-  const [selectedPlanId, setSelectedPlanId] = useState(4);
+  const [selectedPlanId, setSelectedPlanId] = useState(1);
   const stepTwoData = useSelector((state) => state.form.stepTwo);
   const stepOneData = useSelector((state) => state.form.stepOne);
+
+  useEffect(() => {
+    try {
+      const storedPlanId = Number(sessionStorage.getItem("lto_preselected_plan"));
+      if (SystemStepThreeData.some((plan) => plan.id === storedPlanId)) {
+        setSelectedPlanId(storedPlanId);
+      }
+      sessionStorage.removeItem("lto_preselected_plan");
+    } catch {}
+  }, []);
 
   // page authorization | redirect if previous step has no data
   if (process.env.NODE_ENV === "production" && Object.keys(stepTwoData).length === 0) {
@@ -83,12 +93,12 @@ const StepThree = () => {
   const selectedPlan = SystemStepThreeData.find((plan) => plan.id === selectedPlanId);
 
   return (
-    <main className="system-page-standard-layout flex flex-col gap-7">
+    <section className="system-page-standard-layout flex flex-col gap-7" aria-labelledby="package-plan-heading">
       <FormLoader isVisible={!!loadingPlanId} />
       <div className="text-center">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Service package</p>
-        <h1 className="mt-2 font-inria text-3xl font-bold text-heading-color sm:text-4xl">Choose your preparation plan</h1>
-        <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">The $649 Premium plan is preselected for customers who want the broadest search, priority preparation and ongoing monitoring. You can choose any plan.</p>
+        <h1 id="package-plan-heading" className="mt-2 font-inria text-3xl font-bold text-heading-color sm:text-4xl">Choose your preparation plan</h1>
+        <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">Choose the service package that matches the preparation speed, search coverage and support you want. You can review every option before continuing.</p>
       </div>
 
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
@@ -125,7 +135,7 @@ const StepThree = () => {
         <p className="text-center text-sm text-slate-600"><strong className="text-slate-900">{selectedPlan?.planName}</strong> · {selectedPlan?.planPrice} today · USPTO fees separate</p>
         <Button onClick={() => handleNext(selectedPlan)} className="h-14 w-full bg-primary-theme px-7 font-bold text-white sm:w-auto" isLoading={loadingPlanId === selectedPlanId}>Continue with {selectedPlan?.planName}</Button>
       </div>
-    </main>
+    </section>
   );
 };
 
