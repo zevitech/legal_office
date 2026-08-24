@@ -54,10 +54,10 @@ const Header = () => {
         } fixed top-0 left-0 w-full z-[9999]`}
       >
         <div className="flex justify-between items-center px-24 max-md:px-12 max-sm:px-8 py-2">
-          <Link href={"/"}>
+          <Link href={"/"} aria-label="Legal Trademark Office home">
             <Image
               src={"/images/legal-trademark-office.png"}
-              alt="Legal Trademark Office logo"
+              alt="Legal Trademark Office"
               width={100}
               height={80}
               className="object-contain max-md:w-[90px]"

@@ -14,9 +14,15 @@ const poppins = Poppins({
 
 export const metadata = {
   metadataBase: new URL("https://www.legaltrademarkoffice.com"),
-  title: "Register Trademark - Legal Trademark Office",
+  applicationName: "Legal Trademark Office",
+  title: "Trademark Registration Filing Support | Legal Trademark Office",
   description:
-    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
+    "Independent U.S. trademark application preparation and filing support for business names, logos, and slogans.",
+  openGraph: {
+    siteName: "Legal Trademark Office",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 const organizationSchema = {
@@ -48,6 +54,8 @@ const organizationSchema = {
       "@id": "https://www.legaltrademarkoffice.com/#website",
       url: "https://www.legaltrademarkoffice.com/",
       name: "Legal Trademark Office",
+      alternateName: "LegalTrademarkOffice.com",
+      inLanguage: "en-US",
       publisher: { "@id": "https://www.legaltrademarkoffice.com/#organization" },
     },
   ],

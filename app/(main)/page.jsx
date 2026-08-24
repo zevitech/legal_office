@@ -17,11 +17,17 @@ import Searchbar from "@/components/pages/home/search-bar";
 import PackageCard2 from "@/components/ui/PackageCard2";
 
 export const metadata = {
-  title: "Legal Trademark Office | US Based trademark register website.",
+  title: "Trademark Registration Filing Support | Legal Trademark Office",
   description:
-    "At Legal Trademark Office, we offer expert trademark registration services to protect your business name, logo, and brand identity. Get started today!",
+    "Independent U.S. trademark application preparation and filing support for business names, logos, and slogans. Review service scope and fees before filing.",
   alternates: {
     canonical: "https://www.legaltrademarkoffice.com/",
+  },
+  openGraph: {
+    url: "https://www.legaltrademarkoffice.com/",
+    title: "Trademark Registration Filing Support | Legal Trademark Office",
+    description:
+      "Independent U.S. trademark application preparation and filing support for business names, logos, and slogans.",
   },
 };
 
