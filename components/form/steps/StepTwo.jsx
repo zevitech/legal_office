@@ -385,7 +385,11 @@ const StepTwo = ({ previewMode = false }) => {
     setIsLoading(true);
     const payload = {
       trademarkClassification: classificationSummary,
-      selectedActivities,
+      // "Other business" leaves selectedActivities empty, so the customer's own
+      // description reached email and CRM only through trademarkClassification.
+      selectedActivities: customActivity.trim()
+        ? [...selectedActivities, { label: customActivity.trim(), classNo: null }]
+        : selectedActivities,
       estimatedClassCount: Math.max(
         uniqueClasses.length,
         customActivity ? 1 : 0,
@@ -403,19 +407,22 @@ const StepTwo = ({ previewMode = false }) => {
     if (process.env.NODE_ENV !== "production")
       return router.push("/trademark-register/step-3");
 
-    void axios.post("/api/save-data", {
+    // Awaited: navigating in the same tick cancelled the in-flight request, so
+    // the step never reached email or the CRM.
+    try {
+      await axios.post("/api/save-data", {
         ...stepOneData,
         ...payload,
         zoho_step: 2,
-      }).then(() => {
+      });
       trackClassificationComplete({
         activityCount: selectedActivities.length + (customActivity ? 1 : 0),
         classCount: payload.estimatedClassCount,
         reviewPreference,
       });
-    }).catch((error) => {
+    } catch (error) {
       console.log("Error sending step 2 data:", error);
-    });
+    }
     setIsLoading(false);
     return router.push("/trademark-register/step-3");
   };
