@@ -501,7 +501,7 @@ finish, so you can focus on growing your business.`}
             </dl>
           </section>}
           <div className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between"><p className="font-semibold text-slate-700">Legal Trademark Office{optimizedCopy ? " · Independent filing support" : ""}</p><nav aria-label="Landing page policies" className="flex flex-wrap gap-5"><Link className="hover:text-[#026daf]" href="/legal/privacy">Privacy</Link><Link className="hover:text-[#026daf]" href="/legal/terms">Terms</Link><Link className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</Link></nav></div>
-          {optimizedCopy && <p className="mt-4 max-w-4xl text-xs leading-5 text-slate-500 sm:text-sm">Legal Trademark Office is an independent private filing-support service and is not affiliated with the USPTO. Government filing fees are separate.</p>}
+          {optimizedCopy && <p className="mt-4 max-w-4xl text-xs leading-5 text-slate-500 sm:text-sm">Legal Trademark Office is an independent professional trademark filing service. We help customers prepare and submit U.S. trademark applications and are not affiliated with the USPTO. Government filing fees are separate.</p>}
         </div>
       </footer>
       </div>
