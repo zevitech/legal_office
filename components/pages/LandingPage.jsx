@@ -102,10 +102,10 @@ const LandingPage = ({ optimizedCopy = false }) => {
         <div className="relative mx-auto max-w-5xl px-4 py-14 text-center sm:py-20 lg:py-24">
           <p className="text-sm font-bold uppercase tracking-[.16em] text-[#026daf]">U.S. trademark filing support</p>
           <h1 data-customizer-old-text="hero-title" className="mx-auto mt-4 max-w-4xl text-balance text-4xl font-bold leading-[1.12] text-[#13233a] sm:text-5xl lg:text-[3.5rem]">Trademark Registration for Your Business Name, Logo or Slogan</h1>
-          <p data-customizer-old-text="hero-copy" className="mx-auto mt-6 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">Complete our guided questionnaire and our filing team will prepare your trademark application. Review and approve the details, then track documents and updates in your secure account.</p>
+          <p data-customizer-old-text="hero-copy" className="mx-auto mt-6 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">{optimizedCopy ? "Apply to register a U.S. trademark for your business name, logo or slogan through our guided filing-support process." : "Complete our guided questionnaire and our filing team will prepare your trademark application. Review and approve the details, then track documents and updates in your secure account."}</p>
           <div className="mt-8 flex flex-col items-center gap-3">
             <button type="button" onClick={handleRegisterClick} className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Trademark Registration <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button>
-            <p className="text-sm font-semibold text-slate-600">Service plans from $49 <span aria-hidden="true">·</span> USPTO filing fee separate</p>
+            <p className="text-sm font-semibold text-slate-600">Service plans start at $49</p>
           </div>
           <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Review before submission", "Secure customer account", "No automatic renewal"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}</div>
         </div>
@@ -135,12 +135,12 @@ const LandingPage = ({ optimizedCopy = false }) => {
       <section data-customizer-old-section="process" className="order-2 flex-center mt-24 max-md:mt-20 max-md:w-full">
         <div className="flex flex-col gap-16 max-md:gap-8">
           <div className="text-center flex flex-col gap-4  max-md:px-3">
+            {optimizedCopy && <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">A simple three-step process</p>}
             <h2 className="text-4xl text-[#025da0] font-bold max-md:text-3xl">
-              Start Your U.S. Trademark in 3 Easy Steps
+              {optimizedCopy ? "Apply for a U.S. Trademark" : "Start Your U.S. Trademark in 3 Easy Steps"}
             </h2>
             <p className="text-base text-slate-600 md:max-w-[50%] m-auto">
-              Our guided process supports businesses across retail, e-commerce,
-              professional services, technology and many other industries.
+              {optimizedCopy ? "Start by selecting a business name, logo or slogan and completing our guided questionnaire. Our filing team organizes your information for review, including ownership details, goods or services and likely trademark classes. You review and approve the application details before submission to the USPTO." : "Our guided process supports businesses across retail, e-commerce, professional services, technology and many other industries."}
             </p>
             <Image
               src={"/images/curve-DplsLMf8.webp"}
@@ -488,7 +488,22 @@ finish, so you can focus on growing your business.`}
       </section>
 
       {/* footer section */}
-      <footer data-customizer-old-section="footer" className="order-12 mt-28 border-t border-slate-200 bg-white px-4 py-8 text-slate-600 max-md:mt-20"><div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm sm:flex-row sm:items-center sm:justify-between"><p className="font-semibold text-slate-700">Legal Trademark Office{optimizedCopy ? " · Independent filing support" : ""}</p><nav aria-label="Landing page policies" className="flex flex-wrap gap-5"><Link className="hover:text-[#026daf]" href="/legal/privacy">Privacy</Link><Link className="hover:text-[#026daf]" href="/legal/terms">Terms</Link><Link className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</Link></nav></div></footer>
+      <footer data-customizer-old-section="footer" className="order-12 mt-28 border-t border-slate-200 bg-white px-4 py-8 text-slate-600 max-md:mt-20">
+        <div className="mx-auto max-w-6xl text-sm">
+          {optimizedCopy && <section aria-labelledby="business-information-heading" className="border-b border-slate-200 pb-6">
+            <h2 id="business-information-heading" className="text-base font-bold text-slate-800">Business Information</h2>
+            <dl className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div><dt className="font-semibold text-slate-700">Legal business name</dt><dd>Legal Trademark Office LLC</dd></div>
+              <div><dt className="font-semibold text-slate-700">Physical mailing address</dt><dd>2121 Crystal Dr, Arlington, VA 22202, USA</dd></div>
+              <div><dt className="font-semibold text-slate-700">Support email</dt><dd><a className="hover:text-[#026daf]" href="mailto:support@legaltrademarkoffice.com">support@legaltrademarkoffice.com</a></dd></div>
+              <div><dt className="font-semibold text-slate-700">Phone number</dt><dd><a className="hover:text-[#026daf]" href="tel:+13104244909">+1 (310) 424-4909</a></dd></div>
+              <div><dt className="font-semibold text-slate-700">Business hours</dt><dd>Monday–Friday, 9:00 AM–6:00 PM</dd></div>
+            </dl>
+          </section>}
+          <div className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between"><p className="font-semibold text-slate-700">Legal Trademark Office{optimizedCopy ? " · Independent filing support" : ""}</p><nav aria-label="Landing page policies" className="flex flex-wrap gap-5"><Link className="hover:text-[#026daf]" href="/legal/privacy">Privacy</Link><Link className="hover:text-[#026daf]" href="/legal/terms">Terms</Link><Link className="hover:text-[#026daf]" href="/legal/refund-policy">Refund policy</Link></nav></div>
+          {optimizedCopy && <p className="mt-4 max-w-4xl text-xs leading-5 text-slate-500 sm:text-sm">Legal Trademark Office is an independent professional trademark filing service. We help customers prepare and submit U.S. trademark applications and are not affiliated with the USPTO. Government filing fees are separate.</p>}
+        </div>
+      </footer>
       </div>
 
       {dashboardOpen && (
