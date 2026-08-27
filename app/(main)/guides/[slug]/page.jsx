@@ -22,6 +22,8 @@ export function generateMetadata({ params }) {
 
 function ProcessGuide() {
   return <>
+    <h2>How do you register a trademark in the United States?</h2>
+    <p>To register a U.S. trademark, identify the owner and mark, define the goods or services, choose a filing basis, search for potentially conflicting marks, and submit an application to the USPTO. The application then moves through examination, possible correspondence, publication, and—when all requirements are satisfied—registration or a later proof-of-use stage.</p>
     <h2>What happens during trademark registration?</h2>
     <p>Federal registration is a multi-stage review, not an instant purchase. The applicant prepares and submits an application through the USPTO Trademark Center. The USPTO assigns a serial number, reviews the application, and communicates through the official record. A complete application can still be refused, and filing fees are generally not refunded merely because registration is refused.</p>
     <h2>1. Define the mark and owner</h2>
@@ -40,6 +42,43 @@ function ProcessGuide() {
     <p>If approved, the mark is published in the Trademark Official Gazette. Third parties then have an opportunity to oppose registration or request more time to oppose. If no successful opposition occurs, a use-based application may proceed to registration. An intent-to-use application generally receives a Notice of Allowance and must complete the required use filings first.</p>
     <h2>8. Maintain the registration</h2>
     <p>Registration creates continuing responsibilities. Owners must keep information current and file required maintenance documents during the USPTO windows, including filings between the fifth and sixth years and renewal-related filings every ten years. A registration can be cancelled or expire when required documents and fees are not timely submitted.</p>
+  </>;
+}
+
+function WhatIsTrademarkGuide() {
+  return <>
+    <h2>What is a trademark in simple terms?</h2>
+    <p>A trademark is a source identifier. It helps customers recognize that particular goods or services come from one business rather than another. A business name, product name, logo, slogan, symbol, packaging feature, sound, or another distinctive element may function as a trademark when customers use it to identify the source.</p>
+    <p>The term <em>service mark</em> is sometimes used for services, while <em>trademark</em> is often used broadly for both goods and services. A trademark does not automatically give its owner control over a word or design in every possible context. Rights are connected to the mark, the relevant goods or services, and the circumstances in which consumers encounter it.</p>
+
+    <h2>What can function as a trademark?</h2>
+    <p>Common trademark formats include business and product names, logos, slogans, symbols, and combinations of wording and design. The key question is whether the matter identifies source rather than merely describing the product, decorating it, or communicating ordinary information.</p>
+    <div className="overflow-x-auto"><table><thead><tr><th>Mark type</th><th>Example format</th><th>Application consideration</th></tr></thead><tbody><tr><td>Business or product name</td><td>Words in standard characters</td><td>May protect the wording without limiting it to one font or design</td></tr><tr><td>Logo or design</td><td>Stylized wording, symbol, or combined design</td><td>The drawing should accurately show the design being claimed</td></tr><tr><td>Slogan</td><td>A phrase used to identify source</td><td>Advertising language must function as a mark, not only as a message</td></tr><tr><td>Other source identifier</td><td>Sound, color, packaging, or configuration</td><td>May require specialized evidence and a clear description</td></tr></tbody></table></div>
+
+    <h2>Trademark vs. business name</h2>
+    <p>Forming an LLC, registering a corporation, or obtaining a local assumed-name registration does not create a federal trademark registration. Entity-name systems generally identify businesses in a particular jurisdiction. Trademark review focuses on whether a mark identifies source and conflicts with earlier rights for related goods or services.</p>
+    <p>A business can therefore have an available entity name but still encounter a trademark conflict. Searching should consider similar wording, sound, meaning, appearance, and related goods or services—not only an exact company-name match.</p>
+
+    <h2>Trademark vs. copyright vs. patent</h2>
+    <p>Trademarks identify the source of goods or services. Copyright generally protects original expressive works, while patents protect qualifying inventions or designs for limited periods. One business asset can involve more than one type of intellectual property, but each system has different requirements and purposes.</p>
+
+    <h2>Do trademark rights require federal registration?</h2>
+    <p>Rights may begin when a mark is used to identify goods or services, but unregistered rights can be limited by geography, priority, and the facts of marketplace use. Federal registration is not mandatory, yet it may provide important nationwide benefits connected with the goods or services covered by the registration.</p>
+    <p>The symbols also mean different things. Businesses may use TM or SM to communicate a trademark claim. The federal registration symbol, ®, should be used only after the USPTO registers the mark and only in connection with the covered goods or services.</p>
+
+    <h2>What makes a trademark strong?</h2>
+    <p>Distinctive marks are generally easier to identify as a single source. Fanciful marks are invented terms, arbitrary marks use familiar words in unrelated ways, and suggestive marks require thought to connect them with an offering. Merely descriptive wording may face registration obstacles, and a generic term cannot function as a trademark for the goods or services it names.</p>
+
+    <h2>Why search before applying?</h2>
+    <p>The USPTO can refuse registration when a proposed mark is likely to cause confusion with an earlier mark for related goods or services. A useful search examines more than exact spelling. It may include similar sounds, meanings, appearances, abbreviations, translations, and marketplace uses.</p>
+    <p>No search guarantees approval, but it can identify records that deserve attention before a nonrefundable government filing fee is paid.</p>
+
+    <h2>What information is needed to apply?</h2>
+    <ul><li>The correct individual or legal entity that owns the mark.</li><li>A clear representation of the name, logo, slogan, or other mark.</li><li>Accurate descriptions of the associated goods or services.</li><li>The international classes and expected government fees.</li><li>A filing basis, such as current use in commerce or a bona fide intent to use.</li><li>Evidence of use when the selected basis and filing stage require it.</li></ul>
+
+    <h2>Direct filing, filing support, or legal representation</h2>
+    <p>Applicants may prepare a filing directly with the USPTO, purchase defined-scope filing support, or retain a U.S.-licensed attorney for individualized legal advice and representation. These are different service models. Legal Trademark Office offers filing-support plans beginning at $49, with USPTO government fees paid separately.</p>
+    <p>A defined service fee can help customers budget application-preparation support separately from optional legal advice. Questions involving ownership disputes, close conflicts, substantive refusals, or legal strategy may require advice from a qualified U.S.-licensed trademark attorney.</p>
   </>;
 }
 
@@ -102,6 +141,7 @@ function StructuredGuide({ sections }) {
 const guideContent = {
   "trademark-registration-process": <ProcessGuide />,
   "trademark-cost": <CostGuide />,
+  "what-is-a-trademark": <WhatIsTrademarkGuide />,
   "trademark-search-likelihood-of-confusion": <SearchGuide />,
 };
 

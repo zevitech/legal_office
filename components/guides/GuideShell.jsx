@@ -38,7 +38,8 @@ export default function GuideShell({ guide, children, relatedGuides }) {
             <p className="mt-3 leading-7 text-slate-700">
               Legal Trademark Office specialists help organize your owner, mark,
               goods or services, class and filing information for review before
-              submission. Choose the service plan, preparation speed and support
+              submission. Service plans start at $49, with USPTO government fees
+              paid separately. Choose the preparation speed and defined support
               level that fit your trademark registration needs.
             </p>
             <Link className="mt-5 inline-flex rounded-xl bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800" href="/trademark-registration">
