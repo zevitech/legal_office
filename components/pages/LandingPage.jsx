@@ -168,8 +168,8 @@ const LandingPage = ({ optimizedCopy = false }) => {
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
-                title={`Review, Approve and File`}
-                description={`Confirm the prepared details before submission, then follow updates from your secure account.`}
+                title={`Review, Approve and File with the USPTO`}
+                description={`Review and approve the prepared details. Your application is then submitted to the USPTO, and you can follow updates from your secure account.`}
               />
             </div>
           </div>
