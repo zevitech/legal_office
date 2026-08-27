@@ -107,7 +107,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
             <button type="button" onClick={handleRegisterClick} className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Trademark Registration <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button>
             <p className="text-sm font-semibold text-slate-600">Service plans start at $49</p>
           </div>
-          <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Review before submission", "Secure customer account", "No automatic renewal"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}</div>
+          <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Review before submission", "Secure customer account", "Guided step-by-step process"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}</div>
         </div>
       </section>
 
@@ -155,7 +155,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
               <HowWorkCard
                 step={1}
                 title={` Search and Review`}
-                description={`The search level included in your selected plan helps identify potentially similar marks before your application is prepared. No search can guarantee USPTO approval.`}
+                description={`The search level included in your selected plan helps identify potentially similar marks and supports a more informed filing decision before preparation.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
@@ -169,7 +169,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
               <HowWorkCard
                 step={3}
                 title={` Track Your Application`}
-                description={`After filing, receive status updates, access documents and see required actions from your customer account. Additional response services are quoted separately when required.`}
+                description={`After filing, receive status updates, access documents and see required actions from your customer account. If later support is needed, available options and pricing are explained before you choose.`}
               />
             </div>
           </div>
@@ -182,12 +182,12 @@ const LandingPage = ({ optimizedCopy = false }) => {
           <div className="grid items-start gap-8 lg:grid-cols-[.85fr_1.15fr]">
             <div>
               <p className="text-sm font-bold uppercase tracking-[.14em] text-primary-theme">Prepare with confidence</p>
-              <h2 className="mt-2 text-3xl font-bold leading-tight text-slate-800 max-md:text-2xl">Avoid common filing problems.</h2>
-              <p className="mt-4 leading-7 text-slate-600">The USPTO may raise questions when important details are incomplete or inconsistent. Our guided application helps collect the information needed for review before filing.</p>
+              <h2 className="mt-2 text-3xl font-bold leading-tight text-slate-800 max-md:text-2xl">Prepare your application with confidence.</h2>
+              <p className="mt-4 leading-7 text-slate-600">Our guided application helps organize the important ownership, business-activity and filing details needed for review before submission.</p>
               <Button onClick={handleRegisterClick} isLoading={isLoading} className="mt-6 bg-primary-theme px-8 py-6 font-bold text-white hover:bg-primary-hovered">{optimizedCopy ? "Start My Trademark Registration" : "Start Your Application"}</Button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {["A similar existing trademark", "Incorrect goods or services class", "Unclear business activity description", "Incomplete ownership information", "Weak or unsuitable proof of use", "Missing application details"].map((item) => (
+              {["Similarity review", "Goods and services classification", "Clear business activity details", "Accurate ownership information", "Proof-of-use guidance", "Complete filing details"].map((item) => (
                 <div key={item} className="flex min-h-16 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-700">
                   <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-100 text-primary-theme">✓</span>
                   {item}
@@ -231,7 +231,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
           </div>
           <PackageCard2 />
           <div className="mx-auto mt-8 max-w-5xl rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
-            <strong className="text-slate-900">Refund and cancellation summary:</strong> You may request cancellation before substantive preparation begins. Completed work, third-party costs and government fees may be non-refundable. Review the full <Link className="font-bold text-[#025da0] underline" href="/legal/refund-policy">Refund Policy</Link> and <Link className="font-bold text-[#025da0] underline" href="/legal/terms">Terms</Link> before purchase.
+            <strong className="text-slate-900">Cancellation and refund information:</strong> You may request cancellation before substantive preparation begins. Refund eligibility after work begins depends on completed work and fees already paid. Review the full <Link className="font-bold text-[#025da0] underline" href="/legal/refund-policy">Refund Policy</Link> and <Link className="font-bold text-[#025da0] underline" href="/legal/terms">Terms</Link> before purchase.
           </div>
         </section>
 
