@@ -149,9 +149,16 @@ export default function TrademarkGuidePage({ params }) {
   const guide = getTrademarkGuide(params.slug);
   if (!guide) notFound();
   const canonical = `${guideBaseUrl}/${guide.slug}`;
+  const guideIndex = trademarkGuides.findIndex((item) => item.slug === guide.slug);
+  const rotateFrom = (items, offset) => items.length
+    ? [...items.slice(offset % items.length), ...items.slice(0, offset % items.length)]
+    : [];
   const sameCluster = trademarkGuides.filter((item) => item.slug !== guide.slug && item.cluster === guide.cluster);
   const otherClusters = trademarkGuides.filter((item) => item.slug !== guide.slug && item.cluster !== guide.cluster);
-  const relatedGuides = [...sameCluster, ...otherClusters].slice(0, 5);
+  const relatedGuides = [
+    ...rotateFrom(sameCluster, guideIndex).slice(0, 3),
+    ...rotateFrom(otherClusters, guideIndex).slice(0, 2),
+  ];
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
