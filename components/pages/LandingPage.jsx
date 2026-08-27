@@ -107,7 +107,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
             <button type="button" onClick={handleRegisterClick} className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Trademark Registration <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button>
             <p className="text-sm font-semibold text-slate-600">Service plans start at $49</p>
           </div>
-          <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Answer questions", "We prepare", "Approve & file with USPTO"].map((item, index) => <span key={item} className="inline-flex items-center gap-2"><span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-blue-100 text-xs font-bold text-[#026daf]">{index + 1}</span>{item}</span>)}</div>
+          <div className="mx-auto mt-8 flex max-w-5xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Complete the application form", "We prepare your application", "You approve, we file with the USPTO"].map((item, index) => <span key={item} className="inline-flex items-center gap-2"><span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-blue-100 text-xs font-bold text-[#026daf]">{index + 1}</span>{item}</span>)}</div>
         </div>
       </section>
 
@@ -137,10 +137,10 @@ const LandingPage = ({ optimizedCopy = false }) => {
           <div className="text-center flex flex-col gap-4  max-md:px-3">
             {optimizedCopy && <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">A simple three-step process</p>}
             <h2 className="text-4xl text-[#025da0] font-bold max-md:text-3xl">
-              {optimizedCopy ? "How Trademark Registration Works in 3 Steps" : "Start Your U.S. Trademark in 3 Easy Steps"}
+              {optimizedCopy ? "How It Works in 3 Steps" : "Start Your U.S. Trademark in 3 Easy Steps"}
             </h2>
             <p className="text-base text-slate-600 md:max-w-[50%] m-auto">
-              {optimizedCopy ? "Complete the guided questionnaire, let our filing team organize your application details, then review and approve everything before submission." : "Our guided process supports businesses across retail, e-commerce, professional services, technology and many other industries."}
+              {optimizedCopy ? "Move from a simple online questionnaire to a prepared application and USPTO filing in three clear steps." : "Our guided process supports businesses across retail, e-commerce, professional services, technology and many other industries."}
             </p>
             <Image
               src={"/images/curve-DplsLMf8.webp"}
@@ -154,22 +154,22 @@ const LandingPage = ({ optimizedCopy = false }) => {
             <div className="flex-center gap-4 max-md:flex-col">
               <HowWorkCard
                 step={1}
-                title={`Answer a Few Questions`}
-                description={`Tell us about your mark, its owner and the products or services connected to it.`}
+                title={`Complete a Short Questionnaire`}
+                description={`Tell us about your name, logo or slogan, its owner and the products or services connected to it.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={2}
-                title={`We Prepare Your Application`}
-                description={`Our filing team organizes your details, likely classes and selected-plan search information.`}
+                title={`Application Preparation and Search`}
+                description={`Our filing team organizes your application details, likely classes and the search support included in your selected plan.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
-                title={`Review, Approve and File with the USPTO`}
-                description={`Review and approve the prepared details. Your application is then submitted to the USPTO, and you can follow updates from your secure account.`}
+                title={`Review and USPTO Filing`}
+                description={`Review and approve the prepared details. We then submit your application to the USPTO and provide updates in your secure account.`}
               />
             </div>
           </div>
