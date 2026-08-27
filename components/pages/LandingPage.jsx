@@ -107,7 +107,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
             <button type="button" onClick={handleRegisterClick} className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Trademark Registration <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button>
             <p className="text-sm font-semibold text-slate-600">Service plans start at $49</p>
           </div>
-          <div className="mx-auto mt-8 flex max-w-5xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Complete the application form", "We prepare your application", "You approve, we file with the USPTO"].map((item, index) => <span key={item} className="inline-flex items-center gap-2"><span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-blue-100 text-xs font-bold text-[#026daf]">{index + 1}</span>{item}</span>)}</div>
+          <div className="mx-auto mt-8 flex max-w-5xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Complete the application form", "We prepare your application", "Filed with the USPTO"].map((item, index) => <span key={item} className="inline-flex items-center gap-2"><span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-blue-100 text-xs font-bold text-[#026daf]">{index + 1}</span>{item}</span>)}</div>
         </div>
       </section>
 
@@ -168,8 +168,8 @@ const LandingPage = ({ optimizedCopy = false }) => {
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
-                title={`Review and USPTO Filing`}
-                description={`Review and approve the prepared details. We then submit your application to the USPTO and provide updates in your secure account.`}
+                title={`Filed with the USPTO`}
+                description={`After the prepared details are confirmed, we submit your application to the USPTO and provide updates in your secure account.`}
               />
             </div>
           </div>
