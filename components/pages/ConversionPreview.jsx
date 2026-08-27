@@ -73,8 +73,8 @@ export default function ConversionPreview({ showPreviewNotice = true }) {
             <button type="button" onClick={() => startApplication()} className={primaryButton}>Start My Trademark Registration <CtaArrow /></button>
             <p className="text-sm font-semibold text-slate-600">Service plans from $49 <span aria-hidden="true">·</span> USPTO filing fee separate</p>
           </div>
-          <div className="mx-auto mt-8 grid w-full max-w-4xl grid-cols-1 gap-3 text-sm font-semibold text-slate-700 sm:grid-cols-3">
-            {["Complete the application form", "We prepare your application", "Filed with the USPTO"].map((item, index) => <span key={item} className="inline-flex min-w-0 items-center justify-center gap-2 text-center"><span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-100 text-xs font-bold text-[#026daf]">{index + 1}</span><span className="min-w-0">{item}</span></span>)}
+          <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">
+            {["Complete the application form", "We prepare your application", "Filed with the USPTO"].map((item, index) => <span key={item} className="inline-flex items-center gap-2"><span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-blue-100 text-xs font-bold text-[#026daf]">{index + 1}</span>{item}</span>)}
           </div>
         </div>
       </section>
