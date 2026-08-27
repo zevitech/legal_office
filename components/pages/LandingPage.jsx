@@ -107,7 +107,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
             <button type="button" onClick={handleRegisterClick} className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-[#087fd3] px-7 text-base font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-[#026bb5] focus:outline-none focus:ring-4 focus:ring-blue-200 motion-reduce:transform-none motion-reduce:transition-none">Start My Trademark Registration <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse motion-reduce:transition-none"><HiArrowRight aria-hidden="true" /></span></button>
             <p className="text-sm font-semibold text-slate-600">Service plans start at $49</p>
           </div>
-          <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Review before submission", "Secure customer account", "Guided step-by-step process"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}</div>
+          <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">{["Professional application preparation", "Secure customer account", "Guided step-by-step process"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}</div>
         </div>
       </section>
 
