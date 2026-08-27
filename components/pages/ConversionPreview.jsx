@@ -74,7 +74,7 @@ export default function ConversionPreview({ showPreviewNotice = true }) {
             <p className="text-sm font-semibold text-slate-600">Service plans from $49 <span aria-hidden="true">·</span> USPTO filing fee separate</p>
           </div>
           <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-700">
-            {["Professional application preparation", "Secure customer account", "Guided step-by-step process"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}
+            {["Careful filing preparation", "Secure online account", "Guided start to filing"].map((item) => <span key={item} className="inline-flex items-center gap-2"><HiCheck className="text-emerald-600" aria-hidden="true" />{item}</span>)}
           </div>
         </div>
       </section>
