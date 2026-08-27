@@ -1,42 +1,42 @@
 export const testimonials = [
   {
-    title: `John Smith`,
-    description: `"The trademark registration process was seamless and efficient. The team was incredibly helpful and guided me through every step. Highly recommend!"`,
+    title: `Daniel Thompson`,
+    description: `"I had a great experience with the trademark registration process. Everything was explained clearly, and the team made the entire process incredibly easy."`,
   },
   {
-    title: `Emily Johnson`,
-    description: `"Excellent service! The 2-minute form was quick and easy to fill out. The team handled everything professionally, and now my brand is fully protected."`,
+    title: `Olivia Carter`,
+    description: `"The application process was much easier than I expected. The quick form made getting started simple, and the team was helpful throughout."`,
   },
   {
-    title: `Michael Davis`,
-    description: `"I was impressed by how straightforward the trademark application process was. The team kept me informed throughout, and my trademark was registered without any issues."`,
+    title: `Matthew Anderson`,
+    description: `"Very professional service from start to finish. I received clear guidance at every stage and felt confident that my trademark application was being handled properly."`,
   },
   {
-    title: `Sarah Wilson`,
-    description: `"Fantastic experience! The team was knowledgeable and made the whole process stress-free. I can now confidently market my brand."`,
+    title: `Sophia Mitchell`,
+    description: `"I really appreciated how simple the process was. The team answered my questions quickly and made trademark registration feel completely stress-free."`,
   },
   {
-    title: `David Martinez`,
-    description: `"Quick, reliable, and professional service. The team took care of everything, and I didn't have to worry about a thing. My trademark is now secure."`,
+    title: `Andrew Williams`,
+    description: `"Excellent experience overall. The process was straightforward, communication was clear, and everything was handled professionally."`,
   },
   {
-    title: `Jessica Taylor`,
-    description: `"The trademark experts were extremely helpful and responsive. They answered all my questions and ensured my trademark application was successful."`,
+    title: `Emma Richardson`,
+    description: `"The team was incredibly responsive and helpful. They explained everything in a way that was easy to understand and made the whole experience smooth."`,
   },
   {
-    title: `James Brown`,
-    description: `"I appreciated the thoroughness and attention to detail from the team. They made sure my trademark application was perfect and got it approved quickly."`,
+    title: `Ryan Peterson`,
+    description: `"Fast and professional service. I was impressed with how organized the process was and how easy it was to get my trademark application started."`,
   },
   {
-    title: `Linda Garcia`,
-    description: `"The 2-minute form was a game-changer. The process was quick and easy, and the team handled all the complexities. My trademark is now registered, thanks to their hard work."`,
+    title: `Grace Thompson`,
+    description: `"The quick application form was really convenient. I was able to get started in just a few minutes, and the team took care of the rest professionally."`,
   },
   {
-    title: `Christopher Lee`,
-    description: `"Exceptional service! The team provided clear instructions and updates throughout the process. My trademark was registered without any hassle."`,
+    title: `Ethan Collins`,
+    description: `"A very smooth experience from beginning to end. The team kept me informed and made sure I understood each part of the trademark process."`,
   },
   {
-    title: `Patricia Anderson`,
-    description: `"I couldn't be happier with the service. The team made the trademark registration process simple and efficient. I highly recommend them to anyone needing trademark protection."`,
+    title: `Ava Morgan`,
+    description: `"I'm very happy with the service. Everything was simple, professional, and well explained. I would definitely recommend the service to other business owners."`,
   },
 ];
