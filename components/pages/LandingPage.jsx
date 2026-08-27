@@ -137,10 +137,10 @@ const LandingPage = ({ optimizedCopy = false }) => {
           <div className="text-center flex flex-col gap-4  max-md:px-3">
             {optimizedCopy && <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">A simple three-step process</p>}
             <h2 className="text-4xl text-[#025da0] font-bold max-md:text-3xl">
-              {optimizedCopy ? "Apply for a U.S. Trademark" : "Start Your U.S. Trademark in 3 Easy Steps"}
+              {optimizedCopy ? "How Trademark Registration Works in 3 Steps" : "Start Your U.S. Trademark in 3 Easy Steps"}
             </h2>
             <p className="text-base text-slate-600 md:max-w-[50%] m-auto">
-              {optimizedCopy ? "Start by selecting a business name, logo or slogan and completing our guided questionnaire. Our filing team organizes your information for review, including ownership details, goods or services and likely trademark classes. You review and approve the application details before submission to the USPTO." : "Our guided process supports businesses across retail, e-commerce, professional services, technology and many other industries."}
+              {optimizedCopy ? "Complete the guided questionnaire, let our filing team organize your application details, then review and approve everything before submission." : "Our guided process supports businesses across retail, e-commerce, professional services, technology and many other industries."}
             </p>
             <Image
               src={"/images/curve-DplsLMf8.webp"}
@@ -154,22 +154,22 @@ const LandingPage = ({ optimizedCopy = false }) => {
             <div className="flex-center gap-4 max-md:flex-col">
               <HowWorkCard
                 step={1}
-                title={` Search and Review`}
-                description={`The search level included in your selected plan helps identify potentially similar marks and supports a more informed filing decision before preparation.`}
+                title={`Answer a Few Questions`}
+                description={`Tell us about your mark, its owner and the products or services connected to it.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={2}
-                title={` Prepare and Approve`}
-                description={`Your information, business activities and likely classes are reviewed with you. You approve the final filing details and separate government fees before submission.`}
+                title={`We Prepare Your Application`}
+                description={`Our filing team organizes your details, likely classes and selected-plan search information.`}
               />
               <AiOutlineDoubleRight className="text-3xl text-[#025da0] font-thin animate-left-to-r mt-4 max-md:hidden" />
               <FaAnglesDown className="text-3xl text-[#025da0] font-thin animate-down-to-r mt-4 md:hidden" />
               <HowWorkCard
                 step={3}
-                title={` Track Your Application`}
-                description={`After filing, receive status updates, access documents and see required actions from your customer account. If later support is needed, available options and pricing are explained before you choose.`}
+                title={`Review, Approve and File`}
+                description={`Confirm the prepared details before submission, then follow updates from your secure account.`}
               />
             </div>
           </div>
