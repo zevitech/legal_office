@@ -223,11 +223,20 @@ const LandingPage = ({ optimizedCopy = false }) => {
 
         <section data-customizer-old-section="pricing" className="order-6 pt-10 pb-4 max-md:px-2">
           <div className="col-flex justify-center items-center gap-5 max-w-4xl m-auto  max-md:px-3">
-            <HeaderText text1="Trademark" text2="Registration Packages" />
+            <p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">Choose your level of support</p>
+            <HeaderText text1="Trademark" text2="Registration Service Plans" />
             <p className="text-slate-500 text-base text-center max-md:text-start">
-              Simplify your budgeting with our transparent and straightforward
-              business pricing plan, designed to support your growth.
+              Compare preparation speed, search coverage and ongoing support.
+              Select a plan here and the same plan will be ready in your application.
             </p>
+          </div>
+          <div className="mx-auto mt-7 grid max-w-5xl gap-3 px-4 sm:grid-cols-2 lg:grid-cols-4">
+            {["Guided questionnaire", "Application preparation", "Secure customer account", "Status and document access"].map((item) => (
+              <div key={item} className="flex items-center gap-3 rounded-xl border border-blue-100 bg-blue-50/60 p-4 text-sm font-semibold text-slate-700">
+                <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white text-emerald-600 shadow-sm">✓</span>
+                {item}
+              </div>
+            ))}
           </div>
           <PackageCard2 />
           <div className="mx-auto mt-8 max-w-5xl rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
@@ -240,7 +249,7 @@ const LandingPage = ({ optimizedCopy = false }) => {
         <div className="text-center"><p className="text-sm font-bold uppercase tracking-[.14em] text-[#025da0]">After checkout</p><h2 className="mt-2 text-4xl font-bold text-slate-800 max-md:text-3xl">Know what happens next.</h2><p className="mx-auto mt-3 max-w-2xl text-slate-600">Your receipt is immediate, and your account keeps every following step visible.</p></div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[
           ["1", "Payment confirmed", "Receive your receipt and account access."],
-          ["2", "Information reviewed", "Your mark, owner details and activities are checked."],
+          ["2", "Application prepared", "Your mark, owner details and selected business activities are organized for filing review."],
           ["3", "Approve filing details", "Confirm classes, filing information and separate fees."],
           ["4", "Track online", "See documents, messages, status and required actions."],
         ].map(([number, title, description]) => <div key={number} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><span className="grid h-9 w-9 place-items-center rounded-full bg-[#025da0] font-bold text-white">{number}</span><h3 className="mt-5 text-lg font-bold text-slate-800">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{description}</p></div>)}</div>

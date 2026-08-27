@@ -1,11 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { FaCircleCheck } from "react-icons/fa6";
 
 const plans = [
-  { name: "Basic", price: "$49", badge: "Essential filing", timing: "7 business days", search: "Federal basic", review: "Filing specialist", monitoring: "—", specimen: "—" },
-  { name: "Standard", price: "$149", badge: "Popular starter", timing: "3 business days", search: "Federal + state", review: "Paralegal review", monitoring: "—", specimen: "—" },
-  { name: "Advanced", price: "$249", badge: "Faster support", timing: "24–48 hours", search: "Comprehensive", review: "Full paralegal support", monitoring: "6 months", specimen: "—" },
-  { name: "Premium", price: "$649", badge: "Recommended", timing: "Priority: 1 business day", search: "Expanded + common-law", review: "Dedicated specialist", monitoring: "12 months", specimen: "Included" },
+  { id: 1, name: "Basic", price: "$49", badge: "Essential filing", timing: "7 business days", search: "Federal basic", review: "Filing specialist", monitoring: "—", specimen: "—" },
+  { id: 3, name: "Standard", price: "$149", badge: "Popular starter", timing: "3 business days", search: "Federal + state", review: "Paralegal review", monitoring: "—", specimen: "—" },
+  { id: 2, name: "Advanced", price: "$249", badge: "Faster support", timing: "24–48 hours", search: "Comprehensive", review: "Full paralegal support", monitoring: "6 months", specimen: "—" },
+  { id: 4, name: "Premium", price: "$649", badge: "Recommended", timing: "Priority: 1 business day", search: "Expanded + common-law", review: "Dedicated specialist", monitoring: "12 months", specimen: "Included" },
 ];
 
 const rows = [
@@ -19,6 +21,11 @@ const rows = [
 const PlanButton = ({ plan }) => (
   <Link
     href="/trademark-register"
+    onClick={() => {
+      try {
+        sessionStorage.setItem("lto_preselected_plan", String(plan.id));
+      } catch {}
+    }}
     className={`inline-flex min-h-12 w-full items-center justify-center rounded-md px-4 text-sm font-bold transition-colors ${plan.name === "Premium" ? "bg-white text-primary-theme hover:bg-blue-50" : "bg-primary-theme text-white hover:bg-primary-hovered"}`}
   >
     Choose {plan.name}
