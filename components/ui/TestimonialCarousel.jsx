@@ -61,7 +61,7 @@ export default function TestimonialCarousel() {
         }}
         pagination={true}
         modules={[Navigation, Pagination]}
-        className="mySwiper max-w-[700px] max-md:w-full m-0  z-10"
+        className="mySwiper max-w-[700px] max-md:w-full m-0  z-10 !pb-10"
       >
         {testimonials.map((testimonial, index) => (
           <SwiperSlide key={index}>
