@@ -41,6 +41,8 @@ const nextConfig = {
         "/legacy-landing-preview",
         "/form-conversion-preview",
         "/goods-services-preview",
+        "/optimized-landing-preview",
+        "/page-customizer",
       ].map((source) => ({
         source,
         headers: [
@@ -48,6 +50,21 @@ const nextConfig = {
           { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
         ],
       })),
+      ...[
+        "/conversion-preview",
+        "/legacy-landing-preview",
+        "/form-conversion-preview",
+        "/goods-services-preview",
+        "/optimized-landing-preview",
+        "/page-customizer",
+      ].map((source) => ({
+        source,
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      })),
+      {
+        source: "/trademark-register/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      },
     ];
   },
 };

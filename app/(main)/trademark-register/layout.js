@@ -2,6 +2,11 @@ export const metadata = {
   title: "Register Trademark | Legal Trademark Office",
   description:
     "A guided trademark registration intake with clear service and government-fee disclosures.",
+  robots: {
+    index: false,
+    follow: true,
+    googleBot: { index: false, follow: true },
+  },
 };
 
 // The root app layout already provides Redux, NextUI, analytics and the document
