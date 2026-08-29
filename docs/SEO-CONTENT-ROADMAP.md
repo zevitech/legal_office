@@ -32,9 +32,11 @@ Fees, deadlines, forms and processing-time statements require quarterly review. 
 | 11 | `/guides/word-mark-vs-logo-trademark` | Mark-format education | Search, classes, checklist |
 | 12 | `/guides/trademark-vs-copyright-vs-patent` | IP right comparison | Process and mark-format guide |
 
-All twelve original roadmap priorities are now written. The release also includes distinct resources for ownership, common-law rights, distinctiveness, publication/opposition, intent-to-use Statements of Use, TSDR status, goods/services wording, and misleading notice verification, bringing the authority library to 20 pages.
+All twelve original roadmap priorities are now written. The release also includes distinct resources for ownership, common-law rights, distinctiveness, publication/opposition, intent-to-use Statements of Use, TSDR status, goods/services wording, and misleading notice verification. Five purchase-adjacent search intents were then added: trademarking a business name, trademarking a logo, attorney requirements, state versus federal registration, and names already in use. The authority library now contains 26 pages.
 
 Every spoke links back to `/guides/trademark-registration-process`. The pillar links to every spoke in the relevant process section. Transaction-proximate pages may link to `/trademark-registration` using restrained anchors such as “guided filing support” or “compare filing-support plans.”
+
+The commercial head term remains owned only by `/trademark-registration`. Do not create separate top-level `/trademark-application`, `/trademark-cost`, or `/trademark-attorney` pages unless Search Console and SERP-overlap evidence later proves that a genuinely different commercial page is needed. Their current informational intent is served inside `/guides`, preventing avoidable cannibalization and unsupported service positioning.
 
 ## Primary evidence library
 

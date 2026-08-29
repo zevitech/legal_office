@@ -23,6 +23,18 @@ External submissions require business-owner approval, genuine eligibility, accur
 3. **Government fees vs. optional private support** — offer a dated cost explainer with direct USPTO citations.
 4. **Brand-name preparation workshop** — cover distinctiveness, searching, classes, and evidence without promising registration.
 
+## New purchase-adjacent assets
+
+| Search intent | Outreach destination | Recommended pitch |
+|---|---|---|
+| How to trademark a business name | Startup centers, SBDC partners, incorporation and accounting firms | Add the guide to a new-business naming or launch checklist. |
+| How to trademark a logo | Branding studios, design associations and creator newsletters | Pair the logo guide with a brand-deliverables or launch resource. |
+| Do I need a trademark attorney? | Small-business legal clinics and entrepreneurship programs | Offer the neutral self-filing vs. filing-support vs. attorney comparison. |
+| State vs. federal registration | State and regional small-business resource libraries | Use the state/federal decision questions as a workshop handout. |
+| Name already in use | Naming agencies, domain resources and founder publications | Pitch the similarity, related-offerings and priority checklist before a rebrand investment. |
+
+These are page-specific outreach angles, not permission to buy links. Each destination must independently choose whether the resource is useful enough to cite.
+
 ## Outreach template
 
 Subject: U.S. trademark preparation resource for your small-business audience
@@ -46,4 +58,3 @@ Thank you,
 - Customize the pitch to the organization’s audience.
 - Do not send bulk automated email or promise reciprocal links.
 - Record the submission date, recipient, response, live URL, and anchor after acceptance.
-
