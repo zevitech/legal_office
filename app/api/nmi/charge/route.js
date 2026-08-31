@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
-import { calculateOrderTotal } from "@/constant/pricing";
+import { ADD_ON_PRICES, PACKAGE_PRICES, calculateOrderTotal } from "@/constant/pricing";
+import { sendOrderReceipt } from "@/lib/orderReceipt";
+
+// Customer-facing names for the checkout add-ons, used on the receipt.
+const ADDON_LABELS = {
+  rush: "Rush preparation",
+  monitoring: "12-month trademark monitoring",
+  specimenReview: "Specimen readiness review",
+};
 import { provisionPortalClient } from "@/lib/portalProvisioning";
 import { getPortalUser } from "@/lib/portalAuth";
 import { getAdminFirestore } from "@/lib/firebaseAdmin";
@@ -180,6 +188,33 @@ export async function POST(req) {
       transactionId: parsed.transactionid || "",
       amount,
     });
+
+    // Send the receipt HERE, not from the browser. The old client-side send ran
+    // in a useEffect guarded only by localStorage, which could fire twice on a
+    // re-render or reload — customers received two receipts, with different
+    // totals because the amount was recalculated client-side each time. This
+    // runs after the idempotency claim, so it happens exactly once per payment,
+    // and the figures are the ones actually charged.
+    const packagePrice = PACKAGE_PRICES[packageName] ?? amount;
+    const addonLines = [...new Set(Array.isArray(addons) ? addons : [])]
+      .concat(isRushProcessing && !addons?.includes("rush") ? ["rush"] : [])
+      .filter((key) => ADD_ON_PRICES[key])
+      .map((key) => ({ title: ADDON_LABELS[key] || key, amount: ADD_ON_PRICES[key] }));
+
+    // Not awaited: SMTP is slow and the payment has already succeeded, so a
+    // receipt failure must never turn a completed sale into an error.
+    sendOrderReceipt({
+      req,
+      email: accountEmail,
+      name: accountName,
+      transactionId: parsed.transactionid || "",
+      packageName,
+      packagePrice,
+      addonLines,
+      totalPrice: amount,
+    }).catch((error) =>
+      console.error("Receipt email failed:", error?.message),
+    );
 
     let portalProvisioned = false;
     let portalNewlyCreated = false;

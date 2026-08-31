@@ -48,7 +48,15 @@ export async function POST(req) {
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top: 1px solid #cbd5e1; padding-top: 10px; margin-top: 10px;">
                               <tr>
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Trademark registration</td>
-                                <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$${data?.totalPrice || data?.nestedLeadData?.stepThree?.price || 0}</td>
+                                <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$${Number(
+                                  // The PACKAGE price, not the order total. This
+                                  // line previously printed the total, so with a
+                                  // rush add-on the itemisation did not add up.
+                                  data?.packagePrice ??
+                                    data?.nestedLeadData?.stepThree?.price ??
+                                    data?.totalPrice ??
+                                    0,
+                                ).toFixed(2)}</td>
                               </tr>
                               <tr>
                                 <td style="color: #475569; font-weight: 500; font-size: 14px;">Comprehensive Trademark Search</td>
@@ -63,19 +71,22 @@ export async function POST(req) {
                                 <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$0.00</td>
                               </tr>
                               ${
-                                data.nestedLeadData?.stepFour
-                                  ?.isRushProcessing === true &&
-                                `<tr>
-                                    <td style="color: #475569; font-weight: 500; font-size: 14px;">
-                                      Rush processing
-                                    </td>
-                                    <td
-                                      style="color: #0f172a; font-weight: 500; font-size: 14px;"
-                                      align="right"
-                                    >
-                                      $${data.nestedLeadData.stepFour?.rushAmount}
-                                    </td>
-                                  </tr>`
+                                // Add-on lines come from the server, which knows
+                                // exactly what was charged. The old check read
+                                // stepFour.isRushProcessing, which the current
+                                // checkout no longer sets — rush now lives in
+                                // `addons`, so the line silently disappeared
+                                // while the total still included it.
+                                Array.isArray(data?.addonLines)
+                                  ? data.addonLines
+                                      .map(
+                                        (line) => `<tr>
+                                    <td style="color: #475569; font-weight: 500; font-size: 14px;">${line.title}</td>
+                                    <td style="color: #0f172a; font-weight: 500; font-size: 14px;" align="right">$${Number(line.amount || 0).toFixed(2)}</td>
+                                  </tr>`,
+                                      )
+                                      .join("")
+                                  : ""
                               }
                             </table>
 
