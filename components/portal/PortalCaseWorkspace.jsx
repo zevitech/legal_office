@@ -20,6 +20,25 @@ import AdminSecureMessages from "@/components/portal/AdminSecureMessages";
 import CaseManagementPanel from "@/components/portal/CaseManagementPanel";
 import { useRouter } from "next/navigation";
 
+/**
+ * Classifies a status message so the banner colours it correctly.
+ *
+ * The banner previously matched success by prefix ("Saved"…), so genuine
+ * successes worded differently — "Appointment updated", "USPTO filing
+ * recorded" — rendered red as though the action had failed. Detecting failure
+ * instead means a new success message is styled correctly by default.
+ */
+function isFailureMessage(message) {
+  const text = String(message || "");
+  // Validation prompts ask the operator to do something and are not successes.
+  if (/^(enter|select|choose|add|upload|provide|please)\b/i.test(text.trim())) {
+    return true;
+  }
+  return /\b(unable|failed|error|cannot|could not|not allowed|required|invalid|declined|already)\b/i.test(
+    text,
+  );
+}
+
 const actions = [
   { id: "status", label: "Status", icon: HiOutlineClipboardDocumentCheck },
   { id: "requirement", label: "Requirement", icon: HiOutlineScale },
@@ -188,6 +207,9 @@ function CallConsentPanel({ client, preview }) {
     event.preventDefault();
     setBusy(true);
     setResult("");
+    // React nulls out event.currentTarget once this handler awaits, so capture
+    // the form now. Reading it later threw "Cannot read properties of null
+    // (reading 'reset')" AFTER the action had already succeeded.
     const formElement = event.currentTarget;
     try {
       if (preview) {
@@ -633,6 +655,10 @@ function QuickPaymentPanel({
     event.preventDefault();
     setBusy(true);
     setResult("");
+    // React nulls out event.currentTarget once this handler awaits, so capture
+    // the form now. Reading it later threw "Cannot read properties of null
+    // (reading 'reset')" AFTER the action had already succeeded.
+    const formElement = event.currentTarget;
     const form = new FormData(event.currentTarget);
     const mode = event.nativeEvent.submitter?.value || "request";
     const payload = {
@@ -688,7 +714,7 @@ function QuickPaymentPanel({
             ? "Demo charge completed. Production first verifies saved-method consent and then emails the receipt."
             : "Payment request added to the client portal and email queue.",
         );
-        event.currentTarget.reset();
+        formElement.reset();
         return;
       }
       const response = await fetch(
@@ -742,7 +768,7 @@ function QuickPaymentPanel({
         setResult(
           "Payment request added to the client portal and emailed to the client.",
         );
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (error) {
       setResult(error.message || "Unable to process this payment action.");
     } finally {
@@ -893,6 +919,10 @@ function ExternalPaymentPanel({
     event.preventDefault();
     setBusy(true);
     setResult("");
+    // React nulls out event.currentTarget once this handler awaits, so capture
+    // the form now. Reading it later threw "Cannot read properties of null
+    // (reading 'reset')" AFTER the action had already succeeded.
+    const formElement = event.currentTarget;
     const form = new FormData(event.currentTarget);
     const payload = {
       caseId: client.caseId,
@@ -959,7 +989,7 @@ function ExternalPaymentPanel({
         setResult(
           "Payment received was recorded. The client receipt is available and the filing step is unlocked when these are the required class fees.",
         );
-        event.currentTarget.reset();
+        formElement.reset();
         return;
       }
       const response = await fetch(
@@ -986,7 +1016,7 @@ function ExternalPaymentPanel({
       setResult(
         "Payment received was recorded. The client was emailed a receipt and the roadmap was updated.",
       );
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (error) {
       setResult(error.message || "Unable to record this payment.");
     } finally {
@@ -1842,6 +1872,10 @@ export default function PortalCaseWorkspace({
     event.preventDefault();
     setBusy(true);
     setResult("");
+    // React nulls out event.currentTarget once this handler awaits, so capture
+    // the form now. Reading it later threw "Cannot read properties of null
+    // (reading 'reset')" AFTER the action had already succeeded.
+    const formElement = event.currentTarget;
     const wasEditing = Boolean(editingAppointment && type === "appointment");
     const form = new FormData(event.currentTarget);
     const requirementType = String(form.get("requirementType") || "");
@@ -2094,7 +2128,7 @@ export default function PortalCaseWorkspace({
             ? `USPTO filing recorded. The client's roadmap now shows Filed with USPTO and serial ${payload.serialNumber}.`
             : "Saved to the client portal and email notification queued.",
       );
-      event.currentTarget.reset();
+      formElement.reset();
       if (type === "payment" && payload.paymentKind === "classification_fees") {
         setClassificationFees(
           proposedClasses.length
@@ -3744,7 +3778,7 @@ export default function PortalCaseWorkspace({
               )}
               {result && (
                 <p
-                  className={`rounded-xl p-3 text-sm font-bold ${result.startsWith("Saved") ? "bg-emerald-50 text-emerald-700" : result.startsWith("Template") ? "bg-blue-50 text-blue-700" : "bg-red-50 text-red-700"}`}
+                  className={`rounded-xl p-3 text-sm font-bold ${isFailureMessage(result) ? "bg-red-50 text-red-700" : result.startsWith("Template") ? "bg-blue-50 text-blue-700" : "bg-emerald-50 text-emerald-700"}`}
                 >
                   {result}
                 </p>
