@@ -63,11 +63,12 @@ const Receipt = ({ completedOrder }) => {
     nestedLeadData.stepOne?.emailAddress ||
     "Confirmation sent to the email provided";
 
-  const today = new Date().toLocaleDateString(undefined, {
+  const date = completedOrder?.paidAt ? new Date(completedOrder.paidAt) : null;
+  const today = date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString(undefined, {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  }) : "See confirmation email";
 
   // The receipt email is sent SERVER-SIDE from /api/nmi/charge, immediately
   // after the payment is confirmed and behind the same idempotency claim that
@@ -92,7 +93,7 @@ const Receipt = ({ completedOrder }) => {
             </p>
           </div>
           <div className="sm:text-right">
-            <span className="inline-flex min-w-[154px] items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-bold leading-5 text-emerald-700">
+            <span data-receipt-status className="inline-flex min-w-[154px] items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-bold leading-5 text-emerald-700">
               <HiOutlineCheck className="shrink-0 text-sm" />{" "}
               <span>Payment confirmed</span>
             </span>
@@ -143,7 +144,7 @@ const Receipt = ({ completedOrder }) => {
               </p>
             </div>
             <p className="shrink-0 font-bold text-slate-900">
-              ${displayedPackagePrice}.00
+              ${Number(displayedPackagePrice).toFixed(2)}
             </p>
           </div>
           {addons.map((key) => (
@@ -155,7 +156,7 @@ const Receipt = ({ completedOrder }) => {
                 {ADDON_LABELS[key] || key}
               </p>
               <p className="shrink-0 font-bold text-slate-900">
-                ${ADD_ON_PRICES[key] || 0}.00
+                ${Number(ADD_ON_PRICES[key] || 0).toFixed(2)}
               </p>
             </div>
           ))}
@@ -164,7 +165,7 @@ const Receipt = ({ completedOrder }) => {
         <div className="mt-5 ml-auto max-w-sm space-y-3 text-sm">
           <div className="flex justify-between text-slate-600">
             <span>Subtotal</span>
-            <span>${totalPrice}.00</span>
+            <span>${Number(totalPrice).toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-slate-600">
             <span>Tax</span>
@@ -172,7 +173,7 @@ const Receipt = ({ completedOrder }) => {
           </div>
           <div className="flex justify-between border-t-2 border-slate-900 pt-4 text-xl font-extrabold text-slate-950">
             <span>Total paid</span>
-            <span>${totalPrice}.00 USD</span>
+            <span>${Number(totalPrice).toFixed(2)} USD</span>
           </div>
         </div>
 

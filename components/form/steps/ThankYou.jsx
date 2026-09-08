@@ -14,8 +14,6 @@ import {
 import { LuShieldCheck } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import Receipt from "@/components/form/Receipt";
-import html2canvas from "html2canvas";
-import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
 import { trackPurchase } from "@/utils/tracking";
 
@@ -26,6 +24,8 @@ const ThankYou = () => {
   const [completedOrder, setCompletedOrder] = useState(null);
   const [activating, setActivating] = useState(false);
   const [activationError, setActivationError] = useState("");
+  const [downloadError, setDownloadError] = useState("");
+  const [orderLoaded, setOrderLoaded] = useState(false);
   const isLocalPreview = process.env.NODE_ENV !== "production";
   const isRehydrated = useSelector((state) => state.form._persist?.rehydrated);
   const nestedLeadData = useSelector((state) => state.form);
@@ -33,28 +33,30 @@ const ThankYou = () => {
     () => nestedLeadData.stepFour || {},
     [nestedLeadData.stepFour],
   );
-  const isBypassMode = process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
+  const isBypassMode = isLocalPreview && process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true";
   const paymentBypass = storedStepFour.payment_bypass;
 
   useEffect(() => {
     try {
       const demo = sessionStorage.getItem("lto_demo_order");
       const paid = sessionStorage.getItem("lto_completed_order");
-      setCompletedOrder(JSON.parse(demo || paid || "null"));
+      setCompletedOrder(JSON.parse((isLocalPreview ? demo || paid : paid) || "null"));
     } catch {
       setCompletedOrder(null);
+    } finally {
+      setOrderLoaded(true);
     }
-  }, []);
+  }, [isLocalPreview]);
 
   const isDemo =
     isLocalPreview || !!completedOrder?.transactionId?.startsWith("DEMO-");
   const resolvedReceiptId =
-    completedOrder?.transactionId || storedStepFour.receipt_ID || "";
+    completedOrder?.transactionId || "";
 
   // On the live site an order we cannot identify must never be dressed up with
   // placeholder values — a customer would see a receipt number and an amount
   // that do not exist. Only the local preview may fall back to demo data.
-  const isOrderUnavailable = !isLocalPreview && !resolvedReceiptId;
+  const isOrderUnavailable = !isLocalPreview && (!resolvedReceiptId || isDemo || !Number.isFinite(completedOrder?.value) || completedOrder.value <= 0);
 
   const packageName =
     completedOrder?.packageName ||
@@ -78,6 +80,7 @@ const ThankYou = () => {
   const existingPortal =
     completedOrder?.portalProvisioned &&
     completedOrder?.portalNewlyCreated === false;
+  const portalReady = isDemo || completedOrder?.portalProvisioned === true;
 
   useEffect(() => {
     if (
@@ -110,6 +113,10 @@ const ThankYou = () => {
    * token is left sitting in the URL after checkout.
    */
   const handleActivatePortal = async () => {
+    if (isDemo) {
+      setActivationError("Demo only: no account is created. After a real payment, this button opens secure password setup.");
+      return;
+    }
     if (activating) return;
     setActivating(true);
     setActivationError("");
@@ -143,38 +150,20 @@ const ThankYou = () => {
   };
 
   const handleDownload = async () => {
+    if (isLoading || !receiptRef.current) return;
     setIsLoading(true);
-    let printableReceipt;
+    setDownloadError("");
     try {
-      // Render a stable desktop-width copy so downloads stay legible even when
-      // the customer saves the receipt from a narrow phone viewport.
-      printableReceipt = receiptRef.current.cloneNode(true);
-      printableReceipt.style.position = "fixed";
-      printableReceipt.style.left = "-10000px";
-      printableReceipt.style.top = "0";
-      printableReceipt.style.width = "720px";
-      printableReceipt.style.maxWidth = "720px";
-      printableReceipt.style.background = "#f8fafc";
-      printableReceipt.style.padding = "24px";
-      document.body.appendChild(printableReceipt);
-
-      const canvas = await html2canvas(printableReceipt, {
-        backgroundColor: "#f8fafc",
-        scale: 2,
-        width: 768,
-        windowWidth: 768,
-        useCORS: true,
-      });
-      const imageData = canvas.toDataURL("image/png");
-      const blob = await fetch(imageData).then((response) => response.blob());
-      saveAs(blob, `LTO-receipt-${receiptId}.png`);
+      const { downloadReceipt } = await import("../downloadReceipt");
+      await downloadReceipt({ order: completedOrder, packageName, total: totalPrice, receiptId, customerName, email: portalEmail === "your checkout email" ? "" : portalEmail, demo: isDemo });
+    } catch {
+      setDownloadError("Receipt download failed. Please try again or contact support.");
     } finally {
-      printableReceipt?.remove();
       setIsLoading(false);
     }
   };
 
-  if (!isRehydrated && !isLocalPreview) return null;
+  if (!orderLoaded || (!isRehydrated && !isLocalPreview)) return null;
 
   // Order details could not be recovered (e.g. storage cleared, different
   // device). Never invent a receipt — point the customer at support instead.
@@ -187,11 +176,11 @@ const ThankYou = () => {
               <HiOutlineCheck />
             </span>
             <h1 className="mt-5 font-inria text-2xl font-bold text-heading-color">
-              Thank you — your request has been received
+              We couldn’t confirm your order on this device
             </h1>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               We could not display your order details on this device. This does
-              not affect your application. If your payment went through, you
+              not mean your payment failed. Please do not pay again until you check your confirmation email or contact us. If your payment went through, you
               will receive a confirmation email with your receipt shortly.
             </p>
             <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm">
@@ -229,15 +218,15 @@ const ThankYou = () => {
     <main className="min-h-screen bg-slate-50 py-8 sm:py-12">
       <section className="mx-auto w-[92%] max-w-5xl">
         <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
-          <div className="bg-gradient-to-br from-emerald-600 to-teal-700 px-5 py-10 text-center text-white sm:px-10">
-            <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-white text-4xl text-emerald-600 shadow-lg">
+          <div className="bg-gradient-to-br from-emerald-600 to-teal-700 px-5 py-6 text-center text-white sm:px-10 sm:py-10">
+            <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-white text-2xl text-emerald-600 shadow-lg sm:h-20 sm:w-20 sm:text-4xl">
               <HiOutlineCheck />
             </div>
-            <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-emerald-100">
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-emerald-100 sm:mt-6 sm:text-sm">
               Order confirmed
             </p>
             <h1 className="mt-2 font-inria text-3xl font-bold sm:text-5xl">
-              Thank you—your trademark request is received.
+              Thank you—your order is received.
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-emerald-50 sm:text-base">
               {customerName} is now in our review queue. A member of the team
@@ -260,12 +249,12 @@ const ThankYou = () => {
                   <LuShieldCheck className="text-lg" /> Your next step
                 </div>
                 <h2 className="mt-4 font-inria text-2xl font-bold text-slate-950 sm:text-3xl">
-                  {existingPortal
+                  {!portalReady ? "Your portal setup is pending" : existingPortal
                     ? "Your new trademark is now in your portal"
                     : "Activate your private client portal"}
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
-                  {existingPortal ? (
+                  {!portalReady ? <span>Your payment is complete. Portal access is still being prepared. Please contact us if you need help accessing your application.</span> : existingPortal ? (
                     <>
                       Sign in with <b>{portalEmail}</b> to view this trademark
                       alongside your current matters.
@@ -273,9 +262,7 @@ const ThankYou = () => {
                   ) : (
                     <>
                       Create your password now to access your application. Your
-                      portal username is <b>{portalEmail}</b>. We have also
-                      emailed you a secure setup link in case you prefer to do
-                      this later.
+                      portal username is <b className="break-all">{portalEmail}</b>. {isDemo ? "This preview does not create an account or send an email." : "We have also emailed you a secure setup link so you can do this later."}
                     </>
                   )}
                 </p>
@@ -301,7 +288,7 @@ const ThankYou = () => {
                 </div>
               </div>
               <div className="w-full shrink-0 lg:w-auto">
-                {existingPortal ? (
+                {!portalReady ? <Link href="/portal-login" className="inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-[#006fbd] px-7 py-4 font-bold text-white">Go to portal login</Link> : existingPortal ? (
                   <Link
                     href="/portal-login"
                     className="inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-[#006fbd] px-7 py-4 text-center text-base font-extrabold text-white shadow-lg shadow-blue-200 transition hover:bg-[#005fa3] focus:outline-none focus:ring-4 focus:ring-blue-200 lg:w-auto"
@@ -317,7 +304,7 @@ const ThankYou = () => {
                   >
                     {activating
                       ? "Opening secure setup…"
-                      : "Create my password"}
+                      : isDemo ? "Preview portal setup" : "Create my password"}
                   </button>
                 )}
                 {activationError ? (
@@ -432,8 +419,9 @@ const ThankYou = () => {
                 variant="bordered"
                 className="mt-4 h-11 w-full rounded-xl border-slate-300 bg-white font-bold text-slate-700"
               >
-                Download receipt
+                Download receipt PDF
               </Button>
+              {downloadError && <p role="alert" className="mt-2 text-sm text-red-700">{downloadError}</p>}
             </aside>
           </div>
         </div>

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { CldUploadWidget } from "next-cloudinary";
+import CldUploadWidget from "../ReviewUploadWidget";
 import Image from "next/image";
 import ReCAPTCHA from "react-google-recaptcha";
 // OTP DISABLED - Uncomment below imports to re-enable OTP functionality
@@ -669,7 +669,7 @@ const StepOne = () => {
     const endPoint = "/api/save-data";
 
     axios
-      .post(endPoint, stepOneWithValues)
+      .post(endPoint, stepOneWithValues, { timeout: 20000 })
       .then(async (res) => {
         if (res.data.success) {
           await prepareEnhancedConversionData({ email: emailAddress, phone: phoneNumber });
@@ -679,6 +679,8 @@ const StepOne = () => {
             protectionTypes: wantToProtect,
           });
           return router.push("/trademark-register/step-2");
+        } else {
+          throw new Error("Your details could not be saved. Please try again.");
         }
       })
       .catch((err) => {
@@ -700,20 +702,20 @@ const StepOne = () => {
             <div>
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-bold uppercase tracking-[0.14em] text-primary-theme">Your trademark</p>
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">About 3 minutes</span>
+                <span className="text-xs font-medium text-slate-500">Trademark details</span>
               </div>
-              <h1 className="font-inria text-heading-color text-3xl font-bold sm:text-4xl">
+              <h1 className="font-inria text-heading-color text-2xl font-bold sm:text-3xl">
                 What would you like to protect?
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                Select one or more. Each selected type will open its own short set of questions.
+                Select all that apply. Add the details for each selected option below.
               </p>
             </div>
 
             {/* FIELD 1.1 */}
             <div className={`w-full flex flex-col`}>
               <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-7">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                   {protectionOptions.map((option) => {
                     const Icon = option.icon;
                     const selected = wantToProtect.includes(option.value);
@@ -732,19 +734,14 @@ const StepOne = () => {
                           );
                           trackFormStart();
                         }}
-                        className={`relative flex min-h-[142px] w-full flex-col items-start rounded-2xl border-2 p-5 text-left transition duration-200 hover:-translate-y-0.5 hover:border-blue-400 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 ${selected ? "border-blue-600 bg-blue-50/70 shadow-sm" : "border-slate-200 bg-white"}`}
+                        className={`relative flex min-h-[150px] w-full flex-col items-start rounded-xl border-2 p-3 text-left transition-colors duration-150 hover:border-primary-theme focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 sm:p-4 ${selected ? "border-primary-theme bg-sky-50 shadow-sm" : "border-slate-200 bg-white"}`}
                       >
-                        {option.badge && (
-                          <span className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${selected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"}`}>
-                            {option.badge}
-                          </span>
-                        )}
-                        <span className={`mb-3 grid h-11 w-11 place-items-center rounded-xl text-2xl ${selected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"}`}>
-                          <Icon />
+                        <span className={`mb-3 grid h-10 w-10 place-items-center rounded-xl text-2xl ${selected ? "bg-primary-theme text-white" : "bg-slate-100 text-slate-600"}`}>
+                          <Icon aria-hidden="true" />
                         </span>
-                        <span className="pr-16 text-base font-bold text-slate-900">{option.title}</span>
-                        <span className="mt-1 text-sm leading-5 text-slate-600">{option.description}</span>
-                        <span className={`absolute bottom-4 right-4 grid h-6 w-6 place-items-center rounded-full border-2 ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300 bg-white"}`}>
+                        <span className="text-sm font-bold text-slate-900 sm:text-base">{option.title}</span>
+                        <span className="mt-1 text-xs leading-5 text-slate-600">{option.description}</span>
+                        <span aria-hidden="true" className={`absolute top-3 right-3 grid h-5 w-5 place-items-center rounded-full border-2 text-xs ${selected ? "border-primary-theme bg-primary-theme text-white" : "border-slate-300 bg-white"}`}>
                           {selected && "✓"}
                         </span>
                       </button>
@@ -752,10 +749,10 @@ const StepOne = () => {
                   })}
                 </div>
 
-                <div className="mt-5 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-                  <HiOutlineLightBulb className="mt-0.5 shrink-0 text-xl" />
-                  <p><strong>Not sure?</strong> Choose the version customers see most often. A name and a logo are usually filed as separate applications because they protect different things.</p>
-                </div>
+                <details className="mt-4 rounded-lg bg-slate-50 px-3 text-sm text-slate-600">
+                  <summary className="cursor-pointer py-3 font-medium text-primary-theme">Not sure which options to choose?</summary>
+                  <p className="pb-3 leading-6">Choose the version customers see most often. A name and a logo are usually filed as separate applications because they protect different things.</p>
+                </details>
 
                 <div className="mt-7 flex flex-col gap-6 border-t border-slate-100 pt-7">
 
@@ -1000,7 +997,7 @@ const StepOne = () => {
                 </fieldset>
 
                 {trademarkCurrentlyBeingUsed === "yes" && (
-                  <>
+                  <div className="grid gap-6 rounded-xl border border-sky-100 bg-sky-50/50 p-4 sm:grid-cols-2 sm:p-5">
                     <Input
                       type="date"
                       label="First used anywhere"
@@ -1039,18 +1036,18 @@ const StepOne = () => {
                       labelPlacement="outside"
                       radius="lg"
                       size="lg"
-                      label="Enter ownership details affilated with your trademark"
-                      className="w-full"
+                      label="Ownership details"
+                      className="w-full sm:col-span-2"
                       value={ownershipDetail}
                       onChange={(e) => setOwnershipDetail(e.target.value)}
                     />
-                  </>
+                  </div>
                 )}
                 </div>
               </div>
             </div>
-            <div className="sticky bottom-3 z-20 mt-2 flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
-              <div className="hidden items-center gap-2 text-sm text-slate-600 sm:flex"><LuShieldCheck className="text-xl text-emerald-600" /> Saved securely as you continue</div>
+            <div className="mt-2 flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
+              <div className="hidden items-center gap-2 text-sm text-slate-600 sm:flex">Next: trademark owner details</div>
               <Button
                 className="h-[56px] w-full bg-primary-theme px-8 text-lg font-bold text-white sm:w-auto"
                 onClick={handleContinueToOwnerDetails}
@@ -1064,39 +1061,29 @@ const StepOne = () => {
           {intakeSection === 1 && <>
           <div className="flex flex-col gap-4">
             <h1 className="font-inria text-heading-color text-[24px] w-full">
-              Formation Information
+              Trademark owner
             </h1>
 
             <div
               className={`w-full flex flex-col border border-slate-200 bg-white shadow-sm rounded-2xl justify-start p-4 sm:p-7 gap-4`}
             >
               <h1 className="font-inria font-bold lg:text-[24px] text-[20px] lg:leading-[26px] leading-[22px] text-heading-color">
-                Will the trademark be owned by an individual or an entity such
-                as a corporation or LLC?
+                Who owns the trademark?
               </h1>
-              <p className="font-light text-[12px] leading-[18px]">
-                Identify the owner of the trademark. This is the person or
-                organization who will be the owner of record. If you choose
-                individuals, you can enter as many names as you want who own the
-                mark. With an organization, you will have to identify someone to
-                be the person of contact for the organization.
+              <p className="text-sm leading-6 text-slate-600">
+                Choose the person or business that will own this trademark.
               </p>
 
-              <Tabs
-                aria-label="owner-type"
-                radius="sm"
-                size="md"
-                color="primary"
-                fullWidth={true}
-                selectedKey={selectedOwnerType}
-                onSelectionChange={setSelectedOwnerType}
-                classNames={{
-                  tab: "h-[40px]",
-                }}
-              >
-                <Tab key="individual" title="Individual" />
-                <Tab key="organization" title="Organization" />
-              </Tabs>
+              <div className="grid grid-cols-2 gap-3" role="group" aria-label="Trademark owner type">
+                {[{key:"individual",title:"Individual",copy:"Owned by a person"},{key:"organization",title:"Business",copy:"Company, LLC or organization"}].map(option => (
+                  <button key={option.key} type="button" aria-pressed={selectedOwnerType === option.key}
+                    onClick={() => setSelectedOwnerType(option.key)}
+                    className={`rounded-xl border-2 p-4 text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100 ${selectedOwnerType === option.key ? "border-primary-theme bg-sky-50" : "border-slate-200 bg-white"}`}>
+                    <span className="flex items-center justify-between gap-2 font-bold text-slate-900">{option.title}<span aria-hidden="true" className="text-primary-theme">{selectedOwnerType === option.key ? "✓" : ""}</span></span>
+                    <span className="mt-1 block text-xs leading-5 text-slate-600">{option.copy}</span>
+                  </button>
+                ))}
+              </div>
 
               {/* ORGANIZATION FIELDS 1.2.1 */}
               {selectedOwnerType === "organization" && (
@@ -1185,7 +1172,7 @@ const StepOne = () => {
                         }
                         variant="bordered"
                         labelPlacement="outside"
-                        placeholder="Ex. C Corporation"
+                        placeholder={selectedFormationType === "us_based" ? "Select a state" : "Select a country"}
                         description={`Select the ${
                           selectedFormationType === "us_based"
                             ? "State"
@@ -1222,8 +1209,8 @@ const StepOne = () => {
                         label="Organization Position"
                         variant="bordered"
                         labelPlacement="outside"
-                        placeholder="Ex. Global Giving"
-                        description="Enter the position of your organization"
+                        placeholder="e.g. Owner, CEO or Director"
+                        description="Your role in the organization"
                         radius="sm"
                         size="lg"
                         value={organizationPosition}
@@ -1246,11 +1233,10 @@ const StepOne = () => {
 
         {/* PERSONAL INFORMATION FIELDS 2 */}
         {intakeSection === 1 && <>
-          <div className="w-full flex flex-col gap-4">
-          <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 sm:flex sm:items-center sm:justify-between">
+          <div className="w-full flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-7">
+          <div className="border-b border-slate-100 pb-4">
             <div className="flex items-start gap-3">
-              <LuShieldCheck className="mt-0.5 shrink-0 text-2xl text-emerald-700" />
-              <div><h1 className="font-inria text-xl font-bold text-slate-900">Your private contact information</h1><p className="mt-1 text-sm leading-5 text-slate-600">Used only for your application, filing questions and status updates. We do not sell your details.</p></div>
+              <div><h2 className="font-inria text-xl font-bold text-slate-900">Contact details</h2><p className="mt-1 text-sm leading-6 text-slate-600">{selectedOwnerType === "organization" ? "Enter the contact person’s details for this business." : "Enter the trademark owner’s contact details."}</p></div>
             </div>
           </div>
 
@@ -1261,7 +1247,7 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. John"
-              description="Enter your first name"
+              autoComplete="given-name"
               radius="sm"
               size="lg"
               value={firstName}
@@ -1277,7 +1263,7 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. Doe"
-              description="Enter your last name"
+              autoComplete="family-name"
               radius="sm"
               size="lg"
               value={lastName}
@@ -1303,7 +1289,7 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. San Francisco"
-              description="Enter your current city"
+              autoComplete="address-level2"
               radius="sm"
               size="lg"
               value={city}
@@ -1318,7 +1304,7 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. Arizona"
-              description="Select your current state"
+              autoComplete="address-level1"
               radius="sm"
               size="lg"
               selectedKeys={state ? new Set([state]) : new Set()}
@@ -1345,7 +1331,7 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. 561-555-7689"
-              description="Enter your phone number"
+              autoComplete="tel"
               radius="sm"
               size="lg"
               value={phoneNumber}
@@ -1367,7 +1353,8 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. 99515"
-              description="Enter your zip code"
+              autoComplete="postal-code"
+              inputMode="numeric"
               radius="sm"
               size="lg"
               value={zipCode}
@@ -1383,7 +1370,7 @@ const StepOne = () => {
               variant="bordered"
               labelPlacement="outside"
               placeholder="Ex. johndoe@example.com"
-              description="Enter your email address"
+              autoComplete="email"
               radius="sm"
               size="lg"
               startContent={
@@ -1396,21 +1383,14 @@ const StepOne = () => {
             />
           </div>
 
-          <div className="flex items-start gap-3 rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-sm leading-6 text-slate-700">
-            <LuShieldCheck className="mt-0.5 shrink-0 text-xl text-emerald-700" />
-            <p><strong className="text-slate-900">Your information is securely saved.</strong> Contact and application details are encrypted in transit and used to prepare and manage your trademark request.</p>
+          <div className="text-xs leading-5 text-slate-500">
+            <p>We’ll use these details to contact you about your application and filing updates.</p>
           </div>
         </div>
 
         {/* BUTTONS AND CAPCHA */}
         <div className="w-full h-full flex flex-col gap-4">
-          <div className="flex items-center gap-1">
-            <IoMdLock className="text-[14px] -translate-y-[2px]" />
-
-            <p className="text-[14px] font-semibold">{`Click on "Next" to save your application`}</p>
-          </div>
-
-          <div className="sticky bottom-3 z-20 grid w-full grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:static sm:grid-cols-[auto_1fr_auto] sm:items-center sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+          <div className="flex w-full flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
             {/* Google reCAPTCHA - render when enabled */}
             {isCaptchaEnabled && (
               <>
@@ -1443,7 +1423,7 @@ const StepOne = () => {
               className="h-14 w-full bg-primary-theme px-7 text-base font-bold text-white sm:w-auto"
               isLoading={isLoading}
             >
-              Save and continue
+              Continue to classification
             </Button>
           </div>
         </div>

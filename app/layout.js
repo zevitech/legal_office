@@ -84,9 +84,10 @@ export default function RootLayout({ children }) {
       /> */}
 
       {/* Live Chat — marketing pages only; the portal routes opt out. */}
-      <LiveChatLoader />
+      {process.env.NODE_ENV === "production" && <LiveChatLoader />}
 
-      {/* Google Tag Manager */}
+      {/* Keep the existing live tags unchanged; do not load them in local review. */}
+      {process.env.NODE_ENV === "production" && <>
       <Script
         id="gtm"
         type="text/javascript"
@@ -121,6 +122,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }}
       />
 
+      </>}
       <head>
         <script
           type="application/ld+json"
@@ -132,14 +134,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
       <body className={`${poppins.className} bg-color-secondary`}>
         {/* Google Tag Manager (noscript) */}
-        <noscript>
+        {process.env.NODE_ENV === "production" && <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KJGHNHGM"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-        </noscript>
+        </noscript>}
         {/* End Google Tag Manager (noscript) */}
 
         {/* Starts Live Chat (noscript) */}
@@ -162,7 +164,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <GlobalProvider>
           {children}
-          <Script id="clarity-script" strategy="lazyOnload">
+          {process.env.NODE_ENV === "production" && <Script id="clarity-script" strategy="lazyOnload">
             {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -170,7 +172,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
             })(window, document, "clarity", "script", "ouge10k1z4");
           `}
-          </Script>
+          </Script>}
         </GlobalProvider>
       </body>
     </html>

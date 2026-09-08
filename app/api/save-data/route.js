@@ -38,6 +38,7 @@ const EMAIL_SECTIONS = [
   { title: "Contact", keys: ["firstName", "lastName", "emailAddress", "phoneNumber", "address", "city", "state", "zipCode"] },
   { title: "Business activities & classification", keys: ["selectedActivities", "trademarkClassification", "estimatedClassCount", "reviewPreference"] },
   { title: "Package", keys: ["packageName", "price"] },
+  { title: "Optional service interest", keys: ["websiteSupportInterest"] },
   { title: "Payment", keys: ["is_paid", "payment_method", "transaction_id", "addons", "totalAmount"] },
 ];
 

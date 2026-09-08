@@ -20,6 +20,7 @@ const NmiPayment = ({
   allowSavePaymentMethod = true,
   statementDescriptor = "XTARLABS LLC",
 }) => {
+  const isLocalPreview = process.env.NODE_ENV !== "production";
   // Saving a card requires the Customer Vault add-on on the NMI account. When
   // it is absent the gateway rejects the entire sale, so the option is hidden
   // unless the account is known to support it.
@@ -58,6 +59,7 @@ const NmiPayment = ({
   }, []);
 
   useEffect(() => {
+    if (isLocalPreview) return;
     const tokenizationKey = process.env.NEXT_PUBLIC_NMI_TOKENIZATION_KEY;
     if (!tokenizationKey) {
       setFieldError("Payment form is unavailable. Please contact support.");
@@ -127,11 +129,11 @@ const NmiPayment = ({
     script.onerror = () =>
       setFieldError("Could not load the payment form. Please refresh.");
     document.head.appendChild(script);
-  }, []);
+  }, [isLocalPreview]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!collectJsReady || isProcessing) return;
+    if (isLocalPreview || !collectJsReady || isProcessing) return;
 
     if (!acceptedTerms) {
       setFieldError("Please accept the terms and fee disclosure to continue.");
@@ -249,16 +251,16 @@ const NmiPayment = ({
         </p>
         <div>
           <label className={labelClass}>Card Number</label>
-          <div id="ccnumber" className={fieldBoxClass} />
+          <div id="ccnumber" className={fieldBoxClass}>{isLocalPreview && <span className="text-sm text-slate-500">Card number · preview only</span>}</div>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className={labelClass}>Expiry Date</label>
-            <div id="ccexp" className={fieldBoxClass} />
+            <div id="ccexp" className={fieldBoxClass}>{isLocalPreview && <span className="text-sm text-slate-500">MM / YY</span>}</div>
           </div>
           <div>
             <label className={labelClass}>CVV</label>
-            <div id="cvv" className={fieldBoxClass} />
+            <div id="cvv" className={fieldBoxClass}>{isLocalPreview && <span className="text-sm text-slate-500">•••</span>}</div>
           </div>
         </div>
       </div>
@@ -305,10 +307,12 @@ const NmiPayment = ({
             <FaSpinner className="animate-spin" />
             Processing...
           </>
+        ) : isLocalPreview ? (
+          `Pay $${totalAmount}.00 securely · Preview only`
         ) : !collectJsReady ? (
           "Loading payment form..."
         ) : (
-          `Pay $${totalAmount}.00`
+          `Pay $${totalAmount}.00 securely`
         )}
       </button>
 

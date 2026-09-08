@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import FormLoader from "@/components/form/FormLoader";
 import axios from "axios";
 import { Button, Textarea } from "@nextui-org/react";
@@ -10,6 +10,14 @@ import { saveStepTwo } from "@/features/formSlice";
 import { IoMdLock } from "react-icons/io";
 import { HiOutlineCheck, HiOutlineSearch } from "react-icons/hi";
 import { trackClassificationComplete } from "@/utils/tracking";
+import { extraIndustries, matchesBusiness, suggestActivities } from "../businessDiscovery";
+import { FaTshirt, FaUtensils, FaSpa, FaLaptop, FaShoppingBag, FaBullhorn, FaBriefcase, FaHome, FaHeartbeat, FaPaw, FaFilm, FaDumbbell, FaTruck, FaUniversity, FaGraduationCap, FaIndustry, FaLeaf, FaBuilding, FaSuitcase, FaCouch, FaCalendar, FaHandsHelping, FaShieldAlt, FaCamera, FaQuestionCircle } from "react-icons/fa";
+
+const iconList = [FaTshirt, FaUtensils, FaSpa, FaLaptop, FaShoppingBag, FaBullhorn, FaBriefcase, FaHome, FaHeartbeat, FaPaw, FaFilm, FaDumbbell, FaTruck, FaUniversity, FaGraduationCap, FaIndustry, FaLeaf, FaBuilding, FaSuitcase, FaCouch, FaCalendar, FaHandsHelping, FaShieldAlt, FaCamera, FaQuestionCircle];
+function IndustryIcon({name}) {
+  const Icon = iconList[INDUSTRIES.findIndex(item => item.name === name)] || FaBriefcase;
+  return <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-primary-theme" />;
+}
 
 const INDUSTRIES = [
   {
@@ -309,27 +317,52 @@ const INDUSTRIES = [
   },
 ];
 
-const StepTwo = ({ previewMode = false }) => {
+INDUSTRIES.splice(INDUSTRIES.length - 1, 0, ...extraIndustries);
+
+const StepTwo = ({ previewMode: requestedPreviewMode = false }) => {
+  const previewMode = process.env.NODE_ENV !== "production" && requestedPreviewMode;
   const router = useRouter();
   const dispatch = useDispatch();
   const stepOneData = useSelector((state) => state.form.stepOne);
   const [activeIndustry, setActiveIndustry] = useState(INDUSTRIES[0].name);
-  const [selectedActivities, setSelectedActivities] = useState([]);
-  const [customActivity, setCustomActivity] = useState("");
+  const savedStep = useSelector((state) => state.form.stepTwo);
+  const [selectedActivities, setSelectedActivities] = useState(() => (savedStep.selectedActivities || []).filter(item => item.classNo || item.reviewRequired));
+  const [customActivity, setCustomActivity] = useState(() => (savedStep.selectedActivities || []).filter(item => !item.classNo && !item.reviewRequired).map(item => item.label).join(", "));
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [validation, setValidation] = useState(false);
   const [previewComplete, setPreviewComplete] = useState(false);
+  const [draftReady, setDraftReady] = useState(false);
   const reviewPreference = "application_review";
+  const draftKey = `lto-classification-draft:${JSON.stringify(stepOneData)}`;
+  useEffect(() => {
+    try {
+      const draft = JSON.parse(sessionStorage.getItem(draftKey) || "null");
+      if (draft && Date.now() - draft.time < 86400000) {
+        setSelectedActivities(draft.activities || []); setCustomActivity(draft.description || "");
+        if (INDUSTRIES.some(item => item.name === draft.category)) setActiveIndustry(draft.category);
+      }
+    } catch {}
+    setDraftReady(true);
+  }, [draftKey]);
+  useEffect(() => {
+    if (!draftReady) return;
+    try { sessionStorage.setItem(draftKey, JSON.stringify({time:Date.now(),activities:selectedActivities,description:customActivity,category:activeIndustry})); } catch {}
+  }, [draftReady, draftKey, selectedActivities, customActivity, activeIndustry]);
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
+  const suggestions = suggestActivities(INDUSTRIES, customActivity);
+  const visibleSuggestions = showAllSuggestions ? suggestions : suggestions.slice(0, 4);
+  const countFor = name => selectedActivities.filter(item => item.industry === name).length;
 
   const filteredIndustries = INDUSTRIES.filter((industry) =>
-    `${industry.name} ${industry.activities.map((item) => item.label).join(" ")}`
-      .toLowerCase()
-      .includes(search.toLowerCase()),
+    matchesBusiness(`${industry.name} ${industry.activities.map((item) => item.label).join(" ")}`, search),
   );
   const industry =
     filteredIndustries.find((item) => item.name === activeIndustry) ||
     filteredIndustries[0];
+  const visibleActivities = search.trim()
+    ? INDUSTRIES.flatMap(group => group.activities.filter(activity => matchesBusiness(`${group.name} ${activity.label}`, search)).map(activity => ({...activity, industry: group.name})))
+    : (industry?.activities || []).map(activity => ({...activity, industry: industry.name}));
   const uniqueClasses = [
     ...new Set(selectedActivities.map((item) => item.classNo).filter(Boolean)),
   ];
@@ -369,16 +402,14 @@ const StepTwo = ({ previewMode = false }) => {
     setSearch(value);
     const normalized = value.toLowerCase();
     const firstMatch = INDUSTRIES.find((item) =>
-      `${item.name} ${item.activities.map((activity) => activity.label).join(" ")}`
-        .toLowerCase()
-        .includes(normalized),
+      matchesBusiness(`${item.name} ${item.activities.map((activity) => activity.label).join(" ")}`, normalized),
     );
-    if (firstMatch) setActiveIndustry(firstMatch.name);
+    if (normalized.trim() && firstMatch) setActiveIndustry(firstMatch.name);
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if (!classificationSummary || (industry?.name === "Other business" && !customActivity.trim())) {
+    if (!classificationSummary.trim()) {
       setValidation(true);
       return;
     }
@@ -414,7 +445,7 @@ const StepTwo = ({ previewMode = false }) => {
         ...stepOneData,
         ...payload,
         zoho_step: 2,
-      });
+      }, { timeout: 20000 });
       trackClassificationComplete({
         activityCount: selectedActivities.length + (customActivity ? 1 : 0),
         classCount: payload.estimatedClassCount,
@@ -438,15 +469,30 @@ const StepTwo = ({ previewMode = false }) => {
           What does your business offer?
         </h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">
-          Select everything your business currently offers or plans to offer.
-          Our filing team will use this information to prepare the classification
-          review.
+          Tell us what you sell or do. Our paralegal team will review your activities before filing.
         </p>
       </div>
 
+      <div className="rounded-xl border border-sky-100 bg-sky-50 p-4">
+        <label htmlFor="business-description" className="mb-2 block font-semibold">Describe your products or services</label>
+        <textarea id="business-description" value={customActivity} onChange={event => {setCustomActivity(event.target.value);setValidation(false);}} placeholder="Example: We sell T-shirts and print custom designs" rows={2} className="w-full rounded-lg border border-slate-300 bg-white p-3 text-base" />
+        <p className="mt-2 text-sm text-slate-600">Describe your business or select activities below.</p>
+        {suggestions.length > 0 && <div className="mt-4">
+          <p className="mb-2 text-sm font-semibold text-slate-800">Suggested from your description · select what applies</p>
+          <div id="activity-suggestions" className="grid gap-2 sm:grid-cols-2">{visibleSuggestions.map(item => {
+            const selected = selectedActivities.some(activity => activity.label === item.label);
+            return <button key={`${item.industry}-${item.label}`} type="button" aria-pressed={selected} onClick={() => toggleActivity(item, item.industry)} className={`flex min-h-16 items-center gap-3 rounded-xl border p-3 text-left text-sm transition-colors hover:border-primary-theme focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-theme ${selected ? "border-primary-theme bg-sky-100" : "border-sky-200 bg-white"}`}><IndustryIcon name={item.industry} /><span className="min-w-0 flex-1"><span className="block font-semibold">{item.label}</span><span className="mt-1 block text-xs text-slate-500">{item.industry}{selected ? " · Selected" : ""}</span></span><span aria-hidden="true" className="text-lg text-primary-theme">{selected ? "✓" : "+"}</span></button>;
+          })}</div>
+          {suggestions.length > 4 && <button type="button" aria-expanded={showAllSuggestions} aria-controls="activity-suggestions" onClick={() => setShowAllSuggestions(value => !value)} className="mt-2 min-h-11 rounded-lg px-2 text-sm font-semibold text-primary-theme focus-visible:ring-2 focus-visible:ring-primary-theme">{showAllSuggestions ? "Show fewer suggestions" : `Show ${suggestions.length - 4} more suggestions`}</button>}
+        </div>}
+      </div>
+      <details className="rounded-xl border border-slate-200 bg-white p-4">
+      <summary className="min-h-11 cursor-pointer py-2 font-semibold text-primary-theme">Browse categories or search activities manually</summary>
+      <div className="mt-3 flex flex-col gap-5">
       <div className="relative">
         <HiOutlineSearch className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-xl text-slate-400" />
         <input
+          aria-label="Search industries or activities"
           value={search}
           onChange={handleSearchChange}
           placeholder="Search industries or activities"
@@ -455,8 +501,15 @@ const StepTwo = ({ previewMode = false }) => {
       </div>
 
 
-      <section className="grid gap-5 lg:h-[680px] lg:grid-cols-[320px_minmax(0,1fr)]">
-        <div className="max-h-[360px] overflow-y-scroll rounded-2xl border border-slate-200 bg-slate-50 shadow-inner [scrollbar-color:#60a5fa_#e2e8f0] [scrollbar-width:thin] lg:h-full lg:max-h-none">
+      <div className="lg:hidden">
+        <label htmlFor="industry-picker" className="mb-2 block text-sm font-semibold">Business category</label>
+        <div className="mb-2 flex items-center gap-2 text-sm text-slate-600"><IndustryIcon name={activeIndustry} /> {activeIndustry}</div>
+        <select id="industry-picker" value={activeIndustry} onChange={event => {setActiveIndustry(event.target.value);setSearch("");}} className="min-h-12 w-full rounded-xl border border-slate-300 bg-white p-3 text-base">
+          {INDUSTRIES.map(item => <option key={item.name} value={item.name}>{item.name}{countFor(item.name) ? ` · ${countFor(item.name)} selected` : ""}</option>)}
+        </select>
+      </div>
+      <section className="grid gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
+        <div className="hidden max-h-[520px] overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 lg:block">
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-slate-50/95 px-3 py-3 text-xs font-bold uppercase tracking-wide text-slate-600 backdrop-blur">
             <span>Business categories</span>
             <span className="text-blue-700">Scroll to explore ↓</span>
@@ -470,21 +523,22 @@ const StepTwo = ({ previewMode = false }) => {
                   type="button"
                   onClick={() => {
                     setActiveIndustry(item.name);
+                    setSearch("");
                     setValidation(false);
                   }}
                   className={`flex min-h-16 items-center gap-3 rounded-xl border-2 p-3 text-left text-sm font-semibold transition ${selected ? "border-blue-600 bg-blue-50 text-blue-900" : "border-slate-200 bg-white text-slate-700 hover:border-blue-300"}`}
                 >
-                  <span className="text-xl" aria-hidden="true">{item.icon}</span>
-                  <span>{item.name}</span>
+                  <IndustryIcon name={item.name} /><span>{item.name}{countFor(item.name) > 0 && <span className="ml-2 text-xs text-primary-theme">{countFor(item.name)} selected</span>}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 lg:h-full lg:overflow-y-auto lg:[scrollbar-color:#cbd5e1_transparent] lg:[scrollbar-width:thin]">
-          <h2 className="text-xl font-bold text-slate-900">
-            <span aria-hidden="true">{industry?.icon}</span> {industry?.name}
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+          <h2 className="flex items-center gap-2 text-xl font-bold text-slate-900">
+            <IndustryIcon name={industry?.name} />
+            {search.trim() ? `Matching activities (${visibleActivities.length})` : industry?.name}
           </h2>
           <p className="mt-1 text-sm text-slate-500">
             {industry?.name === "Other business" ? "Describe what customers buy from you." : "Select all that apply."}
@@ -511,21 +565,22 @@ const StepTwo = ({ previewMode = false }) => {
             </div>
           ) : (
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {industry?.activities.map((activity) => {
+            {search.trim() && visibleActivities.length === 0 && <p className="text-sm text-slate-600 sm:col-span-2">No matching activities. Try another word or describe your business below.</p>}
+            {visibleActivities.map((activity) => {
               const selected = selectedActivities.some(
                 (item) => item.label === activity.label,
               );
               return (
                 <button
-                  key={activity.label}
+                  key={`${activity.industry}-${activity.label}`}
                   type="button"
                   aria-pressed={selected}
-                  onClick={() => toggleActivity(activity, industry?.name)}
-                  className={`flex min-h-20 items-start justify-between gap-3 rounded-xl border-2 p-4 text-left transition ${selected ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}
+                  onClick={() => toggleActivity(activity, activity.industry)}
+                  className={`flex min-h-14 items-center justify-between gap-3 rounded-xl border-2 p-3 text-left text-sm transition-colors ${selected ? "border-primary-theme bg-sky-50" : "border-slate-200 hover:border-primary-theme"}`}
                 >
                   <span>
                     <span className="block font-semibold text-slate-900">{activity.label}</span>
-                    <span className="mt-1 block text-xs text-slate-500">Business activity</span>
+                    {search.trim() && <span className="mt-1 block text-xs text-slate-500">{activity.industry}</span>}
                   </span>
                   <span
                     className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"}`}
@@ -540,26 +595,16 @@ const StepTwo = ({ previewMode = false }) => {
         </div>
       </section>
 
-      {industry?.name !== "Other business" && (
-      <Textarea
-        label="Anything else customers buy from you?"
-        description="Use everyday language. Our filing specialist will confirm the final wording and classes."
-        variant="bordered"
-        labelPlacement="outside"
-        placeholder="Example: custom printed packaging and an online store selling stationery"
-        radius="lg"
-        minRows={3}
-        value={customActivity}
-        onChange={(event) => {
-          setCustomActivity(event.target.value);
-          setValidation(false);
-        }}
-        isInvalid={validation}
-        errorMessage="Select an activity or describe what your business offers."
-      />
-      )}
+      </div>
+      </details>
+      {selectedActivities.length > 0 && <section className="rounded-xl border border-sky-100 bg-sky-50 p-4" aria-label="Your selections">
+        <h2 className="mb-3 text-sm font-bold" aria-live="polite">Your selections · {selectedActivities.length}</h2>
+        <div className="flex flex-wrap gap-2">{selectedActivities.map(activity => <button key={activity.label} type="button" aria-label={`Remove ${activity.label}`} onClick={() => toggleActivity(activity, activity.industry)} className="flex min-h-11 items-center gap-3 rounded-lg border border-sky-200 bg-white px-3 py-2 text-left text-sm text-slate-700">{activity.label}<span aria-hidden="true">×</span></button>)}</div>
+      </section>}
 
-      <div className="sticky bottom-3 z-20 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-[0_12px_35px_rgba(15,23,42,0.16)] backdrop-blur sm:grid-cols-[auto_1fr_auto] sm:items-center">
+      {validation && <p role="alert" className="text-sm text-rose-700">Select an activity or describe what your business offers.</p>}
+
+      <div className="grid grid-cols-1 gap-3 rounded-xl border border-slate-200 bg-white p-3 sm:grid-cols-[auto_1fr_auto] sm:items-center">
         <Button
           onClick={() => router.back()}
           className="h-14 w-full border-2 border-primary-theme bg-white px-7 text-base font-bold text-primary-theme sm:w-auto"
@@ -567,13 +612,13 @@ const StepTwo = ({ previewMode = false }) => {
           Previous
         </Button>
         <div className={`hidden items-center justify-center gap-2 text-sm sm:flex ${previewComplete ? "font-semibold text-emerald-700" : "text-slate-600"}`} role={previewComplete ? "status" : undefined}>
-          {previewComplete ? <HiOutlineCheck /> : <IoMdLock />} {previewComplete ? "Preview selections are ready" : "Your selections are securely saved"}
+          {previewComplete ? <HiOutlineCheck /> : null} {previewComplete ? "Preview selections are ready" : "Next: choose your package"}
         </div>
         <Button
           onClick={handleFormSubmit}
           className="h-14 w-full bg-primary-theme px-7 text-base font-bold text-white sm:w-auto"
           isLoading={isLoading}
-          isDisabled={industry?.name === "Other business" ? !customActivity.trim() : !classificationSummary}
+          isDisabled={!classificationSummary.trim()}
         >
           Continue to packages
         </Button>

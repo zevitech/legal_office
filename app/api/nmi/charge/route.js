@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ADD_ON_PRICES, PACKAGE_PRICES, calculateOrderTotal } from "@/constant/pricing";
+import { ADD_ON_PRICES, PACKAGE_PRICES, calculateOrderTotal, getChargeableAddons } from "@/constant/pricing";
 import { sendOrderReceipt } from "@/lib/orderReceipt";
 
 // Customer-facing names for the checkout add-ons, used on the receipt.
@@ -196,8 +196,7 @@ export async function POST(req) {
     // runs after the idempotency claim, so it happens exactly once per payment,
     // and the figures are the ones actually charged.
     const packagePrice = PACKAGE_PRICES[packageName] ?? amount;
-    const addonLines = [...new Set(Array.isArray(addons) ? addons : [])]
-      .concat(isRushProcessing && !addons?.includes("rush") ? ["rush"] : [])
+    const addonLines = getChargeableAddons(packageName, addons, isRushProcessing)
       .filter((key) => ADD_ON_PRICES[key])
       .map((key) => ({ title: ADDON_LABELS[key] || key, amount: ADD_ON_PRICES[key] }));
 

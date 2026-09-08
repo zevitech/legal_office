@@ -18,8 +18,8 @@ const SystemStepProgressTracker = ({ p_value }) => {
   );
 
   return (
-    <section className="mx-auto my-8 w-[92%] max-w-6xl rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex w-full flex-col gap-6 p-5 md:p-8">
+    <section className={`mx-auto ${p_value === 25 ? "my-4" : "my-8"} w-[92%] max-w-6xl rounded-2xl border border-slate-200 bg-white shadow-sm`}>
+      <div className={`flex w-full flex-col ${p_value === 25 ? "gap-3 p-4 md:p-5" : "gap-6 p-5 md:p-8"}`}>
         <div className="w-full flex flex-col items-center gap-2">
           <h1 className="font-inria text-heading-color md:text-[24px] text-[20px] md:leading-[24px] leading-[20px] font-bold">
             {currentStep
@@ -51,7 +51,7 @@ const SystemStepProgressTracker = ({ p_value }) => {
                 >
                   {isComplete ? "✓" : index + 1}
                 </div>
-                <p className={`hidden text-xs sm:block ${isActive ? "font-semibold text-slate-900" : "text-slate-500"}`}>
+                <p className={`text-[10px] sm:text-xs ${isActive ? "font-semibold text-slate-900" : "text-slate-500"}`}>
                   {step.shortTitle}
                 </p>
               </div>
