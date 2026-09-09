@@ -6,7 +6,11 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-import CldUploadWidget from "../ReviewUploadWidget";
+import dynamic from "next/dynamic";
+// Load upload dependencies only when a customer chooses a logo or sound.
+const CldUploadWidget = dynamic(() => import("../ReviewUploadWidget"), {
+  loading: () => <div role="status" className="py-3 text-sm text-slate-500">Loading upload options…</div>,
+});
 import Image from "next/image";
 import ReCAPTCHA from "react-google-recaptcha";
 // OTP DISABLED - Uncomment below imports to re-enable OTP functionality

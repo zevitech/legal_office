@@ -1,8 +1,6 @@
-// Import only the datasets used by the intake form. Importing the package root
-// also bundles its multi-megabyte worldwide city dataset even though this form
-// never requests cities.
-import Country from "country-state-city/lib/country";
-import State from "country-state-city/lib/state";
+// Compact projection of country-state-city 3.2.1: preserve every option while
+// excluding unused coordinates, phone codes and currencies from the browser.
+import geographicalOptions from "@/constant/form2.0/geographical-options.json";
 
 // Static reference data: avoid filtering thousands of states on every keystroke.
 const geographicalCache = new Map();
@@ -19,17 +17,12 @@ export const GetGeographicalData = (type, countryCode = "", stateCode = "") => {
   if (geographicalCache.has(cacheKey)) return geographicalCache.get(cacheKey);
   let result = [];
   if (type === "country") {
-    const countries = Country.getAllCountries();
-    result = countries.map((country) => ({
-      value: country.isoCode,
-      name: country.name,
-    }));
+    result = geographicalOptions.countries.map(([value, name]) => ({ value, name }));
   } else if (type === "state" && countryCode) {
-    const states = State.getStatesOfCountry(countryCode);
-    result = states.map((state) => ({
-      value: state.isoCode,
-      name: state.name,
-    }));
+    result = geographicalOptions.states
+      .filter(([country]) => country === countryCode)
+      .map(([, value, name]) => ({ value, name }))
+      .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
   }
   geographicalCache.set(cacheKey, result);
   return result;

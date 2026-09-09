@@ -1,9 +1,10 @@
 {
-  "status": "tested_locally_not_deployed",
+  "status": "afa9709_live_followup_performance_fixes_tested_locally_not_deployed",
+  "local_followup": {"form_js_bytes_before":722602,"form_js_bytes_after":597155,"geographical_options_equivalent":true,"main_landmark_added":true,"build_and_mobile_desktop_tests":"pass","unsubmitted_refresh_draft_gap":"pre-existing, unresolved"},
   "baseline_commit": "b9870d8",
   "landing_lab": { "mobile": 66, "desktop": 84 },
   "form_lab": { "mobile": 66, "desktop": 56 },
-  "production_after_scores": null,
+  "production_after_scores": {"landing_mobile":93,"landing_desktop":90,"form_mobile":62},
   "tests": { "production_build": "pass", "lead_delivery": "pass", "mobile_desktop_flow": "pass", "protected_tracking_diff": "unchanged" },
-  "remaining": ["LiveChat check_goals 422 not certified resolved", "Production submission timing not measured", "Deployment pending"]
+  "remaining": ["LiveChat check_goals 422 not certified resolved", "Production submission timing not measured", "Form mobile initial rendering remains slow; 62 lab score"]
 }

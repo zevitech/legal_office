@@ -2,6 +2,14 @@
 
 ## Mobile font-loading follow-up
 
+Released afa9709, Vercel 4MVMTV5z68PD3RfcREuC3BeWE7aJ Ready, September 8 2026 20:53 PDT. Fresh LP lab: mobile 93 (FCP 1.2s, LCP 2.8s, TBT 170ms, CLS 0); desktop 90 (FCP 0.8s, LCP 0.9s, TBT 240ms, CLS 0.017). Prior LP mobile runs were 53 and 61. Individual lab runs are not guaranteed scores or new CrUX data.
+
+LP report: https://pagespeed.web.dev/analysis/https-www-legaltrademarkoffice-com-trademark-registration/7po3beck01
+
+Form mobile remains 62 (FCP 3.4s, LCP 8.5s, TBT 210ms); that initial-load issue is not resolved. Report: https://pagespeed.web.dev/analysis/https-www-legaltrademarkoffice-com-trademark-register/e68prqaghb
+
+Live page/font HTTP200; four font preloads and immutable caching confirmed. Original GTM-KJGHNHGM / AW-16565473053 / Clarity ouge10k1z4 present. No real purchase conversion test performed.
+
 The inline-CSS experiment was rejected and is not enabled. The font change preserves all 24 original Poppins font binaries, weights, Unicode subsets and fallback metrics. Four UI weights are preloaded instead of all eight, using early high-priority resource hints; other weights remain available on demand. Hashed font URLs use immutable caching and include the original OFL license.
 
 Local 390/1440px tests: font transfer 62,236 → 31,480 bytes; headings, sizes, colors, geometry and navigation match, no overflow/errors. Local throttled LCP was not improved (about 1.5s → 1.8s), so a production PageSpeed check is required before claiming a mobile speed gain. Root advertising/Clarity blocks and payment/thank-you/tracking source are unchanged. No real payment or lead was submitted. Scripts: test-mobile-render.cjs and test-lead-performance.cjs.
@@ -82,3 +90,13 @@ Reference: https://vercel.com/docs/functions/functions-api-reference/vercel-func
 - Confirm production Firestore writes and pending/completed handoff markers with the next genuine submission. Check notification delivery and conversion diagnostics without inventing a paid order.
 - Notifications may finish after navigation. Preserve step labels when reviewing their arrival order. `after()` is bounded by function duration and is not a durable job scheduler; pending records identify interrupted work.
 - Deploy only the scoped source/test changes; exclude unrelated local PDFs/screenshots. Recheck mobile/desktop PSI and real submit timings after release. Do not change tracking IDs, labels, event names or payment endpoints.
+## September 9 follow-up — local, not deployed
+
+- Compact country/state reference data retains all 250 countries and 4,963 states, exact codes/names and sort order. Unused coordinates/currencies/phone codes are excluded. Run `scripts/test-geographical-options.cjs` against country-state-city 3.2.1 when updating this snapshot.
+- Upload dependency now loads only when the logo/sound upload component is mounted; upload implementation remains unchanged. External Cloudinary upload was not performed.
+- Added a main landmark to the public registration landing page without changing visible content or styling.
+- Next 15.5.25 production build, lint/types and all 92 pages pass. Form first-load bundle: approximately 499 kB to 379 kB. Local first-party JS resource bytes at both 390px and 1440px: 722,602 to 597,155 (17.4% reduction). These are local resource measurements, not a new Lighthouse score.
+- Mocked owner → classification → packages tests pass at both widths, exactly one qualified-lead event, no horizontal overflow/page errors. Protected tracking, root tag installation, payment, thank-you, NMI and save API files were not edited.
+- Fresh public form read-only observation loaded one LiveChat frame and did not reproduce check_goals 422. This does not prove the intermittent vendor error is fixed. Chat configuration was not changed. Vendor reference: https://platform.text.com/docs/messaging/customer-chat-api/v3.5#check-goals
+- Regression comparison identified a pre-existing gap: refreshing an unsubmitted StepOne clears entered details in both baseline and optimized builds. This is NOT fixed by the performance patch and needs a separately tested draft-restoration change.
+- Contrast colors remain unchanged to respect the no-UI-change constraint. Latest public form mobile Lighthouse score remains 62; no fresh production score is claimed for this local patch.

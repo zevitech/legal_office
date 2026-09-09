@@ -13,7 +13,7 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
         if(url.pathname.startsWith('/api/'))return route.abort();
         return route.continue();
       });
-      await page.goto('http://127.0.0.1:3006/trademark-register');
+      await page.goto((process.env.FORM_TEST_BASE || 'http://127.0.0.1:3006')+'/trademark-register');
       await page.getByRole('button',{name:/Not yet/}).click();
       await page.getByLabel('Business or product name',{exact:true}).fill('Performance Test');
       await page.getByRole('button',{name:'Continue to owner details',exact:true}).click();

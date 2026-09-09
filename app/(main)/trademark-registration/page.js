@@ -30,7 +30,7 @@ const page = () => {
           __html: JSON.stringify(serviceSchema).replace(/</g, "\\u003c"),
         }}
       />
-      <LandingPage optimizedCopy />
+      <main><LandingPage optimizedCopy /></main>
     </>
   );
 };
