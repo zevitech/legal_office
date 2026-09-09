@@ -11,24 +11,25 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { Navigation, Pagination } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import ReviewCard from "./ReviewCard";
 import { testimonials } from "@/constant/testimonial";
 
 export default function TestimonialCarousel() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+  const swiperRef = useRef(null);
 
   return (
     <div className="relative z-10 flex justify-end bg-slate-50 shadow-sm py-7 px-16 max-md:px-0 rounded-md pb-9">
       <button
-        ref={prevRef}
+        onClick={() => swiperRef.current?.slidePrev()}
+        aria-label="Previous review"
         className="absolute left-6 max-md:left-3 top-1/2 transform -translate-y-1/2 z-30"
       >
         <FaRegArrowAltCircleLeft className="text-slate-500 text-2xl max-md:text-4xl" />
       </button>
       <button
-        ref={nextRef}
+        onClick={() => swiperRef.current?.slideNext()}
+        aria-label="Next review"
         className="absolute right-7 max-md:right-3 top-1/2 transform -translate-y-1/2 z-30 "
       >
         <FaRegArrowAltCircleRight className="text-slate-500 text-2xl  max-md:text-4xl" />
@@ -37,14 +38,7 @@ export default function TestimonialCarousel() {
         slidesPerView={1}
         spaceBetween={1}
         grabCursor={true}
-        navigation={{
-          prevEl: prevRef.current,
-          nextEl: nextRef.current,
-        }}
-        onBeforeInit={(swiper) => {
-          swiper.params.navigation.prevEl = prevRef.current;
-          swiper.params.navigation.nextEl = nextRef.current;
-        }}
+        onSwiper={(swiper) => { swiperRef.current = swiper; }}
         breakpoints={{
           640: {
             slidesPerView: 1,
@@ -60,7 +54,7 @@ export default function TestimonialCarousel() {
           },
         }}
         pagination={true}
-        modules={[Navigation, Pagination]}
+        modules={[Pagination]}
         className="mySwiper max-w-[700px] max-md:w-full m-0  z-10 !pb-10"
       >
         {testimonials.map((testimonial, index) => (

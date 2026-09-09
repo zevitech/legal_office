@@ -45,7 +45,7 @@ export default function LiveChatLoader() {
 
       (function(n, t, c) {
         function i(n) {
-          return e.h ? e._h.apply(null, n) : e._q.push(n);
+          return e._h ? e._h.apply(null, n) : e._q.push(n);
         }
 
         var e = {
@@ -69,7 +69,7 @@ export default function LiveChatLoader() {
           }
         };
 
-        if (!n._lc.asyncInit) e.init();
+        if (!n.__lc.asyncInit) e.init();
         n.LiveChatWidget = n.LiveChatWidget || e;
       })(window, document, [].slice);
     `,

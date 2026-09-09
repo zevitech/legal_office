@@ -166,6 +166,9 @@ const StepOne = () => {
   // const [resendLoading, setResendLoading] = useState(false);
 
   const router = useRouter();
+  useEffect(() => {
+    if (intakeSection === 1) router.prefetch("/trademark-register/step-2");
+  }, [intakeSection, router]);
   const dispatch = useDispatch();
 
   // Explicit flag to enable/disable captcha independent of site key

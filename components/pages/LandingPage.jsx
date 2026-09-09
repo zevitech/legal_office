@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
@@ -40,6 +40,25 @@ const LandingPage = ({ optimizedCopy = false }) => {
   const [chatLoader, setChatLoader] = useState(false);
   const [selectedProtection, setSelectedProtection] = useState("name");
   const [dashboardOpen, setDashboardOpen] = useState(false);
+  const testimonialRef = useRef(null);
+  const [testimonialsReady, setTestimonialsReady] = useState(false);
+
+  useEffect(() => {
+    // The existing client-only carousel is well below the fold. Load its
+    // slider engine ahead of scrolling into view, not during hero rendering.
+    if (!window.IntersectionObserver) {
+      setTestimonialsReady(true);
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setTestimonialsReady(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: "1200px 0px" });
+    if (testimonialRef.current) observer.observe(testimonialRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!dashboardOpen) return undefined;
@@ -491,8 +510,8 @@ finish, so you can focus on growing your business.`}
             />
           </div>
         </div>
-        <div className="max-md:w-full">
-          <TestimonialCarousel />
+        <div ref={testimonialRef} className="max-md:w-full">
+          {testimonialsReady ? <TestimonialCarousel /> : <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-100" />}
         </div>
       </section>
 

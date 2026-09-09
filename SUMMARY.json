@@ -1,0 +1,9 @@
+{
+  "status": "tested_locally_not_deployed",
+  "baseline_commit": "b9870d8",
+  "landing_lab": { "mobile": 66, "desktop": 84 },
+  "form_lab": { "mobile": 66, "desktop": 56 },
+  "production_after_scores": null,
+  "tests": { "production_build": "pass", "lead_delivery": "pass", "mobile_desktop_flow": "pass", "protected_tracking_diff": "unchanged" },
+  "remaining": ["LiveChat check_goals 422 not certified resolved", "Production submission timing not measured", "Deployment pending"]
+}

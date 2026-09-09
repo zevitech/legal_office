@@ -1,7 +1,10 @@
 import axios from "axios";
 import { saveLead, recordLeadDelivery } from "@/lib/leadStore";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { createTransport } from "nodemailer";
+
+// Keep notification work alive after the response on the deployed Next/Vercel runtime.
+export const maxDuration = 60;
 
 const escapeHtml = (value = "") =>
   String(value)
@@ -122,104 +125,120 @@ export async function POST(req) {
       console.error("Lead persistence failed:", stored.reason);
     }
 
-    let emailSent = false;
-    let emailError = "";
-    let crmSent = false;
-    let crmError = "";
+    const deliverNotifications = async () => {
+      let emailSent = false;
+      let emailError = "";
+      let crmSent = false;
+      let crmError = "";
 
-    // sending data to gmail account -start
-    const transporter = createTransport({
-      service: "gmail",
-      connectionTimeout: 4000,
-      greetingTimeout: 4000,
-      socketTimeout: 6000,
-      auth: {
-        user: process.env.MAILER_EMAIL,
-        pass: process.env.MAILER_PASSWORD,
-      },
-    });
-
-    const stage = stageDetails(data);
-    const formBody = buildProgressEmail(data);
-    const customerName = [data.firstName, data.lastName].filter(Boolean).join(" ") || data.emailAddress || "New lead";
-    const subject = `[LTO] Step ${stage.number}/4: ${stage.title} — ${customerName}`;
-
-    try {
-      await transporter.sendMail({
-        from: `Legal Trademark Office <${process.env.MAILER_EMAIL}>`,
-        to: process.env.MAILER_EMAIL,
-        replyTo: data.emailAddress || process.env.MAILER_EMAIL,
-        subject: subject,
-        html: formBody,
+      // sending data to gmail account -start
+      const transporter = createTransport({
+        service: "gmail",
+        connectionTimeout: 4000,
+        greetingTimeout: 4000,
+        socketTimeout: 6000,
+        auth: {
+          user: process.env.MAILER_EMAIL,
+          pass: process.env.MAILER_PASSWORD,
+        },
       });
-      emailSent = true;
-    } catch (err) {
-      // Gmail throttling used to throw here and abort the whole handler, so the
-      // CRM never received the lead either. The record is already in Firestore.
-      emailError = err?.message || "sendMail failed";
-      console.error("Lead email failed:", emailError);
-    }
-    // sending data to gmail account -end
 
-    // Receipt emails are handled by the dedicated /send-receipt route. Avoid
-    // logging customer contact or application data in production server logs.
+      const stage = stageDetails(data);
+      const formBody = buildProgressEmail(data);
+      const customerName = [data.firstName, data.lastName].filter(Boolean).join(" ") || data.emailAddress || "New lead";
+      const subject = `[LTO] Step ${stage.number}/4: ${stage.title} — ${customerName}`;
 
-    // sending data to ZevitechCRM leads system (server-to-server, API-key guarded)
-    const crmIngestUrl = process.env.CRM_INGEST_URL;
-    const crmIngestKey = process.env.CRM_INGEST_API_KEY;
-    if (crmIngestUrl && crmIngestKey) {
       try {
-        await axios.post(
-          crmIngestUrl,
-          { ...data, brand: "legal_trademark_office" },
-          { headers: { "x-api-key": crmIngestKey }, timeout: 4000 }
-        );
-        crmSent = true;
-        console.log("CRM lead ingest: ok");
+        await transporter.sendMail({
+          from: `Legal Trademark Office <${process.env.MAILER_EMAIL}>`,
+          to: process.env.MAILER_EMAIL,
+          replyTo: data.emailAddress || process.env.MAILER_EMAIL,
+          subject: subject,
+          html: formBody,
+        });
+        emailSent = true;
       } catch (err) {
-        // Never block the form flow on CRM failure — the lead is in Firestore.
-        crmError = err?.response?.data
-          ? JSON.stringify(err.response.data)
-          : err?.message || "CRM post failed";
-        console.error("CRM lead ingest error:", crmError);
+        // Gmail throttling used to throw here and abort the whole handler, so the
+        // CRM never received the lead either. The record is already in Firestore.
+        emailError = err?.message || "sendMail failed";
+        console.error("Lead email failed:", emailError);
       }
-    } else {
-      // Not configured, so nothing to retry.
-      crmSent = true;
-    }
+      // sending data to gmail account -end
 
-    // Flag anything that did not reach email or the CRM so failed handoffs can
-    // be found later with a needsRetry query instead of grepping logs.
+      // Receipt emails are handled by the dedicated /send-receipt route. Avoid
+      // logging customer contact or application data in production server logs.
+
+      // sending data to ZevitechCRM leads system (server-to-server, API-key guarded)
+      const crmIngestUrl = process.env.CRM_INGEST_URL;
+      const crmIngestKey = process.env.CRM_INGEST_API_KEY;
+      if (crmIngestUrl && crmIngestKey) {
+        try {
+          await axios.post(
+            crmIngestUrl,
+            { ...data, brand: "legal_trademark_office" },
+            { headers: { "x-api-key": crmIngestKey }, timeout: 4000 }
+          );
+          crmSent = true;
+          console.log("CRM lead ingest: ok");
+        } catch (err) {
+          // Never block the form flow on CRM failure — the lead is in Firestore.
+          crmError = err?.response?.data
+            ? JSON.stringify(err.response.data)
+            : err?.message || "CRM post failed";
+          console.error("CRM lead ingest error:", crmError);
+        }
+      } else {
+        // Not configured, so nothing to retry.
+        crmSent = true;
+      }
+
+      // sending data to ZOHO - disabled via env or default off
+      const disableZoho =
+        process.env.DISABLE_ZOHO === "true" ||
+        process.env.NEXT_PUBLIC_DISABLE_ZOHO === "true";
+      let zohoSent = disableZoho || !process.env.ZOHO_LEAD_ENDPOINT;
+      let zohoError = "";
+      if (!disableZoho) {
+        try {
+          const zohoEndPoint = process.env.ZOHO_LEAD_ENDPOINT;
+          if (!zohoEndPoint) throw new Error("ZOHO_LEAD_ENDPOINT is not configured");
+          await axios
+            .post(zohoEndPoint, data, { timeout: 4000 })
+            .then((res) => {
+              zohoSent = true;
+              console.log("zoho response: ", res?.data?.message);
+            })
+            .catch((err) => {
+              zohoError = err?.message || "Zoho post failed";
+              console.error("Zoho delivery failed:", zohoError);
+            });
+        } catch (error) {
+          console.log("Error while saving zoho lead: " + error);
+        }
+      } else {
+        console.log("ZOHO lead forwarding disabled. Only SMTP email sent.");
+      }
+
+      if (stored.saved) {
+        await recordLeadDelivery(stored.id, {
+          emailSent, crmSent, emailError, crmError, zohoSent, zohoError,
+          step: stored.step, attempt: stored.attempt,
+        });
+      }
+      return emailSent || (Boolean(process.env.CRM_INGEST_URL && process.env.CRM_INGEST_API_KEY) && crmSent)
+        || (!disableZoho && Boolean(process.env.ZOHO_LEAD_ENDPOINT) && zohoSent);
+    };
+
     if (stored.saved) {
-      await recordLeadDelivery(stored.id, {
-        emailSent,
-        crmSent,
-        emailError,
-        crmError,
-      });
-    }
-
-    // sending data to ZOHO - disabled via env or default off
-    const disableZoho =
-      process.env.DISABLE_ZOHO === "true" ||
-      process.env.NEXT_PUBLIC_DISABLE_ZOHO === "true";
-    if (!disableZoho) {
-      try {
-        const zohoEndPoint = process.env.ZOHO_LEAD_ENDPOINT;
-        if (!zohoEndPoint) throw new Error("ZOHO_LEAD_ENDPOINT is not configured");
-        await axios
-          .post(zohoEndPoint, data, { timeout: 4000 })
-          .then((res) => {
-            console.log("zoho response: ", res?.data?.message);
-          })
-          .catch((err) => {
-            console.log("zoho error", err);
-          });
-      } catch (error) {
-        console.log("Error while saving zoho lead: " + error);
-      }
+      // The lead and pending-delivery marker are durable before acknowledging.
+      // Do not use a detached promise: after() extends the serverless lifecycle.
+      after(deliverNotifications);
     } else {
-      console.log("ZOHO lead forwarding disabled. Only SMTP email sent.");
+      // Preserve the synchronous fallback if Firestore is unavailable.
+      const delivered = await deliverNotifications();
+      if (!delivered) {
+        return NextResponse.json({ error: "Unable to save your details. Please try again." }, { status: 503 });
+      }
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
