@@ -1,16 +1,12 @@
-import { Poppins } from "next/font/google";
 import Script from "next/script";
+import { preload } from "react-dom";
 
 import GlobalProvider from "./GlobalProvider";
 import ClickIdCapture from "@/components/tracking/ClickIdCapture";
 import LiveChatLoader from "@/components/LiveChatLoader";
 
 import "./globals.css";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["100", "300", "400", "500", "600", "700", "800", "900"],
-});
+import "./poppins.css";
 
 export const metadata = {
   metadataBase: new URL("https://www.legaltrademarkoffice.com"),
@@ -62,6 +58,11 @@ const organizationSchema = {
 };
 
 export default function RootLayout({ children }) {
+  // Hoist the four weights actually used by the initial UI. Keep the other
+  // original weights available on demand instead of preloading all eight.
+  for (const file of ["eafabf029ad39a43-s.p.woff2", "b957ea75a84b6ea7-s.p.woff2", "0484562807a97172-s.p.woff2", "8888a3826f4a3af4-s.p.woff2"]) {
+    preload(`/fonts/poppins/${file}`, { as: "font", type: "font/woff2", crossOrigin: "anonymous", fetchPriority: "high" });
+  }
   return (
     <html lang="en">
       {/* Tawk.to */}
@@ -132,7 +133,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
       </head>
 
-      <body className={`${poppins.className} bg-color-secondary`}>
+      <body className="font-poppins bg-color-secondary">
         {/* Google Tag Manager (noscript) */}
         {process.env.NODE_ENV === "production" && <noscript>
           <iframe

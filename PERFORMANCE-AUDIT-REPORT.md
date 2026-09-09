@@ -1,6 +1,31 @@
 # Performance review — September 8, 2026
 
-Status: implemented and tested locally, not deployed. Baseline production commit: b9870d8.
+## Mobile font-loading follow-up
+
+The inline-CSS experiment was rejected and is not enabled. The font change preserves all 24 original Poppins font binaries, weights, Unicode subsets and fallback metrics. Four UI weights are preloaded instead of all eight, using early high-priority resource hints; other weights remain available on demand. Hashed font URLs use immutable caching and include the original OFL license.
+
+Local 390/1440px tests: font transfer 62,236 → 31,480 bytes; headings, sizes, colors, geometry and navigation match, no overflow/errors. Local throttled LCP was not improved (about 1.5s → 1.8s), so a production PageSpeed check is required before claiming a mobile speed gain. Root advertising/Clarity blocks and payment/thank-you/tracking source are unchanged. No real payment or lead was submitted. Scripts: test-mobile-render.cjs and test-lead-performance.cjs.
+
+Status: deployed as cbf5ea8; Vercel Ready / Production Current confirmed September 8, 2026. Baseline production commit: b9870d8.
+
+## Post-deployment results
+
+Deployment: EneaqbGVeNqjjmDjRQWuFAVHAZXR, production www.legaltrademarkoffice.com.
+
+| Page | Device | Before → after score | New FCP | New LCP | New TBT | New CLS |
+|---|---|---|---|---|---|---|
+| Landing | Mobile | 66 → 53 | 3.5s | 8.4s | 440ms | 0 |
+| Landing | Desktop | 84 → 96 | 0.3s | 0.6s | 170ms | 0.017 |
+| Form | Mobile | 66 → 62 | 2.8s | 7.3s | 380ms | 0 |
+| Form | Desktop | 56 → 78 | 0.7s | 2.7s | 200ms | 0.017 |
+
+Fresh reports:
+- https://pagespeed.web.dev/analysis/https-www-legaltrademarkoffice-com-trademark-registration/lbs8m7fwr4
+- https://pagespeed.web.dev/analysis/https-www-legaltrademarkoffice-com-trademark-register/guao4o5l74
+
+These are single lab runs. Desktop scores improved; mobile scores did NOT improve. LP mobile LCP remained the hero heading, with render delay. Do not claim mobile performance resolved. LiveChat check_goals still returned HTTP422 in the new report. It needs vendor-side investigation rather than hiding the error. No paid transaction was performed.
+
+Public production LP checks passed at 390px and 1440px: no overflow or runtime errors, unchanged headings/sections/review text, reviews load on approach and next arrow advances. External advertising and API requests were blocked in those interaction checks. Protected layout/tracking/payment/thank-you/NMI/package files remain unchanged against b9870d8.
 
 ## Observed production reports (before these changes)
 
@@ -51,7 +76,7 @@ Reference: https://vercel.com/docs/functions/functions-api-reference/vercel-func
 ## Remaining checks
 
 - PSI reported HTTP422 from LiveChat `check_goals`. A fresh public-page observation did not reproduce that request/error. Bootstrap corrections are not proof this vendor-side error is fixed. Recheck after deployment; if it remains, inspect LiveChat goal configuration/vendor diagnostics. Do not suppress errors or disable the widget to hide it.
-- No post-change production PSI score exists yet. The backend change targets submit latency, not the Lighthouse page-load score.
+- Post-change production PSI scores are recorded above. The backend change targets submit latency, not the Lighthouse page-load score.
 - Google, Reddit, Clarity and chat scripts contribute materially to main-thread work. Their timing/configuration was deliberately preserved.
 - Existing visual/accessibility findings (contrast, heading order and landing button names) were not redesigned under the no-UI/content-change constraint.
 - Confirm production Firestore writes and pending/completed handoff markers with the next genuine submission. Check notification delivery and conversion diagnostics without inventing a paid order.

@@ -28,7 +28,7 @@ function handler(code, {saved = true, fail = false, delay = 0, captcha = false} 
 (async () => {
   const data = {customer_ID:'test', zoho_step:1, firstName:'Test', emailAddress:'test@example.com'};
   const req = {json: async () => data};
-  const baseline = handler(execFileSync('git',['show','HEAD:app/api/save-data/route.js'],{cwd:root,encoding:'utf8'}), {delay:250});
+  const baseline = handler(execFileSync('git',['show',`${process.env.BASELINE_REF || 'b9870d8'}:app/api/save-data/route.js`],{cwd:root,encoding:'utf8'}), {delay:250});
   let start = performance.now(); await baseline.POST(req); const oldMs = performance.now()-start;
   const updated = handler(source, {delay:250});
   start = performance.now(); const response = await updated.POST(req); const newMs = performance.now()-start;
