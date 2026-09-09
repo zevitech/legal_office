@@ -280,9 +280,9 @@ const NmiPayment = ({
           className="mt-0.5 h-4 w-4"
         />
         <span>
-          I agree to the <Link className="underline" href="/legal/terms" target="_blank">Terms</Link>,{" "}
-          <Link className="underline" href="/legal/privacy" target="_blank">Privacy Policy</Link> and{" "}
-          <Link className="underline" href="/legal/refund-policy" target="_blank">Refund Policy</Link>. I authorize the amount shown today. I understand service fees become non-refundable after the application is submitted to the USPTO, subject to applicable law, and USPTO fees are generally non-refundable. Payment details and the applicable card-statement descriptor will be provided on my receipt after a successful payment.
+          I agree to the <Link className="underline" href="/legal/terms" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Terms</Link>,{" "}
+          <Link className="underline" href="/legal/privacy" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Privacy Policy</Link> and{" "}
+          <Link className="underline" href="/legal/refund-policy" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Refund Policy</Link>. I authorize the amount shown today. I understand service fees become non-refundable after the application is submitted to the USPTO, subject to applicable law, and USPTO fees are generally non-refundable. Payment details and the applicable card-statement descriptor will be provided on my receipt after a successful payment.
         </span>
       </label>
 
