@@ -8,21 +8,30 @@ const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 function handler(code, {saved = true, fail = false, delay = 0, captcha = false} = {}) {
   const callbacks = [], deliveries = [], messages = [], posts = [];
+  const stats = {notificationModuleLoads:0};
   const context = {
-    console: {log(){}, error(){}}, URLSearchParams,
+    console: {log(){}, error(){}, info(){}}, URLSearchParams, performance,
     Date: class extends Date { constructor(){ super('2026-09-09T02:00:00Z'); } },
     process: {env: {MAILER_EMAIL: 'test@example.com', CRM_INGEST_URL: 'https://crm.invalid', CRM_INGEST_API_KEY: 'stub', DISABLE_ZOHO: 'true', ...(captcha ? {RECAPTCHA_SECRET_KEY:'stub'} : {})}},
     saveLead: async () => { await pause(20); return {saved, id:'lead-test', step:1, attempt:'test'}; },
     recordLeadDelivery: async (...args) => deliveries.push(args),
     after: callback => callbacks.push(callback),
-    NextResponse: {json: (body, options) => ({body, status:options.status})},
+    NextResponse: {json: (body, options) => ({body, status:options.status, headers:options.headers})},
     createTransport: () => ({sendMail: async data => { await pause(delay); if (fail) throw Error('SMTP unavailable'); messages.push(data); }}),
     axios: {post: async (...args) => { await pause(delay); if (fail) throw Error('CRM unavailable'); posts.push(args); return {data:{}}; }},
     fetch: async () => ({json: async () => ({success:false})}),
   };
   vm.createContext(context);
-  vm.runInContext(code.replace(/^import .*;\n/gm,'').replace(/export /g,'')+'\nthis.POST = POST;', context);
-  return {...context, callbacks, deliveries, messages, posts};
+  context.loadLeadNotifications = async () => {
+    stats.notificationModuleLoads++;
+    const deliveryContext = {...context};
+    vm.createContext(deliveryContext);
+    const deliverySource = fs.readFileSync(`${root}/lib/leadNotifications.js`, 'utf8');
+    vm.runInContext(deliverySource.replace(/^import .*;\n/gm,'').replace(/export /g,'')+'\nthis.deliverLeadNotifications=deliverLeadNotifications;', deliveryContext);
+    return {deliverLeadNotifications: deliveryContext.deliverLeadNotifications};
+  };
+  vm.runInContext(code.replace(/^import .*;\n/gm,'').replace('import("@/lib/leadNotifications")','loadLeadNotifications()').replace(/export /g,'')+'\nthis.POST = POST;', context);
+  return {...context, callbacks, deliveries, messages, posts, stats};
 }
 
 (async () => {
@@ -33,9 +42,12 @@ function handler(code, {saved = true, fail = false, delay = 0, captcha = false} 
   const updated = handler(source, {delay:250});
   start = performance.now(); const response = await updated.POST(req); const newMs = performance.now()-start;
   assert.equal(response.status,200); assert.equal(response.body.success,true);
+  assert.match(response.headers['Server-Timing'], /captcha;dur=.*persist;dur=.*handler;dur=/);
   assert.equal(updated.callbacks.length,1); assert.equal(updated.messages.length,0);
+  assert.equal(updated.stats.notificationModuleLoads,0);
   assert.ok(newMs < oldMs / 2);
   await updated.callbacks[0]();
+  assert.equal(updated.stats.notificationModuleLoads,1);
   assert.equal(updated.messages.length,1); assert.equal(updated.posts.length,1);
   assert.equal(updated.deliveries[0][1].emailSent,true);
   assert.equal(updated.messages[0].html,baseline.messages[0].html);
@@ -48,6 +60,15 @@ function handler(code, {saved = true, fail = false, delay = 0, captcha = false} 
   assert.equal(partial.deliveries[0][1].emailSent,false);
   const captcha = handler(source,{captcha:true});
   assert.equal((await captcha.POST(req)).status,400); assert.equal(captcha.callbacks.length,0);
+  for (const step of [1,2,3,4]) {
+    const h=handler(source,{delay:10});
+    assert.equal((await h.POST({json:async()=>({...data,zoho_step:step,is_paid:step===4})})).status,200);
+    assert.equal(h.messages.length,0); assert.equal(h.posts.length,0);
+    await h.callbacks[0]();
+    assert.equal(h.messages.length,1); assert.equal(h.posts.length,1);
+  }
+  const invalid=handler(source);
+  assert.equal((await invalid.POST({json:async()=>{throw Error('invalid json')}})).status,500);
   console.log(`PASS: mocked handler ${oldMs.toFixed(0)}ms -> ${newMs.toFixed(0)}ms; background delivery, unchanged email/CRM payload, failure fallback and captcha`);
 
   let record = {};

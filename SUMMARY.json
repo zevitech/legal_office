@@ -1,5 +1,6 @@
 {
-  "status": "afa9709_live_followup_performance_fixes_tested_locally_not_deployed",
+  "status": "e6f46de_deployed_ready_live_pages_and_tag_ids_verified",
+  "submission_patch": {"status":"tested_local", "durable_save_before_response":true,"notification_dependencies":"deferred inside after","lead_client":"cached REST preferred; portal client unchanged","baseline_real_response_seconds":3.8,"new_real_response_seconds":null,"production_build":"pass"},
   "local_followup": {"form_js_bytes_before":722602,"form_js_bytes_after":597155,"geographical_options_equivalent":true,"main_landmark_added":true,"build_and_mobile_desktop_tests":"pass","unsubmitted_refresh_draft_gap":"pre-existing, unresolved"},
   "baseline_commit": "b9870d8",
   "landing_lab": { "mobile": 66, "desktop": 84 },
