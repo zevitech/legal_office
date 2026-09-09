@@ -3,6 +3,7 @@
 // Client-side blog listing used by the App Router blog page.
 
 import React, { useState } from "react";
+import Link from "next/link";
 import FooterSection from "@/components/sections/FooterSection";
 import Header from "@/components/ui/Header";
 import { Pagination } from "@nextui-org/react";
@@ -73,7 +74,7 @@ const BlogPage = ({ initialBlogs = [] }) => {
               <p className="mt-3 text-gray-600">
                 {searchTerm ? "Try another search or browse our current trademark guides." : "Browse our current trademark guides for practical filing information while this news section grows."}
               </p>
-              <a href="/guides" className="mt-5 inline-block font-semibold text-[#027DD6] hover:underline">Browse trademark guides</a>
+              <Link href="/guides" className="mt-5 inline-block font-semibold text-[#027DD6] hover:underline">Browse trademark guides</Link>
             </div>
           )}
         </div>

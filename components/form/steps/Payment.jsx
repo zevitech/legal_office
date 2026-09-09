@@ -209,7 +209,7 @@ const Payment = () => {
       };
 
       try {
-        const res = await axios.post(endPoint, paidLeadData);
+        const res = await axios.post(endPoint, paidLeadData, { timeout: 20000 });
         if (res.data.success) {
           window.location.href = "/trademark-register/thank-you";
           return;
@@ -226,7 +226,7 @@ const Payment = () => {
     } catch (err) {
       console.log("Error processing NMI payment:", err);
       setPaymentError(
-        err?.response?.data?.message || "Checkout failed, please try again.",
+        err?.response?.data?.message || "We could not confirm your payment status. Please contact support before trying another payment.",
       );
       setIsProcessing(false);
     }

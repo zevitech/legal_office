@@ -157,9 +157,18 @@ export async function POST(req) {
     // decline: response 3 means the gateway never created a transaction, so
     // resubmitting without the vault fields cannot double charge. Take the
     // payment rather than lose a paid-traffic order.
-    if (requestedVault && parsed.response !== "1" && /customer vault/i.test(parsed.responsetext || "")) {
+    if (requestedVault && parsed.response === "3" && !parsed.transactionid && /customer vault/i.test(parsed.responsetext || "")) {
       console.error("NMI Customer Vault unavailable; retrying the sale without storing the card:", parsed.responsetext);
       parsed = await submitCharge(false);
+    }
+
+    // An incomplete reply is not a confirmed decline. Keep the reservation:
+    // releasing it could allow a retry of a payment the gateway already took.
+    if (!["1", "2", "3"].includes(parsed.response)) {
+      return NextResponse.json(
+        { success: false, message: "We could not confirm the payment status. Please contact support before trying another payment." },
+        { status: 502 }
+      );
     }
 
     // response=1 approved, 2 declined, 3 error

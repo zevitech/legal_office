@@ -3,6 +3,13 @@
 ## Deployment status
 Not deployed. Base repository HEAD verified against origin and Vercel production: f1e282d316adee26938e8b9d90d06434aff0dd65. Existing project: danishs-projects-29ca5462/legaltrademarkoffice, domain legaltrademarkoffice.com, production branch main. Rollback deployment: E5ubLvpX1fbv6XZg5hMWWtoGsoN8. Do not replace production environment variables with local preview values. Hosting dashboard reports overdue billing/payment failure; owner notified.
 
+## Security follow-up
+- Owner asked to exclude Vercel billing from this review. Billing has not been changed.
+- Next.js 15.5.25 production build and lint passed; 92 pages prerendered (server-rendered routes remain in the route table). Dependency lockfile audit now reports zero critical/high and ten moderate findings.
+- Production-mode 390px journey passed from trademark details through owner, classification, packages and payment. Package selection persists on Back; package layout checked at 320/390/768/1440px; demo payment button absent; no browser page errors. External services were blocked and save-data mocked.
+- Anonymous admin API returned 401. Empty checkout request rejected before gateway access.
+- Payment response ambiguity and post-payment CRM timeout safeguards added. See security_best_practices_report.md for residual risks and test limitations.
+
 ## Passed locally
 - Final rerun: production build all 102 pages; full lint; 20 route/viewport checks at 320, 390, 768 and 1440 pixels without overflow or page errors; complete 390px synthetic walkthrough.
 - Production guards explicitly disable payment bypass and classification preview. Receipt includes XTARLABS LLC descriptor and invoice-style line items; PDF visually verified.
@@ -23,6 +30,9 @@ Not deployed. Base repository HEAD verified against origin and Vercel production
 - Gateway endpoint and tokenization integration retained. Payment changes include package aliases and exclusion of already-included add-ons from totals/receipt lines.
 
 ## Release gates still required
+- Release branch codex/form-ui-release-2026-09-08 at 5dc292c built successfully on Vercel (73Go8YQviLPtkrg7quxPEHmx1QgX). Hosted first step opened successfully without local demo UI. Production main remains unchanged.
+- Original dependency audit findings were remediated as described above; ten moderate findings remain. No forced downgrade of Firebase applied.
+- Production not yet published; integration checks below remain distinct from passing local smoke tests. Billing excluded at owner's request.
 - Confirm correct Vercel project, production domain, deployment revision and rollback version.
 - Confirm build and runtime in the actual deployment environment (isolated local production build passed).
 - Hosted card fields in gateway test environment; success, decline, retry/idempotency, portal provisioning and email delivery.
