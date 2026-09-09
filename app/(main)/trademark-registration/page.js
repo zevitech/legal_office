@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
 import LandingPage from "@/components/pages/LandingPage";
+import LandingHero from "@/components/pages/LandingHero";
 
 export const metadata = {
   title: "Trademark Registration Filing Support | Legal Trademark Office",
@@ -30,7 +31,12 @@ const page = () => {
           __html: JSON.stringify(serviceSchema).replace(/</g, "\\u003c"),
         }}
       />
-      <main><LandingPage optimizedCopy /></main>
+      <main>
+        <LandingHero optimizedCopy />
+        <Suspense fallback={null}>
+          <LandingPage optimizedCopy includeHero={false} />
+        </Suspense>
+      </main>
     </>
   );
 };

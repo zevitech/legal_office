@@ -1,11 +1,13 @@
 {
-  "status": "e6f46de_deployed_ready_live_pages_and_tag_ids_verified",
-  "submission_patch": {"status":"tested_local", "durable_save_before_response":true,"notification_dependencies":"deferred inside after","lead_client":"cached REST preferred; portal client unchanged","baseline_real_response_seconds":3.8,"new_real_response_seconds":null,"production_build":"pass"},
+  "status": "99a4d2b_deployed_ready_real_submission_timing_pending",
+  "submission_patch": {"status":"deployed_DPLet1Liq2yucEoQjynuSyUaraEP", "durable_save_before_response":true,"notification_dependencies":"deferred inside after","lead_client":"cached REST preferred; portal client unchanged","baseline_real_response_seconds":3.8,"new_real_response_seconds":null,"production_build":"pass"},
   "local_followup": {"form_js_bytes_before":722602,"form_js_bytes_after":597155,"geographical_options_equivalent":true,"main_landmark_added":true,"build_and_mobile_desktop_tests":"pass","unsubmitted_refresh_draft_gap":"pre-existing, unresolved"},
   "baseline_commit": "b9870d8",
   "landing_lab": { "mobile": 66, "desktop": 84 },
   "form_lab": { "mobile": 66, "desktop": 56 },
-  "production_after_scores": {"landing_mobile":93,"landing_desktop":90,"form_mobile":62},
+  "historical_production_after_scores": {"landing_mobile":93,"landing_desktop":90,"form_mobile":62},
+  "latest_landing_lab_before_hero_patch": {"report":"uc2u69h0at","mobile":66,"desktop":53,"mobile_lcp_ms":4201,"desktop_tbt_ms":7907,"real_user_data":null},
+  "hero_render_patch": {"status":"local_verified","hero_initial_html":true,"ui_and_tracking_unchanged":true,"mobile_local_lcp_before_ms":1864,"mobile_local_lcp_after_ms":1072,"desktop_local_lcp_before_ms":1748,"desktop_local_lcp_after_ms":1012,"live_score_after":null},
   "tests": { "production_build": "pass", "lead_delivery": "pass", "mobile_desktop_flow": "pass", "protected_tracking_diff": "unchanged" },
   "remaining": ["LiveChat check_goals 422 not certified resolved", "Production submission timing not measured", "Form mobile initial rendering remains slow; 62 lab score"]
 }
