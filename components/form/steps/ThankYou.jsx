@@ -93,6 +93,7 @@ const ThankYou = () => {
     trackPurchase({
       transactionId: completedOrder.transactionId,
       value: completedOrder.value,
+      paidAt: completedOrder.paidAt,
       packageName: completedOrder.packageName,
       classCount: completedOrder.classCount,
       addons: completedOrder.addons,

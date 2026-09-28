@@ -8,6 +8,14 @@ const CLICK_IDS_KEY = "lto_click_ids";
 const FIRED_EVENTS_KEY = "lto_fired_events";
 const PURCHASES_FIRED_KEY = "lto_fired_purchases";
 const ENHANCED_DATA_KEY = "lto_enhanced_conversion_data";
+// Same existing Website Purchase action as the GTM tag. Never create a second
+// action for retries: Google deduplicates by action + transaction_id.
+const GOOGLE_PURCHASE_DESTINATION = "AW-16565473053/RmqECOrQ97sbEJ2ehNs9";
+const PURCHASE_ATTEMPTS_PREFIX = "lto_google_purchase_attempts_v1:";
+const PURCHASE_RETRY_OFFSETS = [0, 2000, 5000];
+const PURCHASE_RETRY_TTL = 10 * 60 * 1000;
+const purchasesSeen = new Set();
+const purchaseRetryTimers = new Map();
 
 const CLICK_ID_PARAMS = ["gclid", "wbraid", "gbraid"];
 
@@ -151,13 +159,14 @@ function markFired(key) {
 }
 
 /**
- * Permanent guard for purchases only. Keyed by transaction id, so a genuine
- * second order still fires while the SAME order can never be counted twice —
- * including after closing the tab and reopening the thank-you page, which a
- * session-scoped guard would miss.
+ * Guard for the shared GTM/Reddit event only, NOT a delivery receipt. Google-only
+ * retries have a separate bounded attempt ledger below. Keep legacy flags so
+ * deployment does not replay historical purchases or duplicate Reddit events.
  */
 function markPurchaseFired(key) {
   if (!isBrowser()) return false;
+  if (purchasesSeen.has(key)) return false;
+  purchasesSeen.add(key);
   try {
     const fired = JSON.parse(localStorage.getItem(PURCHASES_FIRED_KEY) || "{}");
     if (fired[key]) return false;
@@ -167,6 +176,69 @@ function markPurchaseFired(key) {
   } catch {
     return true;
   }
+}
+
+function withPurchaseLock(key, callback) {
+  // Serialize tabs where supported. Storage failures must never break checkout.
+  if (window.navigator?.locks?.request) {
+    void window.navigator.locks.request(key, callback).catch(() => {});
+  } else {
+    try { callback(); } catch { /* Tracking is non-blocking. */ }
+  }
+}
+
+function readPurchaseAttempts(key) {
+  try {
+    const state = JSON.parse(localStorage.getItem(key) || "null");
+    if (!state || !Number.isInteger(state.attempts) || state.attempts < 1 ||
+        state.attempts > 3 || !Number.isFinite(state.startedAt) ||
+        !Number.isFinite(state.lastAttemptAt) || !Number.isFinite(state.value) ||
+        state.value <= 0 || state.currency !== "USD") return null;
+    return state;
+  } catch { return null; }
+}
+
+function savePurchaseAttempts(key, state) {
+  try {
+    localStorage.setItem(key, JSON.stringify(state));
+    return true;
+  } catch { return false; }
+}
+
+function scheduleGooglePurchaseRetry(transactionId) {
+  const key = PURCHASE_ATTEMPTS_PREFIX + transactionId;
+  const state = readPurchaseAttempts(key);
+  if (!state || state.attempts >= 3 || purchaseRetryTimers.has(key) ||
+      Date.now() - state.startedAt > PURCHASE_RETRY_TTL) return;
+  const dueAt = Math.max(state.startedAt + PURCHASE_RETRY_OFFSETS[state.attempts],
+    state.lastAttemptAt + 2000);
+  purchaseRetryTimers.set(key, window.setTimeout(() => {
+    purchaseRetryTimers.delete(key);
+    withPurchaseLock(key, () => {
+      const current = readPurchaseAttempts(key);
+      if (!current || current.attempts >= 3 ||
+          Date.now() - current.startedAt > PURCHASE_RETRY_TTL) return;
+      // Reserve before dispatch to bound attempts across refreshes. This counts
+      // attempts, not success. A gtag callback cannot confirm Ads attribution.
+      if (!savePurchaseAttempts(key, { ...current,
+        attempts: current.attempts + 1, lastAttemptAt: Date.now() })) return;
+      try {
+        // Use the existing Google tag and its consent state; do not inject a new
+        // script, grant consent, or replay lto_purchase (which also fires Reddit).
+        const gtag = window.gtag || function () {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(arguments);
+        };
+        gtag("event", "conversion", {
+          send_to: GOOGLE_PURCHASE_DESTINATION,
+          transaction_id: transactionId,
+          value: current.value,
+          currency: current.currency,
+        });
+      } catch { /* The remaining bounded attempt may still work. */ }
+      scheduleGooglePurchaseRetry(transactionId);
+    });
+  }, Math.max(0, dueAt - Date.now())));
 }
 
 // 2. First meaningful interaction with the registration form.
@@ -241,20 +313,38 @@ export function trackBeginCheckout(details) {
   });
 }
 
-// 5. Payment confirmed by the provider. Keyed on transaction_id so a
-// thank-you page refresh can never count a second purchase.
-export function trackPurchase({ transactionId, value, packageName, classCount, addons = [] }) {
-  if (!transactionId) return;
-  if (!markPurchaseFired(`lto_purchase_${transactionId}`)) return;
-  push({
-    event: "lto_purchase",
-    ...funnelFields(5),
-    transaction_id: transactionId,
-    value: Number(value),
-    currency: "USD",
-    package_name: packageName || "",
-    potential_class_count: Number(classCount || 0),
-    addon_count: Array.isArray(addons) ? addons.length : 0,
-    user_data: getEnhancedConversionData(),
+// 5. Called only after provider-confirmed payment, from the thank-you page.
+// One shared event + at most two Google-only retries. These are timed retries,
+// not proof of failure/success; Sheet recovery remains necessary for lost hits.
+export function trackPurchase({ transactionId, value, paidAt, packageName, classCount, addons = [] }) {
+  if (!isBrowser() || process.env.NODE_ENV !== "production") return;
+  const id = String(transactionId || "").trim();
+  const amount = Number(value);
+  if (!id || id.startsWith("DEMO-") || !Number.isFinite(amount) || amount <= 0) return;
+  const key = PURCHASE_ATTEMPTS_PREFIX + id;
+  withPurchaseLock(key, () => {
+    const previous = readPurchaseAttempts(key);
+    const firstAttempt = !previous && markPurchaseFired(`lto_purchase_${id}`);
+    if (firstAttempt) {
+      // Only fresh orders start a retry ledger. Never replay legacy/recovered
+      // orders just because a customer revisits an old receipt after deployment.
+      const age = Date.now() - Date.parse(paidAt);
+      if (Number.isFinite(age) && age >= 0 && age <= 24 * 60 * 60 * 1000) {
+        savePurchaseAttempts(key, { attempts: 1, startedAt: Date.now(),
+          lastAttemptAt: Date.now(), value: amount, currency: "USD" });
+      }
+      try { push({
+        event: "lto_purchase",
+        ...funnelFields(5),
+        transaction_id: id,
+        value: amount,
+        currency: "USD",
+        package_name: packageName || "",
+        potential_class_count: Number(classCount || 0),
+        addon_count: Array.isArray(addons) ? addons.length : 0,
+        user_data: getEnhancedConversionData(),
+      }); } catch { /* Google-only retries can still run if the push throws. */ }
+    }
+    scheduleGooglePurchaseRetry(id);
   });
 }
