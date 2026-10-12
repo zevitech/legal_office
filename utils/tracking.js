@@ -318,9 +318,15 @@ export function trackBeginCheckout(details) {
 // not proof of failure/success; Sheet recovery remains necessary for lost hits.
 export function trackPurchase({ transactionId, value, paidAt, packageName, classCount, addons = [] }) {
   if (!isBrowser() || process.env.NODE_ENV !== "production") return;
-  const id = String(transactionId || "").trim();
+  // Keep the provider's permanent ID; never stringify objects or invent an ID.
+  // Invalid IDs cannot safely deduplicate website hits against recovery imports.
+  if (typeof transactionId !== "string" &&
+      !(typeof transactionId === "number" && Number.isSafeInteger(transactionId) && transactionId > 0)) return;
+  const id = String(transactionId).trim();
   const amount = Number(value);
-  if (!id || id.startsWith("DEMO-") || !Number.isFinite(amount) || amount <= 0) return;
+  if (!/^[\x20-\x7E]{2,64}$/.test(id) ||
+      /^(?:undefined|null|nan|true|false|unknown|none|0+)$/i.test(id) ||
+      id.startsWith("DEMO-") || !Number.isFinite(amount) || amount <= 0) return;
   const key = PURCHASE_ATTEMPTS_PREFIX + id;
   withPurchaseLock(key, () => {
     const previous = readPurchaseAttempts(key);

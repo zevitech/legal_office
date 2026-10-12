@@ -65,6 +65,28 @@ test('one shared event, exactly two Google-only retries, unchanged ID/value/dest
   }
 });
 
+test('malformed transaction IDs never dispatch or reserve purchase attempts', () => {
+  const h = harness();
+  for (const id of [undefined, null, {}, [], true, false, NaN, Infinity,
+    1.5, -1, Number.MAX_SAFE_INTEGER + 1, '', ' ', 'x', 'null', 'undefined',
+    'unknown', '000', 'id\n123', 'id\u200b123', 'é123', 'a'.repeat(65)]) {
+    h.track({ ...h.order(), transactionId: id });
+  }
+  h.advance(60000);
+  assert.equal(h.window.dataLayer.length, 0);
+  assert.equal(h.google.length, 0);
+  assert.equal(h.storage.size, 0);
+});
+
+test('numeric provider IDs are preserved identically in first event and retries', () => {
+  const h = harness();
+  h.track(h.order(12599800042, 649)); h.advance(60000);
+  assert.equal(h.window.dataLayer[0].transaction_id, '12599800042');
+  assert.equal(h.window.dataLayer[0].value, 649);
+  assert.equal(h.google.length, 2);
+  for (const hit of h.google) assert.equal(hit[2].transaction_id, '12599800042');
+});
+
 test('refresh resumes remaining attempts without repeating shared event or changing value', () => {
   const first = harness(); first.track(first.order()); first.advance(2000);
   const refresh = harness({ storage: first.storage, now: START + 2500 });
