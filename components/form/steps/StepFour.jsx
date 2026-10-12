@@ -66,9 +66,12 @@ const StepFour = () => {
     }
 
     // Check if payment bypass mode is enabled for testing
-    if (process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true") {
+    if (
+      process.env.NODE_ENV !== "production" &&
+      process.env.NEXT_PUBLIC_PAYMENT_BYPASS_MODE === "true"
+    ) {
       console.log(
-        "Payment bypass mode enabled - skipping payment and going directly to thank you page"
+        "Payment bypass mode enabled - skipping payment and going directly to thank you page",
       );
       // Mark as paid for testing purposes
       const bypassData = {
