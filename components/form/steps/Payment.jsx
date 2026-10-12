@@ -169,7 +169,12 @@ const Payment = () => {
       });
 
       if (!charge?.success) {
-        setPaymentError(charge?.message || "Payment declined, please try again.");
+        // The server already maps gateway responses to customer-safe wording;
+        // this fallback only covers a response with no message at all.
+        setPaymentError(
+          charge?.message ||
+            "Payment unsuccessful. Please contact your bank, or try a different card.",
+        );
         setIsProcessing(false);
         return;
       }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ADD_ON_PRICES, PACKAGE_PRICES, calculateOrderTotal, getChargeableAddons } from "@/constant/pricing";
 import { sendOrderReceipt } from "@/lib/orderReceipt";
+import { nmiDeclineMessage } from "@/lib/nmiDeclineMessage";
 
 // Customer-facing names for the checkout add-ons, used on the receipt.
 const ADDON_LABELS = {
@@ -184,7 +185,10 @@ export async function POST(req) {
       return NextResponse.json(
         {
           success: false,
-          message: parsed.responsetext || "Payment declined",
+          // Never return the gateway's raw text: it is alarming, unhelpful, and
+          // can disclose merchant configuration. The full response is logged
+          // above for support. See lib/nmiDeclineMessage.js.
+          message: nmiDeclineMessage(parsed),
         },
         { status: 400 }
       );
