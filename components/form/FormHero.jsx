@@ -20,7 +20,7 @@ const FormHero = ({ step }) => {
             href="tel:+13104244909"
             className="font-bold text-color-primary uppercase max-md:px-1"
           >
-            Call +1 (310) 424 4909
+            Call +1 (408) 320 5208
           </Link>
           or
           <button

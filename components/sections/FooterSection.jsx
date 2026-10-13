@@ -22,9 +22,9 @@ const FooterSection = ({ description }) => {
             {description || (
               <>
                 Prepare your U.S. trademark application with clear service
-                packages, specialist filing support and customer approval
-                before submission. Choose the preparation speed and support
-                level that fit your brand.
+                packages, specialist filing support and customer approval before
+                submission. Choose the preparation speed and support level that
+                fit your brand.
               </>
             )}
           </p>
@@ -51,9 +51,7 @@ const FooterSection = ({ description }) => {
         </div>
 
         <div className="text-slate-100 flex flex-col gap-4">
-          <h4 className="text-xl font-normal mb-7">
-            Customer Support:
-          </h4>
+          <h4 className="text-xl font-normal mb-7">Customer Support:</h4>
           <div className="flex items-center gap-2">
             <div className="flex-center md:flex-col gap-4 -m-5">
               <Link
@@ -62,7 +60,7 @@ const FooterSection = ({ description }) => {
               >
                 <IoCallSharp className="text-[20px]" />
                 <h4 className="text-lg font-bold max-md:text-[16px]">
-                  +1 (310) 424 4909
+                  +1 (408) 320 5208
                 </h4>
               </Link>
             </div>
@@ -92,24 +90,48 @@ const FooterSection = ({ description }) => {
       <div className="bg-slate-800 text-slate-200 flex flex-col items-center py-8 px-6 gap-3">
         <p className="text-slate-300 text-[14px] md:text-[15px] leading-relaxed max-w-5xl text-center mt-2 opacity-90">
           Disclaimer: We are an independent trademark filing support service. We
-          are not a government agency and are not affiliated with the USPTO.
-          We assist business owners by preparing and submitting trademark
+          are not a government agency and are not affiliated with the USPTO. We
+          assist business owners by preparing and submitting trademark
           applications directly to the USPTO on their behalf.
         </p>
 
-        <nav aria-label="Legal policies" className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
-          <Link className="hover:text-white hover:underline" href="/legal/privacy">Privacy Policy</Link>
-          <Link className="hover:text-white hover:underline" href="/legal/terms">Terms</Link>
-          <Link className="hover:text-white hover:underline" href="/legal/refund-policy">Refund Policy</Link>
-          <Link className="hover:text-white hover:underline" href="/editorial-policy">Editorial Standards</Link>
+        <nav
+          aria-label="Legal policies"
+          className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm"
+        >
+          <Link
+            className="hover:text-white hover:underline"
+            href="/legal/privacy"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            className="hover:text-white hover:underline"
+            href="/legal/terms"
+          >
+            Terms
+          </Link>
+          <Link
+            className="hover:text-white hover:underline"
+            href="/legal/refund-policy"
+          >
+            Refund Policy
+          </Link>
+          <Link
+            className="hover:text-white hover:underline"
+            href="/editorial-policy"
+          >
+            Editorial Standards
+          </Link>
         </nav>
 
         <p className="text-center text-sm md:text-base mt-2">
-          © {new Date().getFullYear()} <Link className="text-blue-400 hover:underline" href="/">Legal Trademark Office</Link>. All rights reserved.
-          {" "}
-         
+          © {new Date().getFullYear()}{" "}
+          <Link className="text-blue-400 hover:underline" href="/">
+            Legal Trademark Office
+          </Link>
+          . All rights reserved.{" "}
         </p>
-
       </div>
     </footer>
   );
